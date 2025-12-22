@@ -25,7 +25,7 @@
         "b999d0ce-4883-4f99-ba80-07bd9603540c": "668740a8-ff12-45f0-9d51-b84da4df18c9",
         "4c778bea-0a5c-4bb0-8f09-a1be9e3b04b9": "59499376-b610-4be9-861d-d0129a507283",
         "850b6328-2b86-4a7e-bc83-261075aaf5f4": "8872f3fc-bbb7-4873-b536-04b04de58f91",
-        "12365b29-f7cb-4b0e-9c6c-e6d0f0969e77": "a77d6555-d050-4bdd-bd81-ca32e6188524",
+        "8d202bc6-c3e8-4f5c-bb8a-3167f30fb386": "63e4cbb9-6d17-43f0-ab2a-2b34288fc62e",
         "24a493cc-1674-4688-b7f5-6fffedf11097": "0d977781-3341-4d09-ad8e-bcd9ab251f32",
         "86031451-ffc2-41a9-b7e7-a23bab3d3f51": "6290e130-699c-407b-b503-abe4c60de000",
         "06dfad86-35ed-4b74-ab94-2f3da03015b6": "1245e943-e0a2-44dd-8fc4-6b67e988dadf",
@@ -51,7 +51,7 @@
         "bb68b613-9ce7-453e-b9c9-01d922705890": "b7437830-b420-4d3d-893c-5ca321b6a486",
         "f9bfa9c6-31d1-43c1-b7ea-873aac74f34b": "0efd7f90-d69d-4471-8669-051e5d9b3faa",
         "a76b3fb3-d0f2-4d9a-8ac2-68150dd4c418": "470d9b5b-ddd6-4eb2-887a-ad503603eb02",
-        "e69403c8-b887-42f7-aced-1d2b3c2f2b2d": "ba53a384-7296-4fbc-9a94-e9550984500b",
+        "6322be43-9b42-4bc8-9fd4-0a0c3d853c13": "c6d3853f-871c-4e58-bcba-370364756e16",
         "8fe2d568-d58e-421c-983d-d3fe1ef53bb6": "accdcee8-7b5a-4ed3-a591-0cea11c9c94e",
         "1f5c4980-ed18-4678-abb2-e739a17393e6": "d7ab90bd-f619-452e-ae22-8f38af806a48",
         "eee428f4-69a6-42ef-ae6b-65f5744eab7a": "bda7d61c-8cd9-479d-abad-617d8d299496",
@@ -65,7 +65,8 @@
         "ffbe1951-d3ca-4ee0-beda-cd4c6e43277f": "25045a24-28d3-41b5-bbf7-f664db7bcef1",
         "aeae26a8-832a-4583-b83e-c66641c54748": "aaff842a-9d5c-4046-a4f4-213e8eb004b2",
         "ea736b63-f807-45d6-ac30-75eef000f451": "1b18bca2-a5ca-4653-a534-f76ce8bef06a",
-        "2a674a66-e755-4b31-8d77-df2562bac68d": "ab96ab14-97a0-4bb0-890e-368a54850ba4"
+        "2a674a66-e755-4b31-8d77-df2562bac68d": "ab96ab14-97a0-4bb0-890e-368a54850ba4",
+        "8b87d6bc-df83-4817-88ed-1dd94f89be74": "50f625c9-d7be-4d79-8132-44d87d292fe6"
       }
     },
     {
@@ -81,6 +82,7 @@
       "NetworkMode": 2,
       "NetworkInterpolation": true,
       "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
       "OwnerTransfer": 1,
       "Components": [
         {
@@ -136,7 +138,7 @@
       "__version": 1,
       "Flags": 0,
       "Name": "Guide",
-      "Position": "-3063.574,-640.0103,796.3226",
+      "Position": "-3088.427,-640.0103,844.7175",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "",
@@ -144,6 +146,7 @@
       "NetworkMode": 2,
       "NetworkInterpolation": true,
       "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
       "OwnerTransfer": 1,
       "Components": [],
       "Children": [
@@ -151,8 +154,8 @@
           "__guid": "b235b9cf-f28b-4139-b430-aa4f22d40258",
           "__version": 1,
           "Flags": 0,
-          "Name": "SpawnText",
-          "Position": "-47.12061,-20.56342,0",
+          "Name": "MG Title",
+          "Position": "-39.59375,75.01801,20.49371",
           "Rotation": "0,0,0,1",
           "Scale": "1,1,1",
           "Tags": "",
@@ -160,6 +163,7 @@
           "NetworkMode": 2,
           "NetworkInterpolation": true,
           "NetworkOrphaned": 0,
+          "NetworkTransmit": true,
           "OwnerTransfer": 1,
           "Components": [
             {
@@ -182,9 +186,161 @@
                 "BloomLayer": false,
                 "AfterUILayer": false
               },
-              "Scale": 0.3,
+              "Scale": 0.048780486,
               "TextScope": {
-                "Text": "SDK Coming SOON :)",
+                "Text": "How to: Minigames",
+                "TextColor": "1,0,0,1",
+                "FontName": "Poppins",
+                "FontSize": 64,
+                "FontWeight": 800,
+                "FontItalic": false,
+                "LineHeight": 1,
+                "LetterSpacing": 0,
+                "WordSpacing": 0,
+                "FilterMode": "Bilinear",
+                "Outline": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,1,1"
+                },
+                "Shadow": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                },
+                "OutlineUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,1,0,1"
+                },
+                "ShadowUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                }
+              },
+              "VerticalAlignment": "Center"
+            }
+          ],
+          "Children": []
+        },
+        {
+          "__guid": "fd28ca67-f340-4c9e-89c0-7b76d17714d8",
+          "__version": 1,
+          "Flags": 0,
+          "Name": "Job Title",
+          "Position": "-39.59375,-18.24854,19.85065",
+          "Rotation": "0,0,0,1",
+          "Scale": "1,1,1",
+          "Tags": "",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "NetworkInterpolation": true,
+          "NetworkOrphaned": 0,
+          "NetworkTransmit": true,
+          "OwnerTransfer": 1,
+          "Components": [
+            {
+              "__type": "Sandbox.TextRenderer",
+              "__guid": "06eedbd7-2621-4875-994b-a8e04c79b8c8",
+              "__enabled": true,
+              "__version": 2,
+              "BlendMode": "Normal",
+              "FogStrength": 1,
+              "HorizontalAlignment": "Center",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "Scale": 0.048780486,
+              "TextScope": {
+                "Text": "How to: Job",
+                "TextColor": "1,0,0,1",
+                "FontName": "Poppins",
+                "FontSize": 64,
+                "FontWeight": 800,
+                "FontItalic": false,
+                "LineHeight": 1,
+                "LetterSpacing": 0,
+                "WordSpacing": 0,
+                "FilterMode": "Bilinear",
+                "Outline": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,1,1"
+                },
+                "Shadow": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                },
+                "OutlineUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,1,0,1"
+                },
+                "ShadowUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                }
+              },
+              "VerticalAlignment": "Center"
+            }
+          ],
+          "Children": []
+        },
+        {
+          "__guid": "b3d9c6d9-7d12-4a6d-8f2c-af32f1590ade",
+          "__version": 1,
+          "Flags": 0,
+          "Name": "MG guide",
+          "Position": "-39.59375,90.34406,-0.2518311",
+          "Rotation": "0,0,0,1",
+          "Scale": "1,1,1",
+          "Tags": "",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "NetworkInterpolation": true,
+          "NetworkOrphaned": 0,
+          "NetworkTransmit": true,
+          "OwnerTransfer": 1,
+          "Components": [
+            {
+              "__type": "Sandbox.TextRenderer",
+              "__guid": "70ced5aa-e93b-4f25-8982-7b4dd1565e9a",
+              "__enabled": true,
+              "__version": 2,
+              "BlendMode": "Normal",
+              "FogStrength": 1,
+              "HorizontalAlignment": "Left",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "Scale": 0.019512195,
+              "TextScope": {
+                "Text": "1. Create prefab (main or map/secondary)\n2. Create <NAME>.minigame with config\n3. Restart s&box editor otherwise it won't be picked up\n\nGuide Lines\nUse scene mapping, only use facepunch mats/models.\nFor props, make them static\n (and \"Break into seperate components\" removing rigidbody)\n\nTesting\n/mg start <IDENT> <MAP> - Stats minigame, you can use partial names\n/mg skip - Skips minigame stage\n/mg stop - Cancels minigame\n/mg list - List minigames\n\nThere is a helper minigame just for testing maps:\n/mg start map <maps name>\n\nYou can also drag the prefab into this scene to test without minigame fluff",
                 "TextColor": "1,1,1,1",
                 "FontName": "Poppins",
                 "FontSize": 64,
@@ -221,6 +377,203 @@
             }
           ],
           "Children": []
+        },
+        {
+          "__guid": "753b4d14-cc6a-431e-be95-14fe133d2c55",
+          "__version": 1,
+          "Flags": 0,
+          "Name": "Job guide",
+          "Position": "-39.59375,-6.752258,12.91571",
+          "Rotation": "0,0,0,1",
+          "Scale": "1,1,1",
+          "Tags": "",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "NetworkInterpolation": true,
+          "NetworkOrphaned": 0,
+          "NetworkTransmit": true,
+          "OwnerTransfer": 1,
+          "Components": [
+            {
+              "__type": "Sandbox.TextRenderer",
+              "__guid": "344a5cb8-793b-4160-8448-705bb354a98d",
+              "__enabled": true,
+              "__version": 2,
+              "BlendMode": "Normal",
+              "FogStrength": 1,
+              "HorizontalAlignment": "Left",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "Scale": 0.019512195,
+              "TextScope": {
+                "Text": "1. Create a <NAME>job in Asset Browsers\n2. Define it with what it spawns with, group, config, etc.\n\nThis is just for fun, you can't do anything cool yet",
+                "TextColor": "1,1,1,1",
+                "FontName": "Poppins",
+                "FontSize": 64,
+                "FontWeight": 800,
+                "FontItalic": false,
+                "LineHeight": 1,
+                "LetterSpacing": 0,
+                "WordSpacing": 0,
+                "FilterMode": "Bilinear",
+                "Outline": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,1,1"
+                },
+                "Shadow": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                },
+                "OutlineUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,1,0,1"
+                },
+                "ShadowUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                }
+              },
+              "VerticalAlignment": "Center"
+            }
+          ],
+          "Children": []
+        },
+        {
+          "__guid": "b9fb7358-faaf-4d21-8a2e-1a7e8a771e32",
+          "__version": 1,
+          "Flags": 0,
+          "Name": "MG guide",
+          "Position": "-40.42603,47.62091,15.36743",
+          "Rotation": "0,0,0,1",
+          "Scale": "1,1,1",
+          "Tags": "",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "NetworkInterpolation": true,
+          "NetworkOrphaned": 0,
+          "NetworkTransmit": true,
+          "OwnerTransfer": 1,
+          "Components": [
+            {
+              "__type": "Sandbox.TextRenderer",
+              "__guid": "c19712db-6fdb-4b3b-9e55-02c945cf6a6f",
+              "__enabled": true,
+              "__version": 2,
+              "BlendMode": "Normal",
+              "FogStrength": 1,
+              "HorizontalAlignment": "Left",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "Scale": 0.019512195,
+              "TextScope": {
+                "Text": "[Minigame Helper Components]\nMinigame Spawn Point - Where players spawn\nMinigame Win Trigger- Will make the player who enters win\nMinigame Object Area Spawner - Spawns a prefab in trigger area",
+                "TextColor": "1,1,1,1",
+                "FontName": "Poppins",
+                "FontSize": 64,
+                "FontWeight": 800,
+                "FontItalic": false,
+                "LineHeight": 1,
+                "LetterSpacing": 0,
+                "WordSpacing": 0,
+                "FilterMode": "Bilinear",
+                "Outline": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,1,1"
+                },
+                "Shadow": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                },
+                "OutlineUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,1,0,1"
+                },
+                "ShadowUnder": {
+                  "Enabled": false,
+                  "Size": 4,
+                  "Color": "0,0,0,1",
+                  "Offset": "4,4"
+                }
+              },
+              "VerticalAlignment": "Center"
+            }
+          ],
+          "Children": []
+        },
+        {
+          "__guid": "d2a0b3ee-a51e-4b69-b3af-acdef8d8bfb1",
+          "__version": 1,
+          "Flags": 0,
+          "Name": "Backdrop",
+          "Position": "-35.84302,10.15186,0",
+          "Rotation": "0,0,0,1",
+          "Scale": "0.1500007,3.729997,1",
+          "Tags": "",
+          "Enabled": true,
+          "NetworkMode": 2,
+          "NetworkInterpolation": true,
+          "NetworkOrphaned": 0,
+          "NetworkTransmit": true,
+          "OwnerTransfer": 1,
+          "Components": [
+            {
+              "__type": "Sandbox.ModelRenderer",
+              "__guid": "264dbe1b-8a38-4258-b7c0-8bf52cd11c10",
+              "__enabled": true,
+              "BodyGroups": 18446744073709551615,
+              "CreateAttachments": false,
+              "LodOverride": null,
+              "MaterialGroup": null,
+              "MaterialOverride": null,
+              "Materials": null,
+              "Model": "models/dev/box.vmdl",
+              "OnComponentDestroy": null,
+              "OnComponentDisabled": null,
+              "OnComponentEnabled": null,
+              "OnComponentFixedUpdate": null,
+              "OnComponentStart": null,
+              "OnComponentUpdate": null,
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
+              "RenderType": "On",
+              "Tint": "0,0,0,1"
+            }
+          ],
+          "Children": []
         }
       ]
     }
@@ -247,7 +600,7 @@
   "Title": null,
   "Description": null,
   "__references": [
-    "dxura.rp#126465"
+    "dxura.rp#133101"
   ],
   "__version": 3
 }
