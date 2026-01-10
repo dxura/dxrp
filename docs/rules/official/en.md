@@ -178,13 +178,8 @@ The sections below provide comprehensive information on specific aspects of game
 
 ### 🔷 Hits
 
-- Hits must cost a minimum of **💰 $2,000**
-- Hits are only valid if fully paid up front; any other form of payment is considered invalid, and therefore RDM
-- Once a hit is accepted, the hitman must advert that a hit has been accepted (if Advert is on cooldown, use OOC)
-- Once a hit is completed, the hitman must advert the hit has been completed (if Advert is on cooldown, use OOC)
-- You cannot order more than 1 hit every **⏰ 10 minutes**
-- You cannot repeatedly put hits on the same person
-- **Jobs that cannot take hits:** Gun Dealer, Any Government Job, Theatre Manager, and Medic
+- Hits can only be carried out by the Hitman job
+- Hits must have a valid RP reason
 
 ---
 
