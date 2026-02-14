@@ -177,7 +177,7 @@ The sections below provide comprehensive information on specific aspects of game
 - The only entity allowed to be used to reach a base you're raiding or planning to raid is the **entity ladder**
   - **The prop ladder does not count**
 - You must have a valid RP reason to kill the mayor (stock laws don't count as a valid reason)
-- 
+  
 ---
 
 ### 🔷 Mugging
