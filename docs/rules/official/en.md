@@ -75,7 +75,6 @@ The sections below provide comprehensive information on specific aspects of game
 - Usage of game commands to gain an advantage is against the rules
 - Threats or attempts to crash, DDoS, or lag the server will result in a permanent ban
 - Any form of encouraging illegal activities will be severely punished
-- Saying you will break a rule is the same as breaking it
 
 ---
 
