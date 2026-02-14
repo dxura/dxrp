@@ -18,16 +18,11 @@ Please read through these rules carefully to ensure a fun and safe experience fo
 - You can return to a raid after death (see the Raid section for details)
 - If a player is revived, they may still continue that life and act upon existing interactions (including raiders/defenders)
 
-### 🔹 Building / Prop Usage
+### 🔹 Prop Usage
 
 - You cannot build unreachable bases
-- You cannot block off parts of the map that don't belong to you
-- You cannot put valuables/entities more than 2 fading doors deep from the outside
-- You cannot hide valuables behind multiple fading doors, even if individually they would only require a raider to break 2 fading doors
+- You cannot block off parts of the map that don't belong to you (Drug Drops, Recycler, Trash Cans, ATM's)
 - You cannot use props to reach any part of someone's base
-- Your base must not require crouching or jumping
-- Fading doors must be reasonably easy to find
-- Bases must be raidable with a crowbar
 
 ### 🔹 Common Sense
 
@@ -80,6 +75,8 @@ The sections below provide comprehensive information on specific aspects of game
 
 ### 🔷 Building
 
+- You cannot build unreachable bases
+- You cannot put valuables/entities more than 2 fading doors deep from the outside
 - Houses require a minimum of 1 entrance. You can block off doors that you don't use
 - Bases must always be accessible without the need to place props or entities
 - Every part of a base must be reachable by a raider, even if nothing is in that area
