@@ -18,17 +18,6 @@ Please read through these rules carefully to ensure a fun and safe experience fo
 - You can return to a raid after death (see the Raid section for details)
 - If a player is revived, they may still continue that life and act upon existing interactions (including raiders/defenders)
 
-### 🔹 Building / Prop Usage
-
-- You cannot build unreachable bases
-- You cannot block off parts of the map that don't belong to you
-- You cannot put valuables/entities more than 2 fading doors deep from the outside
-- You cannot hide valuables behind multiple fading doors, even if individually they would only require a raider to break 2 fading doors
-- You cannot use props to reach any part of someone's base
-- Your base must not require crouching or jumping
-- Fading doors must be reasonably easy to find
-- Bases must be raidable with a crowbar
-
 ### 🔹 Common Sense
 
 - FearRP is not enforced. You can pull a gun on someone mugging you at your own risk
@@ -80,6 +69,8 @@ The sections below provide comprehensive information on specific aspects of game
 
 ### 🔷 Building
 
+- You cannot build unreachable bases
+- You cannot put valuables/entities more than 2 fading doors deep from the outside
 - Houses require a minimum of 1 entrance. You can block off doors that you don't use
 - Bases must always be accessible without the need to place props or entities
 - Every part of a base must be reachable by a raider, even if nothing is in that area
@@ -117,10 +108,13 @@ The sections below provide comprehensive information on specific aspects of game
 
 ### 🔷 Prop Usage
 
+- You cannot build unreachable bases
 - You cannot place props inside or on someone else's base without permission
+- You cannot use props to reach any part of someone's base
 - You cannot use props to disrupt other players (prop fling/block/spam)
 - You cannot use props to fly or climb
 - You cannot place, move, or remove props if involved in an RP situation
+- You cannot block off parts of the map that don't belong to you (Drug Drops, Recycler, Trash Cans, ATM's)
 
 ---
 
@@ -180,7 +174,7 @@ The sections below provide comprehensive information on specific aspects of game
 - The only entity allowed to be used to reach a base you're raiding or planning to raid is the **entity ladder**
   - **The prop ladder does not count**
 - You must have a valid RP reason to kill the mayor (stock laws don't count as a valid reason)
-- 
+  
 ---
 
 ### 🔷 Mugging
