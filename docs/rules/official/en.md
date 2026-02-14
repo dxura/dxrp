@@ -18,12 +18,6 @@ Please read through these rules carefully to ensure a fun and safe experience fo
 - You can return to a raid after death (see the Raid section for details)
 - If a player is revived, they may still continue that life and act upon existing interactions (including raiders/defenders)
 
-### 🔹 Prop Usage
-
-- You cannot build unreachable bases
-- You cannot block off parts of the map that don't belong to you (Drug Drops, Recycler, Trash Cans, ATM's)
-- You cannot use props to reach any part of someone's base
-
 ### 🔹 Common Sense
 
 - FearRP is not enforced. You can pull a gun on someone mugging you at your own risk
@@ -114,10 +108,13 @@ The sections below provide comprehensive information on specific aspects of game
 
 ### 🔷 Prop Usage
 
+- You cannot build unreachable bases
 - You cannot place props inside or on someone else's base without permission
+- You cannot use props to reach any part of someone's base
 - You cannot use props to disrupt other players (prop fling/block/spam)
 - You cannot use props to fly or climb
 - You cannot place, move, or remove props if involved in an RP situation
+- You cannot block off parts of the map that don't belong to you (Drug Drops, Recycler, Trash Cans, ATM's)
 
 ---
 
