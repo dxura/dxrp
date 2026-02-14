@@ -89,7 +89,7 @@ The sections below provide comprehensive information on specific aspects of game
 - You may not force players to crouch or jump at any point in your base, even to fight back
 - Bases cannot be built in a way that will cause players to get stuck permanently in any part of it
 - Bases may not have mazes built within to artificially extend the raid duration
-  - > 1, 180 Degree Turns or > 2, 90 Degree Turns are considered a maze (or multiple pathways that cause players to get lost)   
+  - A base is considered a maze if it contains more than one 180° turn or more than two 90° turns, or uses multiple pathways designed to disorient players.
 - Bases may not purposefully impede player movement (such as placing props too close to each other to slow down players)
 - Reaching a base's entrance should not rely on luck / a glitch / an exploit
 - The entrance of a base must be reasonably easy to find
