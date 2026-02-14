@@ -179,9 +179,9 @@ The sections below provide comprehensive information on specific aspects of game
 - Do not disconnect during or right before a raid. You must wait for a raid to end before quitting
 - Third parties are allowed to join the raid on either side, or against both, as long as they have an RP reason to do so
 - The only entity allowed to be used to reach a base you're raiding or planning to raid is the **entity ladder**
-- You must have a valid RP reason to kill the mayor (stock laws don't count as a valid reason)
   - **The prop ladder does not count**
-
+- You must have a valid RP reason to kill the mayor (stock laws don't count as a valid reason)
+- 
 ---
 
 ### 🔷 Mugging
