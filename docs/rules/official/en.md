@@ -6,7 +6,6 @@ Please read through these rules carefully to ensure a fun and safe experience fo
 ### 🔹 RDM / RDA (Random Death Match / Random Arrest)
 
 - You cannot kill or arrest someone without proper roleplay reason
-- You cannot kill or arrest someone based on a previous life
 - You must have a valid RP reason to kill the mayor (stock laws don't count as a valid reason)
 - **Political prisoners** can be killed when outside their cell, no reason is necessary
   - This does not apply to normal prisoners
@@ -22,6 +21,7 @@ Please read through these rules carefully to ensure a fun and safe experience fo
 
 - FearRP is not enforced. You can pull a gun on someone mugging you at your own risk
 - Hate speech and harassment are not tolerated
+- In the event of a server crash, there is to be no raiding for a 10 minute period to allow all players to reconnect
 - In situations not stated in the rules, a staff member will make the final decision
 
 ---
@@ -75,8 +75,9 @@ The sections below provide comprehensive information on specific aspects of game
 - Bases must always be accessible without the need to place props or entities
 - Every part of a base must be reachable by a raider, even if nothing is in that area
 - Builds should not take an unnecessary amount of public space. If you build in public areas, be reasonable
-- If you can shoot at someone, they must be able to see you and shoot back at you, and clearly see you
-- You may not force players to crouch or jump at any point in your base, even to fight back
+- If you can shoot at someone, they must be able to see you, shoot back at you and clearly see you
+- Raiders must not be forced to jump or crouch at any time inside or outide of your base
+  - This includes gaining access and being able to shoot back
 - Bases cannot be built in a way that will cause players to get stuck permanently in any part of it
 - Bases may not have mazes built within to artificially extend the raid duration
   - A base is considered a maze if it contains more than one 180° turn or more than two 90° turns, or uses multiple pathways designed to disorient players.
@@ -91,6 +92,7 @@ The sections below provide comprehensive information on specific aspects of game
 - If your base can harm other players, make sure that it has reasonable counterplay that does not rely on luck
 - All bases should be raidable with a crowbar; you cannot make players rely on finding a code
 - All Map Doors in a building must be owned by the same player
+- Drug Chute's are not allowed, you must intend to physically leave your base to sell
 
 ---
 
@@ -108,13 +110,11 @@ The sections below provide comprehensive information on specific aspects of game
 
 ### 🔷 Prop Usage
 
-- You cannot build unreachable bases
 - You cannot place props inside or on someone else's base without permission
 - You cannot use props to reach any part of someone's base
 - You cannot use props to disrupt other players (prop fling/block/spam)
 - You cannot use props to fly or climb
 - You cannot place, move, or remove props if involved in an RP situation
-- You cannot block off parts of the map that don't belong to you (Drug Drops, Recycler, Trash Cans, ATM's)
 
 ---
 
@@ -128,14 +128,13 @@ The sections below provide comprehensive information on specific aspects of game
 - You cannot make laws targeting individuals
 - Laws must be within reason
 - On major law changes, announce it to the population before enforcing it
-- Lockdowns are for arresting people outside; prop houses count as being indoors
 
 #### 👮 Police
 
 - You cannot base outside of PD
 - You can build outside of PD only for governmental reasons (such as checkpoints)
 - You must follow hierarchy when possible (Mayor > Chief > Officer)
-- Lockdowns are for arresting people outside (not KOS); prop houses count as being indoors
+- Lockdowns are for arresting people outside; prop houses count as being indoors
 - Mutinies are allowed
 - Corruption is allowed
 - Arrests can only be done on people breaking laws; you cannot be bribed into arresting an innocent
@@ -143,17 +142,28 @@ The sections below provide comprehensive information on specific aspects of game
 - Police should always attempt to arrest someone breaking a law first, not KOS (unless player has a weapon)
 - Police Medics cannot revive criminals with the intent to arrest after
 - Warrants/ Wanted expire after Player is killed/ Jailed or Successfully defends a raid. Police cannot return if the warrant is still valid, but have already failed.
+- Warrants require a valid RP reason to act upon (hearing or seeing illegal items)
 
 #### 💼 Gun Dealers
 
-- You must have an intent to provide the services assigned to your job
 - One group cannot have a monopoly on this job
+- You must have an intent to provide the services assigned to your job
+- Cannot base with another gun dealer
+- Cannot participate in a raid
+- Cannot exclusively sell shipments, must intend to sell idividual weapons
 
 #### ⚕️ Medic
 
 - One group cannot have a monopoly on this job
-- You cannot base with another medic
-- Can be hired by criminals/ raid
+- You must have an intent to provide the services assigned to your job
+- Cannot base with another medic
+- Can raid
+
+  #### Drug Dealers
+
+  - Can base with other drug dealers
+  - Can raid
+  - Cannot automate drug selling (no drug chute's)
 
 ---
 
@@ -164,16 +174,15 @@ The sections below provide comprehensive information on specific aspects of game
 - Criminal’s can have a maximum of 3 person groups while raiding, this includes a hired medic (Gangsters/ Mob Boss Exempt)
 - If you die during a raid as a **defender**, you can return to it no matter what
 - If you die during a raid as a **raider**, you can return to it if someone is still alive raiding the base
+- Third Party raiders can never return
+- Third parties are allowed to join the raid on either side, or against both, as long as they have an RP reason to do so
 - If no raider is left inside a base, the raid ends. This applies even if the raider walks out for a few seconds
-- Third Party Raiders cannot return after death (even if other third party raider remains alive)
 - If a raid group fails or dies, but a third party raider(s) remain alive the original group CANNOT return to the raid.
 - Cops cannot stealth raid unless they have proper proof something illegal is happening. You must announce yourself
 - As soon as a raid is initiated, no prop may be placed, moved, added, or deleted by both parties until it is over
 - Do not disconnect during or right before a raid. You must wait for a raid to end before quitting
-- Third parties are allowed to join the raid on either side, or against both, as long as they have an RP reason to do so
 - The only entity allowed to be used to reach a base you're raiding or planning to raid is the **entity ladder**
   - **The prop ladder does not count**
-- You must have a valid RP reason to kill the mayor (stock laws don't count as a valid reason)
   
 ---
 
