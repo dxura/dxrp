@@ -92,7 +92,6 @@ The sections below provide comprehensive information on specific aspects of game
 - If your base can harm other players, make sure that it has reasonable counterplay that does not rely on luck
 - All bases should be raidable with a crowbar; you cannot make players rely on finding a code
 - All Map Doors in a building must be owned by the same player
-- Drug Chute's are not allowed, you must intend to physically leave your base to sell
 
 ---
 
@@ -163,7 +162,6 @@ The sections below provide comprehensive information on specific aspects of game
 
   - Can base with other drug dealers
   - Can raid
-  - Cannot automate drug selling (no drug chute's)
 
 ---
 
