@@ -8,8 +8,8 @@ This repository is the public counterpart to the DXRP repository and includes th
 - [Roadmap](https://github.com/orgs/dxura/projects/11)
 - [Discord](https://discord.gg/uBwQ2QHP2D)
 - [s&box Link](https://sbox.game/dxura/rp)
-
-- [s&box Server Container](https://hub.docker.com/r/dxura/sbox)
+---
+- [Server Image](https://hub.docker.com/r/dxura/sbox)
 
 ## Features
 
