@@ -238,7 +238,7 @@
                 "OnComponentFixedUpdate": null,
                 "OnComponentStart": null,
                 "OnComponentUpdate": null,
-                "Url": "https://dxrp.net/embed/motd/"
+                "Url": "https://staging.dxrp.net/embed/motd/"
               }
             }
           ],
@@ -1037,7 +1037,7 @@
                 "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
               },
               "Property": "Position",
-              "Value": "-2658.792,914.2365,776.0374"
+              "Value": "-2658.834,914.2604,775.8712"
             },
             {
               "Target": {
@@ -6170,7 +6170,7 @@
               "Property": "TimeSinceOwnerDisconnect",
               "Value": {
                 "Absolute": 0,
-                "Relative": 1424.9918
+                "Relative": 576.8214
               }
             }
           ],
@@ -6584,7 +6584,7 @@
         }
       },
       {
-        "__guid": "e1a12426-eff5-4670-99b6-4d969403d789",
+        "__guid": "7685a91b-6143-40a4-81af-bd66aecd3f0b",
         "__version": 2,
         "__Prefab": "gameplay/entities/jobs/mayor/law_board.prefab",
         "__PrefabInstancePatch": {
@@ -6594,7 +6594,7 @@
           "MovedObjects": []
         },
         "__PrefabIdToInstanceId": {
-          "4a5ba9c7-10db-495e-9e49-9c01318c17ee": "3dcfa8de-9e15-4b61-b1b8-2d9e69b68093"
+          "333c9790-747e-4923-8d88-03ad72fb49dc": "7edecc6d-f9ad-4328-9a44-5eb5245da2a3"
         }
       },
       {
@@ -10097,7 +10097,8 @@
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
   "__references": [
-    "dxura.rp#133385"
+    "facepunch.metal_01a#9574",
+    "facepunch.metal_door_01a#143444"
   ],
   "__version": 2
 }
