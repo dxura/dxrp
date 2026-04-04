@@ -1,0 +1,70 @@
+FROM debian:trixie-slim AS builder
+
+ARG DEBIAN_FRONTEND="noninteractive"
+
+# Install dependencies and add i386 architecture
+RUN apt update && \
+    dpkg --add-architecture i386 && \
+    sed -i 's/^Components: main$/& contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources && \
+    apt update
+
+# Install build tools, wine, and steamcmd dependencies
+RUN apt-get update && \
+    apt-get install --assume-yes --no-install-recommends git make ca-certificates cabextract wine wine32 wine64 libwine libwine:i386 fonts-wine wget winbind xserver-xorg-core xvfb xauth psmisc && \
+    echo steam steam/question select "I AGREE" | debconf-set-selections && \
+    echo steam steam/license note '' | debconf-set-selections && \
+    apt-get install --assume-yes steamcmd && \
+    apt-get clean --assume-yes && \
+    rm -rf /tmp/* /var/tmp/*
+
+# Update Winetricks and make
+RUN apt-get remove --assume-yes winetricks && \
+    git clone https://github.com/Winetricks/winetricks.git && \
+    cd winetricks && \
+    make install
+
+# Prepare Wine environment
+RUN mkdir -p /work && cd /work && \
+    WINEPREFIX=/work/wineprefix xvfb-run winetricks -q --force win10 vcrun2022 && \
+    wget -q "https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.0/dotnet-runtime-10.0.0-win-x64.exe" -O dotnet-installer.exe && \
+    WINEPREFIX=/work/wineprefix xvfb-run wine dotnet-installer.exe /install /quiet /norestart && \
+    rm dotnet-installer.exe
+    
+# Prepare server install
+RUN mkdir -p /work/server && \
+    /usr/games/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir /work/server +login anonymous +app_update 1892930 validate +quit
+
+# Clean up Wine install 
+RUN rm -rf "/work/wineprefix/drive_c/ProgramData/Package Cache"
+
+# --- Move to the runtime image ---
+FROM alpine:edge
+
+# Install packages
+RUN apk add wine gnutls && \
+    apk cache clean && \
+    # Manual (package breaking) cleaning
+    rm -rf /usr/lib/libLLVM* && \
+    rm -rf /usr/lib/libgallium* && \
+    rm -rf /usr/lib/gallium-pipe
+
+# Copy artifacts
+COPY --from=builder --chmod=777 /work/wineprefix /sbox/.wine
+COPY --from=builder --chmod=777 /work/server /sbox
+
+# Add automatic volumes for downloads and logs
+VOLUME ["/sbox/download", "/sbox/logs", "/sbox/data"]
+
+ENV WINEDEBUG=-all
+ENV WINEDLLOVERRIDES=icu,icuuc=d
+ENV XDG_RUNTIME_DIR=/tmp
+
+# Make sure our prefix is ready
+ENV WINEPREFIX=/sbox/.wine
+RUN wine "" || true
+
+# Replace Sandbox.Engine.dll in the final layer
+RUN wget -q -O /sbox/bin/managed/Sandbox.Engine.dll https://files.dxura.com/dimmer/Sandbox.Engine.dll
+
+WORKDIR /sbox
+ENTRYPOINT ["wine", "sbox-server.exe"]
