@@ -3,6 +3,8 @@ name: Docker Deploy s&box Server
 on:
   push:
     branches: ["main"]
+    paths:
+      - 'sbox-server'
   workflow_dispatch:
 
 env:
