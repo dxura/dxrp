@@ -3502,7 +3502,7 @@
                 "__guid": "d6e46a8c-3ebb-4f6a-af9b-824c6d037b7f",
                 "__enabled": true,
                 "Flags": 0,
-                "Center": "0,0,-1821.89",
+                "Center": "0,0,-598.3553",
                 "ColliderFlags": 0,
                 "Elasticity": null,
                 "Friction": null,
@@ -3518,7 +3518,7 @@
                 "OnTriggerEnter": null,
                 "OnTriggerExit": null,
                 "RollingResistance": null,
-                "Scale": "50000,50000,1739.83",
+                "Scale": "25000,25000,557.3518",
                 "Static": false,
                 "Surface": null,
                 "SurfaceVelocity": "0,0,0"
@@ -28965,7 +28965,8 @@
   "MenuIcon": null,
   "DontBreakAsTemplate": false,
   "__references": [
-    "dxura.rp#133385"
+    "dxura.rp#133385",
+    "facepunch.wooden_door_01b#107469"
   ],
   "__version": 2
 }
