@@ -63,5 +63,8 @@ ENV XDG_RUNTIME_DIR=/tmp
 ENV WINEPREFIX=/sbox/.wine
 RUN wine "" || true
 
+# Replace Sandbox.Engine.dll in the final layer
+RUN wget -q -O /sbox/bin/managed/Sandbox.Engine.dll https://files.dxura.com/dimmer/Sandbox.Engine.dll
+
 WORKDIR /sbox
 ENTRYPOINT ["wine", "sbox-server.exe"]
