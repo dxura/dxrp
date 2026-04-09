@@ -32,7 +32,7 @@ RUN mkdir -p /work && cd /work && \
     
 # Prepare server install
 RUN mkdir -p /work/server && \
-    /usr/games/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir /work/server +login anonymous +app_update 1892930 -beta staging validate +quit
+    /usr/games/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir /work/server +login anonymous +app_update 1892930 validate +quit
 
 # Clean up Wine install 
 RUN rm -rf "/work/wineprefix/drive_c/ProgramData/Package Cache"
@@ -62,9 +62,6 @@ ENV XDG_RUNTIME_DIR=/tmp
 # Make sure our prefix is ready
 ENV WINEPREFIX=/sbox/.wine
 RUN wine "" || true
-
-# Replace Sandbox.Engine.dll in the final layer
-RUN wget -q -O /sbox/bin/managed/Sandbox.Engine.dll https://files.dxura.com/dimmer/Sandbox.Engine.dll
 
 WORKDIR /sbox
 ENTRYPOINT ["wine", "sbox-server.exe"]
