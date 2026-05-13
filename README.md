@@ -1,16 +1,13 @@
 # DXRP
 
-**DXRP** is a roleplaying game built on **s&box** with a global economy, and session-based gameplay. In this game, players engage in a dynamic world where currency is the only global factor, and each session creates an unique roleplaying experience.
+**DXRP** is a roleplaying game by **Dxura**, built on **s&box** with a global economy and session-based gameplay. Players engage in a dynamic world where currency is the persistent global factor, while each session creates a unique roleplaying experience.
 
-This repository is the public counterpart to the DXRP repository and includes the SDK, Server Image, and issue/project tracking.
+This repository is the public source-available release for DXRP. It includes the s&box game code, models, assets, documentation, and issue/project tracking for public release.
 
 - [Website](https://dxrp.net)
 - [Roadmap](https://github.com/orgs/dxura/projects/11)
 - [Discord](https://discord.gg/uBwQ2QHP2D)
 - [s&box Link](https://sbox.game/dxura/rp)
-
----
-- [Server Image](https://hub.docker.com/r/dxura/sbox)
 
 ## Features
 
@@ -26,9 +23,11 @@ This repository is the public counterpart to the DXRP repository and includes th
 
 ## License
 
-This project is **closed-source** and licensed under a proprietary license. Please contact support@dxura.com for licensing inquiries or contribution requests.
+DXRP is **source-available**, not open source. All rights are reserved except for the limited permissions expressly granted in [LICENSE.md](LICENSE.md).
+
+Use of the official DXRP release through s&box, dxrp.net, other Dxura-approved channels, or Dxura-provided dedicated server workflows is permitted as described in [LICENSE.md](LICENSE.md). Redistribution, public mirrors, commercial use, competing services, modified public releases, and public modified server hosting outside approved workflows are not permitted without prior written permission from Dxura.
 
 ## Acknowledgements
 
 - Inspired by **DarkRP** on Garry's Mod.
-- Thanks to the s&box by Facepunch for providing the platform for development.
+- Thanks to **s&box** by Facepunch for providing the platform for development.
