@@ -1,0 +1,20 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root>
+	@if ( !Player.IsValid()) return;
+	
+	<p style="color: @Player.Job.Color.Hex()">@Player.JobDisplayName</p>
+</root>
+
+@code
+{
+	private static Player? Player => Player.Local.IsValid() ? Player.Local : null;
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Player?.JobDisplayName );
+	}
+}

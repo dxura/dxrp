@@ -1,0 +1,95 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() ) return;
+
+<root class="@( IsVisible ? "" : "hidden" )">
+
+	<div class="flex gap-6">
+		@foreach ( var slotGroup in Player.Equipment.OrderBy( x => x.Resource.SlotValue() ).GroupBy( x => x.Resource.SlotValue() ) )
+		{
+			<div class="group @GroupClasses( slotGroup.Key )">
+
+				<InputHint Action="@($"Slot{SlotIndex( slotGroup.Key )}")" class="small" Size="@InputGlyphSize.Small"/>
+
+				@foreach ( var equipment in slotGroup )
+				{
+					<EquipmentRow Equipment=@equipment/>
+				}
+			</div>
+		}
+	</div>
+</root>
+
+@code
+{
+	public Player Player => Player.Local;
+	public Equipment? CurrentEquipment => Player.CurrentEquipment;
+	private Equipment? _prevEquipment;
+
+	// Control visibility
+	private new bool IsVisible { get; set; } = true;
+	private TimeSince _lastActivity;
+	private float _inactivityThreshold = 1f;
+	private bool _autoHide = true;
+
+	public void Show()
+	{
+		IsVisible = true;
+		_lastActivity = 0;
+		StateHasChanged();
+	}
+
+	public void Hide()
+	{
+		IsVisible = false;
+		StateHasChanged();
+	}
+
+	// Record activity to prevent auto-hiding
+	public void RecordActivity()
+	{
+		_lastActivity = 0;
+		if ( !IsVisible && _autoHide )
+		{
+			Show();
+		}
+	}
+
+	public string GroupClasses( EquipmentSlot slot )
+	{
+		var wpn = CurrentEquipment;
+		if ( !wpn.IsValid() ) return "";
+
+		if ( wpn.Resource.SlotValue() == slot ) return "active color-border-right";
+
+		return "";
+	}
+
+	public int SlotIndex( EquipmentSlot slot )
+	{
+		return (int)slot;
+	}
+
+	protected override int BuildHash()
+	{
+		return !Player.IsValid() ? 0 : HashCode.Combine( Player.Equipment.Count(), CurrentEquipment );
+	}
+
+	public override void Tick()
+	{
+		if ( _prevEquipment != CurrentEquipment && Player.Local.IsValid() && Player.Local.CantSwitch == false )
+		{
+			RecordActivity();
+		}
+
+		// Check for inactivity
+		if ( _autoHide && IsVisible && _lastActivity > _inactivityThreshold )
+		{
+			Hide();
+		}
+
+		_prevEquipment = CurrentEquipment;
+	}
+}

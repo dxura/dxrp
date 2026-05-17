@@ -1,0 +1,65 @@
+@import "../styles.scss";
+
+Announcement {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+
+.mayor-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.mayor-message {
+  max-width: 1200px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.staff-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.staff-message {
+  max-width: 1200px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.system-header {
+  margin-bottom: 12px;
+}
+
+.system-message {
+  max-width: 1200px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+}
+
+.generic-message {
+  margin-top: 156px;
+  max-width: 1200px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}

@@ -1,0 +1,71 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@page "/settings/performance"
+
+<root class="flex flex-col gap-4 p-4 text-white">
+	<div class="flex flex-col" style=" max-width: 300px;">
+		<p class="text-base">#settings.performance.occlusion</p>
+		<SliderControl Min=@( 500 ) Max=@( 10000 )
+		               Value="@( float.Parse(ConsoleSystem.GetValue("dx_occlusion_distance", OcclusionSystem.OcclusionDistance.ToString())) )"
+		               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_occlusion_distance", value); } )
+		/>
+		<p class="text-sm text-gray-400 -mt-2 ml-2">#settings.performance.occlusion_desc</p>
+
+	</div>
+	
+	
+	<h2 class="text-bold text-lg p-2 bg-primary-75 text-center">#settings.performance.wire</h2>
+	
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.performance.screen_camera</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_wire_screen_camera" )) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_wire_screen_camera", value); } 
+		                              )/>
+	</div>
+	<p class="text-sm text-gray-400 -mt-2 ml-2">#settings.performance.screen_camera_desc</p>
+
+	
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.performance.always_render_wire</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_wire_render_always" )) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_wire_render_always", value); } 
+		                              )/>
+	</div>
+	
+	<div class="flex flex-col ml-2" style=" max-width: 300px;">
+		<p class="text-base">#settings.performance.wire_distance</p>
+		<SliderControl Min=@( 0 ) Max=@( 5000 )
+		               Value="@( float.Parse(ConsoleSystem.GetValue("dx_wire_render_distance")) )"
+		               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_wire_render_distance", value); } )
+		/>
+	</div>
+	
+	<h2 class="text-bold text-lg p-2 bg-primary-75 text-center">#settings.performance.advanced</h2>
+	
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.performance.raycast_occlude</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_occlusion_raycast_players")) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_occlusion_raycast_players", value); } 
+		                              )/>
+	</div>
+
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.performance.hide_body_fp</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_disable_renderer_fp")) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_disable_renderer_fp", value); } 
+		                              )/>
+	</div>
+	
+	<div class="flex gap-2 w-full ml-2">
+		<button class="btn btn-good" @onclick="@( () => { ConsoleSystem.Run( "dx_toggle_env_probes" );})">#settings.performance.env_probes</button>
+	</div>
+	
+	<div class="flex gap-2">
+		<p class="text-base">#settings.performance.occlude_clothing</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_occlude_clothing")) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_occlude_clothing", value); } 
+		                              )/>
+	</div>	
+
+</root>

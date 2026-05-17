@@ -1,0 +1,168 @@
+{
+  "RootObject": {
+    "__guid": "537a3752-47c2-491f-b7a8-84d06247b15b",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "w_hands",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "player",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 3,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Equipment",
+        "__guid": "fe1fe626-a1a6-40ab-b2f5-1ce554531845",
+        "__enabled": true,
+        "DeploySound": "sounds/equipment/switch/equipment_switch.sound",
+        "EjectionPort": null,
+        "Handedness": "Both",
+        "HoldType": "None",
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "71b5aa96-91e3-4591-ac13-d0f36be5e115",
+          "go": "537a3752-47c2-491f-b7a8-84d06247b15b",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "Muzzle": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnlyShowCrosshairDot": true,
+        "Resource": "gameplay/equipment/default/hands/hands.equip",
+        "SpeedPenalty": 20,
+        "UseCrosshair": true
+      },
+      {
+        "__type": "Dxura.RP.Game.TagBinder",
+        "__guid": "8acf7f5b-f598-4b06-bee2-07501c3e874f",
+        "__enabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "71b5aa96-91e3-4591-ac13-d0f36be5e115",
+        "__enabled": true,
+        "AnimationGraph": null,
+        "BodyGroups": 18446744073709551615,
+        "BoneMergeTarget": null,
+        "CreateAttachments": false,
+        "CreateBoneObjects": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "models/nothing.vmdl",
+        "Morphs": {},
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Parameters": {
+          "bools": {},
+          "ints": {},
+          "floats": {},
+          "vectors": {},
+          "rotations": {}
+        },
+        "PlaybackRate": 1,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Sequence": {
+          "Name": null,
+          "Looping": true,
+          "Blending": false
+        },
+        "Tint": "1,1,1,1",
+        "UseAnimGraph": true
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "6a5b70e8-f9db-4408-b52a-b13eacbede77",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Functions",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.Equipments.HandsEquipment",
+            "__guid": "86906f60-d220-43f1-a3a3-66c744db10f7",
+            "__enabled": true,
+            "HoldDistance": 55,
+            "InputActions": [
+              "attack1",
+              "attack2",
+              "attack3"
+            ],
+            "InteractRange": 120,
+            "MaxReleaseVelocity": 500,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RequiresAllInputActions": false,
+            "RotateSpeed": 1,
+            "ThrowForce": 500
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

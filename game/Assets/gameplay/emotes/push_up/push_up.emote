@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_push_up",
+  "Repeat": true,
+  "Duration": 1.53,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

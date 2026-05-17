@@ -1,0 +1,28 @@
+@using Dxura.RP.Game.Equipments
+@inherits PanelComponent
+@namespace Dxura.RP.Game.UI
+
+<root>
+	<div class="w-full h-full flex items-center justify-center bg-primary">
+		@if ( !_tool.IsValid() ) return;
+		<p class="text-base text-center text-primary text-bold text-white">@_tool.CurrentTool?.GetName()</p>
+	</div>
+
+</root>
+
+@code
+{
+	ToolEquipment? _tool;
+
+	protected override void OnStart()
+	{
+		if(!Player.Local.IsValid()) return;
+		
+		_tool = Player.Local.Components.Get<ToolEquipment>( FindMode.EverythingInSelfAndDescendants );
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( _tool, _tool?.CurrentTool?.GetName() );
+	}
+}

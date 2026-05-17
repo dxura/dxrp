@@ -1,0 +1,258 @@
+{
+  "RootObject": {
+    "__guid": "40d7b901-1360-4810-9c2a-4069798b4dba",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "money",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,occludable,hands_interact,playerclip,money",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "a77fefa3-c7b9-4859-bd7f-07021d25f984",
+        "__enabled": true,
+        "Flags": 0,
+        "BodyGroups": 18446744073709551615,
+        "CreateAttachments": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "gameplay/entities/money/model/money.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      },
+      {
+        "__type": "Dxura.RP.Game.Entities.MoneyEntity",
+        "__guid": "4a2cca85-ede2-4fd1-88dc-210df6094d60",
+        "__enabled": true,
+        "Flags": 0,
+        "HealthComponent": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": 0,
+        "Resource": null,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "02d56870-23a6-4744-97b6-c77415e95895",
+          "go": "40d7b901-1360-4810-9c2a-4069798b4dba",
+          "component_type": "Rigidbody"
+        },
+        "TextRenderer": {
+          "_type": "component",
+          "component_id": "bdeb8c04-352b-4989-9911-f26c597038bb",
+          "go": "44e1609c-5d96-4d7f-aacf-0cc1bf1faf7b",
+          "component_type": "TextRenderer"
+        },
+        "UseSound": "sounds/money.sound",
+        "Value": 0
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "ee7302eb-5ed3-47d1-9db1-7c3acdcf04b9",
+        "__enabled": true,
+        "Flags": 512,
+        "Center": "-0.03621912,0.05323648,-0.01619899",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "5.824132,13.0369,1.421839",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "02d56870-23a6-4744-97b6-c77415e95895",
+        "__enabled": true,
+        "Flags": 512,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": 0,
+        "StartAsleep": false
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "44e1609c-5d96-4d7f-aacf-0cc1bf1faf7b",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Value",
+        "Position": "0,0,0.7618651",
+        "Rotation": "-0.7071068,-0.00000003090862,0.7071068,-0.00000003090862",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.TextRenderer",
+            "__guid": "bdeb8c04-352b-4989-9911-f26c597038bb",
+            "__enabled": true,
+            "Flags": 0,
+            "__version": 2,
+            "BlendMode": "Normal",
+            "FogStrength": 1,
+            "HorizontalAlignment": "Center",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "Scale": 0.05,
+            "TextScope": {
+              "Text": "$0",
+              "TextColor": "0.06966,0.65116,0.19565,1",
+              "FontName": "Poppins",
+              "FontSize": 64,
+              "FontWeight": 400,
+              "FontItalic": false,
+              "FontVariantNumeric": "Normal",
+              "LineHeight": 1,
+              "LetterSpacing": 0,
+              "WordSpacing": 0,
+              "FilterMode": "Bilinear",
+              "FontSmooth": "Auto",
+              "Outline": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "1,1,1,1"
+              },
+              "Shadow": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              },
+              "OutlineUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,1,0,1"
+              },
+              "ShadowUnder": {
+                "Enabled": true,
+                "Size": 1.3000004,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              }
+            },
+            "VerticalAlignment": "Center"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "CustomBounds": false
+      }
+    },
+    "__variables": [
+      {
+        "Id": "Value",
+        "Title": "Value",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "4a2cca85-ede2-4fd1-88dc-210df6094d60",
+            "Property": "Value"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

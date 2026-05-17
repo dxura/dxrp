@@ -1,0 +1,88 @@
+@using Dxura.RP.Game.Minigame
+@using Dxura.RP.Game.Minigame.Minigames
+@inherits PanelComponent
+@namespace Dxura.RP.Game
+
+<root>
+	<div class="flex flex-col items-center justify-center gap-1 w-full">
+		@if (!MinigameResource.IsValid() || CurrentState == MinigameState.Idle)
+		{
+			@* Show next minigame countdown when no active minigame *@
+			var nextTime = Math.Max(0, MinigameSystem.Instance?.NextAutoMinigameTime ?? 0);
+			<p class="text-2xl uppercase text-gray-400">#minigame.next</p>
+			<h2 class="text-2xl text-accent text-bold">@FormatTime(nextTime)</h2>
+		}
+		else
+		{
+			@* Simplified active minigame display *@
+			@switch (CurrentState)
+			{
+				case MinigameState.Seeding:
+					var seedingRemaining = Math.Max(0, 30f - _stateTimer);
+					<p class="text-2xl  text-gray-400 uppercase">#minigame.accepting</p>
+					<h2 class="text-2xl text-accent text-bold">@FormatTime(seedingRemaining)</h2>
+					break;
+					
+				case MinigameState.Creating:
+					<p class="text-2xl  text-gray-400 uppercase">#minigame.creating</p>
+					break;
+
+				case MinigameState.PreLobby:
+					var lobbyRemaining = Math.Max(0, MinigameResource.LobbyDuration - _stateTimer);
+					<p class="text-2xl  text-gray-400 uppercase">#minigame.starting_in</p>
+					<h2 class="text-2xl text-accent text-bold">@FormatTime(lobbyRemaining)</h2>
+					break;
+
+				case MinigameState.Playing:
+					var playingRemaining = Math.Max(0, MinigameResource.Duration - _stateTimer);
+					<p class="text-2xl  text-gray-400 uppercase">#minigame.time_remaining</p>
+					<h2 class="text-2xl text-accent text-bold">@FormatTime(playingRemaining)</h2>
+					break;
+
+				case MinigameState.PostLobby:
+					<p class="text-2xl  text-gray-400 uppercase">#minigame.winners</p>
+					<h2 class="text-lg text-accent text-bold">@Winners</h2>
+					break;
+
+				case MinigameState.Finished:
+					<p class="text-2xl  text-gray-400 uppercase">#minigame.game_over</p>
+					break;
+			}
+		}
+	</div>
+</root>
+
+@code
+{
+	MinigameResource? MinigameResource => MinigameSystem.Instance.IsValid() ? MinigameSystem.Instance.CurrentMinigame : null;
+	MinigameState CurrentState => MinigameSystem.Instance.IsValid() ? MinigameSystem.Instance.CurrentState : MinigameState.Idle;
+
+	string Winners => MinigameSystem.Instance.IsValid() ? MinigameSystem.Instance.GetWinnerPlayerNames() : "";
+
+	RealTimeSince _stateTimer = 0f;
+	MinigameState _lastState = MinigameState.Idle;
+
+	protected override void OnUpdate()
+	{
+		// Reset timer when state changes
+		if (CurrentState != _lastState)
+		{
+			_stateTimer = 0f;
+			_lastState = CurrentState;
+		}
+	}
+
+	string FormatTime(float seconds)
+	{
+		var totalSeconds = (int)Math.Ceiling(seconds);
+		var minutes = totalSeconds / 60;
+		var secs = totalSeconds % 60;
+
+		if (minutes > 0)
+			return $"{minutes}m {secs}s";
+
+		return $"{secs}s";
+	}
+
+	protected override int BuildHash() => HashCode.Combine( Time.Now );
+}

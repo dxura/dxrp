@@ -1,0 +1,54 @@
+{
+  "Title": "DXRP",
+  "Type": "game",
+  "Org": "dxura",
+  "Ident": "rp",
+  "Schema": 1,
+  "IncludeSourceFiles": false,
+  "Resources": "ui/*\ngameplay/entities/jobs/mayor/gun_license/gun_license.png",
+  "PackageReferences": [],
+  "EditorReferences": null,
+  "Mounts": null,
+  "IsStandaloneOnly": false,
+  "Metadata": {
+    "MaxPlayers": 128,
+    "MinPlayers": 1,
+    "TickRate": 50,
+    "GameNetworkType": "Multiplayer",
+    "MapSelect": "Unrestricted",
+    "MapList": [
+      "facepunch.flatgrass"
+    ],
+    "RankType": "None",
+    "PerMapRanking": false,
+    "LeaderboardType": "None",
+    "CsProjName": "",
+    "StartupScene": "scenes/game.scene",
+    "Compiler": {
+      "RootNamespace": "Dxura.RP.Game",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;",
+      "WarningsAsErrors": "",
+      "TreatWarningsAsErrors": false,
+      "Nullables": true,
+      "ReleaseMode": "Debug",
+      "AssemblyReferences": [],
+      "ReplacementDirectives": {
+        ".Server.cs": "SERVER"
+      },
+      "IgnoreFolders": [
+        "editor",
+        "unittest"
+      ],
+      "DistinctAssemblyReferences": []
+    },
+    "ControlModes": {
+      "Keyboard": true,
+      "VR": false,
+      "Gamepad": false
+    },
+    "LaunchMode": "DedicatedServerOnly",
+    "DedicatedServerStartupScene": "scenes/game.scene",
+    "MapStartupScene": "scenes/game.scene"
+  }
+}

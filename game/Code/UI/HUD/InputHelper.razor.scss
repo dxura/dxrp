@@ -1,0 +1,16 @@
+@import "../styles.scss";
+
+InputHelper {
+  position: absolute;
+  bottom: 3%;
+  right: 1%;
+
+  img {
+    filter: brightness(90);
+  }
+
+  label {
+    color: white;
+    align-self: center;
+  }
+}

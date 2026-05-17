@@ -1,0 +1,304 @@
+{
+  "RootObject": {
+    "__guid": "62f6f5d4-b7ac-48ac-ab00-2e193609f517",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "panic",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "solid",
+    "Enabled": true,
+    "NetworkMode": 0,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.TimedDestroyComponent",
+        "__guid": "08690fc0-0ecb-429d-9cd2-98883c33a544",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "ServerSideOnly": false,
+        "Time": 30,
+        "TimeUntilDestroy": {
+          "Absolute": 0,
+          "Relative": -186.91469,
+          "Passed": 186.91469,
+          "Fraction": 1
+        }
+      },
+      {
+        "__type": "Sandbox.LineRenderer",
+        "__guid": "ad386d51-0979-408f-b1dc-22f89cf6e3b1",
+        "__enabled": true,
+        "Flags": 0,
+        "Additive": false,
+        "AutoCalculateNormals": true,
+        "CastShadows": false,
+        "Color": {
+          "blend": "Linear",
+          "color": [
+            {
+              "t": 0.5,
+              "c": "0.78437,0.02919,0.04293,1"
+            }
+          ],
+          "alpha": [
+            {
+              "t": 0,
+              "a": 1
+            },
+            {
+              "t": 1,
+              "a": 1
+            }
+          ]
+        },
+        "CylinderSegments": 12,
+        "DepthFeather": 0,
+        "EndCap": "None",
+        "Face": "Camera",
+        "FogStrength": 1,
+        "Lighting": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Opaque": true,
+        "Points": [
+          {
+            "_type": "gameobject",
+            "go": "1f5fa396-ae46-48be-94e1-741a904ca6d5"
+          },
+          {
+            "_type": "gameobject",
+            "go": "26da67fe-e254-4fc3-af32-8e94132fea6d"
+          }
+        ],
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "SplineBias": 0,
+        "SplineContinuity": 0,
+        "SplineInterpolation": 0,
+        "SplineTension": 0,
+        "StartCap": "None",
+        "Texturing": {
+          "Texture": null,
+          "Material": null,
+          "WorldSpace": false,
+          "UnitsPerTexture": 10,
+          "Scale": 1,
+          "Offset": 0,
+          "Scroll": 0,
+          "FilterMode": "Anisotropic",
+          "TextureAddressMode": "Wrap",
+          "Clamp": false
+        },
+        "UseVectorPoints": false,
+        "VectorPoints": [
+          "0,0,1000",
+          "0,0,0"
+        ],
+        "Width": [
+          {
+            "x": 0.5,
+            "y": 5,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          }
+        ],
+        "Wireframe": false
+      },
+      {
+        "__type": "Sandbox.SoundPointComponent",
+        "__guid": "f04a7681-9293-42ce-b3c5-48c2252548eb",
+        "__enabled": true,
+        "Flags": 0,
+        "Distance": 512,
+        "DistanceAttenuation": false,
+        "DistanceAttenuationOverride": false,
+        "Falloff": [
+          {
+            "x": 0,
+            "y": 1,
+            "in": 3.1415927,
+            "out": -3.1415927,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 1,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          }
+        ],
+        "Force2d": false,
+        "MaxRepeatTime": 1,
+        "MinRepeatTime": 1,
+        "Occlusion": false,
+        "OcclusionOverride": false,
+        "OcclusionRadius": 32,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Pitch": 1,
+        "PlayOnStart": true,
+        "ReflectionOverride": false,
+        "Reflections": false,
+        "Repeat": false,
+        "SoundEvent": "sounds/environment/police.sound",
+        "SoundOverride": false,
+        "StopOnNew": false,
+        "TargetMixer": {
+          "Name": "game",
+          "Id": "82952af1-75ac-42a9-b2bf-8812511fb246"
+        },
+        "Volume": 1
+      },
+      {
+        "__type": "Sandbox.SpriteRenderer",
+        "__guid": "aa26090b-1744-4ef2-b863-eeb7a5c4daaa",
+        "__enabled": true,
+        "Flags": 0,
+        "__version": 2,
+        "Additive": false,
+        "AlphaCutoff": 0.5,
+        "Billboard": "Always",
+        "Color": "1,1,1,1",
+        "DepthFeather": 0,
+        "FlipHorizontal": false,
+        "FlipVertical": false,
+        "FogStrength": 1,
+        "IsSorted": false,
+        "Lighting": false,
+        "OnAnimationEnd": null,
+        "OnAnimationStart": null,
+        "OnBroadcastMessage": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Opaque": false,
+        "OverlayColor": "1,1,1,0",
+        "PlaybackSpeed": 1,
+        "RenderOptions": {
+          "GameLayer": false,
+          "OverlayLayer": true,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "Shadows": false,
+        "Size": "125,125",
+        "Sprite": {
+          "$compiler": "embed",
+          "$source": null,
+          "data": {
+            "Animations": [
+              {
+                "Name": "Default",
+                "FrameRate": 15,
+                "Origin": "0.5,0.5",
+                "LoopMode": "Loop",
+                "Frames": [
+                  {
+                    "Texture": "ui/panic.vtex",
+                    "BroadcastMessages": []
+                  }
+                ]
+              }
+            ],
+            "__references": null
+          },
+          "compiled": null
+        },
+        "StartingAnimationName": "Default",
+        "TextureFilter": "Bilinear"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "1f5fa396-ae46-48be-94e1-741a904ca6d5",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "beamStart",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "26da67fe-e254-4fc3-af32-8e94132fea6d",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "beamEnd",
+        "Position": "0,0,5000",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

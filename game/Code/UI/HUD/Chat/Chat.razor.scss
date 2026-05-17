@@ -1,0 +1,330 @@
+@import "../../styles.scss";
+
+Chat {
+  position: absolute;
+  width: 100%;
+  height: 94%;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;  
+
+  &.open {
+    pointer-events: all; 
+  }
+  
+  .msg-color {
+    color: #8B5CF6;
+  }
+
+  .faction-color {
+    color: #00D1FF;
+  }
+
+  .staff-color {
+    color: #F59E0B;
+  }
+
+  .chat-container {
+    width: 550px;
+
+    .messages {
+      overflow-y: scroll;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column-reverse;
+
+      > div {
+        flex-shrink: 0;
+      }
+    }
+
+    .messages-list {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .message, .input, .playername {
+      text-transform: none;
+    }
+
+    .when-open {
+      display: none;
+      .message { color: white; opacity: 0.9; }
+    }
+
+    .when-not-open {
+      display: flex;
+      .message { color: white; opacity: 0.9; }
+    }
+
+    // Keep each hint group (icon + label) on one line
+    .when-open,
+    .when-not-open {
+      white-space: nowrap;
+      flex-wrap: nowrap;
+      flex: 0 0 auto;
+    }
+
+    // Prevent long player names from wrapping
+    .playername {
+      white-space: nowrap;
+    }
+
+    .tags {
+      white-space: nowrap;
+    }
+
+    .role-tag {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 0 4px;
+      border-radius: 3px;
+      align-self: center;
+      background-color: $color-secondary;
+    }
+
+    .item-share-prefix {
+      color: rgba(white, 0.62);
+      text-transform: none;
+    }
+
+    .item-share-link {
+      min-height: 24px;
+      max-width: 250px;
+      padding: 2px 7px;
+      flex-direction: row;
+      align-items: center;
+      gap: 5px;
+      border-radius: 3px;
+      background-color: rgba(#1b1c22, 0.95);
+      color: rgba($color-tertiary, 0.94);
+      font-size: $text-sm;
+      font-weight: 700;
+      i {
+        font-size: 15px;
+        color: rgba($color-tertiary, 0.62);
+      }
+
+      .item-share-icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        object-fit: contain;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      span {
+        min-width: 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .item-share-quantity {
+        flex-shrink: 0;
+        color: rgba($color-tertiary, 0.68);
+      }
+
+      &.rarity-uncommon {
+        background-color: rgba(#1d2d21, 0.95);
+        color: #a7efad;
+      }
+
+      &.rarity-rare {
+        background-color: rgba(#182536, 0.95);
+        color: #a8d4ff;
+      }
+
+      &.rarity-epic {
+        background-color: rgba(#2a1b38, 0.95);
+        color: #d7b6ff;
+      }
+
+      &.rarity-legendary {
+        background-color: rgba(#352512, 0.95);
+        color: #ffd49a;
+      }
+    }
+
+
+    .chat-input-stack {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .emoji-picker {
+      position: absolute;
+      left: calc(100% + 8px);
+      bottom: 0;
+      width: auto;
+      height: 208px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-content: flex-start;
+      background-color: rgba($color-secondary, 0.88);
+      border: 0.5px solid rgba(white, 0.04);
+      border-radius: 4px;
+      pointer-events: all;
+      z-index: 20;
+    }
+
+    .emoji-choice {
+      width: 36px;
+      height: 32px;
+      min-width: 36px;
+      min-height: 32px;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border-radius: 3px;
+      color: white;
+      font-size: 20px;
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(white, 0.08);
+      }
+    }
+
+    .input-area {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      border-radius: 6px;
+    }
+
+    .hints {
+      min-height: 28px;
+      align-items: center;
+    }
+
+    .chat-mode-hint {
+      height: 36px;
+      padding: 0 10px 0 8px;
+      gap: 6px;
+      flex-shrink: 0;
+
+      &.icon-only {
+        padding-right: 8px;
+      }
+    }
+
+    .chat-mode-pill {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+
+      &.mode-local {
+        color: rgba( white, 0.8 );
+      }
+
+      &.mode-global {
+        color: #FA3A37;
+      }
+
+      &.mode-government {
+        color: #60a5fa;
+      }
+
+      &.mode-staff {
+        color: #f59e0b;
+      }
+
+      &.mode-faction {
+        color: #22d3ee;
+      }
+    }
+
+    .chat-input {
+      height: 36px;
+      min-height: 36px;
+      max-height: 36px;
+      padding: 0 10px;
+      background-color: transparent;
+      color: white;
+      border-radius: 0;
+      box-shadow: none;
+      transition: none;
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+
+      &:hover,
+      &:focus,
+      &.is-focused {
+        box-shadow: none;
+      }
+    }
+
+    .emoji-toggle {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border-left: 0.5px solid rgba(white, 0.06);
+      border-radius: 0;
+      color: rgba(white, 0.72);
+      cursor: pointer;
+
+      i {
+        font-size: 21px;
+      }
+
+      &:hover,
+      &.open {
+        color: white;
+        background-color: rgba(white, 0.06);
+      }
+    }
+  }
+}
+
+
+Chat.open {
+  .chat-container {
+    max-height: 70vh;
+
+    .messages {
+      max-height: 33.5vh;
+
+      > div {
+        pointer-events: all;
+      }
+    }
+
+    .when-open {
+      display: flex;
+    }
+
+    .when-not-open {
+      display: none;
+    }
+
+    .input-area {
+      background-color: $color-secondary;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .chat-mode-hint {
+      border-right: 0.5px solid rgba( white, 0.06 );
+    }
+  }
+}
+

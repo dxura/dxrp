@@ -1,0 +1,22 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+	<span class="server-name-value">@GetServerName()</span>
+</root>
+
+@code
+{
+	private static string GetServerName()
+	{
+		return string.IsNullOrWhiteSpace( Networking.ServerName )
+			? "Unknown Server"
+			: Networking.ServerName;
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( GetServerName() );
+	}
+}

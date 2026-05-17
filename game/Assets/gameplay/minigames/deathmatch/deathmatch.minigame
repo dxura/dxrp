@@ -1,0 +1,46 @@
+{
+  "Identifier": "deathmatch",
+  "MainPrefab": null,
+  "SecondaryPrefabs": [
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_container_yard.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_paintball_arena.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_gibs.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_whatever.prefab"
+    }
+  ],
+  "Name": "#minigame.deathmatch.name",
+  "Description": "#minigame.deathmatch.description",
+  "Icon": null,
+  "Color": null,
+  "LobbyOffset": "0,0,1000",
+  "MaxPlayers": 16,
+  "MinPlayers": 2,
+  "IsSelectable": false,
+  "Weight": 50,
+  "Duration": 180,
+  "LobbyDuration": 15,
+  "StartingEquipment": [
+    "gameplay/equipment/weapons/mp5/mp5.equip",
+    "gameplay/equipment/weapons/usp/usp.equip",
+    "gameplay/equipment/weapons/knife/knife.equip"
+  ],
+  "GiveMaxAmmo": true,
+  "SpawnRuleset": "Respawn",
+  "RespawnDuration": 3,
+  "SpawnMethod": "RoundRobin",
+  "MakeDeadPlayersSpectators": false,
+  "WinCondition": "MostKills",
+  "__references": [],
+  "__version": 0
+}

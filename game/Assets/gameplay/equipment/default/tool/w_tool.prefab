@@ -1,0 +1,207 @@
+{
+  "RootObject": {
+    "__guid": "56fffd4a-7058-4879-b0c9-efc3e3bbce84",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "w_tool",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "player,particles",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 3,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Equipment",
+        "__guid": "fe1fe626-a1a6-40ab-b2f5-1ce554531845",
+        "__enabled": true,
+        "DeploySound": "sounds/equipment/switch/equipment_switch.sound",
+        "EjectionPort": null,
+        "Handedness": "Right",
+        "HoldType": "Pistol",
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "07cd16e0-df23-4f65-b294-911f59096e8e",
+          "go": "e5fa2b74-165e-4726-85c0-299ec26bc87b",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "Muzzle": {
+          "_type": "gameobject",
+          "go": "672c40ac-0fb9-4096-8424-a39e3a6163c1"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnlyShowCrosshairDot": true,
+        "Resource": "gameplay/equipment/default/tool/tool.equip",
+        "SpeedPenalty": 20,
+        "UseCrosshair": true
+      },
+      {
+        "__type": "Dxura.RP.Game.TagBinder",
+        "__guid": "5087b522-f603-48a4-be5f-d815e5503404",
+        "__enabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "14528470-faca-4636-8ef0-79261b5585aa",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Functions",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.Equipments.ToolEquipment",
+            "__guid": "e54bbbac-034b-486f-8379-d6d4c591874d",
+            "__enabled": true,
+            "InputActions": [
+              "Attack1",
+              "Attack2"
+            ],
+            "LinePrefab": {
+              "_type": "gameobject",
+              "prefab": "gameplay/equipment/default/tool/tool_line.prefab"
+            },
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RequiresAllInputActions": false,
+            "UseSound": "gameplay/equipment/default/tool/tool.fire.sound"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "e5fa2b74-165e-4726-85c0-299ec26bc87b",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Model",
+        "Position": "2.965264,1.164294,-4.027634",
+        "Rotation": "0.05084048,-0.1114911,0.1030529,0.987099",
+        "Scale": "1.1,1.1,1.1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "07cd16e0-df23-4f65-b294-911f59096e8e",
+            "__enabled": true,
+            "AnimationGraph": null,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": false,
+            "CreateBoneObjects": false,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/weapons/sbox_toolgun/w_toolgun.vmdl",
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Sequence": {
+              "Name": null,
+              "Looping": true,
+              "Blending": false
+            },
+            "Tint": "1,1,1,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": [
+          {
+            "__guid": "672c40ac-0fb9-4096-8424-a39e3a6163c1",
+            "__version": 1,
+            "Flags": 0,
+            "Name": "Muzzle",
+            "Position": "7.845698,-0.1317922,0.5895997",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkInterpolation": true,
+            "NetworkOrphaned": 0,
+            "OwnerTransfer": 1,
+            "Components": [],
+            "Children": []
+          }
+        ]
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.wtoolgun#144911"
+  ],
+  "__version": 2
+}

@@ -1,0 +1,379 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Commands
+@using Dxura.RP.Shared
+@using Sandbox.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root class="item-card @GetRarityClass( Item.Definition.Rarity ) @( _actionsOpen ? "actions-open" : "" ) @( ShowActions ? "" : "no-actions" )">
+	<div class="item-tooltip-region" tooltip="@GetTooltip()" onclick="@ToggleActions" @onrightclick="@ToggleActions">
+		@if ( Item.Definition.Rarity != ItemRarity.Common )
+		{
+			<div class="item-rarity-badge">@GetRarityBadge( Item.Definition.Rarity )</div>
+		}
+
+		<div class="item-icon">
+			@{
+				var tex = ThumbnailCache.GetUrl( Item.Definition.ImageUrl, StateHasChanged );
+			}
+			@if ( tex != null )
+			{
+				<Image class="item-image" Texture="@tex"/>
+			}
+			else if ( !string.IsNullOrEmpty( Item.Definition.ImageUrl ) )
+			{
+				<div class="item-image-placeholder">
+					<i class="material-icons">image</i>
+				</div>
+			}
+			else
+			{
+				<div class="item-image-placeholder">
+					<i class="material-icons">inventory_2</i>
+				</div>
+			}
+		</div>
+
+		@if ( Item.Quantity > 1 )
+		{
+			<div class="item-quantity">@($"x{Item.Quantity}")</div>
+		}
+
+		<div class="item-name-bar">
+			<div class="item-name">@ResolvePhrase( Item.Definition.Name )</div>
+		</div>
+	</div>
+
+	@if ( ShowActions && _actionsOpen )
+	{
+		<div class="item-actions">
+			<button class="@(IsShareOnCooldown() ? "disabled" : "")" disabled="@IsShareOnCooldown()" onclick="@ShareItem">
+				<i class="material-icons">ios_share</i>
+				<span>@GetShareLabel()</span>
+			</button>
+
+			@if ( Item.Definition.Type == ItemType.Emote && !string.IsNullOrWhiteSpace( Item.Definition.GrantIdentifier ) )
+			{
+				<button onclick="@UseEmote">
+					<i class="material-icons">emoji_people</i>
+					<span>@Language.GetPhrase( "inventory.action.use" )</span>
+				</button>
+				<button onclick="@BindEmote">
+					<i class="material-icons">radio_button_checked</i>
+					<span>@Language.GetPhrase( "inventory.action.bind" )</span>
+				</button>
+			}
+
+			@if ( Item.Definition.Type == ItemType.Title && RankSystem.HasLocalPermission( Permission.CommandTitle ) )
+			{
+				var isEquipped = Player.Local.IsValid() &&
+				                 ( Player.Local.PreferredTitle == Item.Definition.GrantIdentifier ||
+				                   Player.Local.PreferredTitle == Item.Definition.Name );
+				@if ( isEquipped )
+				{
+					<button onclick="@ClearTitle">
+						<i class="material-icons">military_tech</i>
+						<span>@Language.GetPhrase( "inventory.action.unequip" )</span>
+					</button>
+				}
+				else
+				{
+					<button onclick="@UseTitle">
+						<i class="material-icons">military_tech</i>
+						<span>@Language.GetPhrase( "inventory.action.equip" )</span>
+					</button>
+				}
+			}
+
+			@if ( Item.Definition.Type == ItemType.Consumable )
+			{
+				<button onclick="@UseConsumableItem">
+					<i class="material-icons">token</i>
+					<span>@Language.GetPhrase( "inventory.action.use" )</span>
+				</button>
+			}
+
+			@if ( Item.Quantity <= 1 )
+			{
+				<button class="@(Item.Definition.IsTradable ? "" : "disabled")" disabled="@(!Item.Definition.IsTradable)" onclick="@DropOne">
+					<i class="material-icons">move_down</i>
+					<span>@Language.GetPhrase( "inventory.action.drop" )</span>
+				</button>
+			}
+			else
+			{
+				<div class="nested-action @(_dropAmountOpen ? "open" : "")">
+					<button class="@(Item.Definition.IsTradable ? "" : "disabled")" disabled="@(!Item.Definition.IsTradable)" onclick="@ToggleDropAmount">
+						<i class="material-icons">move_down</i>
+						<span>@Language.GetPhrase( "inventory.action.drop" )</span>
+						<i class="material-icons nested-chevron">chevron_right</i>
+					</button>
+					@if ( _dropAmountOpen )
+					{
+						<div class="drop-amount-submenu">
+							<TextEntry
+								class="drop-amount-input"
+								Value="@_dropAmountText"
+								OnTextEdited="@OnDropAmountEdited"/>
+							<button class="drop-amount-button @(Item.Definition.IsTradable ? "" : "disabled")" disabled="@(!Item.Definition.IsTradable)" onclick="@DropAmount">
+								<i class="material-icons">check</i>
+								<span>@Language.GetPhrase( "inventory.action.drop" )</span>
+							</button>
+							<button class="drop-all-button @(Item.Definition.IsTradable ? "" : "disabled")" disabled="@(!Item.Definition.IsTradable)" onclick="@DropStack">
+								<i class="material-icons">all_inbox</i>
+								<span>@Language.GetPhrase( "inventory.action.all" )</span>
+							</button>
+						</div>
+					}
+				</div>
+			}
+		</div>
+	}
+
+</root>
+
+@code {
+	public InventoryItemDto Item { get; set; } = null!;
+	public Action<InventoryItemDto, int>? OnDropRequested { get; set; }
+	public bool ShowActions { get; set; } = true;
+
+	private static InventoryItem? _openItem;
+	private const float ShareCooldown = 30f;
+	private const string ShareCooldownId = "inventory-share";
+	private bool _actionsOpen;
+	private bool _dropAmountOpen;
+	private string _dropAmountText = "1";
+	
+	protected override int BuildHash()
+	{
+		var hash = new HashCode();
+		hash.Add( Item.Id );
+		hash.Add( Item.Definition.ImageUrl );
+		hash.Add( Item.Quantity );
+		hash.Add( _actionsOpen );
+		hash.Add( ShowActions );
+		hash.Add( _dropAmountOpen );
+		hash.Add( _dropAmountText );
+		hash.Add( GetShareCooldownRemaining() );
+		hash.Add( Player.Local?.PreferredTitle );
+		return hash.ToHashCode();
+	}
+
+	private void ToggleActions()
+	{
+		if ( !ShowActions )
+		{
+			return;
+		}
+
+		if ( _actionsOpen )
+		{
+			CloseActions();
+			return;
+		}
+
+		if ( _openItem != null && _openItem != this )
+		{
+			_openItem.CloseActions();
+		}
+
+		_actionsOpen = true;
+		_openItem = this;
+		Sound.Play( "pop" );
+		StateHasChanged();
+	}
+
+	private void UseTitle()
+	{
+		PlayActionSound();
+		CloseActions();
+		PauseMenu.Close();
+		Dxura.RP.Game.Chat.Current.ExecuteCommandHost( TitleCommand.Name, Item.Definition.Id.ToString() );
+	}
+
+	private void ClearTitle()
+	{
+		PlayActionSound();
+		CloseActions();
+		PauseMenu.Close();
+		Dxura.RP.Game.Chat.Current.ExecuteCommandHost( TitleCommand.Name, "clear" );
+	}
+
+	private void UseEmote()
+	{
+		PlayActionSound();
+		CloseActions();
+		PauseMenu.Close();
+		Game.Chat.Current.SubmitPlayerChat( BuildEmoteCommand(), MessageType.LocalChat );
+	}
+
+	private void UseConsumableItem()
+	{
+		PlayActionSound();
+		CloseActions();
+		PauseMenu.Close();
+		Dxura.RP.Game.Chat.Current.ExecuteCommandHost( UseInventoryItemCommand.Name, Item.Definition.Id.ToString() );
+	}
+
+	private void CloseActions()
+	{
+		if ( _openItem == this )
+		{
+			_openItem = null;
+		}
+
+		if ( !_actionsOpen )
+		{
+			return;
+		}
+
+		_actionsOpen = false;
+		_dropAmountOpen = false;
+		StateHasChanged();
+	}
+
+	private void BindEmote()
+	{
+		PlayActionSound();
+		CloseActions();
+		PauseMenu.Close();
+		var itemName = ResolvePhrase( Item.Definition.Name );
+		if ( !CommandWheel.BindCommandToFirstAvailableSlot( BuildEmoteCommand(), itemName, "emoji_people" ) )
+		{
+			Notify.Error( Language.GetPhrase( "notify.command_wheel.no_slots" ) );
+			return;
+		}
+		Notify.Inventory( string.Format( Language.GetPhrase( "notify.inventory.bound_command_wheel" ), itemName ) );
+	}
+
+	private void ShareItem()
+	{
+		if ( IsShareOnCooldown() )
+		{
+			return;
+		}
+
+		Cooldown.Current.StartCooldown( ShareCooldownId, ShareCooldown );
+		PlayActionSound();
+		CloseActions();
+		PauseMenu.Close();
+		Game.Chat.Current.ShareInventoryItem( Item.Definition.Id );
+	}
+
+	private static bool IsShareOnCooldown()
+	{
+		return Cooldown.Current.IsOnCooldown( ShareCooldownId );
+	}
+
+	private static int GetShareCooldownRemaining()
+	{
+		return Cooldown.Current.GetRemainingTime( ShareCooldownId ) + 1;
+	}
+
+	private static string GetShareLabel()
+	{
+		return IsShareOnCooldown()
+			? string.Format( Language.GetPhrase( "inventory.action.share_cooldown" ), GetShareCooldownRemaining() )
+			: Language.GetPhrase( "inventory.action.share" );
+	}
+
+	private void DropOne()
+	{
+		Drop( 1 );
+	}
+
+	private void DropStack()
+	{
+		Drop( Item.Quantity );
+	}
+
+	private void ToggleDropAmount()
+	{
+		PlayActionSound();
+		_dropAmountOpen = !_dropAmountOpen;
+		StateHasChanged();
+	}
+
+	private void DropAmount()
+	{
+		if ( !int.TryParse( _dropAmountText, out var quantity ) )
+		{
+			Notify.Inventory( "#notify.inventory.drop_amount_invalid" );
+			return;
+		}
+
+		Drop( Math.Clamp( quantity, 1, Item.Quantity ) );
+	}
+
+	private void OnDropAmountEdited( string value )
+	{
+		_dropAmountText = value;
+	}
+
+	private void Drop( int quantity )
+	{
+		if ( !Item.Definition.IsTradable || quantity <= 0 )
+		{
+			return;
+		}
+
+		PlayActionSound();
+		CloseActions();
+		PauseMenu.Close();
+		OnDropRequested?.Invoke( Item, quantity );
+
+		Dxura.RP.Game.Chat.Current.ExecuteCommandHost( DropItemCommand.Name, Item.Definition.Id.ToString(), quantity.ToString() );
+		StateHasChanged();
+	}
+
+	private static void PlayActionSound()
+	{
+		Sound.Play( "pop" );
+	}
+
+	private string BuildEmoteCommand() => $"/emote {Item.Definition.GrantIdentifier}";
+
+	private string GetTooltip()
+	{
+		if ( string.IsNullOrWhiteSpace( Item.Definition.Description ) )
+		{
+			return GetTooltipText( Item.Definition.Name );
+		}
+
+		return string.Join( " | ",
+			GetTooltipText( Item.Definition.Name ),
+			GetTooltipText( Item.Definition.Description ) );
+	}
+
+	private static string ResolvePhrase( string text )
+	{
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+
+	private static string GetTooltipText( string text )
+	{
+		return ResolvePhrase( text )
+			.Replace( "\r", " " )
+			.Replace( "\n", " " )
+			.Trim();
+	}
+
+	private static string GetRarityClass( ItemRarity rarity ) => rarity switch
+	{
+		ItemRarity.Uncommon => "rarity-uncommon",
+		ItemRarity.Rare => "rarity-rare",
+		ItemRarity.Epic => "rarity-epic",
+		ItemRarity.Legendary => "rarity-legendary",
+		_ => "rarity-common"
+	};
+
+	private static string GetRarityBadge( ItemRarity rarity ) => rarity switch
+	{
+		ItemRarity.Uncommon => "U",
+		ItemRarity.Rare => "R",
+		ItemRarity.Epic => "E",
+		ItemRarity.Legendary => "L",
+		_ => ""
+	};
+}

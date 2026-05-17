@@ -1,0 +1,191 @@
+{
+  "RootObject": {
+    "__guid": "653c1a12-7357-436c-a2b7-8b36e4c6d5f2",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "weed_brick",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,noblockaudio,occludable,pocket_item,weed_brick,hands_interact",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "72b6cb90-fa1f-49c5-b4d3-3349065edcbd",
+        "__enabled": true,
+        "Flags": 0,
+        "BodyGroups": 18446744073709551615,
+        "CreateAttachments": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "gameplay/entities/jobs/drug_dealer/weed_brick/model/weed_brick.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      },
+      {
+        "__type": "Dxura.RP.Game.BaseEntity",
+        "__guid": "501862d2-144d-40b2-b7b8-e055f5d61626",
+        "__enabled": true,
+        "Flags": 0,
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "b538cdf2-f45d-4b18-9ca1-84cbfc21b647",
+          "go": "653c1a12-7357-436c-a2b7-8b36e4c6d5f2",
+          "component_type": "HealthComponent"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "801ec88d-ec7f-4a24-9d71-24240fb22817",
+          "go": "653c1a12-7357-436c-a2b7-8b36e4c6d5f2",
+          "component_type": "Rigidbody"
+        }
+      },
+      {
+        "__type": "Sandbox.ModelCollider",
+        "__guid": "60c9b039-2ef7-462e-b773-5b292a0ea35f",
+        "__enabled": true,
+        "Flags": 0,
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "Model": "gameplay/entities/jobs/drug_dealer/weed_brick/model/weed_brick.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "801ec88d-ec7f-4a24-9d71-24240fb22817",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "b538cdf2-f45d-4b18-9ca1-84cbfc21b647",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 100,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "1cb87dd9-e2e6-4bd9-90d2-0517961be8ed"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "0dc78360-c08d-4351-b751-aa4334b2151a"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "436561f5-fe56-48e1-95d6-71510c9cc6ee"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

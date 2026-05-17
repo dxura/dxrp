@@ -1,0 +1,292 @@
+{
+  "RootObject": {
+    "__guid": "883ded43-bb39-41b7-ac2c-d40f74ffdcbe",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "radio",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,hands_interact,occludable,build_interact,restricted_entity",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 8,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.RadioEntity",
+        "__guid": "b9aa3376-a9ab-4157-a45f-ac6871d33e78",
+        "__enabled": true,
+        "Flags": 0,
+        "DropoffCurve": [
+          {
+            "x": 0,
+            "y": 1,
+            "in": -0,
+            "out": -0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 1,
+            "y": 0,
+            "in": -0,
+            "out": -0,
+            "mode": "Mirrored"
+          }
+        ],
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "b0a09fca-7d1c-4a90-853a-89bd01edabb1",
+          "go": "883ded43-bb39-41b7-ac2c-d40f74ffdcbe",
+          "component_type": "HealthComponent"
+        },
+        "IsPlaying": true,
+        "Model": {
+          "_type": "gameobject",
+          "go": "a5145633-3ce7-4435-883f-1ed64f4b9fe0"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": 0,
+        "PopAmplitude": 0.05,
+        "PopSmoothing": 10,
+        "PopThreshold": 0.3,
+        "Resource": "gameplay/entities/radio/radio.entity",
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "7e81b670-b194-4dcc-a745-f41b70287605",
+          "go": "883ded43-bb39-41b7-ac2c-d40f74ffdcbe",
+          "component_type": "Rigidbody"
+        },
+        "StationIndex": 0,
+        "Ui": {
+          "_type": "gameobject",
+          "go": "5d79e35d-5249-48ec-8dfe-18e52249dc94"
+        }
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "b0a09fca-7d1c-4a90-853a-89bd01edabb1",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 100,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "7e81b670-b194-4dcc-a745-f41b70287605",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "5d79e35d-5249-48ec-8dfe-18e52249dc94",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "UI",
+        "Position": "-0.000041008,-0.0001810789,25",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.UI.RadioEntityDisplay",
+            "__guid": "c54c0388-9e54-489b-92cc-39e8c2cd9e45",
+            "__enabled": true,
+            "Flags": 0,
+            "Entity": {
+              "_type": "component",
+              "component_id": "b9aa3376-a9ab-4157-a45f-ac6871d33e78",
+              "go": "883ded43-bb39-41b7-ac2c-d40f74ffdcbe",
+              "component_type": "RadioEntity"
+            },
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "WorldPanel": {
+              "_type": "component",
+              "component_id": "6252fd21-0d22-445a-8cfc-406ec7af6e81",
+              "go": "5d79e35d-5249-48ec-8dfe-18e52249dc94",
+              "component_type": "WorldPanel"
+            }
+          },
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "6252fd21-0d22-445a-8cfc-406ec7af6e81",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": true,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "800,300",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 1,
+            "VerticalAlign": "Center"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "a5145633-3ce7-4435-883f-1ed64f4b9fe0",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Model",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "7f30cdc1-3583-44f0-a156-e67614eae928",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/props/items/radio/radio.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.BoxCollider",
+            "__guid": "7c5c1733-9d70-48f9-81fc-16689a150d38",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "1.123179,-0.3279858,7.133927",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "8.392298,40.83358,16.13626",
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "CustomBounds": false
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

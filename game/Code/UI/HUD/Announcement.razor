@@ -1,0 +1,138 @@
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+@inherits Panel
+
+<root>
+	@if (IsLockdown)
+	{
+		<div class="pulse bg-bad">
+			<div class="text-white text-xl text-center p-2 flex items-center justify-center w-full">#governance.lockdown.message</div>
+		</div>
+	}	
+	@if (JailTime > 0)
+	{
+		<div class="pulse bg-jail">
+			<div class="text-white text-xl text-center p-1 flex items-center justify-center w-full">
+				<span class="text-base text-bold">#governance.imprisoned</span>
+				<span class="text-base ml-1">(@JailTime.ToString("0")s)</span>
+			</div>
+		</div>
+	}
+
+	@foreach ( var announcement in Announcements )
+	{
+		switch (announcement.Type )
+		{
+
+			case AnnouncementType.Generic:
+				<div class="flex items-center justify-center w-full">
+					<div class="generic-message text-white text-xl text-center text-bold">
+						@announcement.Text
+					</div>
+				</div>
+				break;
+			case AnnouncementType.Mayor:
+				<div class="flex items-center justify-center w-full">
+					<div class="p-4 mt-2 flex flex-col justify-center items-center bg-primary-95 rounded pulse">
+						<div class="mayor-header text-center mb-2">
+							<span class="text-bold text-xl text-accent">#hud.announcement.mayor</span>
+						</div>
+						<div class="text-white text-xl text-center text-bold mayor-message">
+							@announcement.Text
+						</div>
+					</div>
+				</div>
+				break;
+			case AnnouncementType.Staff:
+				<div class="flex items-center justify-center w-full">
+					<div class="p-4 mt-2 flex flex-col justify-center items-center bg-primary-95 rounded pulse">
+						<div class="staff-header text-center mb-2">
+							<span class="text-bold text-xl text-accent">#hud.announcement.staff</span>
+						</div>
+						<div class="text-white text-xl text-center text-bold staff-message">
+							@announcement.Text
+						</div>
+					</div>
+				</div>
+				break;
+			case AnnouncementType.System:
+				<div class="flex items-center justify-center w-full">
+					<div class="p-4 mt-2 flex flex-col justify-center items-center bg-primary-95 rounded">
+						<div class="system-header text-center mb-2">
+							<span class="text-bold text-xl text-bad">#hud.announcement.system</span>
+						</div>
+						<div class="text-white text-xl text-center text-bold system-message">
+							@announcement.Text
+						</div>
+					</div>
+				</div>
+				break;
+		}
+	}
+</root>
+
+@code
+{
+	public enum AnnouncementType
+	{
+		Generic,
+		Mayor,
+		Staff,
+		System
+	}
+	
+	public record AnnouncementEntry(string Text, AnnouncementType Type, TimeUntil Duration);
+	
+	private bool IsLockdown => LockdownSystem.Instance.IsValid() && LockdownSystem.Instance.Lockdown;
+	private double JailTime => Governance.Current.GetLocalJailTimeRemaining();
+
+	static readonly List<AnnouncementEntry> Announcements = new();
+	
+	public static Announcement Instance { get; private set; } = null!;
+
+	public Announcement()
+	{
+		Instance = this;
+	}
+
+	public override void Tick()
+	{
+		if ( Announcements.Count > 0 )
+		{
+			// Remove expired announcements
+			Announcements.RemoveAll( a => a.Duration <= 0 );
+		}
+	}
+
+	public static void Announce(string text, AnnouncementType type, float duration)
+	{
+		Announcements.RemoveAll( a => a.Type == type );
+		Announcements.Add( new AnnouncementEntry( text, type, duration ) );
+
+		switch (type )
+		{
+			case AnnouncementType.Mayor:
+				Sound.Play( "mayor_announce" );
+				break;
+			case AnnouncementType.Staff:
+				Sound.Play( "announce" );
+				break;
+			case AnnouncementType.System:
+				Sound.Play( "announce" );
+				break;
+		}
+		
+		Log.Info( $"Announcement ({type}): {text}" );
+	}
+    
+	protected override int BuildHash()
+	{
+		var hash = HashCode.Combine( IsLockdown, JailTime, Announcements.Count );
+		foreach ( var announcement in Announcements )
+		{
+			hash = HashCode.Combine( hash, announcement.Type, announcement.Text );
+		}
+
+		return hash;
+	}
+}

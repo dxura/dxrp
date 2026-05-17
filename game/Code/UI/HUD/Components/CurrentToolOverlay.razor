@@ -1,0 +1,42 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Tools
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+	@if (!IsToolEquipped || CurrentTool == null || (BuildMenu.Instance?.IsVisible ?? false)) return;
+
+	<div class="flex flex-col bg-primary-95 backdrop-blur rounded p-4 mb-2">
+		<label class="text-2xl font-bold text-accent glow-accent block">@CurrentTool.GetName()</label>
+		<label class="text-base text-tertiary opacity-90">@CurrentTool.GetDescription()</label>
+		
+		<div class="mt-2 flex gap-3">
+			@foreach (var (control, description) in CurrentTool.GetControls())
+			{
+				<div class="control flex items-center gap-3">
+					<InputHint Action="@control" class="small" Size="@InputGlyphSize.Small"/>
+
+					<span class="text-sm text-bold text-tertiary opacity-90">@description</span>
+				</div>
+			}
+		</div>
+	</div>
+
+
+</root>
+
+@code
+{
+    bool IsToolEquipped => Player.Local.IsValid() && Player.Local.CurrentEquipment?.Identifier == "tool";
+    private BaseTool? CurrentTool => BaseTool.CurrentTool;
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(
+            IsToolEquipped, 
+            CurrentTool, 
+            CurrentTool?.GetControlsHash(),
+            BuildMenu.Instance?.IsVisible
+        );
+    }
+}

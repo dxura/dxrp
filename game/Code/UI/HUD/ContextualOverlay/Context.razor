@@ -1,0 +1,173 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@if ( CustomPanel is not null )
+	return;
+
+@if ( _isOffScreen && !Object.ShowChevron )
+	return;
+
+<root>
+	@if ( !string.IsNullOrEmpty( Object.DisplayText ) )
+	{
+		<label class="text-bold text-base">
+			@(string.IsNullOrWhiteSpace( Object.DisplayText ) ? string.Empty : Object.DisplayText.StartsWith( '#' ) ? Language.GetPhrase( Object.DisplayText[1..] ) : Object.DisplayText)
+		</label>
+	}
+
+	@if ( Object.ShowChevron && _isOffScreen )
+	{
+		<label class="chevron" style="transform: rotateZ(@( ChevronAngle )deg);">></label>
+	}
+
+	@if ( !string.IsNullOrEmpty( Object.InputHint ) )
+	{
+		<InputHint Animate="@false" Size="@InputGlyphSize.Small" Action="@Object.InputHint"/>
+	}
+</root>
+
+@code
+{
+	public required IContextualObject Object { get; set; }
+
+	BaseContextPanel? CustomPanel { get; set; }
+
+
+	private float ChevronAngle
+	{
+		get
+		{
+			if ( !Scene.Camera.IsValid() ) return 0f;
+			return Angle( Scene.Camera.PointToScreenNormal( Object.ContextPosition ), new Vector2( 0.5f, 0.5f ) ) - 180f;
+		}
+	}
+	
+	/// <summary>
+	///     Are we off screen?
+	/// </summary>
+	private bool _isOffScreen;
+
+	public override void Tick()
+	{
+		if ( Object.ContextPanelTypeOverride is null ) return;
+		if ( CustomPanel.IsValid() ) return;
+
+		TryCreateCustomPanel();
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Object.DisplayText );
+	}
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( firstTime ) TryCreateCustomPanel();
+	}
+
+	private void TryCreateCustomPanel()
+	{
+		CustomPanel?.Delete( true );
+
+		if ( Object.ContextPanelTypeOverride is null ) return;
+
+		var desc = TypeLibrary.GetType( Object.ContextPanelTypeOverride );
+		if ( desc is null ) return;
+
+		var inst = desc.Create<BaseContextPanel>();
+		inst.Context = this;
+
+		CustomPanel = inst;
+		CustomPanel.Parent = this;
+
+		StateHasChanged();
+	}
+
+	private static readonly Vector2 ScreenSafezone = new(0.05f, 0.95f);
+
+	private Vector2 DistanceFromCenter( Vector2 screenPos )
+	{
+		var xDistance = MathF.Abs( screenPos.x - 0.5f ) * 2f;
+		var yDistance = MathF.Abs( screenPos.y - 0.5f ) * 2f;
+		return new Vector2( xDistance, yDistance );
+	}
+
+	private Vector2 CenterDistance { get; set; }
+
+	// Tries to reposition the context on the screen
+	public void Reposition()
+	{
+		if ( !Scene.IsValid() )
+			return;
+
+		var player = Player.Local;
+		var camera = Scene.Camera;
+		if ( !camera.IsValid() || !player.IsValid() )
+			return;
+
+		// Check if the object is in front of the camera.
+		var directionToObject = (Object.ContextPosition - camera.WorldPosition).Normal;
+		var dot = Vector3.Dot( camera.WorldRotation.Forward, directionToObject );
+
+		// If the dot product is negative, the object is behind the camera, so we should hide it.
+		if ( dot < 0 )
+		{
+			_isOffScreen = true;
+			Style.Opacity = 0;
+			StateHasChanged(); // Make sure the UI updates
+			return;
+		}
+
+		var wasOffScreen = _isOffScreen;
+		var toScreen = camera.PointToScreenNormal( Object.ContextPosition );
+
+		CenterDistance = DistanceFromCenter( toScreen );
+
+		// Are we off the screen? (This check is still needed for when it's in front but off to the sides)
+		_isOffScreen = toScreen.x > 1.0f || toScreen.x < 0.0f || toScreen.y > 1.0f || toScreen.y < 0.0f;
+
+		Style.Left = Length.Fraction( toScreen.x );
+		Style.Top = Length.Fraction( toScreen.y );
+		Style.Opacity = CalculateOpacity();
+
+		if ( wasOffScreen != _isOffScreen )
+			StateHasChanged();
+	}
+
+	private Player? Player
+	{
+		get
+		{
+			if ( Player.Local.IsValid() )
+			{
+				return Player.Local;
+			}
+
+			return null;
+		}
+	}
+
+	/// <summary>
+	///     Gets the angle (in degrees) between two Vector2s
+	/// </summary>
+	/// <param name="a"></param>
+	/// <param name="b"></param>
+	/// <returns></returns>
+	private static float Angle( Vector2 a, Vector2 b )
+	{
+		return (float)Math.Atan2( b.y - a.y, b.x - a.x ) * (180f / MathF.PI);
+	}
+
+	private float CalculateOpacity()
+	{
+		var opacity = 1f;
+
+		if ( !Object.LookOpacity ) return opacity;
+
+		var equipment = Player.IsValid() && Player.CurrentEquipment.IsValid() ? Player.CurrentEquipment : null;
+		if ( !equipment.IsValid() ) return 1f;
+
+		var dist = MathF.Max( CenterDistance.x, CenterDistance.y );
+		return opacity - (1 - dist * 2f);
+	}
+}

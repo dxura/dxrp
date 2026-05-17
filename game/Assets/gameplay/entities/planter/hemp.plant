@@ -1,0 +1,15 @@
+{
+  "Resource": "gameplay/resources/hemp.resource",
+  "Stages": [
+    1,
+    2,
+    3
+  ],
+  "TimeToGrow": 80,
+  "Harvest": {
+    "_type": "gameobject",
+    "prefab": "gameplay/entities/jobs/drug_dealer/weed_harvest/weed_harvest.prefab"
+  },
+  "__references": [],
+  "__version": 0
+}

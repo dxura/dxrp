@@ -1,0 +1,157 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Equipments
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+	@if (!Player.Local.IsValid())
+		return;
+	
+	<div class="flex gap-3">
+		@foreach(var hint in InputHints())
+		{
+			<div class="flex gap-2 items-center justify-center bg-primary-75 pr-1 py-0 rounded">
+				<InputHint Action="@hint.Item1" class="small" Size="@InputGlyphSize.Small"/>
+				<label class="text-sm text-bold">
+					@hint.Item2
+				</label>
+			</div>
+		}
+	</div>
+</root>
+
+@code
+{
+	private bool _cachedHandsHolding;
+	private float _lastCheckTime;
+	
+	private List<(string, string)> InputHints()
+	{
+		var inputHints = new List<(string, string)>();
+		
+		if(!Player.Local.IsValid() || !Player.Local.CurrentEquipment.IsValid())
+			return inputHints;
+		
+		var equip = Player.Local.CurrentEquipment.Identifier;
+
+		switch (equip )
+		{
+			case "hands":
+				var hands = Player.Local.GetComponentInChildren<HandsEquipment>();
+				if ( hands.IsValid() )
+				{
+					if ( hands.IsHolding() )
+					{
+						inputHints.Add(("attack1", "#input.hands.drop"));
+						inputHints.Add(("attack2", "#input.hands.throw"));
+						inputHints.Add(("use", "#input.hands.rotate"));
+					}
+					else
+					{
+						inputHints.Add(("attack1", "#input.hands.grab"));
+						inputHints.Add(("attack2", string.Format( Language.GetPhrase( "input.hands.pocket" ), PocketSystem.LocalPocketCount, Config.Current.Game.MaxPocketItems )));
+					}
+				}
+				break;
+			case "can":
+				inputHints.Add(("attack1", "#input.can.shake"));
+				inputHints.Add(("attack2", "#input.can.taunt"));
+				break;
+			case "build":
+				if ( Input.Down( "attack1" ) )
+				{
+					inputHints.Add(("use", "#input.build.rotate"));
+					inputHints.Add(("attack2", "#input.build.freeze"));
+
+					if ( Input.Down( "use" ) )
+					{
+						inputHints.Add(("run", "#input.build.snap"));
+					}
+				}
+				else
+				{
+					inputHints.Add(("attack1", "#input.build.grab"));
+				}
+				break;
+			case "medkit":
+				inputHints.Add(("attack1", "#input.medkit.heal_revive"));
+				inputHints.Add(("attack2", "#input.medkit.heal_self"));
+				break;
+			case "pry_bar":
+				inputHints.Add(("attack1", "#input.pry_bar.pry"));
+				break;
+			case "fiber_wire":
+				inputHints.Add(("attack1", "#input.fiber_wire.snap_neck"));
+				break;
+			case "hand_cuffs":
+				inputHints.Add(("attack1", "#input.handcuffs.arrest"));
+				inputHints.Add(("attack2", "#input.handcuffs.unarrest"));
+				break;
+			case "grenade":
+				if ( Input.Down( "attack2" ) )
+				{
+					inputHints.Add(("attack1", "#input.grenade.throw"));
+					inputHints.Add(("attack2", "#input.cancel"));
+				}
+				else
+				{
+					inputHints.Add(("attack2", "#input.grenade.cook"));
+				}
+				break;
+			case "excrement":
+				inputHints.Add(("attack1", "#input.excrement.throw"));
+				inputHints.Add(("attack2", "#input.excrement.taunt"));
+				break;
+			case "weapon_checker":
+				inputHints.Add(("attack1", "#input.weapon_checker.search"));
+				break;
+		}
+
+		return inputHints.Select( x => (x.Item1, GetText( x.Item2 )) ).ToList();
+	}
+	
+
+	private bool GetHandsHoldingState()
+	{
+		// Only check every second
+		if ( !(Time.Now - _lastCheckTime > 1.0f) )
+			return _cachedHandsHolding;
+		
+		var hands = Player.Local.GetComponentInChildren<HandsEquipment>();
+		_cachedHandsHolding = hands.IsValid() && hands.IsHolding();
+		_lastCheckTime = Time.Now;
+
+		return _cachedHandsHolding;
+	}
+    
+	protected override int BuildHash()
+	{
+		if (!Player.Local.IsValid())
+			return 0;
+
+		var equipment = Player.Local.CurrentEquipment;
+		var handsHoldingHash = 0;
+        
+		if (equipment.IsValid() && equipment.Identifier == "hands")
+		{
+			handsHoldingHash = GetHandsHoldingState().GetHashCode();
+		}
+
+		return HashCode.Combine(
+			Player.Local.GetHashCode(),
+			equipment.IsValid() ? equipment.Identifier.GetHashCode() : 0,
+			Input.Down("attack1"),
+			Input.Down("attack2"),
+			Input.Down("use"),
+			handsHoldingHash,
+			PocketSystem.LocalPocketCount
+		);
+	}
+
+	private static string GetText( string? text )
+	{
+		if ( string.IsNullOrWhiteSpace( text ) ) return string.Empty;
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+}
+

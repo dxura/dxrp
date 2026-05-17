@@ -1,0 +1,14 @@
+
+Layer0
+{
+	shader "shaders/complex.shader_c"
+
+	TextureColor "gameplay/equipment/job/battering_ram/model/battering_ram_base_color.png"
+	TextureAmbientOcclusion "materials/default/default_ao.tga"
+	TextureNormal "gameplay/equipment/job/battering_ram/model/battering_ram_normal.png"
+	TextureRoughness "gameplay/equipment/job/battering_ram/model/battering_ram_roughness.png"
+	F_METALNESS_TEXTURE 1
+	F_SPECULAR 1
+	TextureMetalness "gameplay/equipment/job/battering_ram/model/battering_ram_metallic.png"
+
+}

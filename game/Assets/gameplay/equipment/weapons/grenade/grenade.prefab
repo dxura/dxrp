@@ -1,0 +1,211 @@
+{
+  "RootObject": {
+    "__guid": "7a3c71af-1897-4e4a-8c71-02459929ba13",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "grenade",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "hands_interact,entity",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "cd71a8ad-6ea4-4fc8-a073-93de25cf4ded",
+        "__enabled": true,
+        "Flags": 512,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": true,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.TimedExplodeComponent",
+        "__guid": "0374c49e-10ec-4537-b7ca-99bba130a129",
+        "__enabled": true,
+        "Flags": 0,
+        "Damage": 100,
+        "Explosion": {
+          "_type": "gameobject",
+          "prefab": "prefabs/helpers/explosion.prefab"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Time": 3,
+        "TimeUntilDestroy": {
+          "Absolute": 0,
+          "Relative": -5021.9634,
+          "Passed": 5021.9634,
+          "Fraction": 1
+        }
+      },
+      {
+        "__type": "Dxura.RP.Game.ContinuousSoundPoint",
+        "__guid": "abc30eb2-b2be-4222-ae5d-2aea319d83c1",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "SoundEvent": "sounds/environment/ticking.sound"
+      },
+      {
+        "__type": "Sandbox.CapsuleCollider",
+        "__guid": "89c0dbd4-d7dd-4d94-9315-b35c39014129",
+        "__enabled": true,
+        "Flags": 0,
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "End": "0,0,1.988123",
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "Radius": 1.7699862,
+        "RollingResistance": null,
+        "Start": "0,0,-0.7926545",
+        "Static": false,
+        "Surface": "surfaces/metal.surface",
+        "SurfaceVelocity": "0,0,0"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "f194003b-cab2-4ed1-b237-0430866974ff",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "model",
+        "Position": "0,0,-2.198395",
+        "Rotation": "0,0,0,1",
+        "Scale": "1.5,1.5,1.5",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "4929ef94-bf73-4ff8-9432-f204ec65ee4c",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 11,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/weapons/sbox_grenade_explosive/w_he_grenade.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "d9a43b73-a449-44f1-8566-a9782d8f6841"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "79822d86-79e9-40e4-9cbe-68bdf1b3099f"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "6645e50b-3eb8-41ca-bed8-1b6b97e78a02"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.w_he_grenade#144895"
+  ],
+  "__version": 2
+}

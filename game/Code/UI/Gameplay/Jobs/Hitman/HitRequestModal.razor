@@ -1,0 +1,144 @@
+@using Sandbox.UI
+@using Game=Sandbox.Game
+@inherits PanelComponent
+@implements IGameEvents
+@namespace Dxura.RP.Game
+
+@if (!HitSystem.Instance.IsValid()) return;
+
+<root class="flex items-center justify-center">
+	<div class="modal-backdrop" onclick=@Cancel></div>
+
+	<div class="modal-content flex flex-col gap-6">
+		<div class="flex flex-col gap-4 mb-2">
+			<h1 class="modal-title text-2xl text-accent">#hit.request</h1>
+		</div>
+
+		<div class="flex flex-col gap-6">
+			<div class="hitman-info flex flex-col gap-2">
+				<div class="flex justify-between items-center">
+					<span class="text-sm text-gray-400">#hit.hitman_label</span>
+					<span class="text-lg text-accent">@Hitman.DisplayName</span>
+				</div>
+				<div class="flex justify-between items-center">
+					<span class="text-sm text-gray-400">#hit.price_label</span>
+					<span class="text-lg text-good">@($"{HitPrice:C0}")</span>
+				</div>
+			</div>
+
+			<div class="flex flex-col gap-3">
+				<p class="text-base text-white" style="margin: 0; font-weight: 600;">#hit.select_target</p>
+				<TextEntry
+					Value=@TargetName
+					OnTextEdited=@OnTargetNameChanged
+					Placeholder="#hit.target_placeholder"
+				/>
+			</div>
+
+			<div class="flex flex-col gap-3">
+				<p class="text-base text-white" style="margin: 0; font-weight: 600;">#hit.reason</p>
+				<TextEntry
+					Value=@Reason
+					OnTextEdited=@OnReasonChanged
+					MaxLength=@(Config.Current.Game.MaxHitReasonLength)
+					Placeholder="#hit.reason_placeholder"
+				/>
+			</div>
+		</div>
+
+		<div class="flex gap-4 justify-end">
+			<button class="btn btn-bad text-bold" style="min-width: 140px; padding: 12px 20px;" onclick=@Cancel>#generic.cancel</button>
+			<button class="btn btn-good text-bold" style="min-width: 140px; padding: 12px 20px;" onclick=@Submit>#hit.request</button>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public Player Hitman { get; set; } = null!;
+	private uint HitPrice => HitSystem.Instance.IsValid() ? HitSystem.Instance.GetHitPrice(Hitman.SteamId) : Config.Current.Game.MinHitPrice;
+
+	private string Reason { get; set; } = "";
+	private string TargetName { get; set; } = "";
+
+	protected override void OnStart()
+	{
+		Sound.Play( "pop" );
+		
+		if (Player.Local.WalletBalance + Player.Local.BankBalance < HitPrice)
+		{
+			Notify.Warn("#hit.no_money");
+			Destroy();
+		}
+	}
+
+	public void OnSecondlyUpdate()
+	{
+		if(!Hitman.IsValid())
+		{
+			Destroy();
+		}
+
+		if ( Player.Local.IsDead || Hitman.IsDead )
+		{
+			Destroy();
+		}
+		
+		var distance = Player.Local.WorldPosition.Distance(Hitman.WorldPosition);
+		if (distance > Config.Current.Game.PlayerInteractDistance)
+		{
+			Destroy();
+		}
+	}
+	
+	private void OnReasonChanged(string value)
+	{
+		Reason = value;
+	}
+
+	private void OnTargetNameChanged(string value)
+	{
+		TargetName = value;
+	}
+
+	private void Cancel()
+	{
+		Sound.Play( "pop" );
+		Destroy();
+	}
+
+	private void Submit()
+	{
+		if(string.IsNullOrWhiteSpace(TargetName))
+		{
+			Notify.Warn("#hit.invalid_target");
+			return;
+		}
+
+		var selectedPlayer = CommandHelper.ResolvePlayer( Player.Local, TargetName );
+		if (!selectedPlayer.IsValid() || selectedPlayer == Player.Local || selectedPlayer == Hitman)
+		{
+			Notify.Warn("#hit.invalid_target");
+			return;
+		}
+
+		if ( Cooldown.Current.CheckAndStartCooldown( "hitman:request", Config.Current.Game.HitmanRequestCooldown, true ) )
+		{
+			Destroy();
+			return;
+		}
+
+		if (string.IsNullOrWhiteSpace(Reason))
+		{
+			Notify.Warn("#hit.no_reason");
+			return;
+		}
+
+		HitSystem.Instance.RequestHit(Hitman.SteamId, selectedPlayer.SteamId, Reason);
+		
+		Notify.Success( string.Format( Language.GetPhrase( "hit.requested" ), selectedPlayer.DisplayName, HitPrice ) );
+
+		Destroy();
+	}
+}
+

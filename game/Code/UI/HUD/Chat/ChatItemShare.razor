@@ -1,0 +1,184 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@using Sandbox.UI
+@inherits Panel
+
+@{
+	var item = Item;
+}
+
+@if ( item == null )
+{
+	<root>
+		<span class="message text-base text-shadow" style="max-width: 350px;">@Message</span>
+	</root>
+}
+else
+{
+	<root class="item-share-link @GetItemShareRarityClass( item.Value.Definition?.Rarity ) @(item.Value.IsLoading ? "loading" : "")"
+	      tooltip="@GetItemShareTooltip( item.Value )">
+		@if ( !string.IsNullOrWhiteSpace( item.Value.Definition?.ImageUrl ) )
+		{
+			var tex = ThumbnailCache.GetUrl( item.Value.Definition.ImageUrl, StateHasChanged );
+			@if ( tex != null )
+			{
+				<Image class="item-share-icon" Texture="@tex"/>
+			}
+			else
+			{
+				<i class="material-icons">inventory_2</i>
+			}
+		}
+		else
+		{
+			<i class="material-icons">inventory_2</i>
+		}
+		<span>@GetItemShareName( item.Value )</span>
+		@if ( item.Value.Quantity > 1 )
+		{
+			<span class="item-share-quantity">@($"x{item.Value.Quantity}")</span>
+		}
+	</root>
+}
+
+@code
+{
+	public string Message { get; set; } = string.Empty;
+
+	private static readonly Dictionary<Guid, SharedItemDefinitionCacheEntry> DefinitionCache = [];
+	private static int _cacheVersion;
+
+	private SharedItemChatLink? Item => GetItemShare( Message );
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Message, _cacheVersion );
+	}
+
+	private sealed class SharedItemDefinitionCacheEntry
+	{
+		public ItemDefinitionDto? Definition { get; set; }
+		public bool IsLoading { get; set; }
+		public bool Failed { get; set; }
+	}
+
+	private readonly record struct SharedItemChatLink( Guid Id, int Quantity, ItemDefinitionDto? Definition, bool IsLoading, bool Failed );
+
+	private SharedItemChatLink? GetItemShare( string message )
+	{
+		if ( !TryParseItemShare( message, out var id, out var quantity ) )
+		{
+			return null;
+		}
+
+		if ( !DefinitionCache.TryGetValue( id, out var entry ) )
+		{
+			entry = new SharedItemDefinitionCacheEntry();
+			DefinitionCache[id] = entry;
+		}
+
+		if ( entry.Definition == null && !entry.IsLoading && !entry.Failed )
+		{
+			_ = LoadItemShareDefinition( id, entry );
+		}
+
+		return new SharedItemChatLink( id, Math.Max( 1, quantity ), entry.Definition, entry.IsLoading, entry.Failed );
+	}
+
+	private static bool TryParseItemShare( string message, out Guid id, out int quantity )
+	{
+		id = Guid.Empty;
+		quantity = 1;
+
+		var parts = message.Split( '\u001f' );
+		if ( parts.Length < 2 ||
+		     !Guid.TryParse( parts[0], out id ) ||
+		     !int.TryParse( parts[1], out quantity ) )
+		{
+			return false;
+		}
+
+		return id != Guid.Empty;
+	}
+
+	private async global::System.Threading.Tasks.Task LoadItemShareDefinition( Guid itemId, SharedItemDefinitionCacheEntry entry )
+	{
+		entry.IsLoading = true;
+		entry.Failed = false;
+		_cacheVersion++;
+		StateHasChanged();
+
+		try
+		{
+			entry.Definition = Networking.IsHost
+				? await ServerApiClient.GetItemDefinition( itemId )
+				: await PlayerApiClient.GetItemDefinition( itemId );
+			entry.Failed = entry.Definition == null;
+		}
+		catch
+		{
+			entry.Failed = true;
+		}
+		finally
+		{
+			entry.IsLoading = false;
+			_cacheVersion++;
+			StateHasChanged();
+		}
+	}
+
+	private static string GetItemShareName( SharedItemChatLink item )
+	{
+		if ( item.Definition != null )
+		{
+			return ResolvePhrase( item.Definition.Name );
+		}
+
+		return item.Failed ? "Unknown item" : "Loading item";
+	}
+
+	private static string GetItemShareRarityClass( ItemRarity? rarity ) => rarity switch
+	{
+		ItemRarity.Uncommon => "rarity-uncommon",
+		ItemRarity.Rare => "rarity-rare",
+		ItemRarity.Epic => "rarity-epic",
+		ItemRarity.Legendary => "rarity-legendary",
+		_ => "rarity-common"
+	};
+
+	private static string GetItemShareTooltip( SharedItemChatLink item )
+	{
+		if ( item.Definition == null )
+		{
+			return item.Failed ? $"Item {item.Id}" : "Resolving item";
+		}
+
+		var type = item.Definition.Type == ItemType.Other ? Language.GetPhrase( "inventory.other" ) : item.Definition.Type.ToString();
+		var rarity = item.Definition.Rarity.ToString();
+		var tooltipParts = new List<string>
+		{
+			GetTooltipText( item.Definition.Name ),
+			$"{rarity} {type}"
+		};
+
+		if ( !string.IsNullOrWhiteSpace( item.Definition.Description ) )
+		{
+			tooltipParts.Add( GetTooltipText( item.Definition.Description ) );
+		}
+
+		return string.Join( " | ", tooltipParts );
+	}
+
+	private static string ResolvePhrase( string text )
+	{
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+
+	private static string GetTooltipText( string text )
+	{
+		return ResolvePhrase( text )
+			.Replace( "\r", " " )
+			.Replace( "\n", " " )
+			.Trim();
+	}
+}

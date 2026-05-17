@@ -1,0 +1,138 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+@if ( !IsSpectating || Target == null )
+	return;
+
+<root class="absolute left-0 bottom-0 m-2">
+	<div class="spectate-container rounded">
+		<div class="top-row flex flex-row items-center">
+			<div class="square rounded profile-picture"
+			     style="background-image: url(avatar:@Target.SteamId)"/>
+
+			<div class="flex flex-col info-section">
+				<label class="spectate-label">@Language.GetPhrase( "spectate.ui.title" )</label>
+				<label class="spectate-target">@Target.DisplayName</label>
+			</div>
+
+			<div class="flex flex-row hints">
+				<div class="hint flex flex-row items-center rounded">
+					<InputHint Action="attack3" Size="@InputGlyphSize.Small" Animate="@false"/>
+					<label class="text-sm text-bold">@Language.GetPhrase( IsFreelookEnabled ? "spectate.ui.freelook.disable" : "spectate.ui.freelook.enable" )</label>
+				</div>
+				<div class="hint flex flex-row items-center rounded">
+					<InputHint Action="Jump" Size="@InputGlyphSize.Small" Animate="@false"/>
+					<label class="text-sm text-bold">@Language.GetPhrase( "spectate.ui.exit" )</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="bottom-row flex flex-row items-center">
+			<div class="stat flex flex-row items-center">
+				<label class="stat-label" style="color: @Target.Job.Color.Hex()">@Target.JobDisplayName</label>
+			</div>
+
+			@if ( !Target.IsDead )
+			{
+				<div class="stat-sep"></div>
+				<div class="stat flex flex-row items-center">
+					<i class="material-icons stat-icon health-icon">favorite</i>
+					<label class="stat-value health">@Target.HealthComponent.Health.CeilToInt()</label>
+				</div>
+
+				@if ( Target.ArmorComponent.Armor > 0 )
+				{
+					<div class="stat-sep"></div>
+					<div class="stat flex flex-row items-center">
+						<i class="material-icons stat-icon armor-icon">shield</i>
+						<label class="stat-value armor">@Target.ArmorComponent.Armor.CeilToInt()</label>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="stat-sep"></div>
+				<label class="stat-value dead">DEAD</label>
+			}
+
+			<div class="stat-sep"></div>
+			<div class="stat flex flex-row items-center">
+				<i class="material-icons stat-icon neutral-icon">schedule</i>
+				<label class="stat-value neutral">@( Target.PlayTime / 60 )h</label>
+			</div>
+
+			<div class="flex-grow"></div>
+
+			<div class="stat flex flex-row items-center">
+				<i class="material-icons stat-icon money-icon">account_balance_wallet</i>
+				<label class="stat-value money">$@Target.WalletBalance.ToString("N0")</label>
+			</div>
+
+			<div class="stat-sep"></div>
+
+			<div class="stat flex flex-row items-center">
+				<i class="material-icons stat-icon money-icon">account_balance</i>
+				<label class="stat-value money">$@Target.BankBalance.ToString("N0")</label>
+			</div>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	private bool IsSpectating
+	{
+		get
+		{
+			if ( !Player.Local.IsValid() || !Player.Local.Controller.IsValid() )
+				return false;
+
+			return Player.Local.Controller.Mode is MoveModeSpectate { SpectateTarget: not null } mode && mode.SpectateTarget.IsValid();
+		}
+	}
+
+	private Player? Target
+	{
+		get
+		{
+			if ( !Player.Local.IsValid() || !Player.Local.Controller.IsValid() )
+				return null;
+
+			var mode = Player.Local.Controller.Components.Get<MoveModeSpectate>();
+			if ( !mode.IsValid() || !mode.SpectateTarget.IsValid() )
+				return null;
+
+			var targetPlayer = mode.SpectateTarget.Components.Get<Player>();
+			return targetPlayer.IsValid() ? targetPlayer : null;
+		}
+	}
+
+	private bool IsFreelookEnabled
+	{
+		get => FreeLookCameraSystem.IsFreelookEnabled;
+	}
+
+	protected override int BuildHash()
+	{
+		if ( Target == null )
+			return HashCode.Combine( IsSpectating, IsFreelookEnabled );
+
+		var targetStatsHash = HashCode.Combine(
+			Target.HealthComponent?.Health,
+			Target.ArmorComponent?.Armor,
+			Target.PlayTime,
+			Target.WalletBalance,
+			Target.BankBalance
+		);
+
+		return HashCode.Combine(
+			IsSpectating,
+			Target.DisplayName,
+			Target.SteamId,
+			IsFreelookEnabled,
+			targetStatsHash
+		);
+	}
+}

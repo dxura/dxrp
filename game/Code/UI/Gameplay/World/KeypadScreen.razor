@@ -1,0 +1,196 @@
+@using Dxura.RP.Game.Wire
+@using Sandbox;
+@using System.Threading.Tasks;
+@inherits PanelComponent
+@namespace Dxura.RP.UI
+
+<root>
+	@if ( !Keypad.IsValid() ) return;
+	
+	<div class="flex flex-col text-primary p-4 mx-auto rounded-lg h-full w-full items-center justify-center">
+		<!-- Display -->
+		<div style="height: 60px; background-color: darkgreen;" class="flex items-center justify-center w-full p-3 mb-3">
+			@if ( Keypad.TimeSinceLastFail < KeypadMessageDuration )
+			{
+				<div class="text-2xl font-mono text-center text-bad">#keypad.error</div>
+			}else if ( Keypad.TimeSinceLastSuccess < KeypadMessageDuration )
+			{
+				<div class="text-2xl font-mono text-center text-good">✓</div>
+			}else if ( Keypad.Initialized || !string.IsNullOrEmpty( InputString ) )
+			{
+				<div class="text-2xl font-mono text-white text-center">@InputString</div>
+			}
+			else
+			{
+				<div class="text-2xl font-mono text-white text-center">#keypad.setup</div>
+			}
+		</div>
+
+		<!-- Control Buttons -->
+		<div class="flex gap-5 mb-3 items-center justify-around">
+			<button class="flex-1 text-lg text-bad text-bold" onclick="@OnAbort">#keypad.clear</button>
+			
+			@if ( !string.IsNullOrEmpty( LastSuccessfulCode ) && Keypad.Initialized )
+			{
+				<button class="flex-1 text-2xl text-white text-bold" onclick="@OnReEnter" title="#keypad.reenter">
+					<i class="material-icons">autorenew</i>
+				</button>
+			}
+			else
+			{
+				<div class="flex-1"></div>
+			}
+			
+			<button class="flex-1 text-xl text-good text-bold " onclick="@OnOK">#keypad.ok</button>
+		</div>
+
+		<!-- Number Pad -->
+		<div class="flex flex-col gap-2 flex-1 w-full">
+			<div class="number-row">
+				<button class="number-btn" onclick="@(() => OnNumberPress(1))">1</button>
+				<button class="number-btn" onclick="@(() => OnNumberPress(2))">2</button>
+				<button class="number-btn" onclick="@(() => OnNumberPress(3))">3</button>
+			</div>
+			<div class="number-row">
+				<button class="number-btn" onclick="@(() => OnNumberPress(4))">4</button>
+				<button class="number-btn" onclick="@(() => OnNumberPress(5))">5</button>
+				<button class="number-btn" onclick="@(() => OnNumberPress(6))">6</button>
+			</div>
+			<div class="number-row">
+				<button class="number-btn" onclick="@(() => OnNumberPress(7))">7</button>
+				<button class="number-btn" onclick="@(() => OnNumberPress(8))">8</button>
+				<button class="number-btn" onclick="@(() => OnNumberPress(9))">9</button>
+			</div>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	[Property]
+	public required KeypadWire Keypad { get; set; }
+	
+	[Property]
+	private SoundEvent? InputSound { get; set; }
+	[Property]
+	private SoundEvent? AbortSound { get; set; }
+
+	private const float KeypadMessageDuration = 1.5f;
+	private bool IsShowingMessage => Keypad.TimeSinceLastFail < KeypadMessageDuration || Keypad.TimeSinceLastSuccess < KeypadMessageDuration;
+
+	private List<int> CurrentInput { get; set; } = new();
+	private string InputString => string.Join( "", CurrentInput );
+	private string LastSuccessfulCode { get; set; } = "";
+	private bool IsReEntering { get; set; } = false;
+
+	protected override int BuildHash()
+	{
+		if ( !Keypad.IsValid() ) return 0;
+		
+		// If we switch input device, rebuild the tree.
+		return HashCode.Combine( CurrentInput.Count, Keypad.Initialized );
+	}
+
+	private void OnNumberPress(int number)
+	{
+		if(IsShowingMessage || IsReEntering)
+		{
+			return;
+		}
+		
+		if ( CurrentInput.Count >= 4 )
+		{
+			OnOK();
+			return;
+		}
+		
+		// Validate number
+		if(number is < 0 or > 9)
+		{
+			return;
+		}
+		
+		CurrentInput.Add( number );
+		
+		InputSound.Broadcast( WorldPosition, GameObject);
+	}
+
+	private void OnAbort()
+	{
+		if(IsReEntering)
+		{
+			return;
+		}
+		
+		// Reset the code on server (if we've entered the correct code)
+		Keypad.ResetCodeHost(InputString);
+
+		CurrentInput.Clear();
+		
+		AbortSound.Broadcast( WorldPosition, GameObject);
+	}
+
+	private void OnOK()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( $"keypad", Config.Current.Game.ActionQuickCooldown, true ) )
+		{
+			return;
+		}
+		
+		Keypad.SubmitCodeHost(InputString);
+		CurrentInput.Clear();
+	}
+
+	private async Task OnReEnter()
+	{
+		if ( IsShowingMessage || string.IsNullOrEmpty( LastSuccessfulCode ) || IsReEntering )
+		{
+			return;
+		}
+		
+		IsReEntering = true;
+		CurrentInput.Clear();
+		
+		// Enter each digit one by one with a delay
+		foreach ( var c in LastSuccessfulCode )
+		{
+			if ( !int.TryParse( c.ToString(), out int digit ) )
+				continue;
+			
+			CurrentInput.Add( digit );
+			InputSound.Broadcast( WorldPosition, GameObject);
+			
+			await GameTask.DelayRealtime( 250 );
+		}
+		
+		OnOK();
+		
+		IsReEntering = false;
+	}
+
+	protected override void OnEnabled()
+	{
+		base.OnEnabled();
+		if ( Keypad.IsValid() )
+		{
+			Keypad.OnSuccessfulCodeReceived += OnReceiveSuccessfulCode;
+		}
+	}
+
+	protected override void OnDisabled()
+	{
+		base.OnDisabled();
+		
+		if ( Keypad.IsValid() )
+		{
+			Keypad.OnSuccessfulCodeReceived -= OnReceiveSuccessfulCode;
+		}
+
+		IsReEntering = false;
+	}
+
+	private void OnReceiveSuccessfulCode( string code )
+	{
+		LastSuccessfulCode = code;
+	}
+}

@@ -1,0 +1,66 @@
+{
+  "RootObject": {
+    "__guid": "a1738cd9-71d8-4459-9255-aa68ff8e2b7a",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "vm_hands",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "0,0,0",
+    "Tags": "player,viewmodel",
+    "Enabled": true,
+    "NetworkMode": 0,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.ViewModel",
+        "__guid": "4a31b873-dc13-4a96-845e-37f70669bc0e",
+        "__enabled": true,
+        "Arms": null,
+        "CanADS": true,
+        "EjectionPort": null,
+        "IronsightsFireScale": 0.2,
+        "ModelRenderer": null,
+        "Muzzle": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "renderingEnabled": true,
+        "UseMovementInertia": true
+      }
+    ],
+    "Children": [],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

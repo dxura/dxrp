@@ -1,0 +1,52 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@using Game=Sandbox.Game
+@inherits Panel
+
+<root>
+	<WebPanel class="web-container" Url="@RulesUrl"/>
+</root>
+
+@code {
+	private string RulesUrl
+	{
+		get
+		{
+			try
+			{
+				if ( Config.Current.Game.RulesUrlOverride != null )
+				{
+					var langCode = Application.LanguageCode;
+					var configuredLanguage = Config.Current.Game.SupportedRulesLanguages.Contains( langCode )
+						? langCode
+						: Config.Current.Game.DefaultRulesLanguage;
+
+					var rulesUrl = Config.Current.Game.RulesUrlOverride;
+					if ( !string.IsNullOrWhiteSpace( configuredLanguage ) )
+					{
+						if ( Config.Current.Game.UseLocalizedRulesUrls )
+						{
+							rulesUrl = $"{rulesUrl.TrimEnd( '/' )}/{configuredLanguage}";
+						}
+						else
+						{
+							var separator = rulesUrl.Contains( '?' ) ? '&' : '?';
+							rulesUrl = $"{rulesUrl}{separator}lang={Uri.EscapeDataString( configuredLanguage )}";
+						}
+					}
+
+					return rulesUrl;
+				}
+
+				return $"{Constants.BaseWebsiteUrl}/embed/ruleset/{ServerApiLink.Current.RulesetId}";
+			}
+			catch ( Exception ex )
+			{
+				Log.Error( $"Failed to build rules URL: {ex.Message}" );
+				return "about:blank";
+			}
+		}
+	}
+
+	protected override int BuildHash() => HashCode.Combine( RulesUrl );
+}

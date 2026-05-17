@@ -1,0 +1,236 @@
+@inherits Panel
+@using Dxura.RP.Game.Equipments
+@using Sandbox.UI
+@using Dxura.RP.Game
+@implements IToolInspector
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+
+<root style="position: relative; height: 100%;">
+
+	@if ( ToolEquipment == null ) return;
+
+	<label class="header">@ToolEquipment.CurrentTool?.GetName()</label>
+	<div class="content" style="padding-bottom: 60px;">
+		<label class="description">@ToolEquipment.CurrentTool?.GetLongDescription()</label>
+		<div class="controls">
+			@foreach ( var property in TypeLibrary.GetSerializedObject( ToolEquipment.CurrentTool ) )
+			{
+				if ( !property.HasAttribute<PropertyAttribute>() ) continue;
+				property.TryGetAttribute<TitleAttribute>( out var title );
+				var name = title?.Value ?? property.Name;
+				
+				@if ( property.PropertyType == typeof(float) )
+				{
+					<div class="control control-column">
+						<div class="control-label-top">
+							<p>@( name )</p>
+						</div>
+						@{
+							property.TryGetAttribute<RangeAttribute>( out var range );
+							property.TryGetAttribute<StepAttribute>( out var step );
+						}
+						<div class="control-input-row">
+							<SliderControl Min=@( range?.Min ?? 0 ) Max=@( range?.Max ?? 1 ) Step=@( step?.Step ?? 0.01f )
+							               Value="@( property.GetValue<float>() )"
+							               OnValueChanged=@( ( float value ) => { property.SetValue( value ); } )
+							               ShowTextEntry=@( false )
+							               style="flex: 1; min-width: 50px;"/>
+							<TextEntry 
+								Value="@( property.GetValue<float>().ToString("F2") )"
+								class="text-tertiary"
+								style="width: 60px; flex-shrink: 0;"
+								OnTextEdited=@( ( string value ) => { 
+									if ( float.TryParse( value, out var floatValue ) )
+									{
+										if ( range != null )
+										{
+											floatValue = Math.Clamp( floatValue, range.Min, range.Max );
+										}
+										property.SetValue( floatValue );
+									}
+								} )/>
+						</div>
+					</div>
+				}
+				else if ( property.PropertyType == typeof(int) )
+				{
+					<div class="control control-column">
+						<div class="control-label-top">
+							<p>@( name )</p>
+						</div>
+						@{
+							property.TryGetAttribute<RangeAttribute>( out var range );
+							property.TryGetAttribute<StepAttribute>( out var step );
+						}
+						<div class="control-input-row">
+							<SliderControl Min=@( range?.Min ?? 0 ) Max=@( range?.Max ?? 1 ) Step=@( step?.Step ?? 0.01f )
+							               Value="@( property.GetValue<int>() )"
+							               OnValueChanged=@( ( float value ) => { property.SetValue( (int)value ); } )
+							               ShowTextEntry=@( false )
+							               style="flex: 1; min-width: 50px;"/>
+							<TextEntry 
+								Value="@( property.GetValue<int>().ToString() )"
+								class="text-tertiary"
+								style="width: 60px; flex-shrink: 0;"
+								OnTextEdited=@( ( string value ) => { 
+									if ( int.TryParse( value, out var intValue ) )
+									{
+										if ( range != null )
+										{
+											intValue = Math.Clamp( intValue, (int)range.Min, (int)range.Max );
+										}
+										property.SetValue( intValue );
+									}
+								} )/>
+						</div>
+					</div>
+				}
+				else if ( property.TryGetAttribute<MaterialPropertyAttribute>( out var materialProperty ) && materialProperty != null )
+				{
+					<div class="control control-column">
+						<div class="control-label-top">
+							<p>#tool.inspector.material_selector</p>
+						</div>
+						<div class="control-input-full">
+							<MaterialPicker
+								SerializedProperty=@property
+								OnValueChanged=@( ( string _value ) =>
+								               {
+									               Notify.Success( Language.GetPhrase( "tool.inspector.material_selected" ) );
+									               property.SetValue( _value );
+								               } )
+							/>
+						</div>
+					</div>
+				}
+				else if ( property.TryGetAttribute<DupePropertyAttribute>( out var dupeProperty ) && dupeProperty != null )
+				{
+					<DupeFileManager/>
+				}
+				else if ( property.PropertyType == typeof(bool) )
+				{
+					<div class="control control-inline">
+						<div class="control-label-inline">
+							<p>@( name )</p><span class="colon">:</span>
+						</div>
+						<div class="control-input-inline">
+							<SwitchControl Value="@( property.GetValue<bool>() )" OnValueChanged=@( ( bool _value ) => { property.SetValue( _value ); } )/>
+						</div>
+					</div>
+				}
+				else if ( property.PropertyType.IsEnum )
+				{
+					<div class="control control-column">
+						<div class="control-label-top">
+							<p>@( name )</p>
+						</div>
+						<div class="control-input-full">
+							<DropDown class="w-100 mt-2" ValueChanged=@( ( string option ) =>
+							{
+								var enumValue = Enum.Parse( property.PropertyType, option, true );
+								property.SetValue( enumValue );
+							} )
+							          Options=@( GetOptionsFromEnum( property.PropertyType ) )
+							          Value="@( property.GetValue<object>()?.ToString()?.ToLower() )">
+							</DropDown>
+						</div>
+					</div>
+				}
+				else if ( property.PropertyType == typeof(Color) )
+				{
+					<div class="control control-inline">
+						<div class="control-label-inline">
+							<p>@( name )</p><span class="colon">:</span>
+						</div>
+						<div class="control-input-inline">
+							<ColorControl Property=@property />
+						</div>
+					</div>
+				}
+				else if ( property.PropertyType == typeof(string) )
+				{
+					@if ( property.TryGetAttribute<DropdownPropertyAttribute>( out var dropdownProperty ) && dropdownProperty != null )
+					{
+						<div class="control control-column">
+							<div class="control-label-top">
+								<p>@( name )</p>
+							</div>
+							<div class="control-input-full">
+								<DropDown  ValueChanged=@( ( string option ) =>
+								{
+									property.SetValue( option );
+								} )
+								          Options=@( dropdownProperty.Options.Select( o => {
+									          var parts = o.Split( '|' );
+									          return new Option( parts.Length > 1 ? parts[0] : o, parts.Length > 1 ? parts[1] : o );
+								          } ).ToList() )
+								          Value="@( property.GetValue<string>() )">
+								</DropDown>
+							</div>
+						</div>
+					}
+					else
+					{
+						<div class="control control-column">
+							<div class="control-label-top">
+								<p>@( name )</p>
+							</div>
+							@{
+								property.TryGetAttribute<RangeAttribute>( out var range );
+							}
+							<div class="control-input-full">
+								<TextEntry class="text-tertiary"
+								           style="width: 100%;"
+								           MaxLength="@( range?.Max.CeilToInt() ?? Config.Current.Game.DefaultTextEntryMaxLength )"
+								           Value="@(property.GetValue<string>())"
+								           OnTextEdited=@( ( string value ) => { property.SetValue( value ); } )
+								></TextEntry>
+							</div>
+						</div>
+					}
+				}
+				@if ( property.TryGetAttribute<DescriptionAttribute>( out var description ) )
+				{
+					<label class="description">@description.Value</label>
+				}
+			}
+		</div>
+	</div>
+	
+	<div style="position: absolute; bottom: 10px; left: 0; right: 0; display: flex; justify-content: center;">
+		<button class="btn btn-secondary" style="width: 200px;" @onclick="@ResetToolSettings">
+			<span>#tool.inspector.reset_settings</span>
+		</button>
+	</div>
+</root>
+
+@code
+{
+	public ToolEquipment? ToolEquipment { get; set; }
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Input.Pressed( "BuildMenu" ) );
+	}
+
+	private void ResetToolSettings()
+	{
+		if (ToolEquipment?.CurrentTool != null)
+		{
+			ToolEquipment.CurrentTool.ResetSettings();
+			ToolMenu.Instance?.UpdateInspector();
+		}
+	}
+
+	private List<Option> GetOptionsFromEnum( Type enumType )
+	{
+		if ( !enumType.IsEnum )
+			return new List<Option>();
+
+		return Enum.GetNames( enumType )
+			.Select( name => new Option( $"#{enumType.Name.ToLower()}.{name.ToLower()}", name.ToLower() ) )
+			.ToList();
+	}
+
+}

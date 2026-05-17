@@ -1,0 +1,143 @@
+{
+  "RootObject": {
+    "__guid": "a4339880-82d8-419e-a4d1-3425ad0bc050",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "9mm_casing",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "magazine",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 0,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.TimedDestroyComponent",
+        "__guid": "18aee328-4ecf-42dd-8039-ef7591b215a4",
+        "__enabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Time": 15,
+        "TimeUntilDestroy": {
+          "Absolute": 0,
+          "Relative": -3916.0457,
+          "Passed": 3916.0457,
+          "Fraction": 1
+        }
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "f435e28b-7886-42f9-aa4a-84b8f881aed4",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "9mm_ejectbrass",
+        "Position": "0,0,0",
+        "Rotation": "-0.1783709,0.232631,-0.9114593,0.2886317",
+        "Scale": "1,1,1",
+        "Tags": "particles",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.LegacyParticleSystem",
+            "__guid": "80a6856e-cb98-42b1-a583-034b53986d57",
+            "__enabled": true,
+            "ControlPoints": [
+              {
+                "Value": "GameObject",
+                "StringCP": "",
+                "VectorValue": "0,0,0",
+                "FloatValue": 0,
+                "ColorValue": "0,0,0,0",
+                "GameObjectValue": {
+                  "_type": "gameobject",
+                  "go": "a4339880-82d8-419e-a4d1-3425ad0bc050"
+                }
+              }
+            ],
+            "Looped": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Particles": null,
+            "PlaybackSpeed": 1
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "3b1cd7e8-14ba-452f-8d72-f51c7fdbc33d",
+        "__version": 1,
+        "__Prefab": "prefabs/weapon_effects/ejectionport_gas.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "5c371bbb-7f1f-40bf-b80c-83923e0d32a6"
+              },
+              "Property": "TimeUntilDestroy",
+              "Value": {
+                "Absolute": 0,
+                "Relative": -3916.0457,
+                "Passed": 3916.0457,
+                "Fraction": 1
+              }
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "ce7f03e5-7ba1-4bc9-abee-16cfd254a1b3": "3b1cd7e8-14ba-452f-8d72-f51c7fdbc33d",
+          "feaf8da1-0480-4536-b695-32edb366917c": "7469b380-f0f1-44eb-8bd4-c254df6061f8",
+          "5c371bbb-7f1f-40bf-b80c-83923e0d32a6": "d2d5a6f1-eaf7-4852-9a63-536ecdcf4f26",
+          "3ca9f7e9-c502-40bb-a817-f82d4d979a7e": "c23db332-222e-4df4-a8b3-58058c32412f",
+          "0b4d4e00-dc8b-42a5-97cd-5d67a943cb59": "ee8f0bcb-41ad-4fa1-9698-2ab63805b344",
+          "6f05c4ad-2a26-4dab-b945-34a12be9958e": "5d2727e6-757c-4ac1-b766-3a4eb19a89e2"
+        }
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

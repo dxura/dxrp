@@ -1,0 +1,91 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Tools
+@using Sandbox.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+
+	<div class="browser">
+		<TextEntry class="search-input" @ref="_searchText" Placeholder="#dupe.search" />
+		<div class="file-list">
+			@if ( _files.Count == 0 )
+			{
+				<p class="empty">#tool.duplicator.dupes.none</p>
+			}
+			else if ( !FilteredFiles.Any() )
+			{
+				<p class="empty">@string.Format( Language.GetPhrase( "dupe.no_matching" ), _searchText?.Text ?? string.Empty )</p>
+			}
+			else
+			{
+				@foreach ( var entry in BrowserEntries )
+				{
+					if ( entry.IsFolder )
+					{
+						<div class="folder-row" style=@($"padding-left: {entry.Depth * 10}px") onclick=@( () => ToggleFolder( entry.Path ) )>
+							<i class="material-icons">@( entry.IsOpen ? "folder_open" : "folder" )</i>
+							<p class="folder-name">@entry.Name</p>
+						</div>
+						continue;
+					}
+
+					var file = entry.Path;
+					var displayName = entry.Name;
+					var isActive = DuplicatorTool.SelectedDupe?.Name == displayName && DuplicatorTool.SelectedDupeSaved;
+					var isRenaming = _renamingFile == file;
+
+					@if ( isRenaming )
+					{
+						<div class="file-row rename-row" style=@($"padding-left: {entry.Depth * 10}px")>
+							<TextEntry class="rename-input" MaxLength=@( 64 ) @ref="_renameText" Value=@displayName />
+							<i class="material-icons rename-confirm" onclick=@( () => ConfirmRename( file ) ) tooltip="#dupe.confirm">check</i>
+							<i class="material-icons rename-cancel" onclick=@CancelRename tooltip="#generic.cancel">close</i>
+						</div>
+					}
+					else
+					{
+						<div class="file-row @( isActive ? "active" : "" )" style=@($"padding-left: {entry.Depth * 10}px")>
+							<p class="file-name" onclick=@( () => OnFileSelected( file ) )>@displayName</p>
+							@if ( DuplicatorTool.SelectedDupe != null && !DuplicatorTool.SelectedDupeSaved )
+							{
+								<i class="material-icons file-update" onclick=@( () => OnFileUpdate( file ) ) tooltip="#dupe.overwrite">sync</i>
+							}
+							<i class="material-icons file-rename" onclick=@( () => OnFileRename( file ) ) tooltip="#dupe.rename">edit</i>
+							<i class="material-icons file-share" onclick=@( () => OnFileShare( file ) ) tooltip="#dupe.share">share</i>
+							<i class="material-icons file-delete" onclick=@( () => OnFileDelete( file ) ) tooltip="#dupe.delete">delete</i>
+						</div>
+					}
+				}
+			}
+		</div>
+
+		@if ( DuplicatorTool.SelectedDupe != null && !DuplicatorTool.SelectedDupeSaved )
+		{
+			<div class="save-bar">
+				<TextEntry class="save-input" MaxLength=@( 64 ) @ref="_dupeNameText" Placeholder="#dupe.name_placeholder"/>
+				<btn @onclick="@( () =>
+				               {
+					               SaveDupe( name: _dupeNameText?.Value );
+
+					               if(_dupeNameText != null)
+					               {
+						               _dupeNameText.Value = "";
+						               _dupeNameText.Blur();
+					               }
+
+					               StateHasChanged();
+				               })" class="save-btn save-confirm" tooltip="#dupe.save"><i class="material-icons">save</i></btn>
+				<btn @onclick="@DiscardDupe" class="save-btn save-discard" tooltip="#dupe.discard"><i class="material-icons">delete</i></btn>
+			</div>
+		}
+	</div>
+
+	@if ( DuplicatorTool.SelectedDupe != null )
+	{
+		<div class="selected-info">
+			<p class="selected-name">@( DuplicatorTool.SelectedDupeSaved ? DuplicatorTool.SelectedDupe.Name : Language.GetPhrase( "dupe.unsaved" ) )</p>
+			<p class="selected-meta">@string.Format( Language.GetPhrase( "dupe.item_count" ), DuplicatorTool.SelectedDupe.Items.Count() )</p>
+		</div>
+	}
+</root>

@@ -1,0 +1,136 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+<root class="voting flex flex-col">
+	@{
+		if(!VoteSystem.Instance.IsValid()) return;
+
+		var votes = VoteSystem.Instance.ActiveVotes
+			.Where( vote => !_dismissedVotes.Contains( vote.Key ) )
+			.ToList();
+	}
+
+	@if ( Player.Local.IsValid() && votes.Count > 0 )
+	{
+		<div class="vote-container rounded-lg flex flex-col gap-2">
+			<div class="vote-header flex justify-center items-center gap-2">
+				<InputHint Action="Mouse" class="small" Size="@InputGlyphSize.Small"/>
+				<label class="text-bold">#hud.voting.unlock_mouse</label>
+			</div>
+
+			@foreach ( var vote in votes )
+			{
+				var target = vote.Value.TargetId.HasValue ? GameUtils.GetPlayerById( vote.Value.TargetId.Value ) : null;
+				var job = GameModeJobs.FindByReference( vote.Value.CustomData );
+				var remainingTime = VoteSystem.Instance.GetRemainingVoteTime( vote.Key );
+				var timeProgress = vote.Value.Duration > 0 ? remainingTime / vote.Value.Duration : 0;
+				var yesVotes = VoteSystem.Instance.GetYesVotes( vote.Key );
+				var noVotes = VoteSystem.Instance.GetNoVotes( vote.Key );
+				var isInitiator = vote.Value.InitiatorId == Player.Local.SteamId;
+
+				<div class="vote-item flex flex-col">
+					<button class="vote-dismiss" onclick=@( () => DismissVote( vote.Key ) )>×</button>
+
+					<div class="vote-body flex flex-col gap-2 p-3">
+						<div class="vote-question text-sm text-tertiary">
+							@if ( vote.Value.Question != null )
+							{
+								@vote.Value.Question
+							}
+							else
+							{
+								@switch ( vote.Value.Type )
+								{
+									case VoteType.Job:
+										<p>
+											<span class="text-bold">@target?.DisplayName</span>
+											<label>#roleplay.vote.wants_job</label>
+											<span class="text-bold" style="color: @job?.Color.Hex()">@job.DisplayName()</span>
+										</p>
+										break;
+									case VoteType.DemotePlayer:
+										<p>
+											<label>#roleplay.vote.demote</label>
+											<span class="text-bold">@target?.DisplayName</span>
+											<label>#roleplay.vote.demote_from</label>
+											<span class="text-bold" style="color: @job?.Color.Hex()">@job.DisplayName()</span>
+										</p>
+										break;
+									case VoteType.Custom:
+										<p>#hud.voting.custom_unknown</p>
+										break;
+								}
+							}
+						</div>
+
+					</div>
+
+					<div class="vote-timer-bar">
+						<div class="vote-timer-fill" style="width: @( timeProgress * 100 )%"></div>
+						<label class="vote-timer-text">@FormatTimeRemaining( remainingTime )</label>
+					</div>
+
+					<div class="vote-actions flex">
+						@{
+							var playerVote = VoteSystem.Instance.GetPlayerVote( Player.Local.SteamId, vote.Key );
+						}
+						<button class="vote-btn vote-btn-yes flex-grow @(playerVote == true ? "voted" : "")" onclick=@( () => CastVote( vote.Key, true ) )>@Language.GetPhrase( "hud.voting.yes" ) (@yesVotes)</button>
+						<button class="vote-btn vote-btn-no flex-grow @(playerVote == false ? "voted" : "")" onclick=@( () => CastVote( vote.Key, false ) )>@Language.GetPhrase( "hud.voting.no" ) (@noVotes)</button>
+						@if ( isInitiator )
+						{
+							<button class="vote-btn vote-btn-cancel" onclick=@( () => CancelVote( vote.Key ) )>#generic.cancel</button>
+						}
+					</div>
+				</div>
+			}
+		</div>
+	}
+</root>
+
+@code
+{
+	private readonly HashSet<Guid> _dismissedVotes = [];
+
+	private void CastVote( Guid voteId, bool inFavor )
+	{
+		CleanDismissedVotes();
+		VoteSystem.Instance.CastVoteHost( voteId, inFavor );
+	}
+
+	private void CancelVote( Guid voteId )
+	{
+		VoteSystem.Instance.CancelVoteHost( voteId );
+	}
+
+	private void DismissVote( Guid voteId )
+	{
+		_dismissedVotes.Add( voteId );
+	}
+
+	private void CleanDismissedVotes()
+	{
+		_dismissedVotes.RemoveWhere( voteId => !VoteSystem.Instance.ActiveVotes.ContainsKey( voteId ) );
+	}
+
+	private string FormatTimeRemaining( float seconds )
+	{
+		var minutes = (int)(seconds / 60);
+		var remainingSeconds = (int)(seconds % 60);
+
+		return $"{minutes:D2}:{remainingSeconds:D2}";
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !VoteSystem.Instance.IsValid() )
+		{
+			return 0;
+		}
+
+		// Update every frame to keep timer accurate
+		return HashCode.Combine( Time.Delta,
+			VoteSystem.Instance.ActiveVotes.Count,
+			_dismissedVotes.Count );
+	}
+}

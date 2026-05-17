@@ -1,0 +1,48 @@
+@using global::System.Threading.Tasks
+@using Sandbox.Network
+@inherits PanelComponent
+@namespace Dxura.RP.Game.UI
+
+<root>
+	<div class="flex flex-col items-center title-container">
+		<div class="title"><span class="text-accent">DX</span><span class="text-white">RP</span></div>
+		<div class="subtitle">#mainmenu.caption</div>
+	</div>
+
+	@* <button onclick="@JoinOfficial" class="btn btn-menu">#mainmenu.play</button> *@
+	<button class="btn btn-menu"><span>#mainmenu.browse</span> <sub class="wip">#mainmenu.wip</sub></button>
+	<button onclick=@( () => NavigateScene( "scenes/testing.scene" ) ) class="btn btn-menu mt-8">#mainmenu.testing
+	</button>
+</root>
+
+@code
+{
+	private async Task JoinOfficial()
+	{
+		var lobbies = await Networking.QueryLobbies();
+
+		LobbyInformation? officialServer = lobbies.FirstOrDefault();
+
+		if ( officialServer.HasValue )
+		{
+			Networking.Connect( officialServer.Value.OwnerId );
+		}
+		else
+		{
+			// I guess join existing or create new one but offical should be up
+			if ( lobbies.Count == 0 )
+			{
+				Scene.LoadFromFile( "scenes/game.scene" );
+			}
+			else
+			{
+				Networking.Connect( Random.Shared.FromList( lobbies ).LobbyId );
+			}
+		}
+	}
+
+	private void NavigateScene( string scene )
+	{
+		Scene.LoadFromFile( scene );
+	}
+}

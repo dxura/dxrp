@@ -1,0 +1,233 @@
+{
+  "RootObject": {
+    "__guid": "053a3903-d73c-4e51-984c-4525bd476ac1",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "money_pot",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "build_interact,construct,occludable,no_collide",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Wire.MoneyPotWire",
+        "__guid": "c5d062d2-b01b-4823-b12d-d02696b48ced",
+        "__enabled": true,
+        "Flags": 0,
+        "CollectSound": "sounds/money.sound",
+        "Collider": {
+          "_type": "component",
+          "component_id": "6d7be82d-c5ae-45f3-8ab4-402d66682ca4",
+          "go": "053a3903-d73c-4e51-984c-4525bd476ac1",
+          "component_type": "BoxCollider"
+        },
+        "DataJson": "",
+        "DisplayAmount": 0,
+        "DropSound": "sounds/money.sound",
+        "InDropPoint": {
+          "_type": "gameobject",
+          "go": "2938189d-3510-4146-b0be-47ba210e4b9d"
+        },
+        "NetworkOwner": "00000000-0000-0000-0000-000000000000",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OutDropPoint": {
+          "_type": "gameobject",
+          "go": "2bc9702f-d45a-4b27-9aa3-53be70f66772"
+        },
+        "Owner": "0"
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "295f04e2-c9b0-44a2-9fa5-7d5487175520",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "-0.08088446,0.1165724,5.227377",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "11.08066,28.43742,11.99707",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "6d7be82d-c5ae-45f3-8ab4-402d66682ca4",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "-0.08088446,0.1078377,4.730262",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "11.08066,26.80523,9.552554",
+        "Static": true,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "2938189d-3510-4146-b0be-47ba210e4b9d",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "drop_in",
+        "Position": "0,-25,5",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "2bc9702f-d45a-4b27-9aa3-53be70f66772",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "drop_out",
+        "Position": "0,25,5",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "237471c4-bf6c-4e86-bf18-cbaca78c48ad",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "model",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "0.6,1,0.6",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "f4903b44-5f10-4f57-b065-d79ceaf2f0f7",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/props/trim_sheets/storage/storage_plastic_box_01.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "ac9ea464-2b92-49e6-b47e-585083bf6e34"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "af3a3ce7-9613-49e9-ad66-88d2965e5b2e"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "01dfcbcc-6d1e-4bc1-ab52-2ef54c39b59e"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.storage_plastic_box_01#43568"
+  ],
+  "__version": 2
+}

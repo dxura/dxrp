@@ -1,0 +1,260 @@
+{
+  "RootObject": {
+    "__guid": "4a78f9e5-66de-477c-ad84-5e2559ced049",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "gun_license",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,occludable,hands_interact,playerclip",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.BaseEntity",
+        "__guid": "85bf8847-aa13-47e2-a0d7-a117dbeffcf7",
+        "__enabled": true,
+        "Flags": 0,
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "7f2ffb68-838e-47f8-abc4-28c359cf6930",
+          "go": "4a78f9e5-66de-477c-ad84-5e2559ced049",
+          "component_type": "HealthComponent"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "5860f539-d15a-4513-b63c-64b8fbfa1161",
+          "go": "4a78f9e5-66de-477c-ad84-5e2559ced049",
+          "component_type": "Rigidbody"
+        }
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "7f2ffb68-838e-47f8-abc4-28c359cf6930",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 100,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "5860f539-d15a-4513-b63c-64b8fbfa1161",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.StatusOnPress",
+        "__guid": "735578c5-fce0-4c82-9b47-378d4e8930c5",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "StatusToApply": "gun_license",
+        "UseSound": null
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "ac106c89-ba3e-46f5-bc19-f96fd568aed8",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "0.03466916,0.08734179,0.2769036",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "7.398629,11.89624,0.7960829",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "9d0fc41e-9c5e-44e3-8788-d8ecd8a5b455",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "texture",
+        "Position": "0,0,0.2275741",
+        "Rotation": "0.7071068,0.00000003090862,0.7071068,-0.00000003090862",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SpriteRenderer",
+            "__guid": "ae5db8c5-d61a-4a72-a5c8-45feb87d584e",
+            "__enabled": true,
+            "Flags": 0,
+            "__version": 2,
+            "Additive": false,
+            "AlphaCutoff": 0.5,
+            "Billboard": "None",
+            "Color": "1,1,1,1",
+            "DepthFeather": 0,
+            "FlipHorizontal": false,
+            "FlipVertical": false,
+            "FogStrength": 1,
+            "IsSorted": false,
+            "Lighting": false,
+            "OnAnimationEnd": null,
+            "OnAnimationStart": null,
+            "OnBroadcastMessage": null,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Opaque": false,
+            "OverlayColor": "1,1,1,0",
+            "PlaybackSpeed": 1,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "Shadows": false,
+            "Size": "10,10",
+            "Sprite": {
+              "$compiler": "embed",
+              "$source": null,
+              "data": {
+                "Animations": [
+                  {
+                    "Name": "Default",
+                    "FrameRate": 15,
+                    "Origin": "0.5,0.5",
+                    "LoopMode": "Loop",
+                    "Frames": [
+                      {
+                        "Texture": "gameplay/entities/jobs/mayor/gun_license/gun_license.png",
+                        "BroadcastMessages": []
+                      }
+                    ]
+                  }
+                ],
+                "__references": null
+              },
+              "compiled": null
+            },
+            "StartingAnimationName": "Default",
+            "TextureFilter": "Anisotropic"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "60c3a3fb-6e9f-463c-b089-1518b986433a"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "f09dc081-71a5-41f3-b4fc-a47a6b2d7fca"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "9b5c3b60-6caf-4f85-82f7-2b3455d5f824"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

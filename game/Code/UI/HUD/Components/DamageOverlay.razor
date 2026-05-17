@@ -1,0 +1,37 @@
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+@using Sandbox.UI
+@inherits Panel
+
+<root>
+	<Panel @ref=" Overlay" class="overlay mask-scope"/>
+</root>
+
+@code
+{
+	public Panel Overlay { get; set; }
+
+	public Player Viewer => Player.Local;
+
+	float GetOpacity()
+	{
+		if ( !Viewer.IsValid() ) return 0f;
+		var hp = Viewer.HealthComponent.Health;
+		// No effect above 50 HP
+		if ( hp > 50f ) return 0f;
+		// Pulse only below or equal to 20 HP
+		var cos = MathF.Cos( Time.Now * 5f ) / 2f + 0.5f;
+		var pulse = cos * ((1f - MathF.Min(hp / 20f, 1f)) * 0.2f);
+		if ( hp > 20f ) pulse = 0f;
+		// 75% intensity
+		return Math.Clamp((1f - (hp / 100f) - pulse) * 0.75f, 0f, 1f);
+	}
+
+	public override void Tick()
+	{
+		if ( Overlay.IsValid() )
+		{
+			Overlay.Style.Opacity = GetOpacity();
+		}
+	}
+}

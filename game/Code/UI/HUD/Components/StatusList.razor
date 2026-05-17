@@ -1,0 +1,124 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+@using StatusSystem = Dxura.RP.Game.Status
+
+<root>
+	@if ( Player.Local.IsValid() && Player.Local.StatusCount > 0 )
+	{
+		<div class="status-container flex flex-col items-end gap-1">
+			@foreach ( var (status, expiry, stacks) in GetVisibleStatuses() )
+			{
+				var remainingTime = expiry.HasValue ? (float)expiry.Value : 0f;
+				var isExpiring = expiry.HasValue && remainingTime <= 10f;
+
+				var duration = status.DefaultDuration;
+				var progress = 1f;
+
+				if ( expiry.HasValue && duration is > 0f )
+				{
+					var ratio = Math.Clamp(remainingTime / duration.Value, 0f, 1f);
+					progress = ratio;
+				}
+
+				var expiring = isExpiring || (duration.HasValue && progress <= 0.25f);
+				var timed = expiry.HasValue && duration is > 0f;
+				var style = BuildStatusStyle( status, progress, timed );
+
+				<div class="status-item flex flex-col items-center justify-center relative rounded @( expiring ? "expiry" : "" )"
+				     style="@style"
+				     title="@status.Name"
+				     aria-label="@status.Name">
+
+					@if ( status.Stackable )
+					{
+						<span class="status-stack-badge">@stacks</span>
+					}
+					
+					@if ( !string.IsNullOrEmpty( status.Icon ) )
+					{
+						<div class="status-icon flex items-center justify-center text-white"
+						     style="background-image: url(@status.Icon);"></div>
+					}
+					else if ( !string.IsNullOrEmpty( status.MaterialIcon ) )
+					{
+						<i style="font-size: 26px" class="flex items-center justify-center text-white material-icons">@status.MaterialIcon</i>
+					}
+					else
+					{
+						<span class="status-icon flex items-center justify-center text-white">@status.Name.Substring( 0, 1 ).ToUpper()</span>
+					}
+
+					@if ( status.ShowText )
+					{
+						<span class="text-semibold" style="font-size:calc(0.5vw); max-width:100%; white-space:nowrap;">@status.Name</span>
+					}
+				</div>
+			}
+		</div>
+	}
+</root>
+
+@code
+{
+	protected override int BuildHash()
+	{
+		if ( !Player.Local.IsValid() || Player.Local.StatusCount == 0 )
+			return 0;
+
+		return HashCode.Combine( Time.Now );
+	}
+
+	private List<(IStatus Status, TimeUntil? Expiry, int Stacks)> GetVisibleStatuses()
+	{
+		var statuses = new List<(IStatus, TimeUntil?, int)>();
+
+		if ( !Player.Local.IsValid() )
+			return statuses;
+
+		foreach ( var statusEntry in Player.Local.Statuses )
+		{
+			var statusInstance = StatusSystem.Current.GetCachedInstance( statusEntry.Key );
+			if ( statusInstance is { Visible: true } )
+			{
+				statuses.Add( (statusInstance, statusEntry.Value.Expiry, statusEntry.Value.Stacks) );
+			}
+		}
+
+		statuses.Sort( ( a, b ) =>
+		{
+			var av = a.Item2.HasValue ? (float)a.Item2.Value : float.MaxValue;
+			var bv = b.Item2.HasValue ? (float)b.Item2.Value : float.MaxValue;
+			return av.CompareTo( bv );
+		} );
+
+		return statuses;
+	}
+
+	private string BuildStatusStyle( IStatus status, float progress, bool timed )
+	{
+		var r = (int)(status.Color.r * 255);
+		var g = (int)(status.Color.g * 255);
+		var b = (int)(status.Color.b * 255);
+
+	    // Border uses the base color, fully opaque
+	    var border = $"rgb({r},{g},{b})";
+	
+	    // Background is slightly transparent
+	    var backgroundAlpha = 0.2f;
+
+		if ( timed )
+		{
+			var severity = 1f - progress;
+			severity = Math.Clamp(severity, 0f, 1f);
+
+	        var solidAlpha = backgroundAlpha + 0.2f * severity;
+			var usedRatio = 1f - progress;
+			var sweepPercent = usedRatio * 100f;
+			var conicGradient = $"conic-gradient(transparent 0%, transparent {sweepPercent:0.#}%, rgba({r},{g},{b},{solidAlpha:0.##}) {sweepPercent:0.#}%, rgba({r},{g},{b},{solidAlpha:0.##}) 100%)";
+			return $"background: {conicGradient}; border: 1px solid {border};";
+		}
+
+	    return $"background-color: rgba({r},{g},{b},{backgroundAlpha:0.##}); border: 1px solid {border};";
+	}
+}

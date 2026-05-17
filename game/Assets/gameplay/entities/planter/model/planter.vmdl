@@ -1,0 +1,209 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						name = "stage_1_weed"
+						filename = "gameplay/entities/planter/model/weed/weed_stage_1.fbx"
+						import_translation = [ 0.0, 0.0, 12.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "stage_2_weed"
+						filename = "gameplay/entities/planter/model/weed/weed_stage_2.fbx"
+						import_translation = [ 0.0, 0.0, 12.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "stage_3_weed"
+						filename = "gameplay/entities/planter/model/weed/weed_stage_3.fbx"
+						import_translation = [ 0.0, 0.0, 12.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "planter"
+						filename = "gameplay/entities/planter/model/Planter.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "planter_soil"
+						filename = "gameplay/entities/planter/model/planter_soil.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "smm plant.vmat"
+								to = "gameplay/entities/planter/model/weed/smm_plants.vmat"
+							},
+							{
+								from = "large plant.vmat"
+								to = "gameplay/entities/planter/model/weed/large_plants.vmat"
+							},
+							{
+								from = "planter.vmat"
+								to = "gameplay/entities/planter/model/planter.vmat"
+							},
+							{
+								from = "planter_soil.vmat"
+								to = "gameplay/entities/planter/model/dirt.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = ""
+					},
+					{
+						_class = "MaterialGroup"
+						name = "watered"
+						remaps = 
+						[
+							{
+								from = "gameplay/entities/planter/model/dirt.vmat"
+								to = "gameplay/entities/planter/model/dirt_watered.vmat"
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "BodyGroupList"
+				children = 
+				[
+					{
+						_class = "BodyGroup"
+						name = "plant_stages"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								meshes = [  ]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "stage_1_weed"
+								meshes = 
+								[
+									"stage_1_weed",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "stage_2_weed"
+								meshes = 
+								[
+									"stage_2_weed",
+								]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "stage_3_weed"
+								meshes = 
+								[
+									"stage_3_weed",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+					{
+						_class = "BodyGroup"
+						name = "soil_stages"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								name = "none"
+								meshes = [  ]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "soiled"
+								meshes = 
+								[
+									"planter_soil",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

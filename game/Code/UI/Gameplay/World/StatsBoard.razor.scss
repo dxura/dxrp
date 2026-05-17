@@ -1,0 +1,29 @@
+@import "../../styles.scss";
+
+StatsBoard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  background-color: $color-primary;
+
+  pointer-events: none;
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .localPlayer {
+    background-color: rgba(26, 26, 46, 0.61);
+  }
+
+}

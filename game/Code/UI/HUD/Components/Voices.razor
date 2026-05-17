@@ -1,0 +1,40 @@
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+@inherits Panel
+
+<root class="m-1">
+	<div class="flex flex-wrap gap-2">
+		@foreach ( var player in GameUtils.Players.Where( CanDisplay ) )
+		{
+			<div class="flex flex-row bg-primary-75 rounded px-2 py-1 items-center gap-2">
+					<Icon class="square rounded shrink-0" File="/ui/chat/radio.png" size="24"
+					      style="@($"transform: scale({GetAmplitudeScale( player.Voice )})")"/>
+					<img class="avatar" src="avatar:@player.SteamId"/>
+					<PlayerPanel Player=@player/>
+			</div>
+		}
+	</div>
+
+</root>
+
+@code
+{
+	private bool CanDisplay( Player player )
+	{
+		if(!player.IsValid()) return false;
+		
+		return player.Voice.LastPlayed < 0.25f
+			&& player.WorldPosition.Distance( Player.Local?.GetListenerPosition() ?? Vector3.Zero ) <= 1000;
+	}
+
+	private string GetAmplitudeScale( Voice voice )
+	{
+		var volume = voice.Volume.Clamp( 0f, 1f );
+		return (volume * voice.Amplitude).Clamp( 1f, 2.5f ).ToString( "0.#" );
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Time.Now );
+	}
+}

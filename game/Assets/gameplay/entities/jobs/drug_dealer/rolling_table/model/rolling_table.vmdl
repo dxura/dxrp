@@ -1,0 +1,141 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "gameplay/entities/jobs/drug_dealer/rolling_table/model/rolling_table.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "final.vmat"
+								to = "gameplay/entities/jobs/drug_dealer/rolling_table/model/rolling_table.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = ""
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -1.9806, 0.790682, 33.609825 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 23.714977, 49.590458, 4.911125 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ 9.008476, -22.416874, 18.011955 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 3.417629, 2.331442, 36.106865 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ 9.00848, 22.583099, 18.011999 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 3.417629, 2.331442, 36.106865 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -14.9915, 22.583099, 18.011999 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 3.417629, 2.331442, 36.106865 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -14.9915, -22.416901, 18.011999 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 3.417629, 2.331442, 36.106865 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -15.711418, 0.790682, 39.411282 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 2.760353, 49.590458, 16.51403 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -10.844862, 0.790682, 47.252998 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 12.493465, 49.590458, 0.830589 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -2.881374, -23.29682, 36.13879 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 28.420441, 1.415449, 9.969049 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -2.88137, 23.086052, 36.138802 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 28.420441, 1.363533, 9.969049 ]
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

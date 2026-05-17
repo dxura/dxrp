@@ -1,0 +1,353 @@
+{
+  "RootObject": {
+    "__guid": "acab9fd6-a2bb-4684-bac5-40924b575dd3",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "door_manhole",
+    "Position": "0,0,0",
+    "Rotation": "0,-0.7071068,0,0.7071068",
+    "Scale": "1,1,1",
+    "Tags": "map",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Door",
+        "__guid": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationCurve": [
+          {
+            "x": 0,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 1,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          }
+        ],
+        "AutoCloseDelay": 5,
+        "BuySound": "sounds/purchase.sound",
+        "CloseDuration": 1,
+        "CloseFinishedSound": null,
+        "CloseSound": "sounds/interaction/manhole-close.sound",
+        "ContextOverlay": true,
+        "HandleCurve": [
+          {
+            "x": 0,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 0.25,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 0.75,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 1,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          }
+        ],
+        "HandleRotationDuration": 0.4,
+        "HasHandles": true,
+        "KnockSound": "sounds/interaction/metal/metal-door-knock.sound",
+        "Locked": false,
+        "LockedSound": "sounds/interaction/door-locked.sound",
+        "LockSound": "sounds/interaction/door-lock.sound",
+        "MainDoor": {
+          "_type": "component",
+          "component_id": "7ee0f172-d0dd-4dfa-8f5f-5ab723de2803",
+          "go": "03c256fd-a95b-4a49-93ae-db34902f9ac9",
+          "component_type": "DoorPart"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OpenAwayFromPlayer": true,
+        "OpenDuration": 1,
+        "OpenFinishedSound": null,
+        "OpenSound": "sounds/interaction/manhole-open.sound",
+        "Owner": 0,
+        "OwnerGroup": "gameplay/jobs/groups/public.jobgroup",
+        "OwnerJob": null,
+        "Price": 50,
+        "ReverseDirection": false,
+        "SecondDoor": null,
+        "SellSound": "sounds/interaction/door-sell.sound",
+        "State": "Closed",
+        "TargetAngle": 90,
+        "TargetHeight": -40,
+        "Type": "Roller",
+        "UnlockSound": "sounds/interaction/door_unlock.sound"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "03c256fd-a95b-4a49-93ae-db34902f9ac9",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Manhole",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.DoorPart",
+            "__guid": "7ee0f172-d0dd-4dfa-8f5f-5ab723de2803",
+            "__enabled": true,
+            "Flags": 0,
+            "Collider": {
+              "_type": "component",
+              "component_id": "8fe9d86d-9144-4dd1-8a7d-98f52e87e109",
+              "go": "03c256fd-a95b-4a49-93ae-db34902f9ac9",
+              "component_type": "BoxCollider"
+            },
+            "Handles": [],
+            "Marker": {
+              "_type": "gameobject",
+              "go": "9bdbe57a-394d-43a0-8e2a-05dcb1cb483d"
+            },
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "ParentDoor": {
+              "_type": "component",
+              "component_id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+              "go": "acab9fd6-a2bb-4684-bac5-40924b575dd3",
+              "component_type": "Door"
+            },
+            "Pivot": null
+          },
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "baa08284-1273-444a-b1d1-ad0413316bbb",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": "default",
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/gameplay/doors/manhole/manhole.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.BoxCollider",
+            "__guid": "8fe9d86d-9144-4dd1-8a7d-98f52e87e109",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "0.8410224,0.04788971,-0.01861954",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "2.676276,54.5912,54.6349",
+            "Static": true,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": [
+          {
+            "__guid": "9bdbe57a-394d-43a0-8e2a-05dcb1cb483d",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Marker",
+            "Position": "0,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [],
+            "Children": []
+          }
+        ]
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": [
+      {
+        "Id": "Model",
+        "Title": "Model",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "baa08284-1273-444a-b1d1-ad0413316bbb",
+            "Property": "Model"
+          }
+        ]
+      },
+      {
+        "Id": "Open Away From Player",
+        "Title": "Open Away From Player",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "OpenAwayFromPlayer"
+          }
+        ]
+      },
+      {
+        "Id": "Target Height",
+        "Title": "Target Height",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "TargetHeight"
+          }
+        ]
+      },
+      {
+        "Id": "Locked",
+        "Title": "Locked",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "Locked"
+          }
+        ]
+      },
+      {
+        "Id": "Owner Group",
+        "Title": "Owner Group",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "OwnerGroup"
+          }
+        ]
+      },
+      {
+        "Id": "Material Group",
+        "Title": "Material Group",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "baa08284-1273-444a-b1d1-ad0413316bbb",
+            "Property": "MaterialGroup"
+          }
+        ]
+      },
+      {
+        "Id": "Owner Job",
+        "Title": "Owner Job",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "OwnerJob"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

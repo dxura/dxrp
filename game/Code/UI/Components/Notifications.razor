@@ -1,0 +1,61 @@
+@namespace Dxura.RP.Game.UI
+@inherits PanelComponent
+
+@attribute [StyleSheet]
+
+<root>
+	@if ( Visible )
+	{
+		<div class="flex flex-col gap-2">
+			@foreach ( var notification in Notify.Current.ActiveNotifications.TakeLast( 10 ) )
+		{
+			@if ( notification.Type == Notify.NotificationType.Cooldown )
+			{
+				<div class="bg-primary-75 p-2 flex items-center justify-center gap-2 rounded text-base text-bold">
+					<span>⌛</span>
+					<span class="emphasis"><span>#notify.cooldown</span> <span class="ml-1">@(notification.Message)s</span></span>
+				</div>
+				continue;
+			}
+
+			<div class="bg-primary-75 p-2 flex items-center justify-center gap-2 rounded text-base text-bold">
+				@switch ( notification.Type )
+				{
+					case Notify.NotificationType.Generic:
+						<span>🔔</span>
+						break;
+					case Notify.NotificationType.Error:
+						<span>❌</span>
+						break;
+					case Notify.NotificationType.Success:
+						<span>✅</span>
+						break;
+					case Notify.NotificationType.Money:
+						<span>💵</span>
+						break;
+					case Notify.NotificationType.Warning:
+						<span>⚠️</span>
+						break;
+					case Notify.NotificationType.Inventory:
+						<i class="material-icons">inventory_2</i>
+						break;
+				}
+				<span class="emphasis">@notification.Message</span>
+			</div>
+		}
+		</div>
+	}
+
+</root>
+
+@code
+{
+	public static bool Visible = true;
+	public Notify Notify => Notify.Current;
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Notify.ActiveNotifications.Count, Visible );
+	}
+
+}

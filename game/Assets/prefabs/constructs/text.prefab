@@ -1,0 +1,176 @@
+{
+  "RootObject": {
+    "__guid": "b7646e87-4be4-4fd7-b18f-ecfd8c0e4c03",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "text",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "build_interact,construct,occludable,no_collide,hands_interact",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Text",
+        "__guid": "54cbfa70-61e1-4464-85c3-c70102ba5b49",
+        "__enabled": true,
+        "Flags": 0,
+        "Collider": {
+          "_type": "component",
+          "component_id": "fd28bef6-01a3-45cd-b205-b1b9c607ca99",
+          "go": "b7646e87-4be4-4fd7-b18f-ecfd8c0e4c03",
+          "component_type": "BoxCollider"
+        },
+        "DataJson": "",
+        "NetworkOwner": "00000000-0000-0000-0000-000000000000",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "TextRenderer": {
+          "_type": "component",
+          "component_id": "01242f48-af75-4366-86a8-59d0cce26792",
+          "go": "b7646e87-4be4-4fd7-b18f-ecfd8c0e4c03",
+          "component_type": "TextRenderer"
+        }
+      },
+      {
+        "__type": "Sandbox.TextRenderer",
+        "__guid": "01242f48-af75-4366-86a8-59d0cce26792",
+        "__enabled": false,
+        "Flags": 0,
+        "__version": 2,
+        "BlendMode": "Normal",
+        "FogStrength": 1,
+        "HorizontalAlignment": "Center",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "Scale": 1,
+        "TextScope": {
+          "Text": "Hello! ❤",
+          "TextColor": "1,1,1,1",
+          "FontName": "Poppins",
+          "FontSize": 32,
+          "FontWeight": 400,
+          "FontItalic": false,
+          "LineHeight": 1,
+          "LetterSpacing": 0,
+          "WordSpacing": 0,
+          "FilterMode": "Bilinear",
+          "FontSmooth": "Auto",
+          "Outline": {
+            "Enabled": false,
+            "Size": 4,
+            "Color": "0,0,1,1"
+          },
+          "Shadow": {
+            "Enabled": false,
+            "Size": 4,
+            "Color": "0,0,0,1",
+            "Offset": "4,4"
+          },
+          "OutlineUnder": {
+            "Enabled": false,
+            "Size": 4,
+            "Color": "0,1,0,1"
+          },
+          "ShadowUnder": {
+            "Enabled": false,
+            "Size": 4,
+            "Color": "0,0,0,1",
+            "Offset": "4,4"
+          }
+        },
+        "VerticalAlignment": "Center"
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "fd28bef6-01a3-45cd-b205-b1b9c607ca99",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "0,0,0",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "50,50,50",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      }
+    ],
+    "Children": [],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "2e8de7cd-5656-4c85-927e-248883b95fb0"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "5c48b212-8099-4126-bd14-fdbfa460367a"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "9a558949-8f72-4470-9e8e-b1ee0599a516"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

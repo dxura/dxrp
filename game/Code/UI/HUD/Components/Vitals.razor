@@ -1,0 +1,56 @@
+﻿@namespace Dxura.RP.Game.UI
+@using global::System.Text
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() || !HealthComponent.IsValid() ) return;
+
+<root class="@BuildClass()">
+
+    <div class="inner p-2 flex flex-row gap items-center justify-center">
+        <div class="flex flex-col items-center justify-center">
+			<ProgressBar Value="@( Health )" width="128"/>
+            <span class="flex flex-row items-center justify-center gap-sm">
+				<Icon class="icon" file="/ui/health.png" size="24"/>
+				<label class="vital">@Health</label>
+			</span>
+
+		</div>
+
+        <div class="flex flex-col">
+			@if ( ArmorComponent.IsValid() )
+			{
+				<Donut Value="@( Armor )" size="48" icon="@( HasHelmet ? "ui/helmet.png" : "ui/armor.png" )"/>
+			}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public Player Player => Player.Local;
+	public HealthComponent HealthComponent => Player.HealthComponent;
+	public ArmorComponent? ArmorComponent => Player.GameObject?.Components.Get<ArmorComponent>();
+	public int Health => HealthComponent?.Health.CeilToInt() ?? 0;
+	public int Armor => ArmorComponent?.Armor.CeilToInt() ?? 0;
+	public bool HasHelmet => ArmorComponent?.HasHelmet ?? false;
+	public bool IsGodMode => HealthComponent?.IsGodMode ?? false;
+
+	protected override int BuildHash()
+	{
+		return !Player.IsValid() ? 0 : HashCode.Combine( Health, Armor, HasHelmet, Player.HealthComponent?.State, Player.HealthComponent?.IsGodMode );
+	}
+
+	private string BuildClass()
+	{
+		var sb = new StringBuilder();
+
+		if ( Health < 30f )
+			sb.Append( "low-health" );
+
+		if ( IsGodMode )
+			sb.Append( "god-mode" );
+
+		return sb.ToString();
+	}
+}

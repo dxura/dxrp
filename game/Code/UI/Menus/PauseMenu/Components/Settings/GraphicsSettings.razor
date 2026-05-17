@@ -1,0 +1,31 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@page "/settings/graphics"
+
+<root class="flex flex-col gap-4 p-4 text-white">
+	<h2 class="text-bold text-lg p-2 bg-primary-75 text-center">#settings.graphics.view_distance</h2>
+
+	<div class="flex flex-col ml-2" style="max-width: 300px;">
+		<p class="text-base">#settings.graphics.render_distance</p>
+		<SliderControl Min=@( 500 ) Max=@( 10000 )
+		               Value="@( float.Parse( ConsoleSystem.GetValue( "dx_render_distance" ) ) )"
+		               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue( "dx_render_distance", value ); } ) />
+	</div>
+
+	<h2 class="text-bold text-lg p-2 bg-primary-75 text-center">#settings.graphics.post_processing</h2>
+	
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.graphics.ao</p>
+		<SwitchControl Value="@( bool.Parse( ConsoleSystem.GetValue( "dx_ambient_occlusion", "false" ) ) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_ambient_occlusion", value ); } ) />
+	</div>
+	<p class="text-sm text-gray-400 -mt-2 ml-2">#settings.graphics.ao_desc</p>
+
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.graphics.ssr</p>
+		<SwitchControl Value="@( bool.Parse( ConsoleSystem.GetValue( "dx_screen_space_reflections", "false" ) ) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_screen_space_reflections", value ); } ) />
+	</div>
+	<p class="text-sm text-gray-400 -mt-2 ml-2">#settings.graphics.ssr_desc</p>
+</root>

@@ -1,0 +1,38 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+	<span class="time-value">@GetFormattedTime()</span>
+</root>
+
+@code
+{
+	private string GetFormattedTime()
+	{
+		// Start at Monday 8:00 AM and add server uptime
+		var totalMinutes = (Time.Now / 60f) + (8f * 60f); // Start at 8am (480 minutes)
+
+		// Calculate day and time
+		var totalDays = (int)(totalMinutes / 1440f); // 1440 minutes per day
+		var dayOfWeek = totalDays % 7; // 0 = Monday
+
+		var minutesInDay = totalMinutes % 1440f;
+		var hour = (int)(minutesInDay / 60f);
+		var minute = (int)(minutesInDay % 60f);
+
+		// Use DateTime for proper formatting
+		// Start from Monday (DayOfWeek.Monday = 1, so we add 1 to our 0-based day)
+		var dateTime = new DateTime(2024, 1, 1 + dayOfWeek, hour, minute, 0);
+		return dateTime.ToString("dddd h:mmtt");
+	}
+	
+
+	protected override int BuildHash()
+	{
+		// Update every minute
+		var totalMinutes = (int)(Time.Now / 60f);
+
+		return HashCode.Combine(totalMinutes );
+	}
+}

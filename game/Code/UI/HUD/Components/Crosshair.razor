@@ -1,0 +1,218 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() || !Player.CurrentEquipment.IsValid() || !IsVisible )
+{
+	return;
+}
+
+<root>
+	<div class="guide"/>
+
+	@if ( !Equipment?.OnlyShowCrosshairDot ?? true )
+	{
+		<Panel @ref=" Left" class="left element"></Panel>
+		<Panel @ref=" Right" class="right element"></Panel>
+		<Panel @ref=" Top" class="top element"></Panel>
+		<Panel @ref=" Bottom" class="bottom element"></Panel>
+	}
+
+	<Panel @ref=" Dot" class="dot element"/>
+
+	<Panel @ref=" Hitmarker" class="@HitmarkerClass"/>
+</root>
+
+@code
+{
+	public Panel Left { get; set; }
+	public Panel Right { get; set; }
+	public Panel Top { get; set; }
+	public Panel Bottom { get; set; }
+	public Panel Dot { get; set; }
+
+	public Panel Hitmarker { get; set; }
+
+	Player? Player => Player.Local.IsValid() ? Player.Local : null;
+	Equipment? Equipment => Player.IsValid() ? Player.CurrentEquipment : null;
+	Vector2 ScreenPosition { get; set; } = new( 0.5f, 0.5f );
+	
+	[ConVar( "dx_thirdperson_dot", ConVarFlags.Saved )]
+	public static bool ThirdPersonDot { get; set; } = true;
+
+	private TimeUntil timeUntilHitmarkerRemove = 0f;
+	private float HitMarkerDuration => 0.1f;
+
+	public static Crosshair Instance { get; set; }
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( firstTime )
+		{
+			Instance = this;
+		}
+	}
+
+	string HitmarkerClasses => !timeUntilHitmarkerRemove ? "is-visible" : string.Empty;
+	string HitmarkerClass => string.IsNullOrEmpty( HitmarkerClasses ) ? "hitmarker" : $"hitmarker {HitmarkerClasses}";
+
+	private ShootWeaponComponent Shoot => Equipment.IsValid() ? Equipment.Components.Get<ShootWeaponComponent>( FindMode.EnabledInSelfAndDescendants ) : null;
+	private ScopeWeaponComponent Scope => Equipment.IsValid() ? Equipment.Components.Get<ScopeWeaponComponent>( FindMode.EnabledInSelfAndDescendants ) : null;
+	private RecoilWeaponComponent Recoil => Equipment.IsValid() ? Equipment.Components.Get<RecoilWeaponComponent>( FindMode.EnabledInSelfAndDescendants ) : null;
+
+	float BaseDistance => 15;
+
+	// 10px base size
+	float BaseElementSize => 15;
+
+	public void Trigger( DamageInfo damageInfo )
+	{
+		if ( Equipment is not { UseCrosshair: true } || Equipment.OnlyShowCrosshairDot )
+		{
+			return;
+		}
+
+		if ( damageInfo.Victim is Player victim && victim.IsValid() )
+		{
+			var hc = victim.HealthComponent;
+			if ( !hc.IsValid() ) return;
+
+			var isKill = hc.Health - damageInfo.Damage <= 0f;
+			timeUntilHitmarkerRemove = isKill ? 0.5f : 0.2f;
+			Hitmarker.SetClass( "is-kill", isKill );
+			Hitmarker.SetClass( "is-headshot", damageInfo.Hitbox.HasFlag( HitboxTags.Head ) );
+		}
+	}
+
+	float VelocityScale => MathF.Abs( Player?.Spread ?? 0 ).Clamp( 0, 0.25f );
+	float VelocityScaleFactor => 150;
+
+	public float Distance => GetDistance();
+
+	private float LerpedDistance = 15;
+	private float SpreadDistance => (Player?.Spread ?? 0) * 250f;
+
+	float GetDistance()
+	{
+		var dist = BaseDistance;
+
+		dist += SpreadDistance;
+
+		// velocity
+		dist += VelocityScale * VelocityScaleFactor;
+
+		if ( Recoil.IsValid() )
+		{
+			dist += Recoil.Current.AsVector3().Length * 175;
+		}
+
+		return dist;
+	}
+
+	Length? GetLength()
+	{
+		var size = BaseElementSize;
+
+		var dist = GetDistance() - (BaseDistance + SpreadDistance);
+		size += dist * 0.2f;
+
+		return Length.Pixels( size );
+	}
+
+	void UpdateDistance()
+	{
+		if ( !Left.IsValid() ) return;
+
+		LerpedDistance = LerpedDistance.LerpTo( Distance, Time.Delta * 7.5f );
+
+		var length = GetLength();
+		var distance = LerpedDistance + BaseElementSize;
+
+		Left.Style.Left = -distance;
+		Left.Style.Top = 0;
+
+		Right.Style.Left = distance;
+		Right.Style.Top = 0;
+
+		Top.Style.Left = 0;
+		Top.Style.Top = -distance;
+
+		Bottom.Style.Left = 0;
+		Bottom.Style.Top = distance;
+
+		if ( Dot.IsValid() )
+		{
+			Dot.Style.Left = 0;
+			Dot.Style.Top = 0;
+		}
+
+		Left.Style.BackgroundColor = Color.White;
+		Top.Style.BackgroundColor = Color.White;
+		Bottom.Style.BackgroundColor = Color.White;
+		Right.Style.BackgroundColor = Color.White;
+
+		if ( Dot.IsValid() )
+			Dot.Style.BackgroundColor = Color.White;
+	}
+
+	void UpdateScreenPosition( bool useThirdPersonProjection )
+	{
+		if ( !Player.IsValid() || !Player.Controller.ThirdPerson || !useThirdPersonProjection || !Scene.Camera.IsValid() )
+		{
+			ScreenPosition = new Vector2( 0.5f, 0.5f );
+			Style.Left = Length.Fraction( ScreenPosition.x );
+			Style.Top = Length.Fraction( ScreenPosition.y );
+			return;
+		}
+
+		var aimRay = new Ray( Player.Controller.EyePosition, Player.Controller.EyeAngles.ToRotation().Forward );
+		var trace = Scene.Trace
+			.IgnoreGameObjectHierarchy( Player.GameObject )
+			.Ray( aimRay, 100000f )
+			.UseHitboxes()
+			.WithoutTags( "invisible", "trigger" )
+			.Run();
+		var targetPosition = trace.Hit
+			? trace.HitPosition
+			: aimRay.Position + aimRay.Forward * 100000f;
+		ScreenPosition = Scene.Camera.PointToScreenNormal( targetPosition );
+		Style.Left = Length.Fraction( ScreenPosition.x );
+		Style.Top = Length.Fraction( ScreenPosition.y );
+	}
+
+	public override void Tick()
+	{
+		if ( !Equipment.IsValid() || !Player.IsValid() || !Equipment.UseCrosshair )
+		{
+			SetClass( "visible", false );
+			SetClass( "dot-only", false );
+			ScreenPosition = new Vector2( 0.5f, 0.5f );
+			Style.Left = Length.Fraction( ScreenPosition.x );
+			Style.Top = Length.Fraction( ScreenPosition.y );
+			return;
+		}
+
+		var isAiming = Equipment.Tags?.Has( "aiming" ) ?? false;
+		var isFreeLooking = Player.IsFreeLooking || Input.Down( "FreeLook" );
+		var showThirdPersonAimCrosshair = Player.Controller.ThirdPerson && isAiming;
+		var showThirdPersonDot = Player.Controller.ThirdPerson && ThirdPersonDot && !isAiming;
+		var showDotOnly = showThirdPersonDot;
+
+		var visible = !isFreeLooking &&
+		              Player.HealthComponent.State == LifeState.Alive &&
+		              (!Player.Controller.ThirdPerson && !isAiming || showThirdPersonAimCrosshair || showThirdPersonDot);
+
+		SetClass( "visible", visible );
+		SetClass( "dot-only", showDotOnly );
+		UpdateScreenPosition( showThirdPersonAimCrosshair || showThirdPersonDot );
+
+		// Always update distance to ensure offset is applied correctly
+		UpdateDistance();
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Time.Now );
+	}
+}

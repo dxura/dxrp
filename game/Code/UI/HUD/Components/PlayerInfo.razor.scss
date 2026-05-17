@@ -1,0 +1,145 @@
+@import "../../styles.scss";
+
+PlayerInfo {
+  pointer-events: none;
+  z-index: 200;
+
+  .player-info-container {
+    background-color: rgba($color-primary, 0.95);
+    min-width: 460px;
+    flex-direction: column;
+  }
+
+  .top-row {
+    padding: 12px 12px;
+    gap: 12px;
+  }
+
+  .profile-picture {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .player-title {
+    font-size: 12px;
+    color: $color-accent;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .player-name {
+    font-size: 17px;
+    color: $color-white;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .wallet-display-value {
+    font-size: 19px;
+    font-weight: 700;
+    color: $color-good;
+    letter-spacing: 0.3px;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+  }
+
+  .vital-bars {
+    gap: 3px;
+    flex-shrink: 0;
+  }
+
+  .vital-row {
+    gap: 6px;
+  }
+
+  .vital-row {
+    gap: 6px;
+  }
+
+  .vital-icon {
+    font-size: 14px;
+    width: 16px;
+  }
+
+  .armor-icon {
+    color: $counter-terror-color;
+  }
+
+  .vital-bar {
+    width: 180px;
+    background-color: rgba(black, 0.6);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .health-bar {
+    height: 13px;
+  }
+
+  .armor-bar {
+    height: 9px;
+  }
+
+  .vital-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .armor-fill {
+    background-color: $counter-terror-color;
+  }
+
+  .vital-value {
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 28px;
+  }
+
+  .armor-value {
+    color: $counter-terror-color;
+  }
+
+  .health-row .health-value {
+    font-size: 14px;
+  }
+
+  .bottom-row {
+    padding: 1px 12px;
+    gap: 10px;
+    background-color: rgba(black, 0.35);
+    border-top: 0.5px solid rgba(white, 0.05);
+  }
+
+  .job-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .stat {
+    gap: 5px;
+  }
+
+  .stat-icon {
+    font-size: 13px;
+  }
+
+  .stat-value {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .money-icon {
+    color: $color-gray-400;
+    font-size: 12px;
+  }
+
+  .stat-value.money {
+    color: $color-good;
+  }
+}

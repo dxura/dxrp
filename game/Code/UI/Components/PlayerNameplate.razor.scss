@@ -1,0 +1,174 @@
+@import "../styles.scss";
+
+PlayerNameplate {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  font-weight: bold;
+  border-radius: 20px;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .title {
+    font-size: $text-xs;
+    color: rgba(246, 249, 255, 0.5);
+    text-align: center;
+    text-shadow: 1px 1px 1px #000;
+    white-space: nowrap;
+    letter-spacing: 1px;
+  }
+
+  .name {
+    font-size: $text-xl;
+    color: #fff;
+    white-space: nowrap;
+    z-index: 10;
+    text-align: center;
+    text-shadow: 1px 1px 1px #000;
+  }
+
+  .voice-indicator {
+    font-size: $text-4xl;
+    color: #f6ad0b;
+    z-index: 15;
+  }
+
+  .status {
+    font-size: $text-base;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 2px rgba(92, 92, 92, 0.5);
+  }  
+  
+  .disconnected {
+    font-size: $text-xl;
+    color: #888888;
+    margin-bottom: 4px;
+    opacity: 0.6;
+    animation: fade-disconnected 2s infinite;
+  }
+
+  .afk {
+    font-size: $text-base;
+    color: #ffaa00;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    text-shadow: 0 0 2px rgba(255, 170, 0, 0.5);
+    opacity: 0.8;
+    animation: fade-afk 3s infinite;
+  }
+
+  .job {
+    font-size: $text-base;
+  }
+
+  .rank {
+    font-size: $text-base;
+    text-align: center;
+  }
+
+  .health-status {
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    
+    &.healthy {
+      color: #4CAF50;
+      border-color: rgba(76, 175, 80, 0.5);
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+    
+    &.medium {
+      color: #FFEB3B;
+      border-color: rgba(255, 235, 59, 0.5);
+      background-color: rgba(255, 235, 59, 0.1);
+    }
+    
+    &.low {
+      color: #FF9800;
+      border-color: rgba(255, 152, 0, 0.5);
+      background-color: rgba(255, 152, 0, 0.1);
+    }
+    
+    &.critical {
+      color: #F44336;
+      border-color: rgba(244, 67, 54, 0.5);
+      background-color: rgba(244, 67, 54, 0.1);
+      animation: pulse-critical 1s infinite;
+    }
+    
+    &.dead {
+      color: #F44336;
+      border-color: rgba(244, 67, 54, 0.5);
+      background-color: rgba(244, 67, 54, 0.1);
+      animation: pulse-red 1.5s infinite;
+    }
+  }
+}
+
+// Pulse animation for critical health (1-24 HP)
+@keyframes pulse-critical {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Pulse animation for dead status
+@keyframes pulse-red {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.25);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Fade animation for disconnected status
+@keyframes fade-disconnected {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+// Fade animation for AFK status
+@keyframes fade-afk {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}

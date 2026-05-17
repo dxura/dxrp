@@ -1,0 +1,333 @@
+@namespace Dxura.RP.Game.UI
+@inherits PanelComponent
+
+@attribute [StyleSheet]
+
+<root class="@( IsActive ? "active" : "" ) flex items-center justify-center tabmenu">
+	@if ( !IsActive )
+	{
+		return;
+	}
+
+	<div class="menu-container @( IsActive ? "active" : "" ) flex">
+		<div class="sidebar bg-primary flex flex-col h-full">
+			<div class="sidebar-player-info">
+				<div class="sidebar-player-header">
+					<div class="sidebar-player-name">@Player.Local?.DisplayName</div>
+					@if ( Config.Current.Game.ShowPlayerInfoMenu )
+					{
+						<div class="sidebar-player-job flex items-center justify-between">
+							<PlayerJob/>
+							<span class="text-cash" style="font-size: 12px;">$@( Player.Local?.Job.Salary * GameManager.Instance.SalaryMultiplier ?? 0 )/hr</span>
+						</div>
+					}
+				</div>
+
+				@if ( Config.Current.Game.ShowPlayerInfoMenu )
+				{
+					<div class="sidebar-finance">
+						<div class="sidebar-finance-row" tooltip="#sidebar.finance.bank">
+							<i class="material-icons finance-icon">savings</i>
+							<span class="finance-label">#sidebar.finance.bank</span>
+							<span class="finance-value text-cash">$@( Player.Local?.BankBalance.ToString( "N0" ) ?? "0" )</span>
+						</div>
+					</div>
+				}
+			</div>
+			
+			<div class="navigation pb-4 flex flex-col gap-1 flex-grow overflow-y-auto">
+				@if ( Config.Current.Game.ShowDashboardMenu )
+				{
+					<button
+						class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Dashboard ? "active-btn" : "" )"
+						@onclick="@(() => SetSelectedSection( MenuSection.Dashboard ))">
+						<i class="material-icons mr-3">dashboard</i> <span>#tabmenu.dashboard</span>
+					</button>
+				}
+				
+				@if ( Config.Current.Game.RulesEnabled )
+				{
+					<button
+						class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Rules ? "active-btn" : "" )"
+						@onclick="@(() => SetSelectedSection( MenuSection.Rules ))">
+						<i class="material-icons mr-3">rule</i> <span>#tabmenu.rules</span>
+					</button>
+				}
+				
+				<button
+					class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Players ? "active-btn" : "" )"
+					@onclick="@(() => SetSelectedSection( MenuSection.Players ))">
+					<i class="material-icons mr-3">group</i> <span>#tabmenu.players</span>
+				</button>
+
+				@if ( IsSectionAvailableInCurrentState( MenuSection.Jobs ) && Config.Current.Game.ShowJobsMenu )
+				{
+					<button
+						class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Jobs ? "active-btn" : "" )"
+						@onclick="@(() => SetSelectedSection( MenuSection.Jobs ))">
+						<i class="material-icons mr-3">work</i> <span>#tabmenu.jobs</span>
+					</button>
+				}
+
+				@if ( IsSectionAvailableInCurrentState( MenuSection.Market ) && Config.Current.Game.ShowMarketMenu )
+				{
+					<button
+						class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Market ? "active-btn" : "" )"
+						@onclick="@(() => SetSelectedSection( MenuSection.Market ))">
+						<i class="material-icons mr-3">store</i> <span>#tabmenu.market</span>
+					</button>
+				}
+
+				@if ( IsSectionAvailableInCurrentState( MenuSection.Governance ) && Player.Local?.Job.IsGovernmentRole() == true )
+				{
+					<button
+						class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Governance ? "active-btn" : "" )"
+						@onclick="@(() => SetSelectedSection( MenuSection.Governance ))">
+						<i class="material-icons mr-3">gavel</i> <span>#tabmenu.governance</span>
+					</button>
+				}
+				
+				@if ( IsSectionAvailableInCurrentState( MenuSection.Faction ) && Config.Current.Game.FactionsEnabled )
+				{
+					<button
+						class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Faction ? "active-btn" : "" )"
+						@onclick="@(() => SetSelectedSection( MenuSection.Faction ))">
+						<i class="material-icons mr-3">account_tree</i> <span>#tabmenu.faction</span>
+					</button>
+				}
+
+			</div>
+
+			<div class="p-4 flex flex-col gap-1">
+				<button class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary"
+				        @onclick="@(() =>
+				                  {
+					                  _ = new WebPanel { Parent = Panel, Surface = { Url = Config.Current.Game.DiscordUrl } };
+					                  Clipboard.SetText( Config.Current.Game.DiscordUrl );
+					                  _discordText = "#generic.copied";
+				                  })">
+					<i class="material-icons mr-3">discord</i> @_discordText
+				</button>
+				
+				<button class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary"
+				        @onclick="@(() =>
+				                  {
+					                  Clipboard.SetText( "https://opencollective.com/dxrp" );
+					                  _supportText = "#generic.copied";
+				                  })">
+					<i class="material-icons mr-3">handshake</i> @_supportText
+				</button>
+				
+				<button
+					class="menuButton flex items-center text-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Credits ? "active" : "" )"
+					@onclick="@(() => SetSelectedSection( MenuSection.Credits ))">
+					<i class="material-icons mr-3">copyright</i> <span>#tabmenu.credits</span>
+				</button>
+
+				@* <button *@
+				@* 	class="menuButton flex items-center text-lg rounded-lg p-3 cursor-pointer text-tertiary @( SelectedSection == MenuSection.Admin ? "active" : "" )" *@
+				@* 	@onclick="@(() => SetSelectedSection( MenuSection.Admin ))"> *@
+				@* 	<i class="material-icons mr-3">admin_panel_settings</i> <span>#tabmenu.admin</span> *@
+				@* </button> *@
+			</div>
+		</div>
+
+		<div class="content-panel flex flex-col min-h-0">
+			<div class="section-body flex-grow min-h-0 overflow-y-auto">
+				<div class="section-content">
+					@switch ( SelectedSection )
+					{
+						case MenuSection.Dashboard:
+							<DashboardTabMenuSection/>
+							break;
+						case MenuSection.Rules:
+							<RulesTabMenuSection/>
+							break;
+						case MenuSection.Players:
+							<PlayersTabMenuSection @key="_playersSectionRevision" />
+							break;
+						case MenuSection.Jobs:
+							<JobTabMenuSection/>
+							break;
+						case MenuSection.Market:
+							<MarketTabMenuSection/>
+							break;
+						case MenuSection.Governance:
+							<GovernanceTabMenuSection/>
+							break;
+						case MenuSection.Faction:
+							<FactionTabMenuSection/>
+							break;
+						case MenuSection.Credits:
+							<CreditsTabMenuSection/>
+							break;
+						case MenuSection.Admin:
+							<AdminTabMenuSection/>
+							break;
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</root>
+
+
+@code
+{
+	public static bool IsOpen { get; private set; }
+	
+	enum MenuSection
+	{
+		Dashboard,
+		Rules,
+		Players,
+		Jobs,
+		Market,
+		Governance,
+		Faction,
+		Credits,
+		Admin
+	}
+
+	// Sections that should be hidden/blocked when player is dead
+	private readonly MenuSection[] _restrictedWhenDeadSections = { MenuSection.Jobs, MenuSection.Market, MenuSection.Governance };
+	private readonly MenuSection[] _restrictedWhenRestrictedSections = { MenuSection.Jobs, MenuSection.Market, MenuSection.Governance };
+
+	private MenuSection SelectedSection { get; set; } = MenuSection.Dashboard;
+	private bool IsActive { get; set; }
+
+	private string _discordText = "#tabmenu.discord";
+	private string _supportText = "#generic.support.project";
+	private int _playersSectionRevision;
+	
+	private static TabMenu? _instance;
+
+	private bool IsPlayerDead()
+	{
+		return Player.Local.IsValid() && Player.Local.HealthComponent.State == LifeState.Dead;
+	}
+	
+	private bool IsPlayerRestricted()
+	{
+		return Player.Local.IsValid() && Player.Local.Restricted;
+	}
+
+	private bool IsSectionAvailableInCurrentState( MenuSection section )
+	{
+		if ( IsPlayerDead() && _restrictedWhenDeadSections.Contains( section ) )
+			return false;
+
+		if ( IsPlayerRestricted() && _restrictedWhenRestrictedSections.Contains( section ) )
+			return false;
+
+		return true;
+	}
+
+	protected override void OnStart()
+	{
+		_instance = this;
+		IsOpen = false;
+		
+		if ( !Config.Current.Game.ShowDashboardMenu )
+		{
+			SelectedSection = MenuSection.Players;
+		}
+		
+		if( !IsSectionAvailableInCurrentState( SelectedSection ) )
+		{
+			SelectedSection = MenuSection.Players;
+		}
+	}
+
+	protected override void OnUpdate()
+	{
+		if ( Input.Pressed( "TabMenu" ) || (IsActive && PauseMenu.IsOpen) )
+		{
+			if ( IsActive )
+			{
+				CloseMenu();
+			}
+			else
+			{
+				IsActive = true;
+				IsOpen = true;
+				_discordText = "#tabmenu.discord";
+				_supportText = "#generic.support.project";
+				StateHasChanged();
+			}
+		}
+
+		if ( IsActive && IsPlayerDead() && !IsSectionAvailableInCurrentState( SelectedSection ) )
+		{
+			SelectedSection = Config.Current.Game.ShowDashboardMenu ? MenuSection.Dashboard : MenuSection.Players;
+			StateHasChanged();
+		}
+	}
+
+	private void SetSelectedSection( MenuSection section )
+	{
+		if ( IsPlayerDead() && !IsSectionAvailableInCurrentState( section ) )
+		{
+			return;
+		}
+
+		BlurFocusedTextEntries();
+		Sound.Play( "pop" );
+		if ( section == MenuSection.Players )
+		{
+			_playersSectionRevision++;
+		}
+
+		SelectedSection = section;
+		StateHasChanged();
+	}
+	
+	public static void RequestOpenProfile( long steamId )
+	{
+		if ( !_instance.IsValid() )
+		{
+			return;
+		}
+
+		PlayersTabMenuSection.PendingFocusSteamId = steamId;
+		_instance.SelectedSection = MenuSection.Players;
+		_instance.IsActive = true;
+		IsOpen = true;
+		_instance.StateHasChanged();
+	}
+
+	public static void RequestCloseMenu()
+	{
+		if ( _instance.IsValid() )
+		{
+			_instance.CloseMenu();
+		}
+	}
+
+	private void CloseMenu()
+	{
+		BlurFocusedTextEntries();
+		IsActive = false;
+		IsOpen = false;
+		
+		StateHasChanged();
+	}
+
+	private void BlurFocusedTextEntries()
+	{
+		if ( !Panel.IsValid() )
+		{
+			return;
+		}
+
+		foreach ( var textEntry in Panel.Descendants.OfType<TextEntry>().Where( x => x.HasFocus ) )
+		{
+			textEntry.Blur();
+		}
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( SelectedSection, GameManager.Instance.SalaryMultiplier );
+	}
+}

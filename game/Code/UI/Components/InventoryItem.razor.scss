@@ -1,0 +1,267 @@
+@import "../styles.scss";
+
+InventoryItem {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  border-radius: 2px;
+  background-color: rgba(#1b1c22, 0.92);
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background-color: rgba(#242631, 0.96);
+  }
+
+  &.rarity-uncommon { background-color: rgba(#1b251d, 0.9); }
+  &.rarity-rare     { background-color: rgba(#17202b, 0.9); }
+  &.rarity-epic     { background-color: rgba(#21182b, 0.9); }
+  &.rarity-legendary { background-color: rgba(#2a2116, 0.9); }
+
+  &.actions-open {
+    overflow: visible;
+    z-index: 20;
+  }
+
+  &.no-actions {
+    cursor: default;
+
+    &:hover {
+      transform: none;
+      background-color: rgba(#1b1c22, 0.92);
+    }
+
+    &.rarity-uncommon:hover { background-color: rgba(#1b251d, 0.9); }
+    &.rarity-rare:hover     { background-color: rgba(#17202b, 0.9); }
+    &.rarity-epic:hover     { background-color: rgba(#21182b, 0.9); }
+    &.rarity-legendary:hover { background-color: rgba(#2a2116, 0.9); }
+  }
+
+  .item-tooltip-region {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .item-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 84px;
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .item-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 28px;
+      color: rgba($color-tertiary, 0.2);
+    }
+  }
+
+  .item-name-bar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 28px;
+    padding: 3px $space-1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(black, 0.38);
+  }
+
+  .item-name {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba($color-tertiary, 0.92);
+    font-size: $text-xs;
+    font-weight: bold;
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .item-name .content-label {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .item-quantity {
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    background-color: transparent;
+    color: $color-tertiary;
+    font-size: $text-sm;
+    font-weight: bold;
+    padding: 0;
+    text-shadow: 1px 1px 0 rgba(black, 0.95), -1px -1px 0 rgba(black, 0.75);
+  }
+
+  .item-rarity-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 1px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    background-color: rgba(black, 0.42);
+    color: rgba($color-tertiary, 0.9);
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  &.rarity-uncommon .item-rarity-badge { color: #63d36d; }
+  &.rarity-rare .item-rarity-badge     { color: #58a9ff; }
+  &.rarity-epic .item-rarity-badge     { color: #b36cff; }
+  &.rarity-legendary .item-rarity-badge { color: #ffae47; }
+
+  .item-actions {
+    position: absolute;
+    top: 6px;
+    left: 100%;
+    min-width: 152px;
+    margin-left: $space-2;
+    padding: $space-1;
+    flex-direction: column;
+    gap: $space-1;
+    background-color: rgba($color-primary, 0.98);
+    border-radius: $space-1;
+    box-shadow: 0 10px 26px rgba(black, 0.45);
+    pointer-events: all;
+
+    .nested-action {
+      position: relative;
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .nested-action.open > button {
+      background-color: rgba($color-accent, 0.18);
+      color: $color-tertiary;
+    }
+
+    .nested-chevron {
+      margin-left: auto;
+      opacity: 0.55;
+    }
+
+    .drop-amount-submenu {
+      position: absolute;
+      top: -$space-1;
+      left: 100%;
+      min-width: 198px;
+      margin-left: $space-2;
+      padding: $space-1;
+      flex-direction: row;
+      align-items: center;
+      gap: $space-1;
+      background-color: rgba($color-primary, 0.98);
+      border-radius: $space-1;
+      box-shadow: 0 10px 26px rgba(black, 0.45);
+    }
+
+    .drop-amount-input {
+      width: 42px;
+      min-height: 28px;
+      padding: 0 $space-1;
+      flex-shrink: 0;
+      align-items: center;
+      border-radius: $space-1;
+      background-color: rgba(black, 0.22);
+      color: rgba($color-tertiary, 0.92);
+      font-size: $text-xs;
+      font-weight: bold;
+    }
+
+    .drop-amount-button {
+      width: 92px;
+      flex-shrink: 0;
+    }
+
+    .drop-all-button {
+      width: 52px;
+      flex-shrink: 0;
+    }
+
+    button {
+      width: 100%;
+      min-height: 28px;
+      padding: $space-1 $space-2;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: $space-2;
+      border-radius: $space-1;
+      background-color: rgba(white, 0.04);
+      color: rgba($color-tertiary, 0.88);
+      font-size: $text-xs;
+      font-weight: bold;
+      cursor: pointer;
+
+      span {
+        white-space: nowrap;
+      }
+
+      i {
+        width: 16px;
+        font-size: 16px;
+        color: rgba($color-tertiary, 0.55);
+      }
+
+      &:hover {
+        background-color: rgba($color-accent, 0.2);
+        color: $color-tertiary;
+      }
+
+      &.danger:hover {
+        background-color: rgba($color-bad, 0.34);
+      }
+
+      &.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+      }
+    }
+  }
+}

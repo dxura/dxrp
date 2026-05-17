@@ -1,0 +1,392 @@
+{
+  "RootObject": {
+    "__guid": "33e391c0-f694-463e-8691-5d7989dca07d",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "slot_machine",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,build_interact,occludable,restricted_entity",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.SlotMachineEntity",
+        "__guid": "cad87b12-679d-4480-9fa8-43303afb03a8",
+        "__enabled": true,
+        "Flags": 0,
+        "ContinuousSoundPoint": {
+          "_type": "component",
+          "component_id": "582de0da-a09d-4ec9-bbe7-a5a1125001db",
+          "go": "33e391c0-f694-463e-8691-5d7989dca07d",
+          "component_type": "ContinuousSoundPoint"
+        },
+        "Decal": {
+          "_type": "component",
+          "component_id": "f2c66464-8621-4853-8ba6-73198ae3b677",
+          "go": "901ac8ec-f88c-47ae-9f31-84b961803e4e",
+          "component_type": "Decal"
+        },
+        "GameComponent": null,
+        "GamePanel": {
+          "_type": "component",
+          "component_id": "207dabf4-ea21-41aa-8b2c-447ac56f6169",
+          "go": "ce15d2c6-621a-4550-8386-9507d7da7d7b",
+          "component_type": "WorldPanel"
+        },
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "53467fd0-d20d-4a21-b646-a4cb56f17345",
+          "go": "33e391c0-f694-463e-8691-5d7989dca07d",
+          "component_type": "HealthComponent"
+        },
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "a9201852-3c18-42ed-8468-ca659c5ff74f",
+          "go": "33e391c0-f694-463e-8691-5d7989dca07d",
+          "component_type": "ModelRenderer"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "6feecd9f-c454-4bb0-b7ee-143ff5e321bb",
+          "go": "33e391c0-f694-463e-8691-5d7989dca07d",
+          "component_type": "Rigidbody"
+        },
+        "SlotMachineDefinition": null
+      },
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "a9201852-3c18-42ed-8468-ca659c5ff74f",
+        "__enabled": true,
+        "Flags": 0,
+        "BodyGroups": 18446744073709551615,
+        "CreateAttachments": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "gameplay/entities/jobs/casino_manager/slot_machine/model/slot_machine.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "6feecd9f-c454-4bb0-b7ee-143ff5e321bb",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "53467fd0-d20d-4a21-b646-a4cb56f17345",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 1000,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.ModelCollider",
+        "__guid": "faa1768d-759a-4786-a17a-9288bf0db9fd",
+        "__enabled": true,
+        "Flags": 0,
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "Model": "gameplay/entities/jobs/casino_manager/slot_machine/model/slot_machine.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Static": false,
+        "Surface": "surfaces/metal.surface",
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Dxura.RP.Game.ContinuousSoundPoint",
+        "__guid": "582de0da-a09d-4ec9-bbe7-a5a1125001db",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "SoundEvent": null
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "901ac8ec-f88c-47ae-9f31-84b961803e4e",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Graphic",
+        "Position": "-1.635962,0.03855354,83.69415",
+        "Rotation": "0.100391,-0.00000001954685,0.9949481,0.0000001937235",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.Decal",
+            "__guid": "f2c66464-8621-4853-8ba6-73198ae3b677",
+            "__enabled": true,
+            "Flags": 0,
+            "__version": 3,
+            "AttenuationAngle": 0,
+            "ColorMix": 1,
+            "ColorTint": {
+              "Type": "Constant",
+              "Evaluation": "Life",
+              "GradientA": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0.5,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": []
+              },
+              "GradientB": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0.5,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": []
+              },
+              "ConstantA": "1,1,1,1",
+              "ConstantB": "1,1,1,1"
+            },
+            "Decals": [],
+            "Depth": 0.26999384,
+            "LifeTime": 0,
+            "Looped": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parallax": 1,
+            "Rotation": 0,
+            "Scale": 1,
+            "SequenceId": 0,
+            "SheetSequence": false,
+            "Size": "1.5,0.8200002",
+            "SortLayer": 1,
+            "Transient": false
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "56be777c-fbe9-4c82-8e2d-b4cd673b57e5",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Backdrop",
+        "Position": "-1.838687,0,83.71114",
+        "Rotation": "0,0.0951107,0,0.9954667",
+        "Scale": "0.006268348,0.4749394,0.256214",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "25531958-8c3b-4d8a-a112-79004400a595",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/dev/box.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "0,0,0,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "ce15d2c6-621a-4550-8386-9507d7da7d7b",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Game",
+        "Position": "1.006654,0,52.55046",
+        "Rotation": "0,-0.1045285,0,0.9945219",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "207dabf4-ea21-41aa-8b2c-447ac56f6169",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "500,820",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 0.5,
+            "VerticalAlign": "Center"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "139cf80c-39a0-40d3-903a-55a8e18bd2ba"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "af0f30e2-bcb4-41eb-85e3-8aece7782596"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "bb29305b-47d2-4f28-bc4f-9c5308c7e6a3"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

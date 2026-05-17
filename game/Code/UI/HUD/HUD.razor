@@ -1,0 +1,112 @@
+@namespace Dxura.RP.Game.UI
+@inherits PanelComponent
+
+@{
+	var isValidPlayer = Player.Local.IsValid();
+}
+
+<root style="@(IsCursorUnlocked ? "pointer-events: all;" : "pointer-events: none;")">
+	@if ( isValidPlayer )
+	{
+		<CommandWheel @ref="_commandWheel"/>
+	}
+
+	@if ( HudHidden )
+		return;
+
+	@if ( isValidPlayer )
+	{
+		<LoadoutComponent/>
+	}
+
+	@if ( isValidPlayer )
+	{
+		<DamageOverlay/>
+		<Announcement/>
+		<ContextSystem/>
+		<Waila/>
+		<CurrentToolOverlay/>
+		<WireToolOverlay/>
+		<InputHelper/>
+		<StatusList/>
+		<Chat @ref=" _chat"/>
+
+		@if ( Config.Current.Game.ShowTimeDisplayHud )
+		{
+			<ServerNameDisplay/>
+			<TimeDisplay/>
+		}
+	}
+
+	<canvas>
+		@if ( isValidPlayer )
+		{
+			<Crosshair/>
+		}
+
+		@if ( isValidPlayer )
+		{
+			<EquipmentOverlay/>
+			<CompressionMinigame/>
+			<HitmanPanel/>
+			<PlayerInfo/>
+			<Deathcam/>
+			<SpectateOverlay/>
+			<DamageIndicator/>
+			<KillFeed/>
+			<Ammo/>
+			<Voting/>
+		}
+
+		<RespawnScreen/>
+		<CinemaUi/>
+	</canvas>
+
+	@if ( isValidPlayer )
+	{
+		<AdminTickets/>
+	}
+</root>
+
+@code
+{
+	private Chat? _chat;
+	private CommandWheel? _commandWheel;
+	private static readonly HashSet<object> CursorUnlockRequests = new();
+
+	public static bool Visible = true;
+
+	[ConVar( "dx_hud", ConVarFlags.Saved )]
+	private static bool DxHudEnabled { get; set; } = true;
+
+	/// <summary>
+	/// Global property to check if the cursor is unlocked via ALT key or an interactive HUD component.
+	/// </summary>
+	public static bool IsCursorUnlocked => Input.Down( "Mouse" ) || CursorUnlockRequests.Count > 0;
+
+	internal static void SetCursorUnlockRequest( object owner, bool requested )
+	{
+		ArgumentNullException.ThrowIfNull( owner );
+
+		if ( requested )
+		{
+			CursorUnlockRequests.Add( owner );
+			return;
+		}
+
+		CursorUnlockRequests.Remove( owner );
+	}
+
+	private bool HudHidden => !Visible || !DxHudEnabled || PauseMenu.IsOpen || TabMenu.IsOpen;
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Visible, DxHudEnabled, PauseMenu.IsOpen, TabMenu.IsOpen, Player.Local.IsValid(), IsCursorUnlocked );
+	}
+
+	protected override void OnUpdate()
+	{
+		_chat?.OnUpdate();
+		_commandWheel?.OnUpdate();
+	}
+}

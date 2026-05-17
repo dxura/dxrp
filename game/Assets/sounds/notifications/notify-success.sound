@@ -1,0 +1,52 @@
+{
+  "UI": true,
+  "Volume": "0.4",
+  "Pitch": "1",
+  "Decibels": 70,
+  "SelectionMode": "Random",
+  "Sounds": [
+    "sounds/notifications/notify-success.vsnd"
+  ],
+  "Occlusion": false,
+  "AirAbsorption": true,
+  "Transmission": true,
+  "OcclusionRadius": 64,
+  "DistanceAttenuation": false,
+  "Distance": 15000,
+  "Falloff": [
+    {
+      "x": 0,
+      "y": 1,
+      "in": 0,
+      "out": -1.8,
+      "mode": "Mirrored"
+    },
+    {
+      "x": 0.05,
+      "y": 0.22,
+      "in": 3.5,
+      "out": -3.5,
+      "mode": "Mirrored"
+    },
+    {
+      "x": 0.2,
+      "y": 0.04,
+      "in": 0.16,
+      "out": -0.16,
+      "mode": "Mirrored"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "in": 0,
+      "out": 0,
+      "mode": "Mirrored"
+    }
+  ],
+  "DefaultMixer": {
+    "Name": "notification",
+    "Id": "5e2f6356-e3a9-4027-927d-008c30b893fb"
+  },
+  "__references": [],
+  "__version": 1
+}

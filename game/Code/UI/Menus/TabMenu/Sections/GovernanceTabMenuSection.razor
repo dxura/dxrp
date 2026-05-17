@@ -1,0 +1,414 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+
+<root>
+	<div class="flex w-full h-full text-white gap-2 overflow-hidden">
+		<div class="flex-grow w-full flex flex-col h-full gap-3 overflow-y-scroll overflow-x-hidden">
+			<div class="section-header p-2 px-4">
+				<h1 class="text-2xl">@( !string.IsNullOrEmpty( Governance.Current.TownName ) ? Governance.Current.TownName : "#governance.tax.city_governance" )</h1>
+			</div>
+
+			@if ( Config.Current.Game.GovernanceTaxEnabled )
+			{
+				<div class="section-group">
+					<div class="section-group-title">#governance.treasury</div>
+					<div class="flex items-center gap-4 p-3">
+						<div class="flex flex-col">
+							<span class="text-xs text-gray-400">#governance.treasury</span>
+							<span class="text-2xl text-cash font-bold">$@(Governance.Current.GovernmentBalance.ToString("N0"))</span>
+						</div>
+						<div class="flex flex-col">
+							<span class="text-xs text-gray-400">#governance.tax.rate</span>
+							<span class="text-2xl text-cash font-bold">@( $"{Governance.Current.TaxRate * 100f:0.#}%" )</span>
+						</div>
+					</div>
+				</div>
+
+				@if ( IsMayor )
+				{
+					<div class="section-group">
+						<div class="section-group-title">#governance.tax.townname</div>
+						<div class="flex gap-2 items-center p-3">
+							<TabMenuTextEntry
+								@ref="_townNameTextEntry"
+								class="bg-secondary text-tertiary rounded flex-grow"
+								placeholder="#governance.tax.townname.placeholder"
+								MaxLength=@( Config.Current.Game.TownNameMaxLength )
+								Value:bind="@_townNameText"/>
+							<button class="btn btn-good" onclick="@TrySetTownName"><span>#governance.tax.townname.rename</span> <span class="ml-1">($@(Config.Current.Game.TownNameCost.ToString("N0")))</span></button>
+						</div>
+					</div>
+
+					<div class="section-group">
+						<div class="section-group-title">#governance.tax.set</div>
+						<div class="flex gap-2 flex-wrap p-3">
+							@foreach ( var rate in _taxRateOptions )
+							{
+								var rateValue = rate;
+								var isActive = Math.Abs( Governance.Current.TaxRate - rateValue ) < 0.001f;
+								<button class="btn-compact @(isActive ? "btn-good" : "")" @onclick="@(() => TrySetTaxRate( rateValue ))">
+									@($"{rateValue * 100f:0.#}%")
+								</button>
+							}
+						</div>
+					</div>
+				}
+
+				<div class="section-group">
+					<div class="section-group-title">#governance.upgrade.title</div>
+					<div class="flex gap-2 p-3" style="overflow-x: scroll; flex-shrink: 0;">
+						@foreach ( var type in Enum.GetValues<Governance.PdUpgradeType>() )
+						{
+							var isActive = Governance.Current.IsUpgradeActive( type );
+							var cost = Governance.Current.GetUpgradeCost( type );
+							var name = Governance.GetUpgradeDisplayName( type );
+							var remaining = Governance.Current.GetUpgradeTimeRemaining( type );
+
+							<div class="flex flex-col items-center justify-center gap-1 bg-secondary rounded" style="padding: 8px 12px; min-width: 100px; flex-shrink: 0;" tooltip="@GetUpgradeTooltip( type )">
+								<span class="text-sm font-bold">@name</span>
+								@if ( isActive )
+								{
+									@if ( remaining > 0 )
+									{
+										<span class="text-xs" style="color: #44ff44;">@(TimeSpan.FromSeconds( remaining ).ToString( @"mm\:ss" ))</span>
+									}
+									else
+									{
+										<span class="text-xs" style="color: #44ff44;">#governance.upgrade.active</span>
+									}
+								}
+								else
+								{
+									<span class="text-xs text-gray-400">$@(cost.ToString( "N0" ))</span>
+									@if ( IsMayor )
+									{
+										<button class="btn-compact btn-good text-xs" @onclick="@(() => TryPurchaseUpgrade( type ))">#governance.upgrade.buy</button>
+									}
+								}
+							</div>
+						}
+					</div>
+				</div>
+			}
+
+			@if ( IsMayor )
+			{
+				<div class="section-group">
+					<div class="section-group-title">#governance.actions</div>
+					<div class="flex flex-col gap-2 p-3">
+						@if ( Config.Current.Game.GovernanceMayorAnnounceEnabled )
+						{
+							<div class="flex gap-2 items-center">
+								<TabMenuTextEntry
+									@ref="_announcementTextEntry"
+									class="bg-secondary text-tertiary rounded flex-grow"
+									placeholder="#governance.announce.placeholder"
+									MaxLength=@( Config.Current.Game.MayorAnnounceMaxLength )
+									Value:bind="@_announcementText"/>
+								<button class="btn btn-good" onclick="@TryAnnounce">#governance.announce</button>
+							</div>
+						}
+
+						@if ( LockdownSystem.Instance.IsValid() )
+						{
+							<div class="flex gap-2">
+								@if ( LockdownSystem.Instance.Lockdown )
+								{
+									<button class="btn btn-good" onclick="@StopLockdown">#governance.lockdown.end</button>
+								}
+								else
+								{
+									<button class="btn btn-bad" onclick="@TryLockdown">#governance.lockdown.start</button>
+								}
+							</div>
+						}
+					</div>
+				</div>
+			}
+
+		</div>
+
+		<div class="flex-grow w-full flex flex-col h-full gap-3 overflow-y-scroll overflow-x-hidden">
+			<div class="section-header p-2 px-4">
+				<h1 class="text-2xl">#governance.law_enforcement</h1>
+			</div>
+
+			<div class="section-group">
+				<div class="section-group-title">#governance.laws</div>
+				<div class="flex flex-col gap-2 p-3">
+					@foreach ( var (law, lawIndex) in Governance.Current.GetAllLaws().Select( (law, index) => (law, index) ) )
+					{
+						<div class="flex items-center">
+							<span class="text-base">@(lawIndex + 1)</span>
+							<span class="text-base ml-1 mr-1">-</span>
+							<span class="text-base">@law</span>
+							@if ( IsMayor )
+							{
+								<button class="btn-compact btn-bad text-xs ml-2" tooltip="#governance.law.remove" @onclick="@(() => TryRemoveLaw( lawIndex ))"><i class="material-icons text-sm">delete</i></button>
+							}
+						</div>
+					}
+
+					@if ( IsMayor )
+					{
+						<div class="flex gap-2 items-center mt-2">
+							<TabMenuTextEntry
+								@ref="_newLawTextEntry"
+								class="bg-secondary text-tertiary rounded flex-grow"
+								placeholder="#governance.law.placeholder"
+								MaxLength=@( 60 )
+								Value:bind="@_newLawText"/>
+							<button class="btn btn-good" onclick="@TryAddLaw">#governance.law.add</button>
+						</div>
+					}
+				</div>
+			</div>
+
+			@{
+				var warrantPlayers = GameUtils.Players.Where( x => x.HasStatus( Constants.WarrantStatus ) ).ToList();
+				var pendingWarrants = Governance.Current.PendingWarrants.ToList();
+			}
+			<div class="section-group">
+				<div class="section-group-title">#governance.warrants</div>
+				<div class="p-3">
+					@if ( warrantPlayers.Count > 0 || CanApproveWarrants && pendingWarrants.Count > 0 )
+					{
+						<div class="flex flex-col gap-2">
+							@foreach ( var warrantPlayer in warrantPlayers )
+							{
+								<div class="flex items-center gap-2 p-2 bg-good/10 rounded">
+									<img style="width: 32px" class="object-cover rounded" src="avatar:@warrantPlayer.SteamId" alt="avatar"/>
+									<div class="flex flex-col flex-grow">
+										<span class="text-base font-bold">@warrantPlayer.DisplayName</span>
+										<span class="text-xs text-gray-400">
+											@{
+												var timeLeft = warrantPlayer.GetStatusExpiry(Constants.WarrantStatus);
+												if (timeLeft.HasValue)
+												{
+													<span>@Language.GetPhrase( "governance.warrants.time_left" ) @(TimeSpan.FromSeconds(timeLeft.Value.Relative).ToString(@"mm\:ss"))</span>
+												}
+											}
+										</span>
+									</div>
+								</div>
+							}
+
+							@if ( CanApproveWarrants )
+							{
+								@foreach ( var warrant in pendingWarrants )
+								{
+									var targetPlayer = GameUtils.GetPlayerById( warrant.Value.TargetId );
+									var requester = GameUtils.GetPlayerById( warrant.Value.RequesterId );
+
+									if ( !targetPlayer.IsValid() ) continue;
+									if ( warrant.Value.RequesterId == Player.Local.SteamId ) continue;
+
+									<div class="flex items-center gap-2 p-2 bg-warn/10 rounded">
+										<img style="width: 32px" class="object-cover rounded" src="avatar:@targetPlayer.SteamId" alt="avatar"/>
+										<div class="flex flex-col flex-grow">
+											<span class="text-base font-bold">@targetPlayer.DisplayName</span>
+											<span class="text-sm text-gray-400">@Language.GetPhrase( "governance.warrants.requested_by_label" ) @(requester.IsValid() ? requester.DisplayName : Language.GetPhrase( "generic.unknown" ))</span>
+											<span class="text-sm text-gray-400">@Language.GetPhrase( "governance.warrants.reason_label" ) @warrant.Value.Reason</span>
+										</div>
+										<div class="flex gap-2">
+											<button class="btn btn-good" @onclick="@(() =>
+											                                      {
+												                                      Governance.Current.Warrant( targetPlayer.SteamId, Governance.WarrantAction.Approve, string.Empty );
+											                                      })">#governance.warrants.approve</button>
+											<button class="btn btn-bad" @onclick="@(() =>
+											                                      {
+												                                      Governance.Current.Warrant( targetPlayer.SteamId, Governance.WarrantAction.Deny, string.Empty );
+											                                      })">#governance.warrants.deny</button>
+										</div>
+									</div>
+								}
+							}
+						</div>
+					}
+					else
+					{
+						<p class="text-base text-gray-400">#governance.warrants.none</p>
+					}
+				</div>
+			</div>
+
+			@{
+				var wantedPlayers = GameUtils.Players.Where( x => x.HasStatus( Constants.WantedStatus ) ).ToList();
+			}
+			<div class="section-group">
+				<div class="section-group-title">#generic.wanted</div>
+				<div class="p-3">
+					@if ( wantedPlayers.Count > 0 )
+					{
+						<div class="flex flex-col gap-2">
+							@foreach(var wantedPlayer in wantedPlayers)
+							{
+								<div class="flex items-center">
+									<img style="width: 32px" class="object-cover rounded" src="avatar:@wantedPlayer?.SteamId" alt="avatar"/>
+									<h2 class="text-base font-bold ml-2">@wantedPlayer?.DisplayName</h2>
+								</div>
+							}
+						</div>
+					}
+					else
+					{
+						<p class="text-base text-gray-400">#governance.wanted.none</p>
+					}
+				</div>
+			</div>
+
+		</div>
+	</div>
+</root>
+
+@code
+{
+	TextEntry? _newLawTextEntry;
+	private string _newLawText = string.Empty;
+
+	TextEntry? _announcementTextEntry;
+	private string _announcementText = string.Empty;
+
+	TextEntry? _townNameTextEntry;
+	private string _townNameText = string.Empty;
+
+	public bool IsMayor => Player.Local.Job.IsMayoralRole();
+	public bool IsChief => Player.Local.Job.IsChiefRole();
+	public bool CanApproveWarrants => IsMayor || IsChief;
+
+	private static float[] _taxRateOptions => Enumerable.Range( 0, (int)(Config.Current.Game.TaxRateMax / 0.05f) + 1 )
+		.Select( i => i * 0.05f )
+		.ToArray();
+
+	private void TrySetTaxRate( float rate )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "tax:rate", Config.Current.Game.TaxRateCooldown, true ) )
+		{
+			return;
+		}
+
+		Governance.Current.SetTaxRateHost( rate );
+		
+		Sound.Play( "pop" );
+	}
+
+	private void TrySetTownName()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "town:name", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		if ( string.IsNullOrWhiteSpace( _townNameText ) || _townNameText.Length < 3 )
+			return;
+
+		Governance.Current.SetTownNameHost( _townNameText );
+
+		_townNameTextEntry?.Blur();
+		_townNameText = string.Empty;
+	}
+
+	private static string GetUpgradeTooltip( Governance.PdUpgradeType type )
+	{
+		return type switch
+		{
+			Governance.PdUpgradeType.Overheal => "#governance.upgrade.tooltip.overheal",
+			Governance.PdUpgradeType.Mp5 => "#governance.upgrade.tooltip.mp5",
+			Governance.PdUpgradeType.Shotgun => "#governance.upgrade.tooltip.shotgun",
+			Governance.PdUpgradeType.M4 => "#governance.upgrade.tooltip.m4",
+			Governance.PdUpgradeType.AmmoCache => "#governance.upgrade.tooltip.ammocache",
+			Governance.PdUpgradeType.RecruitmentDrive => "#governance.upgrade.tooltip.recruitmentdrive",
+			_ => ""
+		};
+	}
+
+	private void TryPurchaseUpgrade( Governance.PdUpgradeType type )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "pd:upgrade", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		Governance.Current.PurchasePdUpgradeHost( type );
+		Sound.Play( "pop" );
+	}
+
+	private void TryAddLaw()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "law:change", Config.Current.Game.LawChange, true ) )
+		{
+			return;
+		}
+
+		if ( string.IsNullOrWhiteSpace( _newLawText ) )
+			return;
+
+		Governance.Current.AddLawHost( _newLawText );
+
+		_newLawTextEntry?.Blur();
+		_newLawText = string.Empty;
+	}
+
+	private void TryRemoveLaw( int lawIndex )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "law:change", Config.Current.Game.LawChange, true ) )
+		{
+			return;
+		}
+
+		Governance.Current.RemoveLawHost( lawIndex );
+
+		_newLawTextEntry?.Blur();
+	}
+
+	private void TryLockdown()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "lockdown:start", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		LockdownSystem.Instance.StartLockdownHost();
+	}
+
+	private void StopLockdown()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "lockdown:stop", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		LockdownSystem.Instance.StopLockdownHost();
+	}
+
+	private void TryAnnounce()
+	{
+		if ( string.IsNullOrWhiteSpace( _announcementText ) )
+			return;
+
+		Dxura.RP.Game.Chat.Current.ExecuteCommandHost( "announce", _announcementText );
+
+		_announcementTextEntry?.Blur();
+		_announcementText = string.Empty;
+
+		TabMenu.RequestCloseMenu();
+	}
+
+	protected override int BuildHash()
+	{
+	    var hash = HashCode.Combine( _newLawText, _announcementText, _townNameText );
+
+	    hash = HashCode.Combine( hash, Governance.Current.GetAllLaws().Count() );
+	    hash = HashCode.Combine( hash, GameUtils.Players.Sum( x => x.StatusCount ));
+	    hash = HashCode.Combine( hash, Governance.Current.PendingWarrants.Count );
+	    hash = HashCode.Combine( hash, CanApproveWarrants );
+	    hash = HashCode.Combine( hash, Governance.Current.TaxRate, Governance.Current.GovernmentBalance, Governance.Current.TownName );
+	    hash = HashCode.Combine( hash, Time.Now.FloorToInt() / 5 ); // Update every 5 seconds
+
+	    if ( LockdownSystem.Instance.IsValid() )
+	        hash = HashCode.Combine( hash, LockdownSystem.Instance.Lockdown );
+
+	    return hash;
+	}
+}

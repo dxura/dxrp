@@ -1,0 +1,37 @@
+@import "../../styles.scss";
+
+Vitals {
+  position: relative;
+
+  &.low-health > .inner {
+    animation: LowHealth 1s linear infinite;
+  }
+
+  &.god-mode > .inner {
+    animation: GodMode 2s linear infinite;
+  }
+}
+
+@keyframes LowHealth {
+  0% {
+    box-shadow: 0 0 0 0 rgba(red, 0.5);
+  }
+
+  100% {
+    box-shadow: 0 0 0 10px rgba(red, 0);
+  }
+}
+
+@keyframes GodMode {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.1;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

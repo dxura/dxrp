@@ -1,0 +1,66 @@
+@namespace Dxura.RP.Game.UI
+@inherits BaseContextPanel
+
+<root>
+	<div class="flex flex-col items-center justify-center rounded">
+		@if ( Door.IsOwned )
+		{
+			<span class="text-accent text-base bg-primary-75 p-1 rounded text-bold">#roleplay.door.owned</span>
+			if ( !string.IsNullOrWhiteSpace( Door.OwnerGroupIdentifier ) )
+			{
+				var group = Door.OwnerGroup;
+				if ( group != null )
+				{
+					<span style="color: @group.Color.Hex()"
+					      class="text-base text-bold">@group.DisplayName()</span>
+				}
+			} else if ( !string.IsNullOrWhiteSpace( Door.OwnerJobIdentifier ) )
+			{
+				var job = Door.OwnerJob;
+				if ( job != null )
+				{
+					<span style="color: @job.Color.Hex()"
+					      class="text-base text-bold">@job.DisplayName()</span>
+				}
+			}
+			else
+			{
+				<span
+					class="text-white text-base text-bold">@( GameUtils.GetPlayerById( Door.Owner )?.DisplayName ?? "Unknown" )</span>
+			}
+
+			if ( Door.Locked )
+			{
+				<i class="material-icons text-2xl">lock</i>
+			}
+			else
+			{
+				<i class="material-icons text-2xl">lock_open</i>
+			}
+		}
+		else
+		{
+			<span class="text-accent text-base bg-primary-75 p-1 rounded text-bold">#roleplay.door.sale</span>
+			
+			@if ( Config.Current.Game.MoneyEnabled )
+			{
+				<span class="text-cash text-lg text-bold">$@Door.Price</span>
+			}
+			
+			<div class="flex flex-col items-center justify-center text-bold text-base">
+				<InputHint Action="attack3" class="small text-sm" Animate="@false" Size="@InputGlyphSize.Medium"/>
+				(Use Hands)
+			</div>
+		}
+	</div>
+</root>
+
+@code {
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Door.Owner, Door.Locked, Door.OwnerJobIdentifier, Door.OwnerGroupIdentifier );
+	}
+
+	private Door Door => (Context.Object as DoorPart)!.ParentDoor;
+}

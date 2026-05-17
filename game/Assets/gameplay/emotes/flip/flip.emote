@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_flip",
+  "Repeat": false,
+  "Duration": 2.17,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

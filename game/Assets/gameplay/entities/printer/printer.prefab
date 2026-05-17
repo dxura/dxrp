@@ -1,0 +1,359 @@
+{
+  "RootObject": {
+    "__guid": "d9722984-8e27-467c-bf69-0aed3358f138",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "printer",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,noblockaudio,occludable,pocket_item,hands_interact",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.PrinterEntity",
+        "__guid": "072aa8e3-63e3-4a4e-87aa-11dd5599a892",
+        "__enabled": true,
+        "Flags": 0,
+        "CurrentBalance": 0,
+        "Explosion": {
+          "_type": "gameobject",
+          "prefab": "prefabs/helpers/explosion.prefab"
+        },
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "8a27bc55-f3dd-4e32-8e80-a2e1c48f554d",
+          "go": "d9722984-8e27-467c-bf69-0aed3358f138",
+          "component_type": "HealthComponent"
+        },
+        "IdleSoundPoint": null,
+        "MaxSmokeTime": 10,
+        "MinSmokeTime": 3,
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "26c609c0-2310-438a-83a3-14b8e2abfb0f",
+          "go": "d9722984-8e27-467c-bf69-0aed3358f138",
+          "component_type": "ModelRenderer"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "PrinterDefinition": null,
+        "PrinterFan": {
+          "_type": "gameobject",
+          "go": "77f52835-a0aa-4c30-be47-0bdf2d8d5133"
+        },
+        "PrintSound": "gameplay/entities/printer/sounds/print.sound",
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "e18c4834-4606-489e-b986-b64aedbad9bb",
+          "go": "d9722984-8e27-467c-bf69-0aed3358f138",
+          "component_type": "Rigidbody"
+        },
+        "SmokeEffect": {
+          "_type": "gameobject",
+          "prefab": "prefabs/helpers/smoke.prefab"
+        },
+        "TextRender": {
+          "_type": "component",
+          "component_id": "4efba85d-267d-4097-88d5-d9918decc893",
+          "go": "a5cd5a30-2083-43c0-a2d7-a09c3e78d29d",
+          "component_type": "TextRenderer"
+        },
+        "TimeSinceOwnerDisconnect": null,
+        "WithdrawSound": "sounds/money.sound"
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "8a27bc55-f3dd-4e32-8e80-a2e1c48f554d",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 100,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "e18c4834-4606-489e-b986-b64aedbad9bb",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": 0,
+        "StartAsleep": false
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "d9246d7c-60a1-4680-9bac-d3a25ec8f36b",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "0,0,0",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "35,35,10",
+        "Static": false,
+        "Surface": "surfaces/metal.surface",
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "26c609c0-2310-438a-83a3-14b8e2abfb0f",
+        "__enabled": true,
+        "Flags": 0,
+        "BodyGroups": 18446744073709551615,
+        "CreateAttachments": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "gameplay/entities/printer/models/printer.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      },
+      {
+        "__type": "Dxura.RP.Game.ContinuousSoundPoint",
+        "__guid": "6243462c-af63-4213-b128-96b5e4ac9c76",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "SoundEvent": "gameplay/entities/printer/sounds/printer.sound"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "a5cd5a30-2083-43c0-a2d7-a09c3e78d29d",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "text",
+        "Position": "5.243544,16.74292,-0.5807551",
+        "Rotation": "0,-0,-0.7071068,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.TextRenderer",
+            "__guid": "4efba85d-267d-4097-88d5-d9918decc893",
+            "__enabled": true,
+            "Flags": 0,
+            "__version": 2,
+            "BlendMode": "Normal",
+            "FogStrength": 1,
+            "HorizontalAlignment": "Center",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "Scale": 0.1,
+            "TextScope": {
+              "Text": "$0",
+              "TextColor": "0.11156,0.84651,0.05906,1",
+              "FontName": "Poppins",
+              "FontSize": 45,
+              "FontWeight": 644,
+              "FontItalic": false,
+              "LineHeight": 1,
+              "LetterSpacing": 0,
+              "WordSpacing": 0,
+              "FilterMode": "Bilinear",
+              "FontSmooth": "Auto",
+              "Outline": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,1,1"
+              },
+              "Shadow": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              },
+              "OutlineUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,1,0,1"
+              },
+              "ShadowUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              }
+            },
+            "VerticalAlignment": "Center"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "77f52835-a0aa-4c30-be47-0bdf2d8d5133",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "fan",
+        "Position": "-11.36446,16.90277,-0.6974952",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "5d4e6314-c428-4dd4-b064-b4b329fe93fb",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": "gameplay/entities/printer/materials/fan/printer_fan.vmat",
+            "Materials": null,
+            "Model": "gameplay/entities/printer/models/printer_fan.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": [
+      {
+        "Id": "Printer Definition",
+        "Title": "Printer Definition",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "072aa8e3-63e3-4a4e-87aa-11dd5599a892",
+            "Property": "PrinterDefinition"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

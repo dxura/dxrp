@@ -1,0 +1,582 @@
+{
+  "RootObject": {
+    "__guid": "acab9fd6-a2bb-4684-bac5-40924b575dd3",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "door_single",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "map",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Door",
+        "__guid": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationCurve": [
+          {
+            "x": 0,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 1,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          }
+        ],
+        "AutoCloseDelay": 0,
+        "BuySound": "sounds/purchase.sound",
+        "CloseDuration": 0.5,
+        "CloseFinishedSound": null,
+        "CloseSound": "sounds/interaction/door-close.sound",
+        "ContextOverlay": true,
+        "HandleCurve": [
+          {
+            "x": 0,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 0.25,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 0.75,
+            "y": 1,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          },
+          {
+            "x": 1,
+            "y": 0,
+            "in": 0,
+            "out": 0,
+            "mode": "Mirrored"
+          }
+        ],
+        "HandleRotationDuration": 0.4,
+        "HasHandles": true,
+        "KnockSound": "sounds/interaction/door-knock.sound",
+        "Locked": false,
+        "LockedSound": "sounds/interaction/door-locked.sound",
+        "LockSound": "sounds/interaction/door-lock.sound",
+        "MainDoor": {
+          "_type": "component",
+          "component_id": "778e2db6-9c75-4ba9-a4c8-2317e04cad4d",
+          "go": "2f2c076b-22e0-48a5-afaa-461dbfd68225",
+          "component_type": "DoorPart"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OpenAwayFromPlayer": true,
+        "OpenDuration": 0.5,
+        "OpenFinishedSound": null,
+        "OpenSound": "sounds/interaction/door-open.sound",
+        "Owner": 0,
+        "OwnerGroup": null,
+        "OwnerJob": null,
+        "Price": 10,
+        "ReverseDirection": false,
+        "SecondDoor": null,
+        "SellSound": "sounds/interaction/door-sell.sound",
+        "State": "Closed",
+        "TargetAngle": 90,
+        "TargetHeight": 100,
+        "Type": "Single",
+        "UnlockSound": "sounds/interaction/door_unlock.sound"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "2f2c076b-22e0-48a5-afaa-461dbfd68225",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Door",
+        "Position": "0,22.83937,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.DoorPart",
+            "__guid": "778e2db6-9c75-4ba9-a4c8-2317e04cad4d",
+            "__enabled": true,
+            "Flags": 0,
+            "Collider": {
+              "_type": "component",
+              "component_id": "0d3d3fc1-6347-4f73-8c7b-a926a19a995d",
+              "go": "2f2c076b-22e0-48a5-afaa-461dbfd68225",
+              "component_type": "BoxCollider"
+            },
+            "Handles": [
+              {
+                "_type": "gameobject",
+                "go": "69753950-85d5-422c-adfe-f3c86978d1a2"
+              },
+              {
+                "_type": "gameobject",
+                "go": "bb9193ac-fd65-48bd-8e4a-cf6cbde56e7c"
+              }
+            ],
+            "Marker": {
+              "_type": "gameobject",
+              "go": "df85d599-2e36-41b9-92cc-540a09fda029"
+            },
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "ParentDoor": {
+              "_type": "component",
+              "component_id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+              "go": "acab9fd6-a2bb-4684-bac5-40924b575dd3",
+              "component_type": "Door"
+            },
+            "Pivot": null
+          },
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "f20dfe59-1663-43f3-a474-32f9783838db",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": "default",
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/props/trim_sheets/doors/wooden_doors/wooden_door_01c.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.BoxCollider",
+            "__guid": "0d3d3fc1-6347-4f73-8c7b-a926a19a995d",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "1.052049,-22.89629,54.0456",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "2.135952,47.88588,107.9681",
+            "Static": true,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": [
+          {
+            "__guid": "69753950-85d5-422c-adfe-f3c86978d1a2",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Handle",
+            "Position": "1.9603,-42.83937,52",
+            "Rotation": "0.4999999,0.5,0.5,0.4999999",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Sandbox.ModelRenderer",
+                "__guid": "7eb458d5-53a4-413c-8c59-d18822d2d92c",
+                "__enabled": true,
+                "Flags": 0,
+                "BodyGroups": 18446744073709551615,
+                "CreateAttachments": false,
+                "LodOverride": null,
+                "MaterialGroup": null,
+                "MaterialOverride": null,
+                "Materials": null,
+                "Model": "models/sbox_props/door_elements/door_handle_a.vmdl",
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "RenderOptions": {
+                  "GameLayer": true,
+                  "OverlayLayer": false,
+                  "BloomLayer": false,
+                  "AfterUILayer": false
+                },
+                "RenderType": "On",
+                "Tint": "1,1,1,1"
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "bb9193ac-fd65-48bd-8e4a-cf6cbde56e7c",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Handle",
+            "Position": "0,-42.83937,52",
+            "Rotation": "-0.5,-0.5,0.5,0.5",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Sandbox.ModelRenderer",
+                "__guid": "81a8bf2d-8825-4a45-af26-4f7805b5668b",
+                "__enabled": true,
+                "Flags": 0,
+                "BodyGroups": 18446744073709551615,
+                "CreateAttachments": false,
+                "LodOverride": null,
+                "MaterialGroup": null,
+                "MaterialOverride": null,
+                "Materials": null,
+                "Model": "models/sbox_props/door_elements/door_handle_a.vmdl",
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "RenderOptions": {
+                  "GameLayer": true,
+                  "OverlayLayer": false,
+                  "BloomLayer": false,
+                  "AfterUILayer": false
+                },
+                "RenderType": "On",
+                "Tint": "1,1,1,1"
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "df85d599-2e36-41b9-92cc-540a09fda029",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Marker",
+            "Position": "0,-22.83937,56",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [],
+            "Children": []
+          }
+        ]
+      },
+      {
+        "__guid": "fa639408-2967-4a20-8741-46c129ee8cd6",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Frame",
+        "Position": "1,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,0.97,0.99",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "f51f5030-4e5a-45ab-a85b-04c563b21c28",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": "default",
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/props/trim_sheets/doors/wooden_door_frame/wooden_door_frame_single_02b.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": [
+      {
+        "Id": "Model",
+        "Title": "Model",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "f20dfe59-1663-43f3-a474-32f9783838db",
+            "Property": "Model"
+          }
+        ]
+      },
+      {
+        "Id": "Open Away From Player",
+        "Title": "Open Away From Player",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "OpenAwayFromPlayer"
+          }
+        ]
+      },
+      {
+        "Id": "Locked",
+        "Title": "Locked",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "Locked"
+          }
+        ]
+      },
+      {
+        "Id": "Owner Group",
+        "Title": "Owner Group",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "OwnerGroup"
+          }
+        ]
+      },
+      {
+        "Id": "Material Group",
+        "Title": "Material Group",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "f20dfe59-1663-43f3-a474-32f9783838db",
+            "Property": "MaterialGroup"
+          }
+        ]
+      },
+      {
+        "Id": "Has Handles",
+        "Title": "Has Handles",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "HasHandles"
+          }
+        ]
+      },
+      {
+        "Id": "Open Sound",
+        "Title": "Open Sound",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "OpenSound"
+          }
+        ]
+      },
+      {
+        "Id": "Close Sound",
+        "Title": "Close Sound",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "CloseSound"
+          }
+        ]
+      },
+      {
+        "Id": "Knock Sound",
+        "Title": "Knock Sound",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "KnockSound"
+          }
+        ]
+      },
+      {
+        "Id": "State",
+        "Title": "State",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "State"
+          }
+        ]
+      },
+      {
+        "Id": "Context Overlay",
+        "Title": "Context Overlay",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "ContextOverlay"
+          }
+        ]
+      },
+      {
+        "Id": "Material Group (Frame)",
+        "Title": "Material Group (Frame)",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "f51f5030-4e5a-45ab-a85b-04c563b21c28",
+            "Property": "MaterialGroup"
+          }
+        ]
+      },
+      {
+        "Id": "Owner Job",
+        "Title": "Owner Job",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "92ff1211-d124-40d5-8eb3-b9ac86e4973b",
+            "Property": "OwnerJob"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.door_handle_a#143562",
+    "facepunch.wooden_door_01c#143452",
+    "facepunch.wooden_door_frame_single_02b#107476"
+  ],
+  "__version": 2
+}

@@ -1,0 +1,217 @@
+{
+  "RootObject": {
+    "__guid": "6a02362e-5a25-463d-99b6-03efcd5363a8",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "ammo",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "hands_interact,entity,pocket_item",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "ef8d858c-688a-44c5-8df1-237d047851c3",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": 0,
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "cf2582ea-4c55-455c-a3d7-12b4eb05be8f",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 100,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "f804de67-59e1-482c-acda-4a6360432669",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "0.2662992,0.1547098,1.563265",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "7.334481,19.88067,3.041038",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Dxura.RP.Game.Entities.AmmoEntity",
+        "__guid": "ba471581-02a7-44e3-b46b-a5bb4bd4987b",
+        "__enabled": true,
+        "Flags": 0,
+        "AmmoAmount": 90,
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "cf2582ea-4c55-455c-a3d7-12b4eb05be8f",
+          "go": "6a02362e-5a25-463d-99b6-03efcd5363a8",
+          "component_type": "HealthComponent"
+        },
+        "IsInfinite": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "ef8d858c-688a-44c5-8df1-237d047851c3",
+          "go": "6a02362e-5a25-463d-99b6-03efcd5363a8",
+          "component_type": "Rigidbody"
+        },
+        "UsesRemaining": 1
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "638f94ed-038a-4b53-9f33-889aa27d525f",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Mesh",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0.7071068,0.7071068",
+        "Scale": "2.3432,2,2",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "22c9cd79-f584-4e29-857e-7a40a4b61a1d",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 1,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/weapons/sbox_ammo/9mm_ammobox/ammobox_9mm.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "68efb486-b1fd-46fa-b833-03d2b418eb88"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "4545ae75-2b53-4d31-8e26-8728943564f3"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "a08e487d-632e-4e13-9065-33fc568a01c3"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.ammobox9mm#142897"
+  ],
+  "__version": 2
+}

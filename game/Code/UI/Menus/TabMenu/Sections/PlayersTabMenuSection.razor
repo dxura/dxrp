@@ -1,0 +1,311 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Commands
+@using Dxura.RP.Shared
+@using global::System.Globalization
+@using Sandbox.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root class="flex flex-col w-full h-full overflow-hidden gap-2">
+	@{
+		if ( _selectedPlayer != null && !_selectedPlayer.IsValid() )
+		{
+			_selectedPlayer = null;
+			if ( LastSelectedSteamId.HasValue )
+			{
+				LastSelectedSteamId = null;
+			}
+		}
+
+		if ( PendingFocusSteamId.HasValue )
+		{
+			var focusId = PendingFocusSteamId.Value;
+			PendingFocusSteamId = null;
+			var focusTarget = GameUtils.Players.FirstOrDefault( p => p.IsValid() && p.SteamId == focusId );
+			if ( focusTarget != null )
+			{
+				SelectPlayer( focusTarget );
+			}
+		}
+		else if ( _selectedPlayer == null && LastSelectedSteamId.HasValue )
+		{
+			var rememberedTarget = GameUtils.Players.FirstOrDefault( p => p.IsValid() && p.SteamId == LastSelectedSteamId.Value );
+			if ( rememberedTarget != null )
+			{
+				_selectedPlayer = rememberedTarget;
+			}
+		}
+	}
+
+	@if ( !_selectedPlayer.IsValid() )
+	{
+		var onlineCount = Players.Count( p => p.IsValid() && p.IsConnected && !p.HasStatus( Constants.AfkStatus ) );
+		var afkCount = Players.Count( p => p.IsValid() && p.IsConnected && p.HasStatus( Constants.AfkStatus ) );
+		var disconnectedCount = Players.Count( p => p.IsValid() && !p.IsConnected );
+
+
+		<div class="player-toolbar">
+			<div class="search-bar">
+				<i class="material-icons text-gray-400 text-sm">search</i>
+				<TabMenuTextEntry
+					@ref="_searchTextEntry"
+					class="search-input"
+					placeholder="#tabmenu.players.search_placeholder"
+					Value:bind="@_searchQuery"/>
+				@if ( !string.IsNullOrEmpty( _searchQuery ) )
+				{
+					<div class="search-clear cursor-pointer" onclick="@( () => ClearSearch() )">
+						<i class="material-icons text-gray-400 text-sm">close</i>
+					</div>
+				}
+			</div>
+			<div class="player-summary">
+				<span class="text-tertiary">@Players.Count()</span>
+				<span>#tabmenu.players.label.players</span>
+				<span>(</span>
+				<span style="color: #44cc44;">@onlineCount</span>
+				<span>#tabmenu.players.label.online</span>
+				@if ( afkCount > 0 )
+				{
+					<span>/</span>
+					<span style="color: #cc9900;">@afkCount</span>
+					<span>#tabmenu.players.label.afk</span>
+				}
+				@if ( disconnectedCount > 0 )
+				{
+					<span>/</span>
+					<span style="color: #cc3333;">@disconnectedCount</span>
+					<span>#tabmenu.players.label.disconnected</span>
+				}
+				<span>)</span>
+			</div>
+		</div>
+
+		<div class="player-list overflow-y-scroll">
+			<div class="header">
+				<div class="cell-quick"></div>
+				
+				@if ( Config.Current.Game.ShowPlayersRpColumnsMenu )
+				{
+					<div class="cell-job">#generic.job</div>
+				}
+				
+				<div class="cell-player">#tabmenu.players.player</div>
+				
+				@if ( Config.Current.Game.FactionsEnabled )
+				{
+					<div class="cell-faction">#generic.faction</div>
+				}
+				
+				<div class="cell-role">#generic.role</div>
+				
+				<div class="cell-default">#tabmenu.players.kills</div>
+				<div class="cell-default">#tabmenu.players.deaths</div>
+				<div class="cell-default">#generic.ping</div>
+				<div class="cell-actions"></div>
+
+			</div>
+
+			@foreach ( var player in Players )
+			{
+				if(!player.IsValid()) continue;
+				if(player.HasStatus( Constants.IncognitoStatus ) && !RankSystem.HasLocalPermission( Permission.ViewIncognitoPlayers )) continue;
+				
+				var playerRank = RankSystem.Instance.GetPlayerRank( player.SteamId );
+
+				<div class="row @( player.IsLocalPlayer ? "local-player" : "" )">
+					
+					<div class="cell-quick flex justify-center items-center">
+						<div class="flex gap-2 ml-6">
+							@if ( !player.IsLocalPlayer )
+							{
+								var friendSystem = FriendSystem.Instance;
+								var hasConstructPermission = friendSystem.HasConstructPermission( Player.Local.SteamId, player.SteamId );
+								var hasDoorPermission = friendSystem.HasDoorPermission( Player.Local.SteamId, player.SteamId );
+									
+								<div tooltip="#tabmenu.players.permission.construct"
+								     onclick="@( () => ToggleConstructPermission( player.SteamId, hasConstructPermission ) )"
+								     class="cursor-pointer flex items-center justify-center">
+									<i class="material-icons text-xl @( hasConstructPermission ? "text-good" : "text-gray-400" )">construction</i>
+								</div>
+								
+								<div tooltip="#tabmenu.players.permission.door"
+								     onclick="@( () => ToggleDoorPermission( player.SteamId, hasDoorPermission ) )"
+								     class="cursor-pointer flex items-center justify-center">
+									<i class="material-icons text-2xl @( hasDoorPermission ? "text-good" : "text-gray-400" )">key</i>
+								</div>
+							}
+						</div>
+					</div>
+					
+					@if ( Config.Current.Game.ShowPlayersRpColumnsMenu )
+					{
+						<div class="cell-job">
+							<span class="text-bold" style="color: @player.Job.Color.Hex()">@( player.JobDisplayName )</span>
+						</div>
+					}
+
+					<div onclick="@( () =>
+					              {
+						              SelectPlayer( player );
+					              } )" class="cell-player cursor-pointer pointer-events ">
+						<div class="player-info cursor-pointer">
+	
+							<PlayerAvatar ShowHealth=@false Player="@player"/>
+							<div class="player-name-stack">
+								@if ( Config.Current.Game.ShowTitleOnPlayerList && !string.IsNullOrWhiteSpace( player.PreferredTitle ) )
+								{
+									<span class="player-title">@player.PreferredTitle</span>
+								}
+								<span class="player-name">@player.DisplayName</span>
+							</div>
+							@if ( !player.IsConnected )
+							{
+								<i class="material-icons text-gray-400 text-sm" tooltip="#tabmenu.players.status.disconnected">signal_wifi_off</i>
+							}
+							else if ( player.HasStatus( Constants.AfkStatus ) )
+							{
+								<i class="material-icons text-warning text-sm" tooltip="#tabmenu.players.status.afk">schedule</i>
+							}
+							
+							@if ( IsPartyMember( player ) )
+							{
+								<i class="material-icons text-accent">group</i>
+							}
+							
+							@if (player.Level is >= 1 and <= 3)
+							{
+								var levelText = player.Level switch
+								{
+									1 => Language.GetPhrase( "tabmenu.players.builder" ),
+									2 => Language.GetPhrase( "tabmenu.players.builder_plus" ),
+									3 => Language.GetPhrase( "tabmenu.players.builder_plus_plus" ),
+									_ => throw new ArgumentOutOfRangeException()
+								};
+
+								<span class="builder-level builder-level-@player.Level">
+									@levelText
+								</span>
+							}
+							
+							@foreach( var status in player.Statuses )
+							{
+								var statusInfo = Status.Current.GetCachedInstance( status.Key );
+								
+								@if ( statusInfo?.ShowOnPlayerList ?? false )
+								{
+									<i class="material-icons text-sm" style="color: @( statusInfo.Color.Hex )" tooltip="@statusInfo.LongName">@statusInfo.MaterialIcon</i>
+								}
+							}
+						</div>
+					</div>
+					
+					@if ( Config.Current.Game.FactionsEnabled && FactionSystem.Instance.IsValid() )
+					{
+						<div class="cell-faction">
+							@if ( player.FactionId != null && FactionSystem.Instance.Factions.TryGetValue( player.FactionId.Value, out var faction ) )
+							{
+								<span class="text-sm">[@faction.Tag]</span>
+							}
+						</div>
+					}
+
+										
+					<div class="cell-role">
+						@if ( playerRank != null && !playerRank.Flags.HasFlag( RankFlags.HideOnPlayerList ) )
+						{
+							<span style="color: @( Color.FromRgb( playerRank.Color ).Hex )"
+							      class="text-sm text-bold text-center">@playerRank.Name</span>
+						}
+					</div>
+
+					<div class="cell-default">@player.Kills</div>
+					<div class="cell-default">@player.Deaths</div>
+					<div class="cell-default">
+						@( player.Connection is { IsHost: true } ? "0" : player.Connection?.Ping.ToString( CultureInfo.InvariantCulture ) ?? "DC" )
+					</div>
+					
+					<div class="cell-actions flex justify-center items-center">
+					<div onclick="@( () => SelectPlayer( player ) )" class="cursor-pointer flex items-center justify-center">
+							<i class="material-icons text-2xl">more_vert</i>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	}
+	
+	@if ( _selectedPlayer != null )
+	{
+		<SelectedPlayerPane SelectedPlayer="@_selectedPlayer" OnClose="@ClearSelectedPlayer"/>
+	}
+</root>
+
+@code
+{
+	public static long? PendingFocusSteamId { get; set; }
+	public static long? LastSelectedSteamId { get; set; }
+
+	Player? _selectedPlayer;
+
+	TextEntry? _searchTextEntry;
+	private string _searchQuery = string.Empty;
+
+	private IEnumerable<Player> Players => GameUtils.Players
+		.Where( x => string.IsNullOrEmpty( _searchQuery ) || x.DisplayName.Contains( _searchQuery, StringComparison.OrdinalIgnoreCase ) )
+		.OrderBy( x => x.Job.Id != GameModeJobs.Default.Id )
+		.ThenBy( x => x.Job.DisplayName() );
+
+	private bool IsPartyMember( Player player )
+	{
+		return PartyRoom.Current?.Members.Any( x => x.Id == player.Connection?.SteamId ) ?? false;
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Time.Delta );
+	}
+
+	private void SelectPlayer( Player player )
+	{
+		Sound.Play( "pop" );
+		_selectedPlayer = player;
+		LastSelectedSteamId = player.SteamId;
+	}
+
+	private void ClearSelectedPlayer()
+	{
+		_selectedPlayer = null;
+		LastSelectedSteamId = null;
+	}
+
+	private void ClearSearch()
+	{
+		_searchQuery = string.Empty;
+		if ( _searchTextEntry != null )
+			_searchTextEntry.Text = string.Empty;
+	}
+
+	private void ToggleConstructPermission(long steamId, bool hasPermission)
+	{
+		if (Cooldown.Current.CheckAndStartCooldown("general_permission", Config.Current.Game.ActionCooldown, true))
+			return;
+		
+		if (hasPermission)
+			FriendSystem.Instance.RemoveConstructPermission(steamId);
+		else
+			FriendSystem.Instance.AddConstructPermission(steamId);
+	}
+
+	private void ToggleDoorPermission(long steamId, bool hasPermission)
+	{
+		if (Cooldown.Current.CheckAndStartCooldown("door_permission", Config.Current.Game.ActionCooldown, true))
+			return;
+		
+		if (hasPermission)
+			FriendSystem.Instance.RemoveDoorPermission(steamId);
+		else
+			FriendSystem.Instance.AddDoorPermission(steamId);
+	}
+}

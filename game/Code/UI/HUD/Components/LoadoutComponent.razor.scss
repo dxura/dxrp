@@ -1,0 +1,69 @@
+@import "../../styles.scss";
+
+LoadoutComponent {
+  position: absolute;
+  top: 0;
+
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 1;
+  transform: translateY(0);
+
+  /* States for show/hide */
+  &.hidden {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 8px;
+    gap: 5px;
+  }
+}
+
+EquipmentRow {
+  justify-content: center;
+  align-items: center;
+  opacity: 0.2;
+  margin: 21%;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  .icon {
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 64px;
+  }
+
+  .image {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.is-active {
+    opacity: 1;
+    transform: scale(1);
+
+    > .background {
+      opacity: 1;
+    }
+  }
+
+  .info {
+    font-weight: bold;
+    color: $main-color;
+  }
+}

@@ -1,0 +1,174 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@inherits Panel
+
+@attribute [StyleSheet]
+
+@if ( !CanViewSanctions || Player == null || !Player.IsValid() || Sanctions.Count == 0 )
+{
+	return;
+}
+
+<root class="profile-sanctions section-group">
+	<div class="section-group-title sanctions-header">
+		<span>#tabmenu.players.sanctions</span>
+		<span class="count">@string.Format( Language.GetPhrase( "tabmenu.players.sanctions.count" ), Sanctions.Count )</span>
+	</div>
+
+	<div class="sanctions-body">
+		<div class="sanction-list">
+			@foreach ( var sanction in Sanctions )
+		{
+			<div class="sanction-entry">
+				<div class="entry-top">
+					<div class="entry-badges">
+						<span class="type-badge">
+							<span class="type-marker type-@GetSanctionTypeClass( sanction.Type )"></span>
+							<span class="type-label">@GetSanctionTypeText( sanction )</span>
+						</span>
+					</div>
+					<span class="issued-at" tooltip="@FormatAbsoluteTimestamp( sanction.Created )">@FormatCreatedTimestamp( sanction.Created )</span>
+				</div>
+
+				<div class="reason" tooltip="@( HasNotes( sanction.Notes ) ? sanction.Notes : null )">@sanction.Reason</div>
+			</div>
+		}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public Player? Player { get; set; }
+
+	private long? _requestedPlayerId;
+
+	private static PlayerSanctionHistorySystem? System => PlayerSanctionHistorySystem.Current;
+	private bool CanViewSanctions => Player != null && (Player.IsLocalPlayer
+		? RankSystem.HasLocalPermission( Permission.ViewOwnSanctions ) || RankSystem.HasLocalPermission( Permission.ViewOtherSanctions )
+		: RankSystem.HasLocalPermission( Permission.ViewOtherSanctions ));
+	private bool IsLoadingCurrentPlayer => System?.IsLoading == true && System.CurrentPlayerId == Player?.SteamId;
+
+	private IReadOnlyList<PlayerSanctionHistoryDto> Sanctions
+	{
+		get
+		{
+			if ( System == null || Player == null || !Player.IsValid() || System.CurrentPlayerId != Player.SteamId )
+			{
+				return [];
+			}
+
+			return System.VisibleSanctions;
+		}
+	}
+
+	public override void Tick()
+	{
+		if ( !CanViewSanctions || Player == null || !Player.IsValid() )
+		{
+			_requestedPlayerId = null;
+			System?.ClearVisibleSanctionsClient();
+			return;
+		}
+
+		if ( _requestedPlayerId == Player.SteamId )
+		{
+			return;
+		}
+
+		_requestedPlayerId = Player.SteamId;
+
+		if ( System == null )
+		{
+			return;
+		}
+
+		var requestId = Guid.NewGuid();
+		System.BeginLoadingClient( Player.SteamId, requestId );
+		System.RequestSanctionsHost( Player.SteamId, requestId );
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(
+			CanViewSanctions,
+			Player?.SteamId ?? 0,
+			System?.ClientRevision ?? 0,
+			System?.CurrentPlayerId ?? 0,
+			System?.IsLoading ?? false
+		);
+	}
+
+	private static string GetSanctionTypeText( PlayerSanctionHistoryDto sanction )
+	{
+		return SplitPascalCase( sanction.Type.ToString() );
+	}
+
+	private static string GetSanctionTypeClass( SanctionType type ) => type switch
+	{
+		SanctionType.Warning => "warning",
+		SanctionType.Jail => "jail",
+		SanctionType.Ban => "ban",
+		SanctionType.Gag => "gag",
+		SanctionType.Kick => "kick",
+		SanctionType.Note => "note",
+		_ => "default"
+	};
+
+	private static string FormatCreatedTimestamp( DateTimeOffset timestamp )
+	{
+		var elapsed = DateTimeOffset.Now - timestamp.ToLocalTime();
+		if ( elapsed <= TimeSpan.Zero )
+		{
+			return "just now";
+		}
+
+		if ( elapsed < TimeSpan.FromMinutes( 1 ) )
+		{
+			return "<1 min ago";
+		}
+
+		if ( elapsed < TimeSpan.FromHours( 1 ) )
+		{
+			var minutes = (int)Math.Floor( elapsed.TotalMinutes );
+			return $"{minutes} min{(minutes == 1 ? string.Empty : "s")} ago";
+		}
+
+		if ( elapsed < TimeSpan.FromDays( 1 ) )
+		{
+			var hours = (int)Math.Floor( elapsed.TotalHours );
+			var minutes = elapsed.Minutes;
+			return minutes == 0
+				? $"{hours}h ago"
+				: $"{hours}h {minutes}m ago";
+		}
+
+		var days = (int)Math.Floor( elapsed.TotalDays );
+		return $"{days} day{(days == 1 ? string.Empty : "s")} ago";
+	}
+
+	private static string FormatAbsoluteTimestamp( DateTimeOffset timestamp ) => timestamp.LocalDateTime.ToString( "g" );
+
+	private static bool HasNotes( string? notes ) => !string.IsNullOrWhiteSpace( notes );
+
+	private static string SplitPascalCase( string value )
+	{
+		if ( string.IsNullOrWhiteSpace( value ) )
+		{
+			return string.Empty;
+		}
+
+		var builder = new global::System.Text.StringBuilder( value.Length + 8 );
+		for ( var i = 0; i < value.Length; i++ )
+		{
+			if ( i > 0 && char.IsUpper( value[i] ) )
+			{
+				builder.Append( ' ' );
+			}
+
+			builder.Append( value[i] );
+		}
+
+		return builder.ToString();
+	}
+}

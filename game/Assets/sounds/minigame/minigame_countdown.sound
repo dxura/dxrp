@@ -1,0 +1,38 @@
+{
+  "UI": false,
+  "Volume": "1",
+  "Pitch": "1",
+  "Decibels": 70,
+  "SelectionMode": "Random",
+  "Sounds": [
+    "sounds/minigame/minigame_countdown.vsnd"
+  ],
+  "Occlusion": false,
+  "AirAbsorption": true,
+  "Transmission": true,
+  "OcclusionRadius": 64,
+  "DistanceAttenuation": true,
+  "Distance": 10000,
+  "Falloff": [
+    {
+      "x": 0,
+      "y": 1,
+      "in": 1,
+      "out": -1,
+      "mode": "Mirrored"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "in": 1,
+      "out": -1,
+      "mode": "Mirrored"
+    }
+  ],
+  "DefaultMixer": {
+    "Name": "game",
+    "Id": "82952af1-75ac-42a9-b2bf-8812511fb246"
+  },
+  "__references": [],
+  "__version": 1
+}

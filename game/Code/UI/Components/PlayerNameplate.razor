@@ -1,0 +1,151 @@
+@using Dxura.RP.Shared
+@inherits PanelComponent
+
+
+@if ( !ShowNameplate || !DxNameplates)
+{
+	return;
+}
+
+<root>
+	@foreach(var statusId in Player.Statuses.Keys.Where( x => Status.Current.GetCachedInstance(x)?.ShowOnNameplate ?? false) )
+	{
+		var status = Status.Current.GetCachedInstance( statusId );
+		
+		if( status == null )
+			continue;
+
+		<div class="status" style="color: @status.Color.Hex">@status.Name</div>
+	}
+
+	@if ( Player.DisconnectedSince != null )
+	{
+		<i class="disconnected material-icons">signal_wifi_off</i>
+	}
+	else if ( Player.HasStatus( Constants.AfkStatus ) && Config.Current.Game.ShowAfkOnNamePlate )
+	{
+		<div class="afk">#generic.afk</div>
+	}
+
+	@if ( ShowHealthInfo )
+	{
+		<div class="health-status @GetHealthClass()">
+			@GetHealthText()
+		</div>
+	}
+
+	@if ( Config.Current.Game.ShowTitleOnNameplate && !string.IsNullOrWhiteSpace( Player.PreferredTitle ) )
+	{
+		<span class="title">@Player.PreferredTitle</span>
+	}
+
+	<div class="name">@Player.DisplayName.Truncate( 13 )
+	</div>
+
+	@if ( Config.Current.Game.ShowJobOnNamePlate )
+	{
+		<span class="job" style="color: @Player.Job.Color.Hex()">@( Player.JobDisplayName )</span>
+	}
+
+	@{
+		var nameRank = RankSystem.Instance.GetPlayerRank( Player.SteamId );
+		if ( nameRank != null && nameRank.Flags.HasFlag( RankFlags.ShowOnNameplate ) )
+		{
+			<span class="rank" style="color: @( Color.FromRgb( nameRank.Color ).Hex )">@nameRank.Name</span>
+		}
+	}
+
+	@if ( Player.Voice.LastPlayed < 0.25f )
+	{
+		<span class="voice-indicator text-2xl text-green-400"><i>volume_up</i></span>
+	}
+</root>
+
+@code
+{
+	[ConVar( "dx_nameplates", ConVarFlags.Saved )]
+	private static bool DxNameplates { get; set; } = true;
+	
+	[Property] Player Player { get; set; } = null!;
+
+	private bool ShowNameplate => Player.IsValid() && !Player.IsLocalPlayer && Config.Current.Game.ShowNamePlate && !Player.GameObject.Tags.Has( Constants.OccludeTag ) && !HasCameraEquipped();
+	private bool ShowHealthInfo =>  ShowNameplate && 
+	                                 Player.Local.IsValid() && 
+	                                 Player.Local.Job.IsMedicRole() && 
+	                                 Player != Player.Local &&
+	                                 HasMedkitEquipped();
+	
+	private bool HasCameraEquipped()
+	{
+		if ( !Player.Local.IsValid() )
+			return false;
+			
+		var currentEquipment = Player.Local.CurrentEquipment;
+		return currentEquipment.IsValid() && currentEquipment.Identifier == "camera";
+	}
+	
+	private bool HasMedkitEquipped()
+	{
+		if ( !Player.Local.IsValid() )
+			return false;
+			
+		var currentEquipment = Player.Local.CurrentEquipment;
+		return currentEquipment.IsValid() && currentEquipment.Identifier == "medkit";
+	}
+
+	private string GetHealthText()
+	{
+		if ( !Player.IsValid() || !Player.HealthComponent.IsValid() )
+			return "";
+
+		var health = Player.HealthComponent.Health;
+		
+		return health <= 0 ? "DEAD" : $"HP: {health.CeilToInt()}";
+
+	}
+
+	private string GetHealthClass()
+	{
+		if ( !Player.IsValid() || !Player.HealthComponent.IsValid() )
+			return "";
+
+		var health = Player.HealthComponent.Health;
+
+		return health switch
+		{
+			<= 0 => "dead",
+			< 25 => "critical",
+			< 50 => "low",
+			< 75 => "medium",
+			_ => "healthy"
+		};
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !Player.IsValid()) return 0;
+
+		var localIsValid = Player.Local.IsValid();
+		
+		var isTalking = Player.Voice.LastPlayed < 0.25f;
+		var localPlayerJob = localIsValid ? Player.Local.Job.Id.ToString() : "";
+		var currentEquipment = localIsValid ? Player.Local.CurrentEquipment?.Identifier : "";
+		var health = Player.HealthComponent.IsValid() ? Player.HealthComponent.Health : 0;
+		
+		var hash = new HashCode();
+		hash.Add(Player.DisplayName);
+		hash.Add(Player.PreferredTitle);
+		hash.Add(Player.JobDisplayName);
+		hash.Add(Player.DisconnectedSince);
+		hash.Add( Player.Tags.Has( Constants.OccludeTag ) );
+		hash.Add(Player.StatusCount);
+		hash.Add(isTalking);
+		hash.Add(localPlayerJob);
+		hash.Add(currentEquipment);
+		hash.Add(ShowHealthInfo);
+		hash.Add(health.CeilToInt());
+		hash.Add( DxNameplates );
+		hash.Add( RankSystem.Instance.GetPlayerRank( Player.SteamId )?.Name );
+		return hash.ToHashCode();
+	}
+}

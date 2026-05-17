@@ -1,0 +1,78 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( Player.Local is not { } player || player.HealthComponent.State != LifeState.Dead )
+{
+	return;
+}
+
+<root>
+	<div class="default-respawner">
+		<p class="label bg-primary-75 rounded pl-1 pr-1">#respawnscreen.title</p>
+		
+		@switch ( player.RespawnState )
+		{
+			case RespawnState.Approved:
+				<div class="flex gap-1 items-center justify-center">
+					<span class="text-base">#respawnscreen.prompt.prefix</span>
+					<InputHint Action="jump" class="large" Size="@InputGlyphSize.Large"/>
+					<span class="text-base">#respawnscreen.prompt.suffix</span>
+				</div>
+
+				break;
+			case RespawnState.Immediate:
+				<p class="label">#respawnscreen.respawning</p>
+				break;
+			default:
+				<p class="label flex gap-sm"><span>#respawnscreen.countdown</span> @GetRespawnTime()</p>
+				break;
+		}
+	</div>
+</root>
+
+@code
+{
+	protected override int BuildHash()
+	{
+		var player = Player.Local;
+		if ( !player.IsValid() )
+			return 0;
+			
+		return HashCode.Combine( 
+			player.HealthComponent.State,
+			player.RespawnState,
+			player.GetEffectiveRespawnElapsed().ToString("F1") // Force update for smooth countdown
+		);
+	}
+
+	public override void Tick()
+	{
+		if ( Input.Pressed( "jump" ) && 
+		     Player.Local.IsValid() && 
+		     Player.Local.RespawnState == RespawnState.Approved &&
+		     RespawnerSystem.Instance.IsValid() &&
+		     !Cooldown.Current.CheckAndStartCooldown( "respawn", Config.Current.Game.ActionCooldown, true )
+
+		)
+		{
+			RespawnerSystem.Instance.RequestRespawn();
+		}
+	}
+
+	private int GetRespawnTime()
+	{
+		var player = Player.Local;
+		if ( !player.IsValid() )
+		{
+			return 0;
+		}
+
+		// Use the effective elapsed time that excludes revive time
+		var effectiveElapsed = player.GetEffectiveRespawnElapsed();
+
+		return (Config.Current.Game.RespawnTime - effectiveElapsed)
+			.Clamp( 0f, Config.Current.Game.RespawnTime )
+			.CeilToInt();
+	}
+}

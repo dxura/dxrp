@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_floor_dance",
+  "Repeat": true,
+  "Duration": 10.6,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

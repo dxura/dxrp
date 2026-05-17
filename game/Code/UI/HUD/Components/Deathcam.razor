@@ -1,0 +1,70 @@
+﻿@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() || Player.HealthComponent.State == LifeState.Alive || LastDamageInfo is null )
+	return;
+
+@if ( GameUtils.GetPlayerFromComponent( LastDamageInfo.Attacker ) is not { } killerPlayer )
+	return;
+
+<root class="absolute left-0 right-0 flex flex-col items-center gap-xs">
+    <div class="flex flex-row">
+		<img alt="#deathcam.player_image" class="image" style="width: 64px; height: 64px;" src="avatar:@killerPlayer.SteamId"/>
+        <div class="flex flex-col bg-primary-75 p-2 h-full items-start justify-center"
+		     style="min-width: 275px;">
+			<label class="text text-base small upper text-bold">#deathcam.killed_by</label>
+			<label class="text-base">@killerPlayer.DisplayName</label>
+		</div>
+	</div>
+
+	@if ( DamageEntries is not null && DamageEntries.Count > 0 )
+	{
+        <div class="flex flex-col bg-primary-75 p-2">
+			<label class="small slight">#deathcam.damage_taken</label>
+			@foreach ( var entry in DamageEntries )
+			{
+                <div class="flex flex-row gap-xs">
+					<label class="text-base">@string.Format( Language.GetPhrase( "deathcam.damage_hits_value" ), entry.Damage.CeilToInt(), entry.Count ) - </label>
+					<label class="text-base">@entry.Attacker?.DisplayName</label>
+				</div>
+			}
+		</div>
+	}
+
+	@if ( InflictedDamageEntries is not null && InflictedDamageEntries.Count > 0 )
+	{
+        <div class="flex flex-col bg-primary-75 p-2">
+			<label class="small slight">#deathcam.inflicted</label>
+			@foreach ( var entry in InflictedDamageEntries )
+			{
+                <div class="flex flex-row gap-xs">
+					<label>@string.Format( Language.GetPhrase( "deathcam.damage_hits_value" ), entry.Damage.CeilToInt(), entry.Count )</label>
+				</div>
+			}
+		</div>
+	}
+</root>
+
+@code
+{
+	public Player Player => Player.Local;
+
+	public static List<DamageTrackerSystem.GroupedDamage>? DamageEntries => Player.Local.GetComponentInChildren<DamageTrackerSystem>()?.GetGroupedDamage( Player.Local );
+	public static List<DamageTrackerSystem.GroupedDamage>? InflictedDamageEntries => Player.Local.GetComponentInChildren<DamageTrackerSystem>()?.GetGroupedInflictedDamage( Player.Local );
+
+	public DamageInfo? LastDamageInfo => Player.Local.LastDamageInfo;
+
+	public string GetName( Component attacker )
+	{
+		var ply = GameUtils.GetDescription( attacker );
+
+		return ply?.DisplayName ?? Language.GetPhrase( "generic.unknown" );
+	}
+
+	protected override int BuildHash()
+	{
+		return !Player.IsValid() ? 0 : HashCode.Combine( Player.HealthComponent.State, Player, Time.Now );
+	}
+}

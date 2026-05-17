@@ -1,0 +1,45 @@
+@import "../../styles.scss";
+
+KeypadScreen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+
+	pointer-events: all;
+}
+
+.number-row {
+	display: flex;
+	gap: $space-2;
+}
+
+.number-btn {
+	color: white;
+	font-size: $text-xl;
+	font-weight: bold;
+	padding: $space-4;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+	text-align: center;
+	
+	background-color: #1e1e1e;
+	cursor: pointer;
+	transition: all 0.15s ease;
+
+	
+	&:hover {
+		background-color: #2a2a2a;
+		border-color: #555;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+	}
+	
+	&:active {
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+		background-color: #1a1a1a;
+	}
+}

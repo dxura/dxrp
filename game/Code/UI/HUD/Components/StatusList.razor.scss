@@ -1,0 +1,41 @@
+@import "../../styles.scss";
+
+StatusList {
+  position: absolute;
+  top: 165px;
+  right: $space-6;
+  z-index: 100;
+
+  .status-item {
+    width: 48px;
+    height: 48px;
+    border-radius: $space-2;
+  }
+
+  .status-icon {
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 32px;
+    height: 32px;
+  }
+
+  .status-stack-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+}

@@ -1,0 +1,124 @@
+@import "../../styles.scss";
+
+TabMenu {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+
+  &.active {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    pointer-events: all;
+  }
+
+  .menu-container {
+    width: 90%;
+    height: 85%;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: hidden;
+    display: none;
+    border-radius: $space-1;
+
+    &.active {
+      display: flex;
+    }
+  }
+
+  .sidebar {
+    min-width: 240px;
+    border-right: 0.5px solid rgba(white, 0.04);
+  }
+
+  .sidebar {
+    .sidebar-player-info {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      background-color: $color-secondary;
+      border-bottom: 0.5px solid rgba(white, 0.04);
+    }
+
+    .sidebar-player-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: $space-3 $space-4 0;
+    }
+
+    .sidebar-player-name {
+      font-size: $text-xl;
+      font-weight: bold;
+      color: $color-tertiary;
+    }
+
+    .sidebar-player-job {
+      font-size: $text-sm;
+      color: $color-accent;
+    }
+
+    .sidebar-finance {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: $space-1 $space-4 $space-2;
+    }
+
+    .sidebar-finance-row {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      font-size: $text-sm;
+      color: $color-tertiary;
+      padding: 2px 0;
+
+      .finance-icon {
+        font-size: $text-sm;
+        color: $color-gray-400;
+        opacity: 0.6;
+      }
+
+      .finance-label {
+        color: $color-gray-400;
+        font-size: $text-xs;
+      }
+
+      .finance-value {
+        margin-left: auto;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .menuButton {
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    width: 100%;
+
+    &:hover {
+      opacity: 1;
+      background-color: rgba($color-accent, 0.01);
+    }
+  }
+  
+  .active-btn {
+    opacity: 1;
+    background-color: rgba($color-accent, 0.05);
+  }
+
+  .content-panel {
+    flex-grow: 1;
+    background-color: $color-primary;
+    overflow: hidden;
+  }
+
+  .section-body {
+    padding: 0;
+  }
+
+  .section-content {
+    padding: 0;
+  }
+}

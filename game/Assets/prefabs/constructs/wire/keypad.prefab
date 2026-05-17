@@ -1,0 +1,292 @@
+{
+  "RootObject": {
+    "__guid": "656d57af-d14c-48fd-ad78-6503e420e9de",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "keypad",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "construct,occludable,build_interact",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Wire.KeypadWire",
+        "__guid": "82cb4c93-d6cd-4632-a538-5ffd9c113978",
+        "__enabled": true,
+        "Flags": 0,
+        "Collider": {
+          "_type": "component",
+          "component_id": "376817c4-d954-43f8-9298-86f166c2f6e4",
+          "go": "a908b597-d390-403b-99f6-1cbf10177655",
+          "component_type": "ModelCollider"
+        },
+        "DataJson": "",
+        "FailSound": "sounds/interaction/keypad_fail.sound",
+        "Initialized": false,
+        "NetworkOwner": "00000000-0000-0000-0000-000000000000",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "SetupSound": "sounds/interaction/keypad_setup.sound",
+        "SuccessSound": "sounds/interaction/keypad_success.sound"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "5864e5ba-e2fe-4bd5-8a9c-2270f9e9a848",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "trigger",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.BoxCollider",
+            "__guid": "ee958ad9-7fcb-484d-b372-90377481b7cc",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "-32.37585,0.2224159,-2.068478",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": true,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "64.14606,67.35966,119.3938",
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          },
+          {
+            "__type": "Dxura.RP.Game.TriggerToggleBox",
+            "__guid": "12129b22-e98d-4862-a185-165e92927803",
+            "__enabled": true,
+            "Flags": 0,
+            "ForceFirstPerson": true,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "TargetGameObject": {
+              "_type": "gameobject",
+              "go": "a1ae1dae-0866-4898-baf1-a967881e14cb"
+            }
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "a1ae1dae-0866-4898-baf1-a967881e14cb",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "screen",
+        "Position": "-0.4278773,0,0",
+        "Rotation": "0,0,1,-0.00000004371139",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": false,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "5361ef7f-f841-4be9-8255-be2e623e7d6a",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "110,181",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 0.3,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "Dxura.RP.UI.KeypadScreen",
+            "__guid": "9047af91-b73a-41e5-a296-17c5baf20cde",
+            "__enabled": true,
+            "Flags": 0,
+            "AbortSound": "sounds/interaction/keypad_abort.sound",
+            "InputSound": "sounds/interaction/keypad.sound",
+            "Keypad": {
+              "_type": "component",
+              "component_id": "82cb4c93-d6cd-4632-a538-5ffd9c113978",
+              "go": "656d57af-d14c-48fd-ad78-6503e420e9de",
+              "component_type": "KeypadWire"
+            },
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "a908b597-d390-403b-99f6-1cbf10177655",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "model",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "0.6,0.75,0.8",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "fb65d29c-0d5e-4e79-a18e-b0b1573c61d8",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": {
+              "indexed": {
+                "0": "materials/generic/metal_brushed.vmat"
+              }
+            },
+            "Model": "models/wire/keypad/keypad.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.ModelCollider",
+            "__guid": "376817c4-d954-43f8-9298-86f166c2f6e4",
+            "__enabled": true,
+            "Flags": 0,
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Model": "models/wire/keypad/keypad.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "4b08bb56-3969-41da-b1c4-7b3f911a632f"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "d73adcb6-7cda-4d3b-8964-c62ab293a9eb"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "1dd86e35-be31-4c5a-943b-3e52f5eb10c0"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.metal_brushed#85422"
+  ],
+  "__version": 2
+}

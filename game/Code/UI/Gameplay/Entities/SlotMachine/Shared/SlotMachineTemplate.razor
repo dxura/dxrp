@@ -1,0 +1,59 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@if (!Game.IsValid()) return;
+
+<root>
+	<div class="content-wrapper flex flex-col items-center justify-center flex-grow">
+		@GameContent
+	</div>
+
+	<div class="bottom-bar bg-primary-95 w-full px-4 py-3 flex justify-between items-center">
+		<div class="player-info flex items-center gap-2">
+			<img class="avatar square rounded" style="width: 40px; height: 40px;" src="avatar:@Game.CurrentPlayer?.SteamId"
+			     alt="@Language.GetPhrase( "slotmachine.player_avatar" )"/>
+			<div class="flex flex-col">
+				<span class="text-xs text-gray-400">#slotmachine.playing_now</span>
+				<span class="text-sm text-white text-bold">@( Game.CurrentPlayer?.DisplayName ?? Language.GetPhrase( "slotmachine.no_player" ) )</span>
+			</div>
+		</div>
+
+		@if ( Game.IsOwner )
+		{
+			<div class="owner-controls flex gap-2">
+				<button class="btn-compact bg-secondary text-white rounded px-3 py-2 hover-scale"
+				        onclick="@OnSettingsClicked">
+					<span class="text-xs">#slotmachine.settings</span>
+				</button>
+
+				@if ( Game.IsInUse )
+				{
+					<button class="btn-compact bg-bad text-white rounded px-3 py-2 hover-scale"
+					        onclick="@OnEndGameClicked">
+						<span class="text-xs">#slotmachine.end_game</span>
+					</button>
+				}
+			</div>
+		}
+	</div>
+</root>
+
+
+@code
+{
+	[Property]
+	public BaseSlotMachineGame Game { get; set; } = null!;
+
+	[Property]
+	public RenderFragment? GameContent { get; set; }
+	
+	private void OnSettingsClicked()
+	{
+		Game?.HandleSettingsClicked();
+	}
+	
+	private void OnEndGameClicked()
+	{
+		Game?.HandleEndGameClicked();
+	}
+}

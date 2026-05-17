@@ -1,0 +1,119 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+@if ( !Player.Local.IsValid() ) return;
+
+<root class="absolute left-0 bottom-0 ml-2 mb-1">
+	<div class="player-info-container rounded">
+		<div class="top-row flex flex-row items-center">
+			<div class="square rounded profile-picture"
+			     style="background-image: url(avatar:@Player.Local.Connection?.SteamId)"/>
+
+			<div class="flex flex-col name-col">
+				<label class="player-name">@Player.Local.DisplayName</label>
+				@if ( Config.Current.Game.MoneyEnabled )
+				{
+					<label class="wallet-display-value">$@Player.Local.WalletBalance.ToString( "N0" )</label>
+				}
+			</div>
+
+			<div class="flex-grow"></div>
+
+			<div class="flex flex-col vital-bars">
+				<div class="vital-row health-row flex flex-row items-center">
+					<i class="material-icons vital-icon health-icon" style="color: @HealthColorHex">favorite</i>
+					<div class="vital-bar health-bar">
+						<div class="vital-fill health-fill" style="width: @(HealthPercent)%; background-color: @HealthColorHex"></div>
+					</div>
+					<label class="vital-value health-value" style="color: @HealthColorHex">@Health</label>
+				</div>
+				<div class="vital-row flex flex-row items-center">
+					<i class="material-icons vital-icon armor-icon">shield</i>
+					<div class="vital-bar armor-bar">
+						<div class="vital-fill armor-fill" style="width: @(ArmorPercent)%"></div>
+					</div>
+					<label class="vital-value armor-value">@Armor</label>
+				</div>
+			</div>
+		</div>
+
+		@if ( !Player.Local.Restricted )
+		{
+			<div class="bottom-row flex flex-row items-center">
+				@if ( Config.Current.Game.ShowJobPlayerInfoHud )
+				{
+					<div class="stat flex flex-row items-center">
+						<label class="job-label" style="color: @Player.Local.Job.Color.Hex()">@Player.Local.JobDisplayName</label>
+					</div>
+					<div class="stat-sep"></div>
+				}
+
+				<div class="flex-grow"></div>
+
+				@if ( Config.Current.Game.ShowTitleOnHud && !string.IsNullOrWhiteSpace( Player.Local.PreferredTitle ) )
+				{
+					<label class="player-title">@Player.Local.PreferredTitle</label>
+				}
+
+				<div class="flex-grow"></div>
+
+				@if ( Config.Current.Game.MoneyEnabled )
+				{
+					<div class="stat flex flex-row items-center">
+						<i class="material-icons stat-icon money-icon">account_balance</i>
+						<label class="stat-value money">$@Player.Local.BankBalance.ToString( "N0" )</label>
+					</div>
+				}
+			</div>
+		}
+	</div>
+</root>
+
+@code
+{
+	private HealthComponent? HealthComponent => Player.Local.HealthComponent;
+	private ArmorComponent? ArmorComponent => Player.Local.GameObject?.Components.Get<ArmorComponent>();
+	private int Health => HealthComponent?.Health.CeilToInt() ?? 0;
+	private int MaxHealth => HealthComponent?.MaxHealth.CeilToInt() ?? 100;
+	private int Armor => ArmorComponent?.Armor.CeilToInt() ?? 0;
+	private float HealthPercent => MaxHealth > 0 ? Math.Clamp( (float)Health / MaxHealth * 100f, 0f, 100f ) : 0f;
+	private float ArmorPercent => Math.Clamp( Armor, 0f, 100f );
+
+	private string HealthColorHex
+	{
+		get
+		{
+			var low = new Color( 0xf8 / 255f, 0x71 / 255f, 0x71 / 255f );
+			var mid = new Color( 0xfa / 255f, 0xcc / 255f, 0x15 / 255f );
+			var high = new Color( 0x22 / 255f, 0xc5 / 255f, 0x5e / 255f );
+
+			if ( HealthPercent <= 15f )
+				return low.Hex;
+
+			var t = (HealthPercent - 15f) / 85f;
+			var c = t < 0.5f
+				? Color.Lerp( low, mid, t * 2f )
+				: Color.Lerp( mid, high, (t - 0.5f) * 2f );
+			return c.Hex;
+		}
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !Player.Local.IsValid() )
+			return 0;
+
+		var hash = new HashCode();
+		hash.Add( Player.Local.DisplayName );
+		hash.Add( Player.Local.Restricted );
+		hash.Add( Player.Local.JobDisplayName );
+		hash.Add( Player.Local.WalletBalance );
+		hash.Add( Player.Local.BankBalance );
+		hash.Add( Player.Local.PreferredTitle );
+		hash.Add( Health );
+		hash.Add( Armor );
+		return hash.ToHashCode();
+	}
+}

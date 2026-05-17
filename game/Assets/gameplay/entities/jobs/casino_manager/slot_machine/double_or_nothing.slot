@@ -1,0 +1,285 @@
+{
+  "GameComponent": "Dxura.RP.Game.UI.DoubleOrNothingSlotMachineGame",
+  "Graphic": {
+    "$compiler": "texture",
+    "$source": "imagefile",
+    "data": {
+      "FilePath": "gameplay/entities/jobs/casino_manager/slot_machine/graphics/double_or_nothing.png",
+      "MaxSize": 4096,
+      "ConvertHeightToNormals": false,
+      "NormalScale": 1,
+      "Rotate": 0,
+      "FlipVertical": false,
+      "FlipHorizontal": false,
+      "Cropping": {
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0
+      },
+      "Padding": {
+        "Left": 0,
+        "Top": 0,
+        "Right": 0,
+        "Bottom": 0
+      },
+      "InvertColor": false,
+      "Tint": "1,1,1,1",
+      "Blur": 0,
+      "Sharpen": 0,
+      "Brightness": 1,
+      "Contrast": 1,
+      "Saturation": 1,
+      "Hue": 0,
+      "Colorize": false,
+      "TargetColor": "1,1,1,1",
+      "CacheToDisk": true
+    },
+    "compiled": null
+  },
+  "BackgroundMusic": {
+    "$compiler": "embed",
+    "$source": null,
+    "data": {
+      "UI": false,
+      "Volume": "0.1",
+      "Pitch": "1",
+      "Decibels": 70,
+      "SelectionMode": "Random",
+      "Sounds": [
+        "gameplay/entities/jobs/casino_manager/slot_machine/music/gambler_music.vsnd"
+      ],
+      "Occlusion": true,
+      "AirAbsorption": true,
+      "Transmission": true,
+      "OcclusionRadius": 64,
+      "DistanceAttenuation": true,
+      "Distance": 1500,
+      "Falloff": [
+        {
+          "x": 0,
+          "y": 1,
+          "in": 0,
+          "out": -1.8,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.05,
+          "y": 0.22,
+          "in": 3.5,
+          "out": -3.5,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.2,
+          "y": 0.04,
+          "in": 0.16,
+          "out": -0.16,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "in": 0,
+          "out": 0,
+          "mode": "Mirrored"
+        }
+      ],
+      "DefaultMixer": {
+        "Name": "world",
+        "Id": "33656371-f4d8-4736-ac85-2e10dc4f31c7"
+      },
+      "__references": null
+    },
+    "compiled": null
+  },
+  "WinSound": {
+    "$compiler": "embed",
+    "$source": null,
+    "data": {
+      "UI": false,
+      "Volume": "0.5",
+      "Pitch": "1",
+      "Decibels": 70,
+      "SelectionMode": "Random",
+      "Sounds": [
+        "sounds/speaker/gamble_win.vsnd"
+      ],
+      "Occlusion": true,
+      "AirAbsorption": true,
+      "Transmission": true,
+      "OcclusionRadius": 64,
+      "DistanceAttenuation": true,
+      "Distance": 1500,
+      "Falloff": [
+        {
+          "x": 0,
+          "y": 1,
+          "in": 0,
+          "out": -1.8,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.05,
+          "y": 0.22,
+          "in": 3.5,
+          "out": -3.5,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.2,
+          "y": 0.04,
+          "in": 0.16,
+          "out": -0.16,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "in": 0,
+          "out": 0,
+          "mode": "Mirrored"
+        }
+      ],
+      "DefaultMixer": {
+        "Name": "world",
+        "Id": "33656371-f4d8-4736-ac85-2e10dc4f31c7"
+      },
+      "__references": null
+    },
+    "compiled": null
+  },
+  "LoseSound": {
+    "$compiler": "embed",
+    "$source": null,
+    "data": {
+      "UI": false,
+      "Volume": "0.3",
+      "Pitch": "1",
+      "Decibels": 70,
+      "SelectionMode": "Random",
+      "Sounds": [
+        "sounds/speaker/gamble_lose.vsnd"
+      ],
+      "Occlusion": true,
+      "AirAbsorption": true,
+      "Transmission": true,
+      "OcclusionRadius": 64,
+      "DistanceAttenuation": true,
+      "Distance": 1500,
+      "Falloff": [
+        {
+          "x": 0,
+          "y": 1,
+          "in": 0,
+          "out": -1.8,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.05,
+          "y": 0.22,
+          "in": 3.5,
+          "out": -3.5,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.2,
+          "y": 0.04,
+          "in": 0.16,
+          "out": -0.16,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "in": 0,
+          "out": 0,
+          "mode": "Mirrored"
+        }
+      ],
+      "DefaultMixer": {
+        "Name": "world",
+        "Id": "33656371-f4d8-4736-ac85-2e10dc4f31c7"
+      },
+      "__references": null
+    },
+    "compiled": null
+  },
+  "ProcessSound": {
+    "$compiler": "embed",
+    "$source": null,
+    "data": {
+      "UI": false,
+      "Volume": "0.6",
+      "Pitch": "1",
+      "Decibels": 70,
+      "SelectionMode": "Random",
+      "Sounds": [
+        "sounds/speaker/gamble_spin.vsnd"
+      ],
+      "Occlusion": true,
+      "AirAbsorption": true,
+      "Transmission": true,
+      "OcclusionRadius": 64,
+      "DistanceAttenuation": true,
+      "Distance": 1500,
+      "Falloff": [
+        {
+          "x": 0,
+          "y": 1,
+          "in": 0,
+          "out": -1.8,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.05,
+          "y": 0.22,
+          "in": 3.5,
+          "out": -3.5,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 0.2,
+          "y": 0.04,
+          "in": 0.16,
+          "out": -0.16,
+          "mode": "Mirrored"
+        },
+        {
+          "x": 1,
+          "y": 0,
+          "in": 0,
+          "out": 0,
+          "mode": "Mirrored"
+        }
+      ],
+      "DefaultMixer": {
+        "Name": "world",
+        "Id": "33656371-f4d8-4736-ac85-2e10dc4f31c7"
+      },
+      "__references": null
+    },
+    "compiled": null
+  },
+  "Prefab": {
+    "_type": "gameobject",
+    "prefab": "gameplay/entities/jobs/casino_manager/slot_machine/slot_machine.prefab"
+  },
+  "Price": 500,
+  "BountyPercentage": null,
+  "Limit": 1,
+  "Name": "#entity.slot.doubleornothing.name",
+  "Category": "media",
+  "Description": null,
+  "Color": "0.07448,0.76744,0.02499,1",
+  "Whitelist": [
+    "gameplay/jobs/theatre_manager.job"
+  ],
+  "Blacklist": [],
+  "MinimumRank": null,
+  "DestroyOnDisconnect": true,
+  "DestroyOnJobChange": true,
+  "AllowOwnershipTransfer": false,
+  "__references": [],
+  "__version": 0
+}

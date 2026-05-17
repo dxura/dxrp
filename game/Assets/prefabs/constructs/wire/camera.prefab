@@ -1,0 +1,261 @@
+{
+  "RootObject": {
+    "__guid": "8042666b-02d7-41df-a6a7-e5b3e1701b6e",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "camera",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "build_interact,construct,occludable,hands_interact",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Wire.CameraWire",
+        "__guid": "a94aca15-88c7-47bc-8cc3-34494a4264d0",
+        "__enabled": true,
+        "Flags": 0,
+        "Camera": {
+          "_type": "component",
+          "component_id": "c5de7fc8-883e-48d2-aa82-ea4ec77a92bb",
+          "go": "ce3cd3a8-65b6-41d5-a8a0-beb8305b912f",
+          "component_type": "CameraComponent"
+        },
+        "Collider": {
+          "_type": "component",
+          "component_id": "7ff18728-a174-4682-9574-2b71055c46d5",
+          "go": "8042666b-02d7-41df-a6a7-e5b3e1701b6e",
+          "component_type": "BoxCollider"
+        },
+        "DataJson": "",
+        "NetworkOwner": "00000000-0000-0000-0000-000000000000",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0"
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "7ff18728-a174-4682-9574-2b71055c46d5",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "-0.06242275,0.1330538,3.419905",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "4.482172,12.38208,6.97143",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "a77e41b9-4cea-46a9-af43-a498324c9242",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "base",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "f0ec7e84-2bac-47c7-8744-26618055813f",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/sbox_props/cctv/cctv_rotating_mount.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "9e55cff4-412d-4ed6-abf3-5b1794432515",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "unit",
+        "Position": "0,0,1.211148",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "147bf655-0ca2-4c60-95ef-c3614fe73b43",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/sbox_props/cctv/cctv.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "ce3cd3a8-65b6-41d5-a8a0-beb8305b912f",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "view",
+        "Position": "0,-4.983384,4.85673",
+        "Rotation": "0,0,-0.7071067,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.CameraComponent",
+            "__guid": "c5de7fc8-883e-48d2-aa82-ea4ec77a92bb",
+            "__enabled": false,
+            "Flags": 0,
+            "BackgroundColor": "0.33333,0.46275,0.52157,1",
+            "ClearFlags": "All",
+            "EnablePostProcessing": true,
+            "FieldOfView": 80,
+            "FovAxis": "Horizontal",
+            "IsMainCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Orthographic": false,
+            "OrthographicHeight": 1204,
+            "PostProcessAnchor": null,
+            "Priority": -1,
+            "RenderExcludeTags": "invisible,viewmodel",
+            "RenderTags": "",
+            "RenderTexture": null,
+            "TargetEye": "None",
+            "Viewport": "0,0,1,1",
+            "ZFar": 10000,
+            "ZNear": 1
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "02277959-de33-4c21-af65-fa109418ca2c"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "7ba8abc6-37ee-4fee-a56a-2d79493e0bea"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "981ae8c2-ad18-49ab-9e3c-3d5ce1113488"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.cctv_rotating_mount#143560",
+    "facepunch.cctv#29019"
+  ],
+  "__version": 2
+}

@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_lay_down",
+  "Repeat": true,
+  "Duration": 0,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

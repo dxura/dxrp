@@ -1,0 +1,182 @@
+{
+  "RootObject": {
+    "__guid": "a9609d9e-aa5a-4e77-8a5e-1410999a3a7f",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "w_hand_cuffs",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "player",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 3,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Equipment",
+        "__guid": "f46bf723-97c8-4415-a45d-069538684bd6",
+        "__enabled": true,
+        "DeploySound": "gameplay/equipment/job/hand_cuffs/sounds/hand_cuffs.deploy.sound",
+        "EjectionPort": null,
+        "Handedness": "Both",
+        "HoldType": "None",
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "021866f7-aefb-48e4-a6ad-024110b74821",
+          "go": "f3a00090-d124-4fe9-b1e3-b5846a2ad3dd",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "Muzzle": null,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnlyShowCrosshairDot": true,
+        "Resource": "gameplay/equipment/job/hand_cuffs/hand_cuffs.equip",
+        "SpeedPenalty": 0,
+        "UseCrosshair": true
+      },
+      {
+        "__type": "Dxura.RP.Game.TagBinder",
+        "__guid": "b2de65d3-2a49-4d42-a7af-0b4faf9f7a41",
+        "__enabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "f3a00090-d124-4fe9-b1e3-b5846a2ad3dd",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Mdl",
+        "Position": "-0.2587328,-1.318106,1.682619",
+        "Rotation": "0.7703549,-0.1879181,-0.02122088,0.6089259",
+        "Scale": "0.25,0.25,0.25",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "021866f7-aefb-48e4-a6ad-024110b74821",
+            "__enabled": true,
+            "AnimationGraph": null,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": false,
+            "CreateBoneObjects": false,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "gameplay/equipment/job/hand_cuffs/model/hand_cuffs.vmdl",
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Sequence": {
+              "Name": null,
+              "Looping": true,
+              "Blending": false
+            },
+            "Tint": "1,1,1,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "e0b6f84a-933e-4d12-9c33-4e41df80b06a",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Functions",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.Equipments.HandCuffsEquipment",
+            "__guid": "72c9e1ca-2342-4827-aed6-1a5f49a996d3",
+            "__enabled": true,
+            "ArrestSound": "gameplay/equipment/job/hand_cuffs/sounds/arrest.sound",
+            "InputActions": [
+              "Attack1",
+              "Attack2"
+            ],
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "ReleaseSound": "sounds/job-switch.sound",
+            "RequiresAllInputActions": false,
+            "UseSound": "gameplay/equipment/job/hand_cuffs/sounds/hand_cuffs.swing.sound"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

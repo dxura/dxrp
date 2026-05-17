@@ -1,0 +1,240 @@
+@using Dxura.RP.Game
+@using Sandbox.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@namespace Dxura.RP.Game.UI
+
+<root>
+	@{
+		var cinema = Cinema.Local;
+		if ( cinema == null || !cinema.IsValid() || !cinema.IsLocalInVoteZone )
+		{
+			return;
+		}
+	}
+
+	@if ( _isCollapsed )
+	{
+		<button tooltip="#cinema.ui.open" class="bg-primary-95 p-2 text-bold" onclick="@ToggleCollapse">
+			<span>#cinema.ui.manager</span>
+		</button>
+	}
+	else
+	{
+		var requester = cinema.NowPlayingRequestedBy > 0 ? GameUtils.GetPlayerById( cinema.NowPlayingRequestedBy ) : null;
+		
+		<div class="cinema-panel bg-primary-95 flex flex-col text-white">
+			<div class="flex items-center justify-between px-3 py-1">
+				<div class="flex items-center gap-2">
+					<i tooltip="#cinema.ui.collapse" onclick="@ToggleCollapse" class="flex items-center text-2xl">menu_open</i>
+				</div>
+				<div class="flex items-center gap-2">
+					<div class="flex items-center gap-1">
+						<InputHint Action="Mouse" class="small" Size="@InputGlyphSize.Small"/>
+						<span class="text-xs text-white">#cinema.ui.mouse</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="p-3 flex flex-col gap-1">
+				<div class="flex items-center justify-between">
+					<span class="text-accent text-bold">#cinema.ui.now_playing</span>
+					@if ( requester.IsValid() )
+					{
+						<span class="text-xs text-white">@requester!.DisplayName</span>
+					}
+				</div>
+				<span class="text-sm text-bold text-white">@( cinema.NowPlayingTitle ?? Language.GetPhrase( "cinema.ui.nothing" ) )</span>
+				@if ( cinema.NowPlayingDurationSeconds > 0 )
+				{
+					<span class="text-xs text-accent">@FormatTime( cinema.NowPlayingElapsedSeconds ) / @FormatTime( cinema.NowPlayingDurationSeconds )</span>
+				}
+			</div>
+
+			<div class="flex items-center justify-between px-3 pb-2">
+				<span class="text-xs text-white">@string.Format( Language.GetPhrase( "cinema.ui.players" ), cinema.Eligible )</span>
+				<button class="btn btn-skip" disabled="@(!cinema.IsLocalInVoteZone || !cinema.HasNowPlaying)" onclick="@OnVoteSkip">
+					<span>#cinema.ui.skip</span> <span class="ml-2">(@(cinema.SkipYesVotes)/@(cinema.SkipNeeded))</span>
+				</button>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="p-2 flex items-center gap-2">
+				<TextEntry class="cinema-input"
+				           placeholder="#cinema.ui.placeholder"
+				           MaxLength="@( 200 )"
+				           @ref="_videoEntry"
+				           Value:bind="@_videoInput"
+				           OnTextEdited="@OnVideoInputChanged"
+				           onclick="@OnVideoEntryInteracted"
+				           onsubmit="@OnQueue"/>
+				<button class="btn btn-primary" onclick="@OnQueue">#cinema.ui.queue</button>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="cinema-queue flex flex-col">
+				<div class="flex items-center justify-between px-3 py-2">
+					<span class="text-bold text-accent">#cinema.ui.queue_title</span>
+					<span class="text-xs text-white">@string.Format( Language.GetPhrase( "cinema.ui.items" ), cinema.QueueItems.Count() )</span>
+				</div>
+
+				<div class="queue-list flex flex-col px-2 pb-1">
+					@{
+						var i = 0;
+					}
+					@foreach ( var item in cinema.QueueItems.Take( 5 ) )
+					{
+						var index = i;
+						var req = item.RequestedBy > 0 ? GameUtils.GetPlayerById( item.RequestedBy ) : null;
+						var canRemove = Player.Local.IsValid() && item.RequestedBy == Player.Local.SteamId;
+
+						<div class="flex items-center gap-1 p-1">
+							<div class="flex flex-col" style="flex-grow: 1; overflow: hidden;">
+								<span class="text-xs text-bold text-white">@item.Title</span>
+								@if ( req.IsValid() )
+								{
+									<span class="text-xs text-accent">@string.Format( Language.GetPhrase( "cinema.ui.queued_by" ), req!.DisplayName )</span>
+								}
+							</div>
+						</div>
+						i++;
+					}
+				</div>
+			</div>
+		</div>
+	}
+</root>
+
+@code
+{
+	private bool _isCollapsed;
+	private bool _pendingVideoFocus;
+	private bool _hasCursorUnlockRequest;
+	private string _videoInput = string.Empty;
+	private TextEntry? _videoEntry;
+
+	private void ToggleCollapse()
+	{
+		_isCollapsed = !_isCollapsed;
+		_pendingVideoFocus = !_isCollapsed;
+
+		if ( _isCollapsed )
+		{
+			_videoEntry?.Blur();
+			SetCursorUnlockRequest( false );
+		}
+	}
+
+	private void OnVideoInputChanged( string value )
+	{
+		_videoInput = value;
+		if ( LooksLikeYouTubeUrl( value ) )
+		{
+			OnQueue();
+			if ( _videoEntry.IsValid() )
+			{
+				_videoEntry.Text = string.Empty;
+			}
+		}
+	}
+
+	private void OnVideoEntryInteracted()
+	{
+		SetCursorUnlockRequest( true );
+	}
+
+	private static bool LooksLikeYouTubeUrl( string input )
+	{
+		if ( string.IsNullOrWhiteSpace( input ) ) return false;
+		var trimmed = input.Trim().ToLowerInvariant();
+		return trimmed.Contains( "youtube.com/watch" ) || trimmed.Contains( "youtu.be/" ) || trimmed.Contains( "youtube.com/shorts/" );
+	}
+
+	private void OnQueue()
+	{
+		var cinema = Cinema.Local;
+		if ( cinema == null || !cinema.IsValid() || string.IsNullOrWhiteSpace( _videoInput ) )
+		{
+			return;
+		}
+
+		cinema.QueueVideoHost( _videoInput );
+		_videoInput = string.Empty;
+		_videoEntry?.Blur();
+		SetCursorUnlockRequest( false );
+		StateHasChanged();
+	}
+
+	// private void OnRemove( int index )
+	// {
+	// 	var cinema = Cinema.Local;
+	// 	if ( cinema == null || !cinema.IsValid() ) return;
+	// 	cinema.RemoveFromQueueHost( index );
+	// }
+
+	private void OnVoteSkip()
+	{
+		var cinema = Cinema.Local;
+		if ( cinema == null || !cinema.IsValid() ) return;
+		cinema.VoteSkipHost();
+	}
+
+	private static string FormatTime( float totalSeconds )
+	{
+		var ts = TimeSpan.FromSeconds( Math.Max( 0, totalSeconds ) );
+		return ts.TotalHours >= 1
+			? $"{(int)ts.TotalHours}:{ts.Minutes:D2}:{ts.Seconds:D2}"
+			: $"{ts.Minutes}:{ts.Seconds:D2}";
+	}
+
+	public override void Tick()
+	{
+		base.Tick();
+
+		if ( _pendingVideoFocus && !_isCollapsed && _videoEntry.IsValid() )
+		{
+			_pendingVideoFocus = false;
+			_videoEntry.Focus();
+		}
+
+		var cinema = Cinema.Local;
+		var shouldKeepCursor = cinema != null
+			&& cinema.IsValid()
+			&& cinema.IsLocalInVoteZone
+			&& !_isCollapsed
+			&& _videoEntry.IsValid()
+			&& _videoEntry.HasFocus;
+
+		SetCursorUnlockRequest( shouldKeepCursor );
+	}
+
+	public override void OnDeleted()
+	{
+		SetCursorUnlockRequest( false );
+		base.OnDeleted();
+	}
+
+	private void SetCursorUnlockRequest( bool requested )
+	{
+		if ( requested == _hasCursorUnlockRequest )
+		{
+			return;
+		}
+
+		_hasCursorUnlockRequest = requested;
+		HUD.SetCursorUnlockRequest( this, requested );
+	}
+
+	protected override int BuildHash()
+	{
+		var cinema = Cinema.Local;
+		if ( cinema == null || !cinema.IsValid() ) return 0;
+		// Include elapsed seconds (truncated to int) so the timer display updates every second
+		return HashCode.Combine( cinema.Version, cinema.SkipYesVotes, cinema.SkipNeeded, cinema.Eligible, cinema.HasNowPlaying, (int)cinema.NowPlayingElapsedSeconds, _isCollapsed );
+	}
+}

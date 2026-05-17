@@ -1,0 +1,282 @@
+{
+  "RootObject": {
+    "__guid": "62fe86a0-f154-4344-ba7c-96e01b66863a",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "packet",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,occludable,pocket_item,hands_interact",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 3,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.ContainerEntity",
+        "__guid": "c0d5c28c-9e89-4c85-9035-ab3f775cb89a",
+        "__enabled": true,
+        "ContainerDefinition": null,
+        "Decal": {
+          "_type": "component",
+          "component_id": "bf741592-f9e3-4720-9e2d-4de9e550ac92",
+          "go": "1cceb205-b993-4f1a-b674-5974a183d629",
+          "component_type": "Decal"
+        },
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "e598a17b-5bd6-48a0-83bb-746234253bd9",
+          "go": "62fe86a0-f154-4344-ba7c-96e01b66863a",
+          "component_type": "HealthComponent"
+        },
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "e4bc34a2-d14d-4b21-8b64-eea16d822bae",
+          "go": "665843dc-c4e3-4e0d-8062-3937e4bcca0c",
+          "component_type": "ModelRenderer"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Quantity": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "bc3e07fc-a636-440f-94f6-b5bec552c34e",
+          "go": "62fe86a0-f154-4344-ba7c-96e01b66863a",
+          "component_type": "Rigidbody"
+        },
+        "TextRenderer": null,
+        "UseSound": "sounds/interaction/seed_plant.sound"
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "bc3e07fc-a636-440f-94f6-b5bec552c34e",
+        "__enabled": true,
+        "AngularDamping": 0,
+        "Gravity": true,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": 0,
+        "StartAsleep": false
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "3f574e3e-1c0b-49ae-b5c8-3a2d2891c66a",
+        "__enabled": true,
+        "Center": "-0.6284561,0.001779556,1.445797",
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "16.5643,10.26234,2.962713",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "e598a17b-5bd6-48a0-83bb-746234253bd9",
+        "__enabled": true,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 15,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "665843dc-c4e3-4e0d-8062-3937e4bcca0c",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "model",
+        "Position": "0,0,1.621466",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "e4bc34a2-d14d-4b21-8b64-eea16d822bae",
+            "__enabled": true,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "gameplay/entities/containers/packet/model/packet.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "1cceb205-b993-4f1a-b674-5974a183d629",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "decal",
+        "Position": "1.638468,0,2.849228",
+        "Rotation": "0,0.7071068,0,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.Decal",
+            "__guid": "bf741592-f9e3-4720-9e2d-4de9e550ac92",
+            "__enabled": true,
+            "__version": 3,
+            "AttenuationAngle": 1,
+            "ColorMix": 1,
+            "ColorTint": {
+              "Type": "Constant",
+              "Evaluation": "Life",
+              "GradientA": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0.5,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": []
+              },
+              "GradientB": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0.5,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": []
+              },
+              "ConstantA": "1,1,1,1",
+              "ConstantB": "1,1,1,1"
+            },
+            "Decals": [
+              null
+            ],
+            "Depth": 0.90000045,
+            "LifeTime": 0,
+            "Looped": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parallax": 1,
+            "Rotation": 180,
+            "Scale": 1,
+            "SequenceId": 0,
+            "SheetSequence": false,
+            "Size": "0.4,0.4",
+            "SortLayer": 0,
+            "Transient": false
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": [
+      {
+        "Id": "Container Definition",
+        "Title": "Container Definition",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "c0d5c28c-9e89-4c85-9035-ab3f775cb89a",
+            "Property": "ContainerDefinition"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

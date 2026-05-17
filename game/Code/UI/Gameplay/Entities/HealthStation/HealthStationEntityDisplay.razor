@@ -1,0 +1,77 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Entities
+@using WorldPanel=Sandbox.WorldPanel
+@inherits PanelComponent
+@implements IOcclusionEvents
+
+<root>
+	<div class="station-title-area flex items-center justify-center">
+		<span class="text-white text-bold text-sm">
+			<span>#entity.healthstation.title</span>
+		</span>
+	</div>
+
+	<div class="station-card flex flex-col font-mono text-white">
+		<div class="flex justify-between w-full gap-2 text-sm whitespace-nowrap">
+			<span class="text-gray-400">#entity.healthstation.medic</span>
+			<span>@(GameUtils.GetPlayerById( Entity.Owner )?.DisplayName ?? Language.GetPhrase( "entity.healthstation.unknown_owner" ))</span>
+		</div>
+		<div class="flex justify-between w-full gap-2 text-sm whitespace-nowrap">
+			<span class="text-gray-400">#entity.healthstation.price</span>
+			<span class="text-bold">@( Entity.HealPrice.ToString( "C0" ) )</span>
+		</div>
+		<div class="flex justify-between w-full gap-2 text-sm whitespace-nowrap">
+			<span class="text-gray-400">#entity.healthstation.output</span>
+			<span class="text-bold">+@(Entity.HealAmount) HP</span>
+		</div>
+		
+		<div class="w-full text-xs whitespace-nowrap">
+			@if ( Entity.IsOwner )
+			{
+				<div class="flex gap-1">
+				<span>#entity.healthstation.adjust</span>
+					<span class="text-lg text-good cursor-pointer" onclick=@(() => Entity.TryUpdatePrice( true ))>
+						<i>add_box</i>
+					</span>
+					<span class="text-lg text-bad cursor-pointer" onclick=@( () => Entity.TryUpdatePrice( false ) )>
+						<i>indeterminate_check_box</i>
+					</span>
+				</div>
+			}
+			else
+			{
+				<span>#entity.healthstation.await_input</span>
+			}
+		</div>
+	</div>
+	
+</root>
+
+@code
+{
+	[Property] public HealthStationEntity Entity { get; set; } = null!;
+
+	[Property] public WorldPanel WorldPanel { get; set; } = null!;
+
+	protected override void OnStart()
+	{
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !GameObject.Tags.Has( Constants.OccludeTag );
+	}
+
+	public void OnOcclusionChanged( bool occlude )
+	{
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !occlude;
+	}
+
+	/// <summary>
+	///     the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+	/// </summary>
+	protected override int BuildHash()
+	{
+		if ( !WorldPanel.IsValid() || !WorldPanel.Enabled ) return 0;
+
+		return HashCode.Combine( Entity.HealPrice, Entity.HealAmount, Entity.Owner );
+	}
+}

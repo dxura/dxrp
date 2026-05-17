@@ -1,0 +1,44 @@
+{
+  "Identifier": "free_for_all_usp",
+  "MainPrefab": null,
+  "SecondaryPrefabs": [
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_container_yard.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_paintball_arena.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_gibs.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_whatever.prefab"
+    }
+  ],
+  "Name": "#minigame.freeforallusp.name",
+  "Description": "#minigame.freeforallusp.description",
+  "Icon": null,
+  "Color": null,
+  "LobbyOffset": "0,0,1500",
+  "MaxPlayers": 16,
+  "MinPlayers": 2,
+  "IsSelectable": true,
+  "Weight": 50,
+  "Duration": 120,
+  "LobbyDuration": 15,
+  "StartingEquipment": [
+    "gameplay/equipment/weapons/usp/usp.equip"
+  ],
+  "GiveMaxAmmo": true,
+  "SpawnRuleset": "OneLife",
+  "RespawnDuration": 30,
+  "SpawnMethod": "RoundRobin",
+  "MakeDeadPlayersSpectators": true,
+  "WinCondition": "LastManStanding",
+  "__references": [],
+  "__version": 0
+}

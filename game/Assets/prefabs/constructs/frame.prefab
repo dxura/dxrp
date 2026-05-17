@@ -1,0 +1,250 @@
+{
+  "RootObject": {
+    "__guid": "f5ead685-c12c-42b9-9e01-3b125a178cbe",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "frame",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "construct,occludable,no_collide,build_interact,hands_interact,occlude",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Frame",
+        "__guid": "1fb6256e-2f3f-4410-ba33-3e4a45b5414d",
+        "__enabled": true,
+        "Flags": 0,
+        "Collider": {
+          "_type": "component",
+          "component_id": "d91d6757-65ff-4b27-b59e-7ca30857e5b4",
+          "go": "9d7937bf-c218-4e89-8a22-ead99ff84233",
+          "component_type": "BoxCollider"
+        },
+        "DataJson": "",
+        "FrameRenderer": {
+          "_type": "component",
+          "component_id": "92b47e7d-b1b6-4db8-8cfb-a69e3c4a3851",
+          "go": "9f8db457-a33d-4ef7-a43b-8d6c447dc46f",
+          "component_type": "ModelRenderer"
+        },
+        "NetworkOwner": "00000000-0000-0000-0000-000000000000",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "PictureMaterial": "materials/picture.vmat",
+        "PictureRenderer": {
+          "_type": "component",
+          "component_id": "0bada203-3e3a-4cc4-ae3a-654d1dfa98c7",
+          "go": "4df6ffa9-8bc1-4333-8f0e-33aa893a9d5b",
+          "component_type": "ModelRenderer"
+        }
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "4df6ffa9-8bc1-4333-8f0e-33aa893a9d5b",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "picture",
+        "Position": "0,0,0",
+        "Rotation": "-0.7071068,0.0000001376788,0.7071066,0.0000001376788",
+        "Scale": "0.5,0.5,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "0bada203-3e3a-4cc4-ae3a-654d1dfa98c7",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": "materials/dev/black_cheap.vmat",
+            "Materials": null,
+            "Model": "models/dev/plane.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "9f8db457-a33d-4ef7-a43b-8d6c447dc46f",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "frame",
+        "Position": "0,0,0",
+        "Rotation": "-0.7071068,-0.00000003090862,0.7071068,-0.00000003090862",
+        "Scale": "0.2949283,0.2949283,0.2349282",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "92b47e7d-b1b6-4db8-8cfb-a69e3c4a3851",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/constructs/frame/frame.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "9d7937bf-c218-4e89-8a22-ead99ff84233",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "collider",
+        "Position": "0,0,0",
+        "Rotation": "0,-0.7071067,0,0.7071068",
+        "Scale": "1.15,1.15,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.BoxCollider",
+            "__guid": "d91d6757-65ff-4b27-b59e-7ca30857e5b4",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "0.01828957,-0.002639771,-0.004047513",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "51.29257,51.39057,2.74827",
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "f7f885de-af8a-4d4d-9810-68cf87c44feb"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "506438b3-13bf-45c0-a5b9-9ffab3f87770"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "5eadf05f-0391-4d44-b478-0e731e54a6a1"
+        }
+      ]
+    },
+    "__variables": [
+      {
+        "Id": "Frame Config",
+        "Title": "Frame Config",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "1fb6256e-2f3f-4410-ba33-3e4a45b5414d",
+            "Property": "FrameConfig"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

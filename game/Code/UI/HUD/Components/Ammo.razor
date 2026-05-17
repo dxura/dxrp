@@ -1,0 +1,55 @@
+﻿@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() || !Player.CurrentEquipment.IsValid() || !AmmoComponent.IsValid())
+    return;
+
+<root class="absolute right-0 bottom-0">
+	<div class="flex items-center justify-center gap-2 bg-primary-75 rounded px-2 py-1 m-4 mb-8">
+		@if ( Shoot.IsValid() && Shoot.SupportedFireModes.Count > 1 )
+		{
+			<InputHint Action="FireMode" class="input-hint"/>
+		}
+
+		<div class="flex items-center">
+			@if ( Shoot.IsValid() )
+			{
+				<Icon class="firemode-icon" File=@FireModeFile size="24"/>
+			}
+
+			<div class="ammo-count flex items-center gap-1">
+				<span class="text-lg nowrap">@( AmmoComponent?.Ammo.ToString() ?? "∞" )</span>
+				<span class="divider">/</span>
+				<span class="text-lg nowrap">@( AmmoComponent?.ReserveAmmo.ToString() ?? "∞" )</span>
+			</div>
+		</div>
+	</div>
+</root>
+
+@code
+{
+    /// The player
+    public Player Player => Player.Local;
+
+    private AmmoComponent? AmmoComponent => Player.CurrentEquipment?.Components?.Get<AmmoComponent>( FindMode.EverythingInSelfAndDescendants );
+
+    public ShootWeaponComponent? Shoot => Player.CurrentEquipment.IsValid() ? Player.CurrentEquipment.Components.Get<ShootWeaponComponent>( FindMode.EnabledInSelfAndDescendants ) : null;
+
+    private string FireModeFile
+    {
+        get
+        {
+            if ( !Shoot.IsValid() ) return null;
+
+            return $"ui/firemode/{Shoot.CurrentFireMode.ToString().ToLowerInvariant()}.png";
+        }
+    }
+
+    protected override int BuildHash()
+    {
+        if ( !Player.IsValid() || !Player.CurrentEquipment.IsValid() )
+            return 0;
+        return HashCode.Combine( Player, AmmoComponent?.Ammo, AmmoComponent?.ReserveAmmo, Player?.CurrentEquipment, FireModeFile );
+    }
+}

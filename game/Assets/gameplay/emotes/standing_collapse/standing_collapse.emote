@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_standing_collapse",
+  "Repeat": false,
+  "Duration": 3.67,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

@@ -1,0 +1,388 @@
+{
+  "RootObject": {
+    "__guid": "0a4c3926-6975-44fb-90f4-4e3e5756fa8d",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "shipment",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,occludable,pocket_item,hands_interact",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 3,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.ShipmentEntity",
+        "__guid": "76d15e64-bca2-411c-8383-bc114df32ee1",
+        "__enabled": true,
+        "EquipmentPreview": {
+          "_type": "gameobject",
+          "go": "87e733cc-f122-479d-9d08-f99a7a77238d"
+        },
+        "EquipmentRenderer": {
+          "_type": "component",
+          "component_id": "5e11a5bf-0a1c-46a8-bf36-fbb858cbaf55",
+          "go": "87e733cc-f122-479d-9d08-f99a7a77238d",
+          "component_type": "ModelRenderer"
+        },
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "7b6c3366-4b7e-496c-9c80-919e329048d4",
+          "go": "0a4c3926-6975-44fb-90f4-4e3e5756fa8d",
+          "component_type": "HealthComponent"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Quantity": 0,
+        "QuantityText": {
+          "_type": "component",
+          "component_id": "f1f96aa2-b015-4adf-b795-7eb205e9308e",
+          "go": "a1f9efde-a2b7-492b-9272-f6495e7bce74",
+          "component_type": "TextRenderer"
+        },
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "bdf45a02-7d61-4be3-af3d-c6a29d695629",
+          "go": "0a4c3926-6975-44fb-90f4-4e3e5756fa8d",
+          "component_type": "Rigidbody"
+        },
+        "ShipmentDefinition": null,
+        "TypeText": {
+          "_type": "component",
+          "component_id": "68022683-b7ca-4549-aa4c-9d3323fb2139",
+          "go": "6ea2adab-0e58-4260-a8c6-6ac038e0530b",
+          "component_type": "TextRenderer"
+        }
+      },
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "a4cac9e9-8176-46ef-9bb7-29ced330edfd",
+        "__enabled": true,
+        "BodyGroups": 18446744073709551615,
+        "CreateAttachments": false,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "gameplay/entities/shipment/model/crate.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "d434894c-297f-4cc7-a036-f65979498e34",
+        "__enabled": true,
+        "Center": "0.3831463,0.1652222,12.04309",
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "24.46778,24.23235,24.13564",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "bdf45a02-7d61-4be3-af3d-c6a29d695629",
+        "__enabled": true,
+        "AngularDamping": 0,
+        "Gravity": true,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": 0,
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "7b6c3366-4b7e-496c-9c80-919e329048d4",
+        "__enabled": true,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 25,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "87e733cc-f122-479d-9d08-f99a7a77238d",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "EquipmentPreview",
+        "Position": "0,0,28.65127",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "5e11a5bf-0a1c-46a8-bf36-fbb858cbaf55",
+            "__enabled": true,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/nothing.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "6ea2adab-0e58-4260-a8c6-6ac038e0530b",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "TypeText",
+        "Position": "-10.76638,0,16.31829",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.TextRenderer",
+            "__guid": "68022683-b7ca-4549-aa4c-9d3323fb2139",
+            "__enabled": true,
+            "__version": 1,
+            "BlendMode": "Normal",
+            "FogStrength": 1,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "Scale": 0.05,
+            "TextAlignment": "Center",
+            "TextScope": {
+              "Text": "TYPE",
+              "TextColor": "1,1,1,1",
+              "FontName": "Poppins",
+              "FontSize": 76.43,
+              "FontWeight": 657,
+              "FontItalic": false,
+              "LineHeight": 1,
+              "LetterSpacing": 0,
+              "WordSpacing": 0,
+              "Outline": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,1,1"
+              },
+              "Shadow": {
+                "Enabled": true,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              },
+              "OutlineUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,1,0,1"
+              },
+              "ShadowUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              }
+            }
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "a1f9efde-a2b7-492b-9272-f6495e7bce74",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "QuantityText",
+        "Position": "-10.7585,0,11.33459",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.TextRenderer",
+            "__guid": "f1f96aa2-b015-4adf-b795-7eb205e9308e",
+            "__enabled": true,
+            "__version": 1,
+            "BlendMode": "Normal",
+            "FogStrength": 1,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "Scale": 0.03,
+            "TextAlignment": "Center",
+            "TextScope": {
+              "Text": "X/10",
+              "TextColor": "1,1,1,1",
+              "FontName": "Poppins",
+              "FontSize": 122.12,
+              "FontWeight": 400,
+              "FontItalic": false,
+              "LineHeight": 1.2,
+              "LetterSpacing": 0,
+              "WordSpacing": 0,
+              "Outline": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,1,1"
+              },
+              "Shadow": {
+                "Enabled": false,
+                "Size": 45.49998,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              },
+              "OutlineUnder": {
+                "Enabled": false,
+                "Size": 33.60001,
+                "Color": "0,1,0,1"
+              },
+              "ShadowUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              }
+            }
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": [
+      {
+        "Id": "Shipment Definition",
+        "Title": "Shipment Definition",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "76d15e64-bca2-411c-8383-bc114df32ee1",
+            "Property": "ShipmentDefinition"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

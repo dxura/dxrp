@@ -1,0 +1,17 @@
+namespace Dxura.RP.Game;
+
+[Title( "On Shot - FOV Offset" )]
+[Icon( "pending" )]
+[Group( "Weapon Components" )]
+public class FovOffset : WeaponComponent, IGameEvents
+{
+	[Property] public float Length { get; set; } = 0.3f;
+	[Property] public float Size { get; set; } = 1.05f;
+	[Property] public Curve Curve { get; set; }
+
+	public void OnWeaponShot()
+	{
+		var shake = new ScreenShake.Fov( Length, Size, Curve );
+		ScreenShaker.Main.Add( shake );
+	}
+}

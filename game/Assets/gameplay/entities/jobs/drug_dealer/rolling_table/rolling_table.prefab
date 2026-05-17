@@ -1,0 +1,324 @@
+{
+  "RootObject": {
+    "__guid": "f04e956d-99e1-427c-954a-98282984837a",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "rolling_table",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,build_interact,occludable",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.RollingTableEntity",
+        "__guid": "00dad237-46f4-4397-87b1-af8ec2f9d860",
+        "__enabled": true,
+        "Flags": 0,
+        "AutoProcessSound": "gameplay/entities/jobs/drug_dealer/rolling_table/sounds/autoprocess_done.sound",
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "6da39790-f5c7-4a57-9424-bba92dfe55d0",
+          "go": "f04e956d-99e1-427c-954a-98282984837a",
+          "component_type": "HealthComponent"
+        },
+        "JointGameObject": {
+          "_type": "gameobject",
+          "prefab": "gameplay/entities/jobs/drug_dealer/joint/joint.prefab"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "PackedGameObject": {
+          "_type": "gameobject",
+          "prefab": "gameplay/entities/jobs/drug_dealer/weed_brick/weed_brick.prefab"
+        },
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "41254079-5f03-4fc7-9ed0-c28ebb5cba4e",
+          "go": "f04e956d-99e1-427c-954a-98282984837a",
+          "component_type": "Rigidbody"
+        }
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "41254079-5f03-4fc7-9ed0-c28ebb5cba4e",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "6da39790-f5c7-4a57-9424-bba92dfe55d0",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 100,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "38bd9be3-6cf1-433a-b261-925c9b4652a5",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "11.9592,0,24.27647",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "57.97673,50,48.59412",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Dxura.RP.Game.TriggerToggleBox",
+        "__guid": "29b282cd-abe9-4fc1-97dc-f476392467f3",
+        "__enabled": true,
+        "Flags": 0,
+        "ForceFirstPerson": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "TargetGameObject": {
+          "_type": "gameobject",
+          "go": "fd55a347-e22b-41ad-a91c-1d1839b7ff0b"
+        }
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "ed84d852-3357-410a-906e-22b1a077c52d",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "model",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "f831893a-bcca-4be6-bc1f-4c9900d3f292",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "gameplay/entities/jobs/drug_dealer/rolling_table/model/rolling_table.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.ModelCollider",
+            "__guid": "586c845c-c7f9-4332-89c0-779fd2a25ea1",
+            "__enabled": true,
+            "Flags": 0,
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Model": "gameplay/entities/jobs/drug_dealer/rolling_table/model/rolling_table.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "fd55a347-e22b-41ad-a91c-1d1839b7ff0b",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "ui",
+        "Position": "1.781733,0,35.93774",
+        "Rotation": "0,-0.7071068,0,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": false,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "4377e2e5-6eca-4544-bc79-0fcad487562a",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "595.5002,345.1",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 0.4,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "Dxura.RP.Game.UI.RollingTableEntityDisplay",
+            "__guid": "12cd7bcd-15fb-4625-b284-de029e3f7a9f",
+            "__enabled": true,
+            "Flags": 0,
+            "Entity": {
+              "_type": "component",
+              "component_id": "00dad237-46f4-4397-87b1-af8ec2f9d860",
+              "go": "f04e956d-99e1-427c-954a-98282984837a",
+              "component_type": "RollingTableEntity"
+            },
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "c740bf1c-72ee-43d4-833f-1cdfb068ed2e"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "d9dbf37f-7092-447d-928f-99882686d3e8"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "bd0ad9b2-819b-41ff-ad2f-b3367fc75bcd"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

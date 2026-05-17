@@ -1,0 +1,148 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Tools
+@using Dxura.RP.Game.Wire
+@inherits Panel
+
+<root class="absolute left-1/2 -translate-x-1/2 -translate-y-1/2" style="top: 55%; z-index: 1000;">
+	@if (!IsWireToolEquipped || WireTool == null || HoveredWireComponent == null) return;
+
+	<div class="flex flex-col items-center gap-2">
+		<!-- Main Context Window -->
+		<div class="flex flex-col items-center">
+			<div class="bg-primary-95 p-1 rounded">
+				<span class="text-base text-accent font-semibold">@HoveredWireComponent.Name</span>
+			</div>
+		</div>
+		
+		<!-- INPUT/OUTPUT Window -->
+		@{
+			var hasInputs = HasInputs;
+			var hasOutputs = HasOutputs;
+
+			var showInput = WireTool is { SelectedWireComponent: null } && hasInputs;
+			var showOutput = WireTool is { SelectedWireComponent: not null } && hasOutputs;
+		}
+		
+		@if ( WireTool != null && (showInput || showOutput) )
+		{
+			<div class="flex flex-col items-center rounded bg-primary-75 p-1 min-w-32">
+				@if ( showInput )
+				{
+					<span class="text-white text-bold text-sm mb-2 uppercase tracking-wide">INPUT</span>
+					<div class="flex flex-col gap-1 w-full">
+						@foreach( var (input, index) in HoveredWireComponent.GetInputPorts().Select((p, i) => (p, i)) )
+						{
+							var isSelected = index == WireTool.HoveredInputIndex;
+							var connectionCount = Wire.Current.GetConnections( HoveredWireComponent )
+								.Count( c => c.Target == HoveredWireComponent && c.InputId == input.Id );
+							var isConnected = connectionCount > 0;
+							var bgClass = isSelected ? "bg-good" : "";
+							var textClass = isConnected ? "text-bad text-bold" : "text-white";
+
+							<div class="@bgClass @textClass text-sm p-1 rounded flex items-center gap-1">
+								<span>@GetPortName( input.Id, true )</span>@if ( connectionCount > 0 ){<span class="text-xs">(@connectionCount)</span>}
+							</div>
+						}
+					</div>
+				}
+				
+				@if ( showOutput )
+				{
+					<span class="text-white text-bold text-sm mb-2 uppercase tracking-wide">OUTPUT</span>
+					<div class="flex flex-col gap-1 w-full">
+						@foreach( var (output, index) in HoveredWireComponent.GetOutputPorts().Select((p, i) => (p, i)) )
+						{
+							var isSelected = index == WireTool.HoveredOutputIndex;
+							var bgClass = isSelected ? "bg-good" : "";
+								
+							<div class="@bgClass text-sm p-1 rounded flex justify-between items-center gap-2">
+								<span>@GetPortName( output.Id, false )</span>
+								@* <span class="text-gray-400 text-xs">@output.Type.Name</span> *@
+							</div>
+						}
+					</div>
+				}
+			</div>
+		}
+		
+		@if (GetHoveredPortDescription() is { } description && !string.IsNullOrEmpty(description))
+		{
+			<span class="text-white text-sm text-center">@description</span>
+		}
+	</div>
+</root>
+
+@code
+{
+	bool IsWireToolEquipped => Player.Local.IsValid() && Player.Local.CurrentEquipment?.Identifier == "tool" && BaseTool.CurrentTool is WireTool;
+	private WireTool? WireTool => BaseTool.CurrentTool as WireTool;
+	private IWireComponent? HoveredWireComponent => WireTool?.HoveredWireComponent;
+	
+		
+	private bool HasOutputs => HoveredWireComponent?.GetOutputPorts().Any() ?? false;
+	private bool HasInputs => HoveredWireComponent?.GetInputPorts().Any() ?? false;
+
+	private WirePort? GetHoveredPort()
+	{
+		if (WireTool == null || HoveredWireComponent == null) return null;
+		
+		var showInput = WireTool.SelectedWireComponent == null && HasInputs;
+		var showOutput = WireTool.SelectedWireComponent != null && HasOutputs;
+		
+		if (showInput && WireTool.HoveredInputIndex >= 0)
+		{
+			var inputPorts = HoveredWireComponent.GetInputPorts().ToArray();
+			if (WireTool.HoveredInputIndex < inputPorts.Length)
+			{
+				return inputPorts[WireTool.HoveredInputIndex];
+			}
+		}
+		else if (showOutput && WireTool.HoveredOutputIndex >= 0)
+		{
+			var outputPorts = HoveredWireComponent.GetOutputPorts().ToArray();
+			if (WireTool.HoveredOutputIndex < outputPorts.Length)
+			{
+				return outputPorts[WireTool.HoveredOutputIndex];
+			}
+		}
+		
+		return null;
+	}
+
+	private string? GetPortName(string id, bool isInput)
+	{
+		return Language.GetPhrase( $"wire.{ (isInput ? "input" : "output") }.{ id }.name" ) ?? id;
+	}
+	
+	private string? GetHoveredPortDescription()
+	{
+		var hoveredPort = GetHoveredPort();
+		
+		if(hoveredPort == null) return null;
+		var phaseKey = $"wire.{(WireTool?.SelectedWireComponent == null ? "input" : "output")}.{hoveredPort.Id}.description";
+		var description = Language.GetPhrase( phaseKey );
+
+		if ( description == phaseKey ) return null;
+		
+		return description;
+	}
+
+	protected override int BuildHash()
+	{
+		var isWireToolEquipped = IsWireToolEquipped;
+		if (!isWireToolEquipped)
+		{
+			return 0; // No wire tool equipped or no hovered component
+		}
+		
+		return HashCode.Combine(
+			isWireToolEquipped,
+			WireTool?.HoveredWireComponent?.GetHashCode() ?? 0,
+			WireTool?.SelectedWireComponent?.GetHashCode() ?? 0,
+			WireTool?.HoveredInputIndex ?? 0,
+			WireTool?.HoveredOutputIndex ?? 0,
+			WireTool?.HoveredWireComponent?.Name,
+			Wire.Current.GetConnections( HoveredWireComponent ?? WireTool?.SelectedWireComponent ).Count()
+		);
+	}
+}

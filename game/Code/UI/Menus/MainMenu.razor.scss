@@ -1,0 +1,48 @@
+@import "../styles.scss";
+
+MainMenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  background-color: $color-primary;
+
+  display: flex;
+  flex-direction: column;
+  pointer-events: all;
+  gap: 10;
+
+
+  .title-container {
+    margin-bottom: 20px;
+  }
+
+  .title {
+    font-size: 150px;
+    //noinspection CssNoGenericFontName - sbox doesn't like generic, always uses it
+    font-family: Poppins;
+  }
+
+  .subtitle {
+    font-size: 30px;
+    margin-top: -60px;
+    font-family: Poppins;
+    color: #fff;
+  }
+
+  .btn-menu {
+    font-size: 60px;
+    color: white;
+    cursor: pointer;
+    border-radius: 3%;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+
+    transition: all 0.3s ease-in-out;
+  }
+}

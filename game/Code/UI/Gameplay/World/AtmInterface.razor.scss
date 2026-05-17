@@ -1,0 +1,109 @@
+@import "../../styles.scss";
+
+AtmInterface
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: $color-secondary;
+	justify-content: center;
+	align-items: center;
+	font-weight: bold;
+	pointer-events: all;
+	flex-direction: column;
+	
+	.header {
+		width: 100%;
+		padding: $space-1 $space-4;
+		background-color: $color-primary;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		
+		.title {
+			font-size: 28px;
+			font-family: Poppins;
+			color: $color-accent;
+			text-transform: uppercase;
+			letter-spacing: 2px;
+		 }
+
+		.balance-indicator {
+			font-size: 24px;
+			padding: $space-2 $space-3;
+			border-radius: $space-1;
+		}
+	}
+	
+	.content {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		padding: $space-4;
+		flex: 1;
+		justify-content: space-between;
+	}
+	
+	.transaction-section {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: $space-4;
+		width: 100%;
+		flex: 1;
+		
+		.amount-buttons {
+			display: flex;
+			flex-direction: column;
+			gap: $space-4;
+			
+			&.left {
+				align-items: flex-end;
+			}
+			
+			&.right {
+				align-items: flex-start;
+			}
+			
+			.btn {
+				min-width: 80px;
+				text-align: center;
+				font-size: 16px;
+				padding: $space-2 $space-3;
+			}
+		}
+		
+		.amount-display {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: $space-4;
+			flex: 1;
+			
+			.amount-value {
+				font-size: 40px;
+				color: $color-white;
+				font-family: Poppins;
+				display: flex;
+				align-items: center;
+				margin-bottom: $space-2;
+			}
+		}
+	}
+	
+	.action-buttons {
+		display: flex;
+		justify-content: center;
+		
+		.btn {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+			font-size: 18px;
+		}
+	}
+}

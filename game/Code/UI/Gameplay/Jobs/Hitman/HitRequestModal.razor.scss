@@ -1,0 +1,63 @@
+@import "../../../styles.scss";
+
+HitRequestModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  pointer-events: all;
+
+  .modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($color-primary, 0.75);
+  }
+
+  .modal-content {
+    position: relative;
+    background-color: $color-primary;
+    border: 1px solid rgba(white, 0.1);
+    border-radius: $space-2;
+    padding: $space-8;
+    max-width: 550px;
+    min-width: 450px;
+  }
+
+  .hitman-info {
+    background-color: $color-secondary;
+    border-radius: $space-1;
+    padding: $space-4;
+  }
+
+  DropDown {
+    width: 100%;
+    min-height: 40px;
+    padding: $space-3 $space-4;
+    border-radius: $space-1;
+    background-color: $color-secondary;
+    font-weight: 600;
+    z-index: 10001;
+    color: white;
+
+    &:hover {
+      background-color: lighten($color-secondary, 5%);
+    }
+  }
+
+  TextEntry {
+    width: 100%;
+    min-height: 40px;
+    padding: $space-3 $space-4;
+    border-radius: $space-1;
+    background-color: $color-secondary;
+    border: 1px solid transparent;
+
+    &:hover {
+      border-color: $color-accent;
+    }
+  }
+}

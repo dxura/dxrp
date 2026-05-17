@@ -1,0 +1,118 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = [  ]
+						use_global_default = true
+						global_default_material = "gameplay/world/recycler/model/recycler.vmat"
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "gameplay/world/recycler/model/recycler.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.3
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Main_LP",
+								"Vent_LP",
+								"Door_LP",
+								"Hinge_3_LP",
+								"Hinge_1_LP",
+								"Hinge_2_LP",
+								"Latch_1_LP",
+								"Latch_2_LP",
+								"Shelf_LP",
+								"Grate_LP",
+								"Ring_LP",
+								"Connector_LP",
+								"Side_LP",
+								"Base_LP",
+								"Bolt_Big_LP",
+								"Bolt_Mid_LP",
+								"Bolt_Cap_LP",
+								"Cap_LP",
+								"Bolt_Small_003_LP",
+								"Bolt_Small_001_LP",
+								"Bolt_Small_LP",
+								"Bolt_Small_002_LP",
+								"Bolt_Ground_LP",
+								"Connector_1_LP",
+								"Grate_1_LP",
+								"Latch_3_LP",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsShapeCylinder"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						radius = 24.83357
+						point0 = [ -43.052197, 0.449313, 35.341038 ]
+						point1 = [ 0.504181, 0.402374, 35.584724 ]
+					},
+					{
+						_class = "PhysicsShapeCylinder"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						radius = 35.651611
+						point0 = [ 0.219803, 0.40268, 35.583138 ]
+						point1 = [ 71.898239, 0.325436, 35.98415 ]
+					},
+					{
+						_class = "PhysicsShapeCylinder"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						radius = 35.651611
+						point0 = [ -71.650223, 0.198111, 35.899761 ]
+						point1 = [ -42.264545, 0.258324, 35.830772 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -21.174805, 25.090498, 45.023972 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 52.349609, 29.866879, 2.983106 ]
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

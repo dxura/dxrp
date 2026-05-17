@@ -1,0 +1,14 @@
+
+Layer0
+{
+	shader "shaders/complex.shader_c"
+
+	TextureColor "models/wire/speaker/speaker_albedo.jpg"
+	TextureAmbientOcclusion "models/wire/speaker/speaker_ao.jpg"
+	TextureNormal "models/wire/speaker/speaker_normal.png"
+	TextureRoughness "models/wire/speaker/speaker_roughness.jpg"
+	F_METALNESS_TEXTURE 1
+	F_SPECULAR 1
+	TextureMetalness "models/wire/speaker/speaker_metallic.jpg"
+
+}

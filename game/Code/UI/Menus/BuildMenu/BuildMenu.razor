@@ -1,0 +1,240 @@
+@using Dxura.RP.Game.Tools
+@using Dxura.RP.Game.Equipments
+@using Dxura.RP.Shared
+@using Sandbox.UI
+@inherits PanelComponent
+@namespace Dxura.RP.Game.UI
+
+<root class="@( IsVisible ? "open" : "" ) @( _leftPanelHidden ? "left-panel-hidden" : "" )">
+	<div class="left">
+		<div class="tabs">
+			<div onclick="@( () => SetActiveLeft( _cloudModelsPanel ) )"
+			     class="btn text-white bg-secondary @( _selectedPanelLeft == _cloudModelsPanel ? "active" : "" )">
+				<span>#buildmenu.props</span>
+			</div>
+			<div onclick="@( () => SetActiveLeft( _localModelsPanel ) )"
+			     class="btn text-white bg-secondary @( _selectedPanelLeft == _localModelsPanel ? "active" : "" )">
+				<span>#buildmenu.building</span>
+			</div>
+			@if ( IsDuplicatorActive && Config.Current.Game.DupeWorkshopEnabled )
+			{
+				<div style="flex-grow: 1"></div>
+				<div onclick="@( () => SetActiveLeft( _dupeListPanel ) )"
+				     class="btn text-white bg-secondary @( _selectedPanelLeft == _dupeListPanel ? "active" : "" )">
+					<span>#buildmenu.workshop</span>
+				</div>
+			}
+		</div>
+		<div class="body">
+			<CloudModelList @ref=" _cloudModelsPanel" />
+			<LocalModelList @ref=" _localModelsPanel" />
+			<DupeList @ref="_dupeListPanel" />
+		</div>
+	</div>
+	
+  <div class="right">
+	  <div class="tabs">
+		  
+		  @if ( ToolMenu.Instance.IsValid() )
+		  {
+			  var toolMenu = ToolMenu.Instance;
+			  
+			  <div onclick="@( () =>
+			                {
+				                SetActiveRight( _toolsPanel );
+				                toolMenu.Category = ToolCategory.Default;
+			                } )"
+			       class="btn text-white bg-primary @( _selectedPanelRight == _toolsPanel && toolMenu.Category == ToolCategory.Default ? "active" : "" )">
+				  <i>construction</i>
+				  <span>#buildmenu.tools</span>
+			  </div>
+			  
+			  <div onclick="@( () =>
+			                {
+				                SetActiveRight( _toolsPanel );
+				                toolMenu.Category = ToolCategory.Wire;
+			                } )"
+			       class="btn text-white bg-primary @( _selectedPanelRight == _toolsPanel && toolMenu.Category == ToolCategory.Wire ? "active" : "" )">
+				  <i>cable</i>
+				  <span>#buildmenu.wire</span>
+			  </div>
+
+			  <div onclick="@( () =>
+			                {
+				                SetActiveRight( _utilitiesPanel );
+			                } )"
+			       class="btn text-white bg-secondary @( _selectedPanelRight == _utilitiesPanel ? "active" : "" )">
+				  <i>bolt</i>
+				  <span>#buildmenu.utilities</span>
+			  </div>
+		  }
+
+	  </div>
+    <div class="body">
+	    <ToolMenu @ref="_toolsPanel" />
+	    <UtilitiesMenu @ref="_utilitiesPanel" />
+
+    </div>
+  </div>
+</root>
+
+@code
+{
+  public static BuildMenu? Instance { get; private set; }
+
+  Panel _localModelsPanel = null!;
+  Panel _cloudModelsPanel = null!;
+  Panel _dupeListPanel = null!;
+  Panel _toolsPanel = null!;
+  Panel _utilitiesPanel = null!;
+
+  Panel? _selectedPanelLeft;
+  Panel? _selectedPanelRight;
+
+  private bool _leftPanelHidden;
+  private bool _textInputHasFocus;
+
+  private TimeUntil? _leftPanelShowTime;
+
+  public bool IsVisible => (Input.Down("BuildMenu") || _textInputHasFocus) && 
+                            Player.Local.IsValid() &&
+                           !Player.Local.Restricted && 
+                           Player.Local.HealthComponent.State == LifeState.Alive;
+  
+  private bool _wasVisibleLastFrame;
+
+  private bool IsDuplicatorActive
+  {
+    get
+    {
+      if ( !Player.Local.IsValid() ) return false;
+      var toolgun = Player.Local.Components.Get<ToolEquipment>( FindMode.EverythingInSelfAndDescendants );
+      return toolgun?.CurrentTool is DuplicatorTool;
+    }
+  }
+
+  protected override void OnTreeFirstBuilt()
+  {
+    Instance = this;
+    SetActiveLeft(_cloudModelsPanel);
+    SetActiveRight(_toolsPanel);
+
+    if (!Config.Current.Game.BuildingEnabled)
+    {
+      Destroy();
+    }
+  }
+
+  public void RequestLeftPanelHide()
+  {
+	  _leftPanelShowTime = 1f;
+	  _leftPanelHidden = true;
+	  StateHasChanged();
+  }
+
+  void SetActiveLeft(Panel? panel)
+  {
+    if (!panel.IsValid()) return;
+
+    BlurFocusedTextEntries();
+    _localModelsPanel.SetClass("hidden", _localModelsPanel != panel);
+    _cloudModelsPanel.SetClass("hidden", _cloudModelsPanel != panel);
+    _dupeListPanel.SetClass("hidden", _dupeListPanel != panel);
+
+    _selectedPanelLeft = panel;
+  }
+
+  void SetActiveRight(Panel? panel)
+  {
+    if (!panel.IsValid()) return;
+    
+    BlurFocusedTextEntries();
+    _toolsPanel.SetClass("hidden", _toolsPanel != panel);
+    _utilitiesPanel.SetClass("hidden", _utilitiesPanel != panel);
+
+    _selectedPanelRight = panel;
+  }
+
+  protected override int BuildHash()
+  {
+    return HashCode.Combine(IsVisible, _selectedPanelLeft ?? null, _leftPanelHidden, _textInputHasFocus, IsDuplicatorActive);
+  }
+
+  protected override void OnUpdate()
+  {
+    base.OnUpdate();
+
+    // Handle visibility changes
+    if ( !IsVisible )
+    {
+	    if ( _wasVisibleLastFrame )
+	    {
+		    BlurFocusedTextEntries();
+		    _textInputHasFocus = false;
+		    // Close all popups when menu is closed (mostly for color picker)
+		    BasePopup.CloseAll();
+		    _wasVisibleLastFrame = false;
+	    }
+	    
+	    return;
+    };
+
+    _wasVisibleLastFrame = true;
+
+    if ( _selectedPanelLeft == _dupeListPanel && ( !IsDuplicatorActive || !Config.Current.Game.DupeWorkshopEnabled ) )
+    {
+      SetActiveLeft( _cloudModelsPanel );
+    }
+
+    if ( _leftPanelShowTime.HasValue && _leftPanelShowTime.Value )
+    {
+	    _leftPanelHidden = false;
+	    _leftPanelShowTime = null;
+	    StateHasChanged();
+    }
+
+    // Check if any text inputs have focus
+    var hasTextFocus = Panel.IsValid() && Panel.Descendants.OfType<TextEntry>().Any(x => x.HasFocus);
+    
+    // Update text input focus state
+    if (hasTextFocus != _textInputHasFocus)
+    {
+      _textInputHasFocus = hasTextFocus;
+      StateHasChanged();
+    }
+
+    // Filter Q key from text inputs when build menu key is held
+    if (_textInputHasFocus && Input.Down("BuildMenu"))
+    {
+      var focusedTextEntry = Panel.Descendants.OfType<TextEntry>().FirstOrDefault(x => x.HasFocus);
+      
+      if (focusedTextEntry != null)
+      {
+        FilterQFromTextEntry(focusedTextEntry);
+      }
+    }
+  }
+
+  private void FilterQFromTextEntry(TextEntry textEntry)
+  {
+    var currentText = textEntry.Text ?? string.Empty;
+    if ( !currentText.Contains( 'q' ) && !currentText.Contains( 'Q' ) )
+	    return;
+    
+    var filteredText = currentText.Replace("q", "").Replace("Q", "");
+    textEntry.Text = filteredText;
+  }
+
+  private void BlurFocusedTextEntries()
+  {
+    if ( !Panel.IsValid() )
+    {
+      return;
+    }
+
+    foreach ( var textEntry in Panel.Descendants.OfType<TextEntry>().Where( x => x.HasFocus ) )
+    {
+      textEntry.Blur();
+    }
+  }
+}

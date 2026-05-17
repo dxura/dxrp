@@ -1,0 +1,634 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Minigame
+@using Dxura.RP.Shared
+@using Sandbox.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root class="absolute inset-0 text-white">
+    <div class="chat-container absolute left-0 bottom-0 flex flex-col mb-8 px-2">
+		    <Voices/>
+	    <div class="messages flex flex-col justify-start gap-1">
+			    @foreach ( var entry in GetVisibleMessages() )
+			    {
+				    <div class="flex flex-row gap-sm items-center bg-secondary-35 p-1">
+					    @if ( entry.SteamId > 0 )
+					    {
+						    <div class="square rounded shrink-0"
+						         style="background-image: url( avatar:@entry.SteamId )"></div>
+					    }
+
+					    @switch ( entry.Type )
+					    {
+						    case MessageType.ItemShare:
+							    <span class="flex flex-row w-full items-center gap-sm">
+								    <span class="flex flex-row gap-sm items-center">
+									    @if ( !string.IsNullOrEmpty( entry.Role ) )
+									    {
+										    <label class="role-tag tags"
+										           style="color: @entry.RoleColor?.Hex">@entry.Role</label>
+									    }
+
+									    <label class="playername bold no-shadow text-base text-bold"
+									           style="color: @entry.Color.Hex">@entry.Author</label>
+									    <label class="small no-shadow item-share-prefix text-base text-bold tags">shared</label>
+								    </span>
+
+								    <ChatItemShare Message="@entry.Message"/>
+							    </span>
+							    break;
+						    case MessageType.LocalChat:
+						    case MessageType.GlobalChat:
+						    case MessageType.GovernmentChat:
+						    case MessageType.StaffChat:
+						    case MessageType.FactionChat:
+						    case MessageType.PrivateMessage:
+							    <span class="flex flex-row w-full items-center gap-sm">
+								    <span class="flex flex-row gap-sm items-center">
+									    @if ( entry.Type == MessageType.GlobalChat )
+									    {
+										    <label class="small no-shadow red text-base text-bold tags">@GetBracketedChatLabel( "chat.label.ooc" )</label>
+									    }
+									    @if ( entry.Type == MessageType.GovernmentChat )
+									    {
+										    <label class="small no-shadow blue text-base text-bold tags">@GetBracketedChatLabel( "chat.label.gov" )</label>
+									    }
+									    @if ( entry.Type == MessageType.StaffChat )
+									    {
+										    <label class="small no-shadow staff-color text-base text-bold tags">@GetBracketedChatLabel( "chat.label.staff" )</label>
+									    }
+									    @if ( entry.Type == MessageType.PrivateMessage )
+									    {
+										    <label class="small no-shadow msg-color text-base text-bold tags">@GetBracketedChatLabel( "chat.label.pm" )</label>
+									    }
+									    @if ( entry.Type == MessageType.FactionChat )
+									    {
+										    <label class="small no-shadow faction-color text-base text-bold tags">@GetBracketedChatLabel( "chat.label.fac" )</label>
+									    }
+
+									    @if ( !string.IsNullOrEmpty( entry.Role ) )
+									    {
+										    <label class="role-tag tags"
+										           style="color: @entry.RoleColor?.Hex">@entry.Role</label>
+									    }
+
+									    <label class="playername bold no-shadow text-base text-bold"
+									           style="color: @entry.Color.Hex">@entry.Author</label>
+								    </span>
+
+								    <span class="message text-base text-shadow" style="max-width: 350px;">@entry.Message</span>
+							    </span>
+							    break;
+						    case MessageType.Minigame:
+							    @if ( MinigameSystem.Instance.IsValid() && MinigameSystem.Instance.CurrentMinigame != null)
+							    {
+								    var minigame = MinigameSystem.Instance.CurrentMinigame;
+								    var playerCount = MinigameSystem.Instance.TotalPlayerCount;
+
+								    <span class="flex flex-row gap-sm w-full items-center justify-between">
+									    <span class="flex flex-row gap-sm items-center">
+										    <label class="bg-primary px-2 py-1 tiny rounded text-bold uppercase text-accent">#chat.label.minigame</label>
+										    <label class="text-base text-bold text-white no-shadow">@((minigame?.Name?.StartsWith( '#' ) ?? false) ? Language.GetPhrase( minigame.Name[1..] ) : minigame?.Name ?? Language.GetPhrase( "generic.unknown" ))</label>
+										    <label class="tiny slight text-bold">@GetPlayerCountLabel( playerCount )</label>
+									    </span>
+									    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.mg_join</label>
+								    </span>
+							    }
+							    else
+							    {
+								    <label>#chat.label.mg_ended</label>
+							    }
+							    break;
+						    case MessageType.VoteBet:
+							    @if ( VoteBetSystem.Instance.IsValid() && VoteBetSystem.Instance.GetActiveVoteBet() != null )
+							    {
+								    var vb = VoteBetSystem.Instance.GetActiveVoteBet()!.Value;
+								    var pot = VoteBetSystem.Instance.GetTotalPot( vb.Id );
+
+								    <span class="flex flex-row gap-sm w-full items-start justify-between">
+									    <span class="flex flex-col gap-1">
+										    <span class="flex flex-row gap-sm items-center">
+											    <label class="bg-primary px-2 py-1 tiny rounded text-bold uppercase text-warning">#chat.label.votebet</label>
+											    <label class="text-base text-bold text-white no-shadow">@vb.Description</label>
+										    </span>
+										    <span class="flex flex-row gap-xs items-center">
+											    @for ( var i = 0; i < vb.Outcomes.Count; i++ )
+											    {
+												    <label class="bg-primary px-1 py-1 tiny rounded slight">@(i + 1). @vb.Outcomes[i]</label>
+											    }
+										    </span>
+									    </span>
+									    <span class="flex flex-col gap-1 items-end">
+										    @if ( vb.IsLocked )
+									    {
+										    <label class="tiny bg-secondary px-2 py-1 rounded text-warning text-bold">#chat.label.locked</label>
+									    }
+									    else
+									    {
+										    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.vb_join</label>
+									    }
+										    @if ( pot > 0 )
+										    {
+											    <label class="tiny text-cash text-bold">@string.Format( Language.GetPhrase( "chat.label.pot" ), pot.ToString( "N0" ) )</label>
+										    }
+									    </span>
+								    </span>
+							    }
+							    else
+							    {
+								    <label>#chat.label.vb_ended</label>
+							    }
+							    break;
+						    case MessageType.Generic:
+						    case MessageType.System:
+						    default:
+							    <label class="message font-mono rounded pl-1 pr-1 text-base text-bold text-shadow" style="color: @entry.Color.Hex">@GetDisplayMessage( entry.Message )</label>
+							    break;
+					    }
+				    </div>
+			    }
+	    </div>
+
+	    <div class="chat-input-stack">
+		    @if ( _emojiPickerOpen )
+		    {
+			    <div class="emoji-picker">
+				    @foreach ( var emoji in Config.Current.Game.ChatEmojis )
+				    {
+					    <button class="emoji-choice" onclick="@(() => InsertEmoji( emoji ))">@emoji</button>
+				    }
+			    </div>
+		    }
+
+		    <div class="gap input-area">
+			    <div class="hints flex items-center gap-sm">
+				    <div class="when-open chat-mode-hint flex items-center gap-sm @(ShouldShowChatModeName() ? "has-mode" : "icon-only")">
+					    <InputHint Action="TabMenu" class="small" Size="@InputGlyphSize.Small"/>
+					    @if ( ShouldShowChatModeName() )
+					    {
+						    <label class="chat-mode-pill @GetChatModeClass( _chatMode )">
+							    @GetChatModeName( _chatMode )
+						    </label>
+					    }
+				    </div>
+
+				    <div class="when-not-open flex items-center gap-sm">
+					    <InputHint Action="Chat" class="small" Size="@InputGlyphSize.Small"/>
+					    <label class="text-base text-bold">#input.chat</label>
+				    </div>
+
+				    <div class="when-not-open flex items-center gap-sm">
+					    <InputHint Action="TabMenu" class="small" Size="@InputGlyphSize.Small"/>
+					    <label class="text-base text-bold">#input.menu</label>
+				    </div>
+
+				    @if ( Config.Current.Game.BuildingEnabled )
+				    {
+					    <div class="when-not-open flex items-center gap-sm">
+						    <InputHint Action="BuildMenu" class="small" Size="@InputGlyphSize.Small"/>
+						    <label class="text-base text-bold">#input.build</label>
+					    </div>
+				    }
+
+				    <div class="when-not-open flex items-center gap-sm">
+					    <InputHint Action="Voice" class="small" Size="@InputGlyphSize.Small"/>
+					    <label class="text-base text-bold">#input.voice</label>
+				    </div>
+
+				    <div class="when-not-open flex items-center gap-sm">
+					    <InputHint Action="Undo" class="small" Size="@InputGlyphSize.Small"/>
+					    <label class="text-base text-bold">#input.undo</label>
+				    </div>
+
+				    <div class="when-not-open flex items-center gap-sm shrink-0">
+					    <InputHint Action="view" class="small" Size="@InputGlyphSize.Small"/>
+					    <label class="text-base text-bold">#input.view</label>
+				    </div>
+
+				    @if ( Config.Current.Game.NoClip )
+				    {
+					    <div class="when-not-open flex items-center gap-sm">
+						    <InputHint Action="noclip" class="small" Size="@InputGlyphSize.Small"/>
+						    <label class="text-base text-bold">#input.noclip</label>
+					    </div>
+				    }
+			    </div>
+
+			    <ChatBox class="chat-input text-base"
+			             @ref=" InputBox"
+			             OnTabPressed="@HandleTabPressed"
+			             OnHistoryPrevious="@ShowPreviousChatEntry"
+			             OnHistoryNext="@ShowNextChatEntry"
+			             onsubmit="@ChatFinished"></ChatBox>
+
+			    @if ( Config.Current.Game.ChatEmojis.Length > 0 )
+			    {
+				    <button class="when-open emoji-toggle @(_emojiPickerOpen ? "open" : "")"
+				            onclick="@ToggleEmojiPicker"
+				            tooltip="Emojis">
+					    <i class="material-icons">sentiment_satisfied</i>
+				    </button>
+			    }
+		    </div>
+	    </div>
+    </div>
+</root>
+
+@code
+{
+	private MessageType _chatMode = MessageType.LocalChat;
+	private TextEntry? InputBox { get; set; }
+	private bool _isOpen;
+	private bool _emojiPickerOpen;
+	private bool _showingRecentMessages = false;
+	private static readonly List<string> _chatHistory = [];
+	private int _chatHistoryIndex;
+	private string _tabCompletionSuffix = " ";
+	private IReadOnlyList<string> _tabCompletionMatches = Array.Empty<string>();
+
+	private bool IsGovernment => Player.Local.IsValid() && Player.Local.Job.IsGovernmentRole();
+	private bool IsInFaction => Player.Local.IsValid() && Player.Local.IsInFaction;
+	private bool CanStaffChat => RankSystem.HasLocalPermission( Permission.StaffChat );
+
+	private bool Open => _isOpen;
+	
+	public void OnUpdate()
+	{
+		if ( !InputBox.IsValid() )
+			return;
+
+		AcceptsFocus = false;
+
+		if ( Input.Pressed( "chat" ) )
+		{
+			if ( !_isOpen )
+			{
+				_chatHistoryIndex = _chatHistory.Count;
+			}
+
+			InputBox.Focus();
+			_isOpen = true;
+			EnsureValidChatMode();
+		}
+
+		if ( !_isOpen )
+		{
+			_emojiPickerOpen = false;
+			ResetTabCompletion();
+			SetInputText( "" );
+		}
+		
+		Player.Local.IsTyping = _isOpen;
+		SetClass( "open", _isOpen );
+	}
+
+	protected override int BuildHash()
+	{
+		var minigameHash = MinigameSystem.Instance.IsValid() && MinigameSystem.Instance.Active ?
+			HashCode.Combine( MinigameSystem.Instance.CurrentState, MinigameSystem.Instance.TotalPlayerCount ) :
+			0;
+
+		var voteBetHash = VoteBetSystem.Instance.IsValid() && VoteBetSystem.Instance.GetActiveVoteBet() != null ?
+			HashCode.Combine( VoteBetSystem.Instance.GetActiveVoteBet()!.Value.Id, VoteBetSystem.Instance.GetTotalPot( VoteBetSystem.Instance.GetActiveVoteBet()!.Value.Id ) ) :
+			0;
+
+		var recentMessagesHash = !Open && _showingRecentMessages ? (int)Time.Now : 0;
+
+        return HashCode.Combine( _chatMode, Open, _emojiPickerOpen, HUD.Visible, Game.Chat.Current.LatestMessageId, minigameHash, voteBetHash, recentMessagesHash );
+	}
+
+	private void ToggleEmojiPicker()
+	{
+		_emojiPickerOpen = !_emojiPickerOpen;
+		InputBox?.Focus();
+		Sound.Play( "pop" );
+		StateHasChanged();
+	}
+
+	private void InsertEmoji( string emoji )
+	{
+		if ( !InputBox.IsValid() )
+		{
+			return;
+		}
+
+		var text = InputBox.Text ?? string.Empty;
+		var caret = Math.Clamp( InputBox.CaretPosition, 0, text.Length );
+		InputBox.Text = text.Insert( caret, emoji );
+		InputBox.CaretPosition = caret + emoji.Length;
+		InputBox.Focus();
+		Sound.Play( "soft_pop" );
+	}
+	
+	void ChangeChatMode()
+	{
+		var availableModes = GetAvailableChatModes();
+		var currentIndex = availableModes.IndexOf( _chatMode );
+
+		if ( currentIndex < 0 )
+		{
+			_chatMode = availableModes[0];
+			return;
+		}
+
+		_chatMode = availableModes[(currentIndex + 1) % availableModes.Count];
+	}
+
+	private void EnsureValidChatMode()
+	{
+		var availableModes = GetAvailableChatModes();
+		if ( !availableModes.Contains( _chatMode ) )
+		{
+			_chatMode = availableModes[0];
+		}
+	}
+
+	private List<MessageType> GetAvailableChatModes()
+	{
+		var modes = new List<MessageType>
+		{
+			MessageType.LocalChat
+		};
+
+		if ( Config.Current.Game.OocChatEnabled )
+		{
+			modes.Add( MessageType.GlobalChat );
+		}
+
+		if ( IsGovernment )
+		{
+			modes.Add( MessageType.GovernmentChat );
+		}
+
+		if ( CanStaffChat )
+		{
+			modes.Add( MessageType.StaffChat );
+		}
+
+		if ( IsInFaction )
+		{
+			modes.Add( MessageType.FactionChat );
+		}
+
+		return modes;
+	}
+
+	private bool ShouldShowChatModeName()
+	{
+		return _chatMode != MessageType.LocalChat || Config.Current.Game.OocChatEnabled;
+	}
+
+	private static string GetChatModeClass( MessageType chatMode )
+	{
+		return chatMode switch
+		{
+			MessageType.GlobalChat => "mode-global",
+			MessageType.GovernmentChat => "mode-government",
+			MessageType.StaffChat => "mode-staff",
+			MessageType.FactionChat => "mode-faction",
+			_ => "mode-local"
+		};
+	}
+
+	private void HandleTabPressed()
+	{
+		if ( InputBox.IsValid() && (InputBox.Text ?? string.Empty).StartsWith( '/' ) )
+		{
+			TryCompleteCommand();
+			return;
+		}
+
+		if ( TryCompleteCommand() )
+		{
+			return;
+		}
+
+		ChangeChatMode();
+	}
+
+	private bool TryCompleteCommand()
+	{
+		if ( !InputBox.IsValid() || !Player.Local.IsValid() )
+		{
+			return false;
+		}
+
+		var text = InputBox.Text ?? string.Empty;
+		if ( !text.StartsWith( '/' ) )
+		{
+			ResetTabCompletion();
+			return false;
+		}
+
+		var commandEnd = text.IndexOf( ' ' );
+		if ( commandEnd < 0 )
+		{
+			commandEnd = text.Length;
+		}
+
+		var typedCommand = text.Length > 1 ? text[1..commandEnd] : string.Empty;
+		var suffix = commandEnd < text.Length ? text[commandEnd..] : " ";
+		var canCycleExisting = _tabCompletionMatches.Count > 0
+			&& string.Equals( suffix, _tabCompletionSuffix, StringComparison.Ordinal )
+			&& _tabCompletionMatches.Contains( typedCommand, StringComparer.OrdinalIgnoreCase );
+
+		if ( InputBox.CaretPosition > commandEnd && !canCycleExisting )
+		{
+			ResetTabCompletion();
+			return false;
+		}
+
+		var matches = canCycleExisting
+			? _tabCompletionMatches
+			: Game.Chat.Current?.GetCommandCompletions( Player.Local, typedCommand ) ?? Array.Empty<string>();
+
+		if ( matches.Count == 0 )
+		{
+			ResetTabCompletion();
+			return true;
+		}
+
+		if ( !canCycleExisting )
+		{
+			_tabCompletionMatches = matches;
+			_tabCompletionSuffix = suffix;
+		}
+
+		var currentIndex = canCycleExisting
+			? Array.FindIndex( matches.ToArray(), match => string.Equals( match, typedCommand, StringComparison.OrdinalIgnoreCase ) )
+			: -1;
+		var nextIndex = currentIndex >= 0 ? (currentIndex + 1) % matches.Count : 0;
+		var completedCommand = matches[nextIndex];
+
+		SetInputText( $"/{completedCommand}{suffix}" );
+		InputBox.CaretPosition = completedCommand.Length + 2;
+
+		return true;
+	}
+	
+	private string GetChatModeName(MessageType chatMode)
+	{
+		return chatMode switch
+		{
+			MessageType.LocalChat => Language.GetPhrase( "chat.label.local" ),
+			MessageType.GlobalChat => Language.GetPhrase( "chat.label.ooc" ),
+			MessageType.GovernmentChat => Language.GetPhrase( "chat.label.gov" ),
+			MessageType.StaffChat => Language.GetPhrase( "chat.label.staff" ),
+			MessageType.FactionChat => Language.GetPhrase( "chat.label.fac" ),
+			_ => chatMode.ToString().ToUpperInvariant()
+		};
+	}
+
+	private static string GetBracketedChatLabel( string key )
+	{
+		return $"[{Language.GetPhrase( key )}]";
+	}
+
+	private static string GetPlayerCountLabel( int playerCount )
+	{
+		var key = playerCount == 1 ? "chat.label.player_count_singular" : "chat.label.player_count_plural";
+		return string.Format( Language.GetPhrase( key ), playerCount );
+	}
+
+	private static string GetDisplayMessage( string message )
+	{
+		if ( string.IsNullOrEmpty( message ) )
+		{
+			return string.Empty;
+		}
+
+		return ResolvePhrase( message );
+	}
+
+	private static string ResolvePhrase( string text )
+	{
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+
+	void ChatFinished()
+	{
+		if ( !InputBox.IsValid() ) return;
+
+		var text = InputBox.Text;
+		_emojiPickerOpen = false;
+		ResetTabCompletion();
+		SetInputText( "" );
+		InputBox.Blur();
+		_isOpen = false;
+
+		if ( string.IsNullOrWhiteSpace( text ) )
+			return;
+
+		_chatHistory.Add( text );
+		if ( _chatHistory.Count > 50 )
+		{
+			_chatHistory.RemoveAt( 0 );
+		}
+
+		_chatHistoryIndex = _chatHistory.Count;
+
+        Game.Chat.Current.SubmitPlayerChat( text, _chatMode );
+	}
+
+	private void ShowPreviousChatEntry()
+	{
+		if ( !InputBox.IsValid() || _chatHistory.Count == 0 )
+		{
+			return;
+		}
+
+		if ( _chatHistoryIndex > 0 )
+		{
+			_chatHistoryIndex--;
+			ResetTabCompletion();
+			SetInputText( _chatHistory[_chatHistoryIndex], true );
+		}
+	}
+
+	private void ShowNextChatEntry()
+	{
+		if ( !InputBox.IsValid() || _chatHistory.Count == 0 )
+		{
+			return;
+		}
+
+		if ( _chatHistoryIndex < _chatHistory.Count - 1 )
+		{
+			_chatHistoryIndex++;
+			ResetTabCompletion();
+			SetInputText( _chatHistory[_chatHistoryIndex], true );
+		}
+	}
+
+	private void ResetTabCompletion()
+	{
+		_tabCompletionSuffix = " ";
+		_tabCompletionMatches = Array.Empty<string>();
+	}
+
+	private void SetInputText( string text, bool moveCaretToEnd = false )
+	{
+		if ( !InputBox.IsValid() )
+		{
+			return;
+		}
+
+		InputBox.Text = text;
+
+		if ( moveCaretToEnd )
+		{
+			InputBox.CaretPosition = InputBox.TextLength;
+		}
+	}
+
+	private IEnumerable<ChatEntry> GetVisibleMessages()
+	{
+		if ( Game.Chat.Current == null )
+		{
+			yield break;
+		}
+
+		if ( Open )
+		{
+			_showingRecentMessages = false;
+
+			// Chat is open: return all entries (already stored newest-first)
+			foreach ( var entry in Game.Chat.Current.Entries )
+			{
+				yield return entry;
+			}
+		}
+		else
+		{
+			// Chat is closed: return only recent messages (< 20 seconds)
+			// Since entries are newest-first, we can break early when we hit an old message
+			var messageCount = 0;
+			foreach ( var entry in Game.Chat.Current.Entries )
+			{
+				if ( !ShouldPersist( entry ) && entry.TimeSinceAdded > 15f || messageCount >= 10 )
+					break;
+
+				messageCount++;
+				yield return entry;
+			}
+			
+			_showingRecentMessages = messageCount > 0;
+		}
+	}
+
+	private static bool ShouldPersist( ChatEntry entry )
+	{
+		if ( entry.Type == MessageType.Minigame
+			&& MinigameSystem.Instance.IsValid()
+			&& MinigameSystem.Instance.CurrentState == MinigameState.Seeding )
+			return true;
+
+		if ( entry.Type == MessageType.VoteBet
+			&& VoteBetSystem.Instance.IsValid()
+			&& VoteBetSystem.Instance.GetActiveVoteBet() != null )
+			return true;
+
+		return false;
+	}
+}

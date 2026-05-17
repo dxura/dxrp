@@ -1,0 +1,275 @@
+{
+  "RootObject": {
+    "__guid": "1388f2e8-0877-4438-9217-3ab4a6a296fa",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "law_board",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,build_interact,occludable,restricted_entity",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "d222b4e0-2f03-4554-ad99-767ac233bcd6",
+        "__enabled": true,
+        "Flags": 0,
+        "BodyGroups": 18446744073709551615,
+        "CreateAttachments": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "gameplay/entities/jobs/mayor/law_board/model/law_board.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "Off",
+        "Tint": "1,1,1,1"
+      },
+      {
+        "__type": "Sandbox.ModelCollider",
+        "__guid": "9c72c45e-7fe6-44b4-949d-cbc32690115e",
+        "__enabled": true,
+        "Flags": 0,
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "Model": "gameplay/entities/jobs/mayor/law_board/model/law_board.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Dxura.RP.Game.BaseEntity",
+        "__guid": "cd14b160-4753-4288-8783-3970b2b5ccf4",
+        "__enabled": true,
+        "Flags": 0,
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "fa82f439-5253-47a1-8b36-bb3179e8e9fa",
+          "go": "1388f2e8-0877-4438-9217-3ab4a6a296fa",
+          "component_type": "HealthComponent"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "a0f9cc4a-2f95-425b-a36b-718807e508c8",
+          "go": "1388f2e8-0877-4438-9217-3ab4a6a296fa",
+          "component_type": "Rigidbody"
+        }
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "fa82f439-5253-47a1-8b36-bb3179e8e9fa",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 2500,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "a0f9cc4a-2f95-425b-a36b-718807e508c8",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "abbe3a91-c09f-4c43-be73-d27d0d2d3e34",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "panel",
+        "Position": "3.502556,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "91e4843a-1e3f-437e-ab9d-38430cdd1444",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 0,
+            "LookAtCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "4500,2650",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 4.9,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "Dxura.RP.Game.UI.LawBoardEntityDisplay",
+            "__guid": "3cc92679-f587-458f-b178-edd7e7ff4716",
+            "__enabled": true,
+            "Flags": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "WorldPanel": null
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "07fd9a74-fc6b-4186-a205-bd02928688b3"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "2353cc99-b779-4a99-9460-18016c951da0"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "26c6e959-2884-4aef-8295-21134ac64fbe"
+        }
+      ]
+    },
+    "__variables": [
+      {
+        "Id": "Breakable",
+        "Title": "Unbreakable",
+        "Description": "",
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "fa82f439-5253-47a1-8b36-bb3179e8e9fa",
+            "Property": "IsGodMode"
+          }
+        ]
+      },
+      {
+        "Id": "Locking",
+        "Title": "Locking",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "a0f9cc4a-2f95-425b-a36b-718807e508c8",
+            "Property": "Locking"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

@@ -1,0 +1,85 @@
+@using Sandbox.Services
+@using Sandbox.UI
+@inherits Panel
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+
+<root class="spawnpage flex flex-col ">
+	@* <TextEntry @ref="_searchEntry" OnTextEdited=@Search Placeholder="Search..." /> *@
+
+	<div class="canvas">
+	    @foreach (var model in _modelList)
+	    {
+		    <div class="cell" onclick="@(() => SpawnProp(model.Name))" Tooltip="@model.ResourceName">
+			    <Image Texture="@ThumbnailCache.Get( model )"/>
+		    </div>
+	    }
+	</div>
+</root>
+
+@code
+{
+	// TextEntry? _searchEntry;
+	// string _selectedFolder = "";
+	string _searchQuery = "";
+	readonly List<Model> _modelList = new();
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if (firstTime)
+		{
+		    Search("models/props");
+		}
+	}
+
+	void SpawnProp(string model)
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( Constants.ConstructTag, Config.Current.Game.ConstructCooldown, true ) )
+		{
+			return;
+		}
+
+		var positon = GameUtils.GetSpawnPosition( Player.Local.AimRay, 30 );
+		
+		Construct.Current.SpawnConstructPlayer( ConstructType.Prop, new PropData
+		{
+			Model = model,
+		},
+		positon, 
+		Rotation.Identity,
+		false
+		);
+		
+		Sound.Play( "spawn" );
+		
+		Blur();
+	}
+
+	void Search( string value )
+	{
+		_searchQuery = value;
+		_modelList.Clear();
+
+		var files = FileSystem.Mounted.FindFile( "", "*.vmdl_c", true );
+		
+		foreach ( var file in files )
+		{
+			if ( string.IsNullOrWhiteSpace( file ) ) continue;
+			if ( string.IsNullOrWhiteSpace( _searchQuery ) )
+			{
+				if ( file.Contains( "_lod0" ) ) continue;
+				if ( file.Contains( "clothes" ) ) continue;
+			}
+			else
+			{
+				if ( !file.Contains( _searchQuery ) ) continue;
+			}
+
+			var model = Model.Load( file );
+			if ( model is not null && model.Name.StartsWith( "models/props" ) )
+			{
+				_modelList.Add( model );
+			}
+		}
+	}
+}

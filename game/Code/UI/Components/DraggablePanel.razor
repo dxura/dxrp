@@ -1,0 +1,182 @@
+@namespace Dxura.RP.Game.UI
+@using global::System.Globalization
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root class="draggable-panel @Class @(IsDragging ? "is-dragging" : string.Empty)" style="@GetPositionStyle()">
+	@if ( HandleContent != null )
+	{
+		<div class="draggable-handle @HandleClass" @onmousedown="@StartDragging">
+			@HandleContent
+		</div>
+	}
+
+	@ChildContent
+</root>
+
+@code
+{
+	[Property] public RenderFragment? HandleContent { get; set; }
+	[Property] public RenderFragment? ChildContent { get; set; }
+	[Property] public string? Class { get; set; }
+	[Property] public string? HandleClass { get; set; }
+	[Property] public string? StorageKey { get; set; }
+	[Property] public float WidthPixels { get; set; }
+
+	public bool IsDragging { get; private set; }
+	public Vector2 Offset
+	{
+		get => GetStoredOffset();
+		private set => SetStoredOffset( value );
+	}
+
+	private static readonly Dictionary<string, Vector2> StoredOffsets = [];
+	private Vector2 _dragStartMousePosition;
+	private Vector2 _dragStartOffset;
+	private int _layoutRevision;
+
+	public override void Tick()
+	{
+		base.Tick();
+		ApplyHostStyle();
+
+		if ( !IsDragging )
+		{
+			return;
+		}
+
+		if ( !HUD.IsCursorUnlocked || Input.Released( "attack1" ) )
+		{
+			StopDragging();
+			return;
+		}
+
+		Offset = _dragStartOffset + GetScaledMousePosition() - _dragStartMousePosition;
+		UpdatePosition();
+	}
+
+	protected override void OnMouseUp( MousePanelEvent e )
+	{
+		base.OnMouseUp( e );
+		StopDragging();
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Class, HandleClass, StorageKey, WidthPixels, Offset, IsDragging, _layoutRevision );
+	}
+
+	private void StartDragging( PanelEvent e )
+	{
+		IsDragging = true;
+		_dragStartMousePosition = GetScaledMousePosition();
+		_dragStartOffset = Offset;
+		_layoutRevision++;
+		UpdatePosition();
+		e.StopPropagation();
+	}
+
+	private void StopDragging()
+	{
+		if ( !IsDragging )
+		{
+			return;
+		}
+
+		IsDragging = false;
+		_layoutRevision++;
+	}
+
+	private void UpdatePosition()
+	{
+		Style.Left = Length.Pixels( Offset.x );
+		Style.Top = Length.Pixels( Offset.y );
+
+		if ( WidthPixels > 0f )
+		{
+			Style.Width = Length.Pixels( WidthPixels );
+		}
+	}
+
+	private void ApplyHostStyle()
+	{
+		if ( WidthPixels <= 0f )
+		{
+			return;
+		}
+
+		Style.Width = Length.Pixels( WidthPixels );
+	}
+
+	private Vector2 GetScaledMousePosition()
+	{
+		return Mouse.Position * ScaleFromScreen;
+	}
+
+	private Vector2 GetStoredOffset()
+	{
+		if ( string.IsNullOrWhiteSpace( StorageKey ) )
+		{
+			return _localOffset;
+		}
+
+		return StoredOffsets.TryGetValue( StorageKey, out var offset ) ? offset : Vector2.Zero;
+	}
+
+	private void SetStoredOffset( Vector2 offset )
+	{
+		if ( string.IsNullOrWhiteSpace( StorageKey ) )
+		{
+			_localOffset = offset;
+			return;
+		}
+
+		if ( MathF.Abs( offset.x ) <= 0.1f && MathF.Abs( offset.y ) <= 0.1f )
+		{
+			StoredOffsets.Remove( StorageKey );
+			return;
+		}
+
+		StoredOffsets[StorageKey] = offset;
+	}
+
+	private Vector2 _localOffset;
+
+	public static void ClearStoredOffset( string? storageKey )
+	{
+		if ( string.IsNullOrWhiteSpace( storageKey ) )
+		{
+			return;
+		}
+
+		StoredOffsets.Remove( storageKey );
+	}
+
+	public static bool HasStoredOffset( string? storageKey )
+	{
+		if ( string.IsNullOrWhiteSpace( storageKey ) )
+		{
+			return false;
+		}
+
+		return StoredOffsets.TryGetValue( storageKey, out var offset )
+		       && (MathF.Abs( offset.x ) > 0.1f || MathF.Abs( offset.y ) > 0.1f);
+	}
+
+	private string GetPositionStyle()
+	{
+		var style = $"left: {FormatPixels( Offset.x )}; top: {FormatPixels( Offset.y )};";
+		if ( WidthPixels > 0f )
+		{
+			style += $" width: {FormatPixels( WidthPixels )};";
+		}
+
+		return style;
+	}
+
+	private static string FormatPixels( float value )
+	{
+		return $"{value.ToString( "0.##", CultureInfo.InvariantCulture )}px";
+	}
+}

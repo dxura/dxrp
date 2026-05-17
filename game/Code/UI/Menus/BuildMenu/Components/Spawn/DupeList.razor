@@ -1,0 +1,169 @@
+@inherits Panel
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Tools
+@using Dxura.RP.Game.Equipments
+@using Sandbox.UI
+@using global::System.Text
+@using global::System.Text.Json
+@attribute [StyleSheet]
+
+<root>
+	<TextEntry @ref="_searchEntry" Placeholder="#dupe.search" OnTextEdited="@OnSearchChanged" />
+	<div class="dupe-grid">
+		@if ( _loading )
+		{
+			<p class="empty">#dupe.loading</p>
+		}
+		else if ( _entries.Count == 0 && !string.IsNullOrWhiteSpace( _searchText ) )
+		{
+			<p class="empty">@string.Format( Language.GetPhrase( "dupe.no_matching" ), _searchText )</p>
+		}
+		else if ( _entries.Count == 0 )
+		{
+			<p class="empty">#dupe.no_shared</p>
+		}
+		else
+		{
+			@foreach ( var entry in _entries )
+			{
+				<div class="dupe-card flex flex-col" tooltip="@entry.Description" onclick="@( () => HandleSelected( entry ) )">
+					<img src="@entry.Preview" alt="preview" />
+					<div class="dupe-card-info">
+						<label class="dupe-title">@entry.Title</label>
+						<label class="dupe-owner">@entry.Owner.Name</label>
+					</div>
+				</div>
+			}
+		}
+	</div>
+</root>
+
+@code
+{
+	const string EncryptionKey = "LeaveMyDupesAloneDXRP123";
+
+	private List<Storage.QueryItem> _entries = new();
+	private bool _loading;
+	private TextEntry _searchEntry = null!;
+	private string _searchText = "";
+
+	private void OnSearchChanged( string text )
+	{
+		_searchText = text ?? "";
+		LoadEntries();
+	}
+
+	private void HandleSelected( Storage.QueryItem entry )
+	{
+		OnSelected( entry );
+	}
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( firstTime )
+		{
+			LoadEntries();
+		}
+	}
+
+	private async void LoadEntries()
+	{
+		_loading = true;
+		StateHasChanged();
+
+		try
+		{
+			var query = new Storage.Query
+			{
+				SortOrder = Storage.SortOrder.RankedByLastUpdatedDate,
+				KeyValues = { ["type"] = Config.Current.Game.DupeWorkshopType },
+				MaxCacheAge = 60
+			};
+
+			if ( !string.IsNullOrWhiteSpace( _searchText ) )
+				query.SearchText = _searchText;
+
+			var result = await query.Run( );
+			_entries = result.Items?.ToList() ?? new();
+		}
+		catch ( Exception e )
+		{
+			Log.Error( $"Failed to query dupes: {e.Message}" );
+		}
+
+		_loading = false;
+		StateHasChanged();
+	}
+
+	private async void OnSelected( Storage.QueryItem entry )
+	{
+		var dupeEntry = await entry.Install();
+		try
+		{
+			if ( !dupeEntry.Files.FileExists( "dupe.json" ) )
+			{
+				Notify.Error( Language.GetPhrase( "dupe.not_found" ) );
+				return;
+			}
+
+			var dupeJson = await dupeEntry.Files.ReadAllTextAsync( "dupe.json" );
+
+			if ( string.IsNullOrEmpty( dupeJson ) )
+			{
+				Notify.Error( Language.GetPhrase( "dupe.read_failed" ) );
+				return;
+			}
+
+			var decryptedJson = DecryptDupe( dupeJson );
+			var dupe = JsonSerializer.Deserialize<ConstructDupe>( decryptedJson );
+
+			if ( dupe == null )
+			{
+				Notify.Error( "#generic.error" );
+				return;
+			}
+
+			dupe.Name = entry.Title;
+
+			DuplicatorTool.SelectedDupe = dupe;
+			DuplicatorTool.SelectedDupeSaved = true;
+
+			// Switch to duplicator tool
+			if ( Player.Local.IsValid() )
+			{
+				var toolgun = Player.Local.Components.Get<ToolEquipment>( FindMode.EverythingInSelfAndDescendants );
+				if ( toolgun != null && toolgun.IsValid() )
+				{
+					var duplicatorType = TypeLibrary.GetType<DuplicatorTool>();
+					if ( duplicatorType != null )
+					{
+						toolgun.SetTool( duplicatorType );
+					}
+				}
+
+				var player = Player.Local.GetComponent<Player>();
+				player?.SetCurrentEquipment( player.Equipment.FirstOrDefault( wep => GameModeEquipments.IsTool( wep.Resource ) ) );
+			}
+
+			Notify.Success( "#notify.dupe.loaded" );
+		}
+		catch ( Exception e )
+		{
+			Log.Error( $"Failed to load workshop dupe: {e.Message}" );
+			Notify.Error( "#generic.error" );
+		}
+	}
+
+	private static string DecryptDupe( string encryptedJson )
+	{
+		var keyBytes = Encoding.UTF8.GetBytes( EncryptionKey.PadRight( 32 ).Substring( 0, 32 ) );
+		var encryptedBytes = Encoding.UTF8.GetBytes( encryptedJson );
+
+		for ( var i = 0; i < encryptedBytes.Length; i++ )
+		{
+			encryptedBytes[i] ^= keyBytes[i % keyBytes.Length];
+		}
+
+		return Encoding.UTF8.GetString( encryptedBytes );
+	}
+}

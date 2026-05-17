@@ -1,0 +1,58 @@
+@import "../styles.scss";
+
+ConsentPanel {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba($color-primary, 0.75);
+	backdrop-filter: blur(4px);
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 999999;
+	pointer-events: all;
+
+	.modal-content {
+		background-color: $color-primary;
+		border-radius: $space-2;
+		padding: $space-6;
+		max-height: 90vh;
+		max-width: 80vw;
+	}
+
+	.title {
+		font-size: 80px;
+		font-family: Poppins;
+	}
+
+	.subtitle {
+		font-size: 30px;
+		margin-top: -35px;
+		margin-bottom: -20px;
+		font-family: Poppins;
+		color: #fff;
+	}
+
+	.heading {
+		font-size: 30px;
+		margin-top: 30px;
+		font-family: Poppins;
+		color: #fff;
+	}
+
+	.rules-container {
+		width: 100%;
+		height: 70%;
+		margin: $space-8 0;
+
+		.web-container {
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+
+

@@ -1,0 +1,75 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Entities
+@using WorldPanel=Sandbox.WorldPanel
+@inherits PanelComponent
+
+<root>
+	<div class="radio-card flex flex-col items-center justify-center">
+		<span class="text-accent text-sm text-bold">@Entity.CurrentStationName</span>
+
+		@if ( Entity.IsPlaying )
+		{
+			<span class="text-white text-xs song-title">
+				@( !string.IsNullOrWhiteSpace( Entity.CurrentStreamTitle ) ? Entity.CurrentStreamTitle : "-" )
+			</span>
+		}
+		else
+		{
+			<span class="text-gray-400 text-xs">#entity.radio.paused</span>
+		}
+
+		<div class="flex items-center gap-2 mt-1">
+			@if ( Entity.CanControl )
+			{
+				<span class="text-white text-lg cursor-pointer nav-btn" onclick=@PreviousStation>
+					<i>skip_previous</i>
+				</span>
+			}
+			<span class="text-white text-lg cursor-pointer nav-btn" onclick=@( () => Entity.TogglePlayLocal() )>
+				<i>@( Entity.IsPlaying ? "pause" : "play_arrow" )</i>
+			</span>
+			@if ( Entity.CanControl )
+			{
+				<span class="text-white text-lg cursor-pointer nav-btn" onclick=@NextStation>
+					<i>skip_next</i>
+				</span>
+			}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	[Property] public RadioEntity Entity { get; set; } = null!;
+
+	[Property] public WorldPanel WorldPanel { get; set; } = null!;
+	
+	protected override int BuildHash()
+	{
+		if ( !Entity.ShouldShowWorldPanel ) return 0;
+
+		return HashCode.Combine( Entity.IsPlaying, Entity.StationIndex, Entity.CurrentStreamTitle, Entity.Owner, Entity.CanControl, Entity.ShouldShowWorldPanel );
+	}
+
+	private void PreviousStation()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( $"radio:station:{Entity.GameObject.Id}", RadioEntity.StationChangeCooldown, true ) )
+		{
+			return;
+		}
+
+		Sound.Play( "pop" );
+		Entity.PreviousStationHost();
+	}
+
+	private void NextStation()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( $"radio:station:{Entity.GameObject.Id}", RadioEntity.StationChangeCooldown, true ) )
+		{
+			return;
+		}
+
+		Sound.Play( "pop" );
+		Entity.NextStationHost();
+	}
+}

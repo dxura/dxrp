@@ -1,0 +1,44 @@
+{
+  "Identifier": "free_for_all_knife",
+  "MainPrefab": null,
+  "SecondaryPrefabs": [
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_container_yard.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_paintball_arena.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_gibs.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_whatever.prefab"
+    }
+  ],
+  "Name": "#minigame.freeforallknife.name",
+  "Description": "#minigame.freeforallknife.description",
+  "Icon": null,
+  "Color": null,
+  "LobbyOffset": "0,0,1000",
+  "MaxPlayers": 16,
+  "MinPlayers": 2,
+  "IsSelectable": true,
+  "Weight": 50,
+  "Duration": 120,
+  "LobbyDuration": 15,
+  "StartingEquipment": [
+    "gameplay/equipment/weapons/knife/knife.equip"
+  ],
+  "GiveMaxAmmo": true,
+  "SpawnRuleset": "OneLife",
+  "RespawnDuration": 30,
+  "SpawnMethod": "RoundRobin",
+  "MakeDeadPlayersSpectators": true,
+  "WinCondition": "LastManStanding",
+  "__references": [],
+  "__version": 0
+}

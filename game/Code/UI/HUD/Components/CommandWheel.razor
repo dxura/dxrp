@@ -1,0 +1,606 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root class="@(_editing ? "editing" : "")">
+	@if ( !_isOpen || Slots.Count == 0 )
+	{
+		return;
+	}
+	
+	<div class="scrim"></div>
+	<div class="wheel">
+		<div class="center">
+			@if ( SelectedSlot != null )
+			{
+				<i class="material-icons">@GetSlotIcon( SelectedSlot )</i>
+				<label>@GetSlotLabel( SelectedSlot, _selectedIndex )</label>
+			}
+			else
+			{
+				<i class="material-icons hint-icon">mouse</i>
+				<label class="hint-label">#commandwheel.hint.select</label>
+			}
+		</div>
+
+		@for ( var i = 0; i < Slots.Count; i++ )
+		{
+			var slotIndex = i;
+			var entry = Slots[i];
+			var isEmpty = string.IsNullOrWhiteSpace( entry.Command ) && string.IsNullOrWhiteSpace( entry.Label );
+			if ( !_editing && isEmpty ) continue;
+			<div class="command-slot @(i == _selectedIndex ? "selected" : "")" style="@GetSlotStyle( i )" onclick="@(() => SelectSlotClick( slotIndex ))">
+				<i class="material-icons">@GetSlotIcon( entry )</i>
+				<label>@GetSlotLabel( entry, slotIndex )</label>
+			</div>
+		}
+
+	</div>
+
+	@if ( _editing && _selectedIndex >= 0 )
+	{
+		<div class="editor-panel">
+			<div class="editor">
+				<div class="editor-header">
+					<div class="editor-header-info">
+						<i class="material-icons">tune</i>
+						<label>#commandwheel.editor.title</label>
+					</div>
+					<button class="action-clear" onclick="@ClearEditingSlot">#commandwheel.editor.clear</button>
+				</div>
+
+				<div class="editor-preview">
+					@if ( SelectedSlot != null )
+					{
+						<i class="material-icons">@GetSlotIcon( SelectedSlot )</i>
+						<label>@GetSlotLabel( SelectedSlot, _selectedIndex )</label>
+					}
+				</div>
+
+				<div class="editor-divider"></div>
+
+				<div class="editor-field">
+					<label class="field-label">#commandwheel.editor.label</label>
+					<TextEntry @ref="_nameTextEntry"
+					           class="command-input"
+					           Value="@_editingLabel"
+					           Placeholder="#commandwheel.editor.label_placeholder"
+					           OnTextEdited="@OnLabelEdited"/>
+				</div>
+
+				<div class="editor-field">
+					<label class="field-label">#commandwheel.editor.command</label>
+					<TextEntry @ref="_commandTextEntry"
+					           class="command-input"
+					           Value="@_editingCommand"
+					           Placeholder="#commandwheel.editor.command_placeholder"
+					           OnTextEdited="@OnCommandEdited"/>
+					<label class="field-hint">#commandwheel.editor.command_hint</label>
+				</div>
+			</div>
+
+			<button class="panel-close-button" onclick="@CloseEditor">#commandwheel.editor.finish</button>
+		</div>
+
+		<button class="done-button" onclick="@CloseEditor">#commandwheel.editor.done</button>
+	}
+</root>
+
+@code
+{
+	public static bool IsOpen { get; private set; }
+
+	private const string BindingsPath = "command_wheel.json";
+	private const float WheelRadius = 170f;
+	private const float Deadzone = 28f;
+	private const float ShortPressThreshold = 0.2f;
+	private const float DoubleTapThreshold = 0.35f;
+	private const int MaxEntries = 8;
+	private bool _isOpen;
+	private bool _editing;
+	private bool _pendingPress;
+	private bool _pendingEdit;
+	private bool _waitingForDoubleTap;
+	private bool _skipExecuteOnClose;
+	private bool _lockedCamera;
+	private TimeSince _timeSincePressed;
+	private TimeSince _timeSinceFirstTap;
+	private int _selectedIndex = -1;
+	private Vector2 _selector = new( 0f, -1f );
+	private TextEntry? _nameTextEntry;
+	private TextEntry? _commandTextEntry;
+	private string _editingLabel = string.Empty;
+	private string _editingCommand = string.Empty;
+	private static List<CommandWheelSlot>? _savedSlots;
+
+	private IReadOnlyList<CommandWheelSlot> Slots
+	{
+		get
+		{
+			var savedSlots = GetSavedSlots();
+			if ( savedSlots.Count > 0 )
+			{
+				return NormalizeSlots( savedSlots );
+			}
+
+			return NormalizeSlots( BuildDefaultSlots() );
+		}
+	}
+
+	private CommandWheelSlot? SelectedSlot => _selectedIndex >= 0 ? Slots[_selectedIndex] : null;
+
+	public void OnUpdate()
+	{
+		var canUse = Player.Local.IsValid() && !Player.Local.IsDead;
+
+		if ( canUse && Input.Pressed( "CommandWheel" ) && !_editing )
+		{
+			_pendingPress = true;
+			_timeSincePressed = 0f;
+
+			if ( _waitingForDoubleTap && _timeSinceFirstTap < DoubleTapThreshold )
+			{
+				_waitingForDoubleTap = false;
+				_pendingEdit = true;
+			}
+		}
+
+		if ( _pendingPress && !Input.Down( "CommandWheel" ) )
+		{
+			_pendingPress = false;
+
+			if ( _pendingEdit )
+			{
+				_pendingEdit = false;
+				_skipExecuteOnClose = true;
+				BeginEditingSlot();
+			}
+			else if ( _timeSincePressed < ShortPressThreshold )
+			{
+				_waitingForDoubleTap = true;
+				_timeSinceFirstTap = 0f;
+				_skipExecuteOnClose = true;
+			}
+		}
+
+		if ( _waitingForDoubleTap && _timeSinceFirstTap >= DoubleTapThreshold )
+		{
+			_waitingForDoubleTap = false;
+		}
+
+		if ( _editing && Input.Pressed( "CommandWheel" ) && (_nameTextEntry == null || !_nameTextEntry.HasFocus) && (_commandTextEntry == null || !_commandTextEntry.HasFocus) )
+		{
+			CloseEditor();
+		}
+
+		var shouldOpen = canUse && (Input.Down( "CommandWheel" ) || _editing);
+		if ( shouldOpen )
+		{
+			if ( !_editing )
+			{
+				LockCamera();
+				UpdateSelection();
+			}
+		}
+		else if ( _isOpen )
+		{
+			if ( !_skipExecuteOnClose )
+			{
+				ExecuteSelectedSlot();
+			}
+
+			_skipExecuteOnClose = false;
+			UnlockCamera();
+		}
+		else
+		{
+			UnlockCamera();
+		}
+
+		if ( _isOpen == shouldOpen )
+		{
+			return;
+		}
+
+		_isOpen = shouldOpen;
+		IsOpen = shouldOpen;
+
+		if ( _isOpen )
+		{
+			_selector = new Vector2( 0f, -1f );
+			_selectedIndex = -1;
+			_skipExecuteOnClose = false;
+		}
+
+		StateHasChanged();
+	}
+
+	private bool IsSlotEmpty( CommandWheelSlot slot ) =>
+		string.IsNullOrWhiteSpace( slot.Command ) && string.IsNullOrWhiteSpace( slot.Label );
+
+	private int SkipEmptySlots( int index, int direction )
+	{
+		for ( var i = 0; i < Slots.Count; i++ )
+		{
+			if ( !IsSlotEmpty( Slots[index] ) ) return index;
+			index = WrapIndex( index + direction, Slots.Count );
+		}
+		return index;
+	}
+
+	private void UpdateSelection()
+	{
+		if ( Slots.Count == 0 )
+		{
+			return;
+		}
+
+		var wheel = Input.MouseWheel.y;
+		if ( wheel != 0f )
+		{
+			var dir = wheel > 0f ? -1 : 1;
+			var startIndex = _selectedIndex >= 0 ? _selectedIndex : 0;
+			_selectedIndex = SkipEmptySlots( WrapIndex( startIndex + dir, Slots.Count ), dir );
+			StateHasChanged();
+			return;
+		}
+
+		_selector += Input.MouseDelta;
+		if ( _selector.Length < Deadzone )
+		{
+			return;
+		}
+
+		_selector = _selector.Normal * WheelRadius;
+
+		var angle = MathF.Atan2( _selector.y, _selector.x ) + MathF.PI / 2f;
+		if ( angle < 0f )
+		{
+			angle += MathF.PI * 2f;
+		}
+
+		var selectedIndex = SkipEmptySlots( (int)MathF.Round( angle / (MathF.PI * 2f) * Slots.Count ) % Slots.Count, 1 );
+		if ( selectedIndex == _selectedIndex )
+		{
+			return;
+		}
+
+		_selectedIndex = selectedIndex;
+		Sound.Play( "soft_pop" );
+		StateHasChanged();
+	}
+
+	private void ExecuteSelectedSlot()
+	{
+		var slot = SelectedSlot;
+		if ( slot == null || !Player.Local.IsValid() || string.IsNullOrWhiteSpace( slot.Command ) )
+		{
+			return;
+		}
+
+		var command = slot.Command.Trim();
+		Dxura.RP.Game.Chat.Current?.SubmitPlayerChat( command.StartsWith( "/" ) ? command : $"/{command}", MessageType.LocalChat );
+	}
+
+	private void BeginEditingSlot()
+	{
+		_editing = true;
+		_skipExecuteOnClose = true;
+		_editingLabel = SelectedSlot?.Label ?? string.Empty;
+		_editingCommand = SelectedSlot?.Command ?? string.Empty;
+		StateHasChanged();
+	}
+
+	private void SelectSlotClick( int index )
+	{
+		_selectedIndex = Math.Clamp( index, 0, Slots.Count - 1 );
+
+		Sound.Play( "pop" );
+
+		if ( !_editing )
+		{
+			BeginEditingSlot();
+			return;
+		}
+
+		_commandTextEntry?.Blur();
+		_nameTextEntry?.Blur();
+		_editingLabel = SelectedSlot?.Label ?? string.Empty;
+		_editingCommand = SelectedSlot?.Command ?? string.Empty;
+		StateHasChanged();
+	}
+
+	private void OnLabelEdited( string value )
+	{
+		_editingLabel = value;
+		SaveEditingValues();
+	}
+
+	private void OnCommandEdited( string value )
+	{
+		_editingCommand = value;
+		SaveEditingValues();
+	}
+
+	private void SaveEditingValues()
+	{
+		var slots = GetEditableSavedSlots();
+		slots[_selectedIndex] = CreateSlotFromCommand( _editingCommand, _editingLabel );
+		SaveSlots( slots );
+	}
+
+	private void ClearEditingSlot()
+	{
+		var slots = GetEditableSavedSlots();
+		slots[_selectedIndex] = new CommandWheelSlot();
+		SaveSlots( slots );
+		_editingLabel = string.Empty;
+		_editingCommand = string.Empty;
+		StateHasChanged();
+		Sound.Play( "pop" );
+	}
+
+	private void CloseEditor()
+	{
+		Sound.Play( "pop" );
+		EndEditing();
+	}
+
+	private void EndEditing()
+	{
+		_editing = false;
+		_skipExecuteOnClose = true;
+		_commandTextEntry?.Blur();
+		_nameTextEntry?.Blur();
+		Blur();
+		StateHasChanged();
+	}
+
+	private List<CommandWheelSlot> GetEditableSavedSlots()
+	{
+		var saved = GetSavedSlots();
+		var slots = saved.Count > 0 ? saved.ToList() : BuildDefaultSlots();
+		while ( slots.Count < MaxEntries )
+		{
+			slots.Add( new CommandWheelSlot() );
+		}
+
+		return slots;
+	}
+
+	private static List<CommandWheelSlot> BuildDefaultSlots()
+	{
+		var defaults = Config.Current?.Game.CommandWheelDefaults ?? [];
+		return defaults.Select( def =>
+		{
+			var slot = CreateSlotFromCommand( def.Command, string.IsNullOrWhiteSpace( def.Label ) ? null : def.Label );
+			if ( !string.IsNullOrWhiteSpace( def.Icon ) )
+				slot.Icon = def.Icon;
+			return slot;
+		} ).ToList();
+	}
+
+	private List<CommandWheelSlot> GetSavedSlots()
+	{
+		if ( _savedSlots != null )
+		{
+			return _savedSlots;
+		}
+
+		if ( !FileSystem.OrganizationData.FileExists( BindingsPath ) )
+		{
+			_savedSlots = [];
+			return _savedSlots;
+		}
+
+		try
+		{
+			var json = FileSystem.OrganizationData.ReadAllText( BindingsPath );
+			_savedSlots = global::System.Text.Json.JsonSerializer.Deserialize<List<CommandWheelSlot>>( json ) ?? [];
+		}
+		catch ( Exception ex )
+		{
+			Log.Warning( $"Failed to load command wheel bindings: {ex.Message}" );
+			_savedSlots = [];
+		}
+
+		return _savedSlots;
+	}
+
+	private void SaveSlots( List<CommandWheelSlot> slots )
+	{
+		_savedSlots = NormalizeSlots( slots ).ToList();
+		var json = global::System.Text.Json.JsonSerializer.Serialize( _savedSlots );
+		FileSystem.OrganizationData.WriteAllText( BindingsPath, json );
+	}
+
+	public static bool BindCommandToFirstAvailableSlot( string command, string? label = null, string? icon = null )
+	{
+		var slots = LoadSavedSlots();
+		if ( slots.Count == 0 )
+		{
+			slots = BuildDefaultSlots();
+		}
+
+		while ( slots.Count < MaxEntries )
+		{
+			slots.Add( new CommandWheelSlot() );
+		}
+
+		var slotIndex = slots.FindIndex( slot => string.IsNullOrWhiteSpace( slot.Command ) && string.IsNullOrWhiteSpace( slot.Label ) );
+		if ( slotIndex < 0 )
+		{
+			return false;
+		}
+
+		var boundSlot = CreateSlotFromCommand( command, label );
+		if ( !string.IsNullOrWhiteSpace( icon ) )
+		{
+			boundSlot.Icon = icon;
+		}
+
+		slots[slotIndex] = boundSlot;
+		var normalized = NormalizeSlots( slots ).ToList();
+		var json = global::System.Text.Json.JsonSerializer.Serialize( normalized );
+		FileSystem.OrganizationData.WriteAllText( BindingsPath, json );
+		_savedSlots = null;
+		return true;
+	}
+
+	private static List<CommandWheelSlot> LoadSavedSlots()
+	{
+		if ( !FileSystem.OrganizationData.FileExists( BindingsPath ) )
+		{
+			return [];
+		}
+
+		try
+		{
+			var json = FileSystem.OrganizationData.ReadAllText( BindingsPath );
+			return global::System.Text.Json.JsonSerializer.Deserialize<List<CommandWheelSlot>>( json ) ?? [];
+		}
+		catch ( Exception ex )
+		{
+			Log.Warning( $"Failed to load command wheel bindings: {ex.Message}" );
+			return [];
+		}
+	}
+
+	private static CommandWheelSlot CreateSlotFromCommand( string command, string? customLabel = null )
+	{
+		command = command.Trim();
+		customLabel = customLabel?.Trim();
+
+		if ( string.IsNullOrWhiteSpace( command ) )
+		{
+			return string.IsNullOrWhiteSpace( customLabel )
+				? new CommandWheelSlot()
+				: new CommandWheelSlot { Label = customLabel };
+		}
+
+		var label = command.TrimStart( '/' );
+		var icon = "terminal";
+
+		if ( label.StartsWith( "emote ", StringComparison.OrdinalIgnoreCase ) )
+		{
+			label = label["emote ".Length..].Trim();
+			icon = "emoji_people";
+		}
+		else if ( label.Equals( "dance", StringComparison.OrdinalIgnoreCase ) )
+		{
+			icon = "emoji_people";
+		}
+		else if ( label.Equals( "wave", StringComparison.OrdinalIgnoreCase ) )
+		{
+			icon = "waving_hand";
+		}
+
+		return new CommandWheelSlot
+		{
+			Label = string.IsNullOrWhiteSpace( customLabel ) ? label : customLabel,
+			Icon = icon,
+			Command = command
+		};
+	}
+
+	private static IReadOnlyList<CommandWheelSlot> NormalizeSlots( IEnumerable<CommandWheelSlot> slots )
+	{
+		var normalized = slots.Take( MaxEntries ).ToList();
+		while ( normalized.Count < MaxEntries )
+		{
+			normalized.Add( new CommandWheelSlot() );
+		}
+
+		return normalized;
+	}
+
+	private static string GetSlotLabel( CommandWheelSlot slot, int index )
+	{
+		if ( !string.IsNullOrWhiteSpace( slot.Label ) )
+		{
+			return slot.Label;
+		}
+
+		return string.IsNullOrWhiteSpace( slot.Command )
+			? $"Slot {index + 1}"
+			: slot.Command.TrimStart( '/' );
+	}
+
+	private static string GetSlotIcon( CommandWheelSlot slot )
+	{
+		if ( !string.IsNullOrWhiteSpace( slot.Icon ) )
+		{
+			return slot.Icon;
+		}
+
+		return string.IsNullOrWhiteSpace( slot.Command ) ? "add_circle" : "terminal";
+	}
+
+	private string GetSlotStyle( int index )
+	{
+		var angle = index / (float)Slots.Count * MathF.PI * 2f - MathF.PI / 2f;
+		var x = MathF.Cos( angle ) * WheelRadius;
+		var y = MathF.Sin( angle ) * WheelRadius;
+		return $"left: 50%; top: 50%; margin-left: {x}px; margin-top: {y}px;";
+	}
+
+	private void LockCamera()
+	{
+		if ( !Player.Local.IsValid() )
+		{
+			return;
+		}
+
+		Player.Local.LockCamera = true;
+		_lockedCamera = true;
+	}
+
+	private void UnlockCamera()
+	{
+		if ( !_lockedCamera )
+		{
+			return;
+		}
+
+		if ( Player.Local.IsValid() )
+		{
+			Player.Local.LockCamera = false;
+		}
+
+		_lockedCamera = false;
+	}
+
+	private static int WrapIndex( int index, int count )
+	{
+		if ( count <= 0 )
+		{
+			return 0;
+		}
+
+		return (index % count + count) % count;
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( _isOpen, _editing, _selectedIndex, Slots.Count, _editingCommand );
+	}
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( firstTime && _editing && _commandTextEntry != null )
+		{
+			_commandTextEntry.Focus();
+		}
+	}
+	
+	
+
+	private class CommandWheelSlot
+	{
+		public string Label { get; set; } = string.Empty;
+		public string Icon { get; set; } = string.Empty;
+		public string Command { get; set; } = string.Empty;
+	}
+}

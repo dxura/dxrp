@@ -1,0 +1,166 @@
+@using Sandbox;
+@using Sandbox.Services
+@* ReSharper disable once RedundantUsingDirective *@
+@using System.Threading.Tasks
+@inherits PanelComponent
+@namespace Dxura.RP.UI
+
+
+<root>
+	<div class="w-full py-2 bg-secondary flex flex-col items-center justify-center">
+		<h1 class="text-2xl text-accent text-bold">@GetText( Title )</h1>
+		@if( !string.IsNullOrEmpty( Subtitle ) )
+		{
+			<h2 class="text-xs text-white text-bold">@Subtitle</h2>
+		}
+	</div>
+	
+	<div class="flex flex-col gap-1 flex-grow w-full justify-center">
+		@if ( _leaderboard != null )
+		{
+			var isPlayerOnLeaderboard = _leaderboard.Entries.Any( e => e.SteamId == Game.SteamId );
+			
+			@foreach ( var entry in _leaderboard.Entries)
+			{
+				<div class="w-full px-2 @(entry.SteamId == Game.SteamId ? "localPlayer" : "")">
+					<div class="flex flex-row justify-between items-center w-full">
+						<div class="flex flex-row items-center gap-2">
+							<label class="text-base text-white text-bold text-center" style="width: 32px">#@entry.Rank.</label>
+						<img class="avatar w-6 h-6 rounded-full" src="avatar:@entry.SteamId" alt="Avatar"/>
+							<label class="text-base text-white truncate">@entry.DisplayName</label>
+						</div>
+						<span class="text-base text-accent text-bold">@entry.Value.ToString("N0") 
+							@if ( !string.IsNullOrEmpty( Unit ) )
+							{
+								<span class="text-white">@GetText( Unit )</span>
+							}
+						</span>
+					</div>
+				</div>
+			}
+			
+			@if ( !isPlayerOnLeaderboard )
+			{
+				var playerEntry = Stats.LocalPlayer.Get( _loadedStatKey ?? DxStats.GetStatKey( Stat ) );
+				<div class="w-full px-2 localPlayer">
+					<div class="flex flex-row justify-between items-center w-full">
+						<div class="flex flex-row items-center gap-2 ">
+							<label class="text-base text-white text-bold text-center" style="width: 32px">#-</label>
+						<img class="avatar w-6 h-6 rounded-full" src="avatar:@Game.SteamId" alt="Avatar"/>
+							<label class="text-base text-white truncate">@Connection.Local.DisplayName</label>
+						</div>
+						<span class="text-base text-accent text-bold">@playerEntry.Value.ToString("N0") 
+							@if ( !string.IsNullOrEmpty( Unit ) )
+							{
+								<span class="text-white">@GetText( Unit )</span>
+							}
+						</span>
+					</div>
+				</div>
+			}
+		}
+	</div>
+
+</root>
+
+@code
+{
+
+	[Property]
+	public string Title { get; set; } = "#statsboard.top_healers";
+	
+	[Property]
+	public string Subtitle { get; set; } = "";
+	
+	[Property]
+	public string Stat { get; set; } = "healed";
+	
+	[Property]
+	public string Unit { get; set; } = "#statsboard.hp";
+	
+	private string? _loadedStatKey;
+	private string? _requestedStatKey;
+	private bool _isRefreshing;
+
+	private static string GetText( string? text )
+	{
+		if ( string.IsNullOrWhiteSpace( text ) ) return string.Empty;
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+	
+	Leaderboards.Board2? _leaderboard;
+	DateTimeOffset _lastRefresh = DateTimeOffset.Now;
+
+	protected override void OnEnabled()
+	{
+		base.OnEnabled();
+		EnsureLeaderboardLoaded();
+	}
+
+	protected override void OnUpdate()
+	{
+		base.OnUpdate();
+		EnsureLeaderboardLoaded();
+	}
+
+	private void EnsureLeaderboardLoaded()
+	{
+		var statKey = DxStats.GetStatKey( Stat );
+		_requestedStatKey = statKey;
+
+		if ( _loadedStatKey == statKey || _isRefreshing )
+		{
+			return;
+		}
+
+		_ = ProcessRefreshQueue();
+	}
+
+	private async Task ProcessRefreshQueue()
+	{
+		if ( _isRefreshing )
+		{
+			return;
+		}
+
+		_isRefreshing = true;
+
+		try
+		{
+			while ( true )
+			{
+				var statKey = _requestedStatKey;
+				if ( string.IsNullOrEmpty( statKey ) || _loadedStatKey == statKey )
+				{
+					return;
+				}
+
+				var leaderboard = Leaderboards.GetFromStat( "dxura.rp", statKey );
+				leaderboard.MaxEntries = 10;
+
+				await leaderboard.Refresh();
+
+				// Tenant changed while we were refreshing. Skip publishing stale data and loop once more.
+				if ( _requestedStatKey != statKey )
+				{
+					continue;
+				}
+
+				_leaderboard = leaderboard;
+				_loadedStatKey = statKey;
+				_lastRefresh = DateTimeOffset.Now;
+				StateHasChanged();
+			}
+		}
+		finally
+		{
+			_isRefreshing = false;
+		}
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( _lastRefresh, _leaderboard?.GetHashCode() );
+	}
+	
+}

@@ -1,0 +1,309 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@inherits Panel
+
+@attribute [StyleSheet]
+
+@{
+	var tickets = GetDisplayTickets();
+}
+
+<root>
+	@if ( !RankSystem.HasLocalPermission( Permission.HandleTickets ) ) return;
+	
+	<div class="ticket-stack flex flex-col">
+		@foreach ( var ticket in tickets )
+		{
+			<DraggablePanel @key="ticket.Id"
+			                WidthPixels="@(320f)"
+			                StorageKey="@GetTicketDragStorageKey( ticket.Id )"
+			                Class="@GetTicketWindowClass( ticket )"
+			                HandleClass="ticket-header flex items-center justify-between bg-secondary-95 p-1">
+				<HandleContent>
+					<div class="flex items-center gap-2 flex-grow min-h-0">
+						<div class="text-sm text-bold text-white">@ticket.ReporterName</div>
+						<div class="ticket-time text-xs text-gray-400">@FormatOpenTime( ticket )</div>
+					</div>
+					<div class="flex items-center">
+						<button class="ticket-close text-xs text-bold"
+						        title="@Language.GetPhrase( "generic.close" )"
+						        @onmousedown="@StopMouseEvent"
+						        @onclick="@(() => DismissTicket( ticket.Id ))">X</button>
+					</div>
+				</HandleContent>
+
+				<ChildContent>
+					<div class="ticket-body flex gap-2 p-2">
+						<div class="ticket-main flex flex-col flex-grow min-h-0 p-2">
+							<div class="ticket-messages flex flex-col flex-grow gap-1 min-h-0">
+								@foreach ( var message in ticket.Messages )
+								{
+									<div class="ticket-message text-sm text-white">@message</div>
+								}
+							</div>
+						</div>
+
+						<div class="ticket-actions flex flex-col">
+							@{
+								var isTicketPlayerOnline = IsTicketPlayerOnline( ticket );
+							}
+							@if ( IsPendingTicket( ticket ) )
+							{
+								<button class="ticket-action ticket-action-primary flex items-center justify-center w-full flex-grow text-center whitespace-nowrap text-xs text-bold cursor-pointer"
+								        title="@Language.GetPhrase( "admin.ticket.claim" )"
+								        @onclick="@(() => ClaimTicket( ticket.Id ))">
+									@Language.GetPhrase( "admin.ticket.claim" )
+								</button>
+							}
+							else
+							{
+								@if ( CanTeleport && isTicketPlayerOnline )
+								{
+									<button class="ticket-action ticket-action-neutral flex items-center justify-center w-full text-center whitespace-nowrap text-xs text-bold cursor-pointer"
+									        title="@Language.GetPhrase( "admin.ticket.goto" )"
+									        @onclick="@(() => TryGoto( ticket.ReporterSteamId ))">
+										@Language.GetPhrase( "admin.ticket.goto" )
+									</button>
+									<button class="ticket-action ticket-action-neutral flex items-center justify-center w-full text-center whitespace-nowrap text-xs text-bold cursor-pointer"
+									        title="@Language.GetPhrase( "admin.ticket.bring" )"
+									        @onclick="@(() => TryBring( ticket.ReporterSteamId ))">
+										@Language.GetPhrase( "admin.ticket.bring" )
+									</button>
+									<button class="ticket-action ticket-action-neutral flex items-center justify-center w-full text-center whitespace-nowrap text-xs text-bold cursor-pointer"
+									        title="@Language.GetPhrase( "admin.ticket.return" )"
+									        @onclick="@(() => TryReturn( ticket.ReporterSteamId ))">
+										@Language.GetPhrase( "admin.ticket.return" )
+									</button>
+								}
+
+								@if ( CanSpectate && isTicketPlayerOnline )
+								{
+									<button class="ticket-action ticket-action-neutral flex items-center justify-center w-full text-center whitespace-nowrap text-xs text-bold cursor-pointer"
+									        title="@Language.GetPhrase( "admin.ticket.spectate" )"
+									        @onclick="@(() => TrySpectate( ticket.ReporterSteamId ))">
+										@Language.GetPhrase( "admin.ticket.spectate" )
+									</button>
+								}
+
+								<button class="ticket-action ticket-action-good flex items-center justify-center w-full text-center whitespace-nowrap text-xs text-bold cursor-pointer"
+								        title="@Language.GetPhrase( "admin.ticket.resolve" )"
+								        @onclick="@(() => ResolveTicket( ticket.Id ))">
+									@Language.GetPhrase( "admin.ticket.resolve" )
+								</button>
+							}
+						</div>
+					</div>
+				</ChildContent>
+			</DraggablePanel>
+		}
+	</div>
+</root>
+
+@code
+{
+	private sealed class TicketLayoutState
+	{
+		public bool Dismissed { get; set; }
+		public int LastSeenMessageCount { get; set; } = -1;
+	}
+
+	private static readonly Dictionary<Guid, TicketLayoutState> TicketLayouts = [];
+	private const int MaxDisplayedTickets = 3;
+
+	private int _layoutRevision;
+	private bool _hasRequestedSync;
+	private bool _wasCursorUnlocked;
+
+	private static bool CanTeleport => RankSystem.HasLocalPermission( Permission.PlayerTeleport );
+	private static bool CanSpectate => RankSystem.HasLocalPermission( Permission.PlayerSpectate );
+
+	public override void Tick()
+	{
+		var isCursorUnlocked = HUD.IsCursorUnlocked;
+		if ( _wasCursorUnlocked && !isCursorUnlocked )
+		{
+			Blur();
+		}
+		_wasCursorUnlocked = isCursorUnlocked;
+
+		if ( !RankSystem.HasLocalPermission( Permission.HandleTickets ) )
+		{
+			_hasRequestedSync = false;
+			AdminTicketSystem.Current?.ClearVisibleTicketsClient();
+			return;
+		}
+
+		if ( !_hasRequestedSync )
+		{
+			AdminTicketSystem.Current?.RequestTicketSyncHost();
+			_hasRequestedSync = true;
+		}
+	}
+
+	protected override int BuildHash()
+	{
+		var ticketHash = 0;
+		if ( AdminTicketSystem.Current != null )
+		{
+			foreach ( var ticket in AdminTicketSystem.Current.VisibleTickets )
+			{
+				ticketHash = HashCode.Combine( ticketHash, ticket.Id, ticket.Messages.Count, ticket.ClaimedBySteamId, ticket.SortOrder, ticket.CreatedAtUnixTime );
+			}
+		}
+
+		return HashCode.Combine(
+			RankSystem.HasLocalPermission( Permission.HandleTickets ),
+			HUD.IsCursorUnlocked,
+			AdminTicketSystem.Current?.ClientRevision ?? 0,
+			_layoutRevision,
+			ticketHash,
+			AdminTicketSystem.Current?.VisibleTickets.Count > 0 ? DateTimeOffset.UtcNow.ToUnixTimeSeconds() : 0
+		);
+	}
+
+	private List<AdminTicketState> GetDisplayTickets()
+	{
+		if ( AdminTicketSystem.Current == null )
+		{
+			return [];
+		}
+
+		var orderedTickets = GetOrderedTickets( AdminTicketSystem.Current.VisibleTickets );
+
+		var activeIds = orderedTickets.Select( ticket => ticket.Id ).ToHashSet();
+		foreach ( var staleId in TicketLayouts.Keys.Where( id => !activeIds.Contains( id ) ).ToList() )
+		{
+			TicketLayouts.Remove( staleId );
+			DraggablePanel.ClearStoredOffset( GetTicketDragStorageKey( staleId ) );
+		}
+
+		foreach ( var ticket in orderedTickets )
+		{
+			var layout = GetLayout( ticket.Id );
+			if ( ticket.Messages.Count <= layout.LastSeenMessageCount )
+			{
+				continue;
+			}
+
+			if ( layout.Dismissed && layout.LastSeenMessageCount >= 0 )
+			{
+				layout.Dismissed = false;
+				_layoutRevision++;
+			}
+
+			layout.LastSeenMessageCount = ticket.Messages.Count;
+		}
+
+		var visibleTickets = orderedTickets
+			.Where( ticket => !GetLayout( ticket.Id ).Dismissed )
+			.ToList();
+
+		var pendingTickets = visibleTickets
+			.Where( ticket => !ticket.ClaimedBySteamId.HasValue && !IsTicketDetached( ticket ) )
+			.Take( MaxDisplayedTickets )
+			.ToList();
+
+		var detachedPendingTickets = visibleTickets
+			.Where( ticket => !ticket.ClaimedBySteamId.HasValue && IsTicketDetached( ticket ) )
+			.ToHashSet();
+
+		return visibleTickets
+			.Where( ticket => ticket.ClaimedBySteamId.HasValue || pendingTickets.Contains( ticket ) || detachedPendingTickets.Contains( ticket ) )
+			.ToList();
+	}
+
+	private TicketLayoutState GetLayout( Guid ticketId )
+	{
+		if ( !TicketLayouts.TryGetValue( ticketId, out var layout ) )
+		{
+			layout = new TicketLayoutState();
+			TicketLayouts[ticketId] = layout;
+		}
+
+		return layout;
+	}
+
+	private void DismissTicket( Guid ticketId )
+	{
+		var layout = GetLayout( ticketId );
+		layout.Dismissed = true;
+
+		_layoutRevision++;
+	}
+
+	private static void StopMouseEvent( PanelEvent e )
+	{
+		e.StopPropagation();
+	}
+
+	private void ClaimTicket( Guid ticketId )
+	{
+		AdminTicketSystem.Current?.ClaimTicketHost( ticketId );
+	}
+
+	private void ResolveTicket( Guid ticketId )
+	{
+		AdminTicketSystem.Current?.ResolveTicketHost( ticketId );
+	}
+
+	private void TryGoto( long reporterSteamId )
+	{
+		Dxura.RP.Game.Chat.Current?.ExecuteCommandHost( "goto", reporterSteamId.ToString() );
+	}
+
+	private void TryBring( long reporterSteamId )
+	{
+		Dxura.RP.Game.Chat.Current?.ExecuteCommandHost( "bring", reporterSteamId.ToString() );
+	}
+
+	private void TryReturn( long reporterSteamId )
+	{
+		Dxura.RP.Game.Chat.Current?.ExecuteCommandHost( "return", reporterSteamId.ToString() );
+	}
+
+	private void TrySpectate( long reporterSteamId )
+	{
+		Dxura.RP.Game.Chat.Current?.ExecuteCommandHost( "spectate", reporterSteamId.ToString() );
+	}
+
+	private static bool IsTicketPlayerOnline( AdminTicketState ticket )
+	{
+		return GameUtils.GetPlayerById( ticket.ReporterSteamId ).IsValid();
+	}
+
+	private static string GetTicketDragStorageKey( Guid ticketId )
+	{
+		return $"admin-ticket:{ticketId}";
+	}
+
+	private static string FormatOpenTime( AdminTicketState ticket )
+	{
+		var openSeconds = Math.Max( 0L, DateTimeOffset.UtcNow.ToUnixTimeSeconds() - ticket.CreatedAtUnixTime );
+		return $"{openSeconds}s";
+	}
+
+	private static List<AdminTicketState> GetOrderedTickets( IEnumerable<AdminTicketState> tickets )
+	{
+		return tickets
+			.OrderBy( ticket => ticket.SortOrder )
+			.ToList();
+	}
+
+	private static bool IsPendingTicket( AdminTicketState ticket )
+	{
+		return !ticket.ClaimedBySteamId.HasValue;
+	}
+
+	private static bool IsTicketDetached( AdminTicketState ticket )
+	{
+		return DraggablePanel.HasStoredOffset( GetTicketDragStorageKey( ticket.Id ) );
+	}
+
+	private static string GetTicketWindowClass( AdminTicketState ticket )
+	{
+		return IsTicketDetached( ticket )
+			? "ticket-window is-detached-ticket flex flex-col bg-primary-95 shadow-lg"
+			: "ticket-window flex flex-col bg-primary-95 shadow-lg";
+	}
+
+}

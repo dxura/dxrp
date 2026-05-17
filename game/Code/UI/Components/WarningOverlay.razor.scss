@@ -1,0 +1,46 @@
+@import "../styles.scss";
+
+WarningOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($color-primary, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  pointer-events: all;
+
+  .modal-content {
+    background-color: $color-primary;
+    border: 0.5px solid rgba(white, 0.04);
+    border-radius: $space-2;
+    padding: $space-8;
+    max-width: 550px;
+    min-width: 450px;
+  }
+
+  .title {
+    font-size: 44px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .warning-message {
+    border-radius: $space-1;
+    padding: $space-4;
+    color: white;
+    text-align: center;
+    font-size: $text-base;
+    max-width: 100%;
+  }
+
+  .btn {
+    font-weight: bold;
+    font-size: $text-base;
+  }
+}
+

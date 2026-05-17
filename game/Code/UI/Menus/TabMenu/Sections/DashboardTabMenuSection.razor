@@ -1,0 +1,284 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Commands
+@using Sandbox.Services
+@using Sandbox.UI
+@using Game = Sandbox.Game
+@inherits Panel
+
+<root>
+	<div class="dashboard-content">
+		<!-- Header -->
+		<div class="dashboard-header">
+			<h1 class="text-5xl text-white">
+				<span>#tabmenu.dashboard.header.prefix</span>
+				<span class="text-accent ml-2">@Config.Current.Game.DashboardName</span>
+			</h1>
+			<p class="text-gray-400 text-sm">@GetText( Config.Current.Game.DashboardDescription )</p>
+		</div>
+
+		<!-- Stats Row -->
+		<div class="stats-row">
+			<div class="stat-item">
+				<div class="stat-icon-wrap">
+					<i class="material-icons">dns</i>
+				</div>
+				<div class="stat-text">
+					<span class="stat-value">@( Networking.ServerName ?? Language.GetPhrase( "tabmenu.dashboard.unknown" ) )</span>
+					<span class="stat-label">#tabmenu.dashboard.server</span>
+				</div>
+			</div>
+
+			<div class="stat-divider"></div>
+
+			<div class="stat-item">
+				<div class="stat-icon-wrap">
+					<i class="material-icons">schedule</i>
+				</div>
+				<div class="stat-text">
+					<span class="stat-value">@( FormatUptime( Time.Now ) )</span>
+					<span class="stat-label">#tabmenu.dashboard.uptime</span>
+				</div>
+			</div>
+
+			<div class="stat-divider"></div>
+
+			<div class="stat-item">
+				<div class="stat-icon-wrap">
+					<i class="material-icons">hourglass_bottom</i>
+				</div>
+				<div class="stat-text">
+					<span class="stat-value">@( Player.Local.PlayTime / 60 )h</span>
+					<span class="stat-label">#tabmenu.dashboard.playtime</span>
+				</div>
+			</div>
+
+			<div class="stat-divider"></div>
+
+			<div class="stat-item">
+				<div class="stat-icon-wrap">
+					<i class="material-icons">timer</i>
+				</div>
+				<div class="stat-text">
+					<span class="stat-value">@( FormatUptime( GameManager.Instance.SessionTime ) )</span>
+					<span class="stat-label">#tabmenu.dashboard.session</span>
+				</div>
+			</div>
+		</div>
+
+		<p class="text-gray-400 text-xs">#tabmenu.dashboard.disclaimer</p>
+
+		<!-- Governance & Laws Section -->
+		@if ( Config.Current.Game.GovernanceLawEnabled || Config.Current.Game.GovernanceTaxEnabled )
+		{
+			<div class="governance-card">
+				<div class="governance-header">
+					<h2 class="text-xl text-accent">
+						<i class="material-icons mr-2">gavel</i>
+						@( !string.IsNullOrEmpty( Governance.Current.TownName ) ? Governance.Current.TownName : "#governance.laws" )
+					</h2>
+
+					@if ( Config.Current.Game.GovernanceTaxEnabled )
+					{
+						<div class="treasury-badges">
+							<div class="treasury-badge">
+								<i class="material-icons">account_balance</i>
+								<span class="text-cash">$@( Governance.Current.GovernmentBalance.ToString( "N0" ) )</span>
+							</div>
+							<div class="treasury-badge">
+								<span class="badge-label">#tabmenu.dashboard.tax</span>
+								<span class="text-cash">@( $"{Governance.Current.TaxRate * 100f:0.#}%" )</span>
+							</div>
+						</div>
+					}
+				</div>
+
+				@if ( Config.Current.Game.GovernanceLawEnabled && Governance.Current.GetAllLaws().Any() )
+				{
+					<div class="laws-list">
+						@foreach ( var (law, index) in Governance.Current.GetAllLaws().Select( ( law, i ) => ( law, i + 1 ) ) )
+						{
+							<div class="law-item">
+								<span class="law-number">@index.</span>
+								<span class="law-text">@law</span>
+							</div>
+						}
+					</div>
+				}
+			</div>
+		}
+
+		@if ( ServerApiLink.HasAuthorizationKey )
+		{
+			<TempPlayerUpgrader></TempPlayerUpgrader>
+		}
+
+	</div>
+
+	<!-- Actions Bar -->
+	<div class="actions-bar">
+		<h2 class="text-base text-white text-bold">#tabmenu.dashboard.actions</h2>
+		<div class="actions-row">
+			@if ( !IsPlayerDead() )
+			{
+				@if ( Config.Current.Game.MoneyEnabled )
+				{
+					<div class="input-combo @(_customAmountFocused ? "is-focused" : string.Empty)">
+						<TabMenuTextEntry
+							@ref="_customAmountEntry"
+							Value:bind="@_customAmountText"
+							Numeric="@true"
+							class="combo-input text-tertiary"
+							placeholder="#tabmenu.dashboard.enter_amount"/>
+						<button class="combo-btn btn-primary" onclick="@( () => TryDropCustomAmount() )">#tabmenu.dashboard.actions.dropmoney</button>
+					</div>
+				}
+
+				<button class="btn btn-bad" onclick="@( () => TrySuicide() )">#tabmenu.dashboard.actions.suicide</button>
+				<button class="btn btn-warn" onclick="@( () => TryPanic() )">#tabmenu.dashboard.actions.panic</button>
+
+				@if ( Config.Current.Game.CustomJobEnabled && Player.Local.Job.IsCitizenRole() )
+				{
+					<div class="input-combo @(_customJobFocused ? "is-focused" : string.Empty)">
+						<TabMenuTextEntry
+							@ref="_customJobEntry"
+							Value:bind="@_customJobText"
+							class="combo-input text-tertiary"
+							MaxLength=@( 15 )
+							MinLength=@( 2 )
+							Placeholder="#tabmenu.dashboard.gambler"/>
+						<button class="combo-btn btn-primary" onclick="@( () => TrySetCustomJob() )">#tabmenu.dashboard.actions.customjob</button>
+					</div>
+				}
+			}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	private static string _customAmountText = "100";
+	private string _customJobText = "";
+	private TextEntry? _customAmountEntry;
+	private TextEntry? _customJobEntry;
+	private bool _customAmountFocused;
+	private bool _customJobFocused;
+
+	private static string GetText( string? text )
+	{
+		if ( string.IsNullOrWhiteSpace( text ) ) return string.Empty;
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+
+	private bool IsPlayerDead() => Player.Local.IsValid() && Player.Local.HealthComponent.State == LifeState.Dead;
+
+	public override void Tick()
+	{
+		base.Tick();
+
+		var customAmountFocused = _customAmountEntry.IsValid() && _customAmountEntry.HasFocus;
+		var customJobFocused = _customJobEntry.IsValid() && _customJobEntry.HasFocus;
+
+		if ( customAmountFocused == _customAmountFocused && customJobFocused == _customJobFocused )
+		{
+			return;
+		}
+
+		_customAmountFocused = customAmountFocused;
+		_customJobFocused = customJobFocused;
+		StateHasChanged();
+	}
+
+	private void TryDropCustomAmount()
+	{
+		if ( !Player.Local.IsValid() ) return;
+
+		if ( string.IsNullOrWhiteSpace( _customAmountText ) || !uint.TryParse( _customAmountText, out var amount ) || amount == 0 )
+		{
+			Notify.Error( "#notify.cash.invalid" );
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
+		Achievements.Unlock( "drop_money" );
+
+        // route via command system
+        RP.Game.Chat.Current.ExecuteCommandHost(DropMoneyCommand.Name, amount.ToString());
+
+		TabMenu.RequestCloseMenu();
+	}
+	
+	private void TryPanic()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "panic", Config.Current.Game.PanicCooldown, true ) )
+		{
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
+		if ( !Player.Local.IsValid() )
+		{
+			Notify.Error( Language.GetPhrase( "generic.player.not.found" ) );
+			return;
+		}
+
+        // route via command system
+        Dxura.RP.Game.Chat.Current.ExecuteCommandHost(PanicCommand.Name);
+		
+        TabMenu.RequestCloseMenu();
+	}
+
+	private void TrySuicide()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "suicide", Config.Current.Game.SuicideCooldown, true ) )
+		{
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
+		if ( !Player.Local.IsValid() )
+		{
+			Notify.Error( Language.GetPhrase( "generic.player.not.found" ) );
+			return;
+		}
+
+		if ( Player.Local.HealthComponent.IsGodMode )
+		{
+			Notify.Error( "#notify.suicide.god" );
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
+        // route via command system
+        Dxura.RP.Game.Chat.Current.ExecuteCommandHost(SuicideCommand.CommandConstant);
+	}
+
+	private void TrySetCustomJob()
+	{
+		var player = Player.Local;
+		if(!player.IsValid()) return;
+		
+		if ( Cooldown.Current.CheckAndStartCooldown( "customJob", Config.Current.Game.ChangeCustomJobCooldown, true) )
+		{
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
+		RP.Game.Chat.Current.ExecuteCommandHost( CustomJobCommand.Name, _customJobText );
+		
+		_customJobText = "";
+		TabMenu.RequestCloseMenu();
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( IsPlayerDead(), Governance.Current.GetAllLaws().Count(), Governance.Current.GovernmentBalance, Governance.Current.TaxRate, ((float)GameManager.Instance.SessionTime).FloorToInt() );
+	}
+	
+	private static string FormatUptime(float seconds)
+	{
+		var ts = TimeSpan.FromSeconds(seconds);
+		return ts.TotalHours >= 24 
+			? $"{(int)ts.TotalDays}d {ts.Hours}h {ts.Minutes}m"
+			: $"{(int)ts.TotalHours}h {ts.Minutes}m";
+	}
+}

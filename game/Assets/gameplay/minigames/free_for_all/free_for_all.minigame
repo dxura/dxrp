@@ -1,0 +1,47 @@
+{
+  "Identifier": "free_for_all",
+  "MainPrefab": null,
+  "SecondaryPrefabs": [
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_container_yard.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_paintball_arena.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_gibs.prefab"
+    },
+    {
+      "_type": "gameobject",
+      "prefab": "gameplay/minigames/maps/mg_whatever.prefab"
+    }
+  ],
+  "Name": "#minigame.freeforall.name",
+  "Description": "#minigame.freeforall.description",
+  "Icon": null,
+  "Color": null,
+  "LobbyOffset": "0,0,1000",
+  "MaxPlayers": 16,
+  "MinPlayers": 2,
+  "IsSelectable": true,
+  "Weight": 50,
+  "Duration": 120,
+  "LobbyDuration": 15,
+  "StartingEquipment": [
+    "gameplay/equipment/weapons/mp5/mp5.equip",
+    "gameplay/equipment/weapons/spaghelli/spaghelli.equip",
+    "gameplay/equipment/default/fists/fists.equip",
+    "gameplay/equipment/weapons/usp/usp.equip"
+  ],
+  "GiveMaxAmmo": true,
+  "SpawnRuleset": "OneLife",
+  "RespawnDuration": 30,
+  "SpawnMethod": "RoundRobin",
+  "MakeDeadPlayersSpectators": true,
+  "WinCondition": "LastManStanding",
+  "__references": [],
+  "__version": 0
+}

@@ -1,0 +1,159 @@
+@using Dxura.RP.Game.Entities
+@using Sandbox;
+@inherits PanelComponent
+
+@namespace Dxura.RP.Game.UI
+
+<root>
+	@if (!_isPluckingGame)
+	{
+	    <div class="flex flex-col w-full h-full ">
+		    <div class="flex-grow">
+			    
+		    </div>
+		    <div class="flex flex-col w-full p-4 gap-4">
+			    <div class="w-full flex items-center justify-center">
+				    <p class="text-xl text-center">#rollingtable.place_weed</p>
+			    </div>
+			    
+			    <div class="flex justify-between items-center p-3 rounded bg-primary">
+				    <span class="text-lg">#rollingtable.unprocessed</span>
+				    <span class="text-lg text-accent">@Entity.UnprocessedWeed</span>
+			    </div>
+
+			    <div class="flex justify-between items-center p-3 rounded bg-primary">
+				    <span class="text-lg">#rollingtable.processed</span>
+				    <span class="text-lg text-accent">@Entity.ProcessedWeed</span>
+			    </div>
+
+			    @if (Entity.AutoProcessTime.HasValue)
+			    {
+				    <div class="flex flex-col p-3 rounded bg-primary gap-1">
+					    <div class="flex justify-between items-center">
+						    <span class="text-lg">#rollingtable.auto_process</span>
+						    <span class="text-lg text-green-400">#rollingtable.active</span>
+					    </div>
+					    <div class="w-full bg-gray-700 rounded h-4">
+						    <div class="bg-green-500 h-full rounded transition-all" style="width: @((1 - Entity.AutoProcessTime.Value / RollingTableEntity.AutoProcessInterval) * 100)%;"></div>
+					    </div>
+					    <span class="text-sm text-gray-400 text-center">@string.Format( Language.GetPhrase( "rollingtable.next_process_in" ), (int)Math.Max( 0, Entity.AutoProcessTime.Value ) )</span>
+				    </div>
+			    }
+		    </div>
+
+		    <div class="flex flex-col p-4 gap-4 mt-auto items-center">
+			    
+			    <div class="flex gap-2">
+				    <button class="btn btn-primary text-lg" @onclick="@(OnProcessClick)">
+					    <span>#rollingtable.process</span>
+				    </button>
+	            
+				    @if (!Entity.AutoProcessTime.HasValue)
+				    {
+					    <button class="btn btn-secondary text-lg flex items-center gap-2" @onclick="@(OnAutoProcessClick)">
+					        <span>#rollingtable.auto_process</span>
+					        <span class="font-bold text-accent">@RollingTableEntity.AutoProcessCost.ToString("C0")</span>
+					    </button>
+				    }
+			    </div>
+
+
+	            
+	            <div class="flex gap-4">
+	                <button class="btn btn-good text-lg flex-1" @onclick="@(() => OnMakeProduct(true))">
+	                    <span>#rollingtable.roll_joints</span>
+	                </button>
+	                <button class="btn text-lg flex-1" style="background-color: #556B2F;" @onclick="@(() => OnMakeProduct(false))">
+	                    <span>#rollingtable.pack_bundle</span>
+	                </button>
+	            </div>
+	        </div>
+	    </div>
+	}
+	else
+	{
+	    <div class="flex flex-col w-full h-full">
+	        <div class="flex justify-center items-center w-full p-4 bg-primary">
+	            <h2 class="text-2xl text-white poppins">#rollingtable.pluck</h2>
+	        </div>
+
+	        <WeedPluckingGame OnGameComplete="@OnPluckingComplete" @ref="_pluckingGame" />
+	    </div>
+	}
+</root>
+
+@code
+{
+    [Property]
+    public required RollingTableEntity Entity { get; set; }
+    
+    private bool _isPluckingGame = false;
+    private WeedPluckingGame? _pluckingGame;
+    
+    private bool CanProcessUnprocessed => Entity.UnprocessedWeed > 0;
+    private bool CanProcessProcessed => Entity.ProcessedWeed < 6;
+    
+    private bool CanMakeProduct => Entity.ProcessedWeed > 0;
+
+    private void OnProcessClick()
+    {
+	    if ( !CanProcessUnprocessed )
+	    {
+		    Notify.Error( "#rollingtable.nothing_to_process" );
+		    return;
+	    }
+	    
+	    if ( !CanProcessProcessed )
+	    {
+		    Notify.Error( "#rollingtable.full" );
+		    return;
+	    }
+
+	    _isPluckingGame = true;
+        StateHasChanged();
+    }
+
+    private void OnPluckingComplete(bool success)
+    {
+        _isPluckingGame = false;
+        if (success)
+        {
+            Entity.OnProcess();
+        }
+        StateHasChanged();
+    }
+
+    private void OnMakeProduct(bool isJoint)
+    {
+	    if ( !CanMakeProduct)
+	    {
+		    Notify.Error( "#rollingtable.need_process" );
+		    return;
+	    }
+
+	    if ( Cooldown.Current.CheckAndStartCooldown( "rollingtable:make", Config.Current.Game.ActionCooldown, true ) )
+	    {
+		    return;
+	    }
+	    
+        Entity.OnMakeProduct(isJoint);
+    }
+
+    private void OnAutoProcessClick()
+    {
+	    if ( Entity.AutoProcessTime.HasValue )
+	    {
+		    Notify.Error( "#rollingtable.auto_active" );
+		    return;
+	    }
+
+	    if ( Cooldown.Current.CheckAndStartCooldown( "rollingtable:autoprocess", Config.Current.Game.ActionCooldown, true ) )
+	    {
+		    return;
+	    }
+	    
+	    Entity.OnStartAutoProcessBuy();
+    }
+
+    protected override int BuildHash() => HashCode.Combine(Entity.UnprocessedWeed, Entity.ProcessedWeed, Entity.AutoProcessTime.HasValue, (int)(Entity.AutoProcessTime ?? 0));
+}

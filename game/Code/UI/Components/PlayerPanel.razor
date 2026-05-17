@@ -1,0 +1,18 @@
+
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@if ( !Player.IsValid() ) return;
+
+<root>
+	<label class="name text-base text-bold" style="color:@JobColor">
+		@Player.DisplayName
+	</label>
+</root>
+
+@code
+{
+	public Player? Player { get; set; }
+
+	private string JobColor => Player?.Job?.Color.Hex() ?? Color.White.Hex;
+}

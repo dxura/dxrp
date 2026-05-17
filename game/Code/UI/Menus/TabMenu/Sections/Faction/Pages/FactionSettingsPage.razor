@@ -1,0 +1,235 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@using Sandbox.UI
+@inherits Panel
+@page "/tabmenu/faction/settings"
+
+<root>
+@if ( !FactionSystem.Instance.IsValid() )
+{
+	<p class="text-base text-gray-400 p-3">#faction.settings.loading</p>
+}
+else if ( !Player.Local.IsInFaction )
+{
+	<p class="text-base text-gray-400 p-3">#faction.settings.join_first</p>
+}
+else
+{
+	var factionId = Player.Local.FactionId!.Value;
+	var myRole = Player.Local.GetFactionRole();
+	var canManage = myRole != null && myRole.Value.Permission.HasFlag( FactionPermission.ManageFaction );
+	var canSetRanks = myRole != null && myRole.Value.Permission.HasFlag( FactionPermission.SetRanks );
+	var roles = FactionSystem.Instance.GetFactionRoles( factionId ).OrderBy( r => r.Order ).ToList();
+
+	@if ( canManage )
+	{
+		<div class="section-group">
+			<div class="section-group-title">#faction.settings.description</div>
+			<div class="flex gap-2 items-center p-3">
+				<TabMenuTextEntry
+					@ref="_descriptionEntry"
+					class="bg-secondary text-tertiary rounded flex-grow"
+					placeholder="#faction.settings.desc_placeholder"
+					MaxLength=@( 200 )
+					Value:bind="@_descriptionText"/>
+				<button class="btn btn-good" onclick="@(() => TryUpdateDescription( factionId ))">#faction.settings.save</button>
+			</div>
+		</div>
+	}
+
+	@if ( canSetRanks )
+	{
+		<div class="section-group">
+			<div class="section-group-title">@string.Format( Language.GetPhrase( "faction.settings.roles_count" ), roles.Count )</div>
+			<div class="flex flex-col gap-1 p-3">
+				@if ( roles.Count > 0 )
+				{
+					<div class="flex text-xs text-gray-400 uppercase pb-1" style="border-bottom: 1px solid rgba(136,139,145,0.2)">
+						<span style="width: 40px; flex-shrink: 0;">#</span>
+						<span style="flex: 1; min-width: 100px;">#faction.settings.name</span>
+						<span style="flex: 1; min-width: 160px;">#faction.settings.permissions</span>
+						<span style="width: 60px; flex-shrink: 0;"></span>
+					</div>
+
+					@foreach ( var role in roles )
+					{
+						<div class="flex items-center text-sm py-1" style="border-bottom: 1px solid rgba(136,139,145,0.1)">
+							<span class="text-gray-400" style="width: 40px; flex-shrink: 0;">@role.Order</span>
+							<span class="text-accent text-bold" style="flex: 1; min-width: 100px;">@role.Name</span>
+							<span class="text-gray-400 text-xs" style="flex: 1; min-width: 160px;">@FormatPermissions( role.Permission )</span>
+							<div style="width: 60px; flex-shrink: 0;" class="flex justify-end">
+								<button class="btn-compact btn-bad text-xs" onclick="@(() => TryDeleteRole( factionId, role.Id ))">#faction.settings.delete</button>
+							</div>
+						</div>
+					}
+				}
+				else
+				{
+					<p class="text-sm text-gray-400">#faction.settings.no_roles</p>
+				}
+			</div>
+		</div>
+
+		<div class="section-group">
+			<div class="section-group-title">#faction.settings.create_role</div>
+			<div class="flex flex-col gap-2 p-3">
+				<div class="flex gap-2">
+					<TabMenuTextEntry
+						class="bg-secondary text-tertiary rounded flex-grow"
+						placeholder="#faction.settings.role_name"
+						MaxLength=@( 30 )
+						Value:bind="@_newRoleName"/>
+					<TabMenuTextEntry
+						class="bg-secondary text-tertiary rounded"
+						placeholder="#faction.settings.role_desc"
+						MaxLength=@( 100 )
+						Value:bind="@_newRoleDescription"/>
+					<TabMenuTextEntry
+						class="bg-secondary text-tertiary rounded"
+						placeholder="#faction.settings.order"
+						Numeric="@true"
+						style="width: 60px;"
+						Value:bind="@_newRoleOrder"/>
+				</div>
+
+				<div class="flex items-center gap-2">
+					<span class="text-xs text-gray-400">#faction.settings.permissions</span>
+					<button class="btn-compact @( _newRolePermission.HasFlag( FactionPermission.InviteMember ) ? "btn-primary" : "btn-secondary" ) text-xs"
+					        onclick="@(() => TogglePermission( FactionPermission.InviteMember ))">#faction.settings.perm_invite</button>
+					<button class="btn-compact @( _newRolePermission.HasFlag( FactionPermission.KickMember ) ? "btn-primary" : "btn-secondary" ) text-xs"
+					        onclick="@(() => TogglePermission( FactionPermission.KickMember ))">#faction.settings.perm_kick</button>
+					<button class="btn-compact @( _newRolePermission.HasFlag( FactionPermission.ManageFaction ) ? "btn-primary" : "btn-secondary" ) text-xs"
+					        onclick="@(() => TogglePermission( FactionPermission.ManageFaction ))">#faction.settings.perm_manage</button>
+					<button class="btn-compact @( _newRolePermission.HasFlag( FactionPermission.SetRanks ) ? "btn-primary" : "btn-secondary" ) text-xs"
+					        onclick="@(() => TogglePermission( FactionPermission.SetRanks ))">#faction.settings.perm_ranks</button>
+					<button class="btn-compact @( _newRolePermission.HasFlag( FactionPermission.WithdrawMoney ) ? "btn-primary" : "btn-secondary" ) text-xs"
+					        onclick="@(() => TogglePermission( FactionPermission.WithdrawMoney ))">#faction.settings.perm_withdraw</button>
+				</div>
+
+				<button class="btn btn-good" onclick="@(() => TryCreateRole( factionId ))">#faction.settings.create_role</button>
+			</div>
+		</div>
+	}
+
+	<div class="section-group">
+		<div class="section-group-title" style="color: #cc3333;">#faction.settings.danger_zone</div>
+		<div class="flex gap-2 p-3">
+			<button class="btn btn-warn" onclick="@TryLeaveFaction">#faction.settings.leave</button>
+			@if ( canManage )
+			{
+				<button class="btn btn-bad" onclick="@(() => TryDeleteFaction( factionId ))">#faction.settings.delete</button>
+			}
+		</div>
+	</div>
+}
+</root>
+
+@code {
+	TextEntry? _descriptionEntry;
+	private string _descriptionText = "";
+	private string _newRoleName = "";
+	private string _newRoleDescription = "";
+	private string _newRoleOrder = "0";
+	private FactionPermission _newRolePermission = FactionPermission.None;
+
+	private void TogglePermission( FactionPermission flag )
+	{
+		_newRolePermission ^= flag;
+	}
+
+	private static string FormatPermissions( FactionPermission perms )
+	{
+		if ( perms == FactionPermission.None ) return Language.GetPhrase( "faction.settings.none" );
+		var parts = new List<string>();
+		if ( perms.HasFlag( FactionPermission.InviteMember ) ) parts.Add( Language.GetPhrase( "faction.settings.perm_invite" ) );
+		if ( perms.HasFlag( FactionPermission.KickMember ) ) parts.Add( Language.GetPhrase( "faction.settings.perm_kick" ) );
+		if ( perms.HasFlag( FactionPermission.ManageFaction ) ) parts.Add( Language.GetPhrase( "faction.settings.perm_manage" ) );
+		if ( perms.HasFlag( FactionPermission.SetRanks ) ) parts.Add( Language.GetPhrase( "faction.settings.perm_ranks" ) );
+		if ( perms.HasFlag( FactionPermission.WithdrawMoney ) ) parts.Add( Language.GetPhrase( "faction.settings.perm_withdraw" ) );
+		return string.Join( ", ", parts );
+	}
+
+	private void TryUpdateDescription( Guid factionId )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:update", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.UpdateFactionHost( factionId,
+			string.IsNullOrWhiteSpace( _descriptionText ) ? null : _descriptionText.Trim() );
+		_descriptionEntry?.Blur();
+	}
+
+	private void TryCreateRole( Guid factionId )
+	{
+		if ( string.IsNullOrWhiteSpace( _newRoleName ) )
+		{
+			Notify.Error( "#faction.settings.role_name_required" );
+			return;
+		}
+
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:role:create", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		int.TryParse( _newRoleOrder, out var order );
+
+		FactionSystem.Instance.CreateFactionRoleHost(
+			factionId,
+			_newRoleName.Trim(),
+			string.IsNullOrWhiteSpace( _newRoleDescription ) ? null : _newRoleDescription.Trim(),
+			order,
+			_newRolePermission
+		);
+
+		_newRoleName = "";
+		_newRoleDescription = "";
+		_newRoleOrder = "0";
+		_newRolePermission = FactionPermission.None;
+	}
+
+	private void TryDeleteRole( Guid factionId, Guid roleId )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:role:delete", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.DeleteFactionRoleHost( factionId, roleId );
+	}
+
+	private void TryLeaveFaction()
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:leave", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.LeaveFactionHost();
+	}
+
+	private void TryDeleteFaction( Guid factionId )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:delete", Config.Current.Game.ActionLongCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.DeleteFactionHost( factionId );
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !FactionSystem.Instance.IsValid() ) return 0;
+		return HashCode.Combine(
+			Player.Local?.FactionId,
+			Player.Local?.FactionRoleId,
+			FactionSystem.Instance.FactionRoles.Count,
+			_descriptionText,
+			_newRoleName,
+			_newRolePermission
+		);
+	}
+}

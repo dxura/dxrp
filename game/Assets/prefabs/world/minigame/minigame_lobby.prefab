@@ -1,0 +1,1737 @@
+{
+  "RootObject": {
+    "__guid": "0bbeef3d-72df-47a1-b688-58b374573cd2",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "minigame_lobby",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [],
+    "Children": [
+      {
+        "__guid": "5b3b37fd-d16a-4558-b344-26025dec6bb9",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Spawns",
+        "Position": "-32,0.000001907349,-31.10177",
+        "Rotation": "0,0,0.7071067,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": [
+          {
+            "__guid": "782320b9-868d-4377-8915-d92730be8e19",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "0,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "1cba2e06-b913-4f98-9cf1-68290b9de72d",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "adf1b582-06f5-4230-845d-b42bbd9ae4b8",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "0,-64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "a28fdd4f-34b5-46fd-a30e-20dc206c121f",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "e9ae2122-14b8-44b3-801f-3baf6f500adc",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "0,64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "e04a860b-18eb-4efd-aeb4-c5dbd42edbff",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "2a1fca6b-1209-4b2c-b980-1eeb5fdd569f",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "64,64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "31459bbc-d4aa-4a09-80bc-8a2c20075dad",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "eb175f66-2a3d-46a7-b3e9-67d942e9aebe",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "0,128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "f137fb0c-1425-4f35-96c8-e0b9b4694de2",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "144224a5-1933-49d6-8699-835924c84404",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "64,128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "7e322d8c-e593-49eb-9860-2a7777fc7e28",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "a32fda17-1b2c-4700-bfc7-7b1bae1f7253",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "0,-128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "522d5aa5-0124-4ecf-be7c-7ed4a9087c1a",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "a24e47df-8dd3-4622-aef2-c5f751039ef7",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "64,-128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "bbbfacfa-e3f3-4d32-8b8c-81595540a74a",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "5ee44bc0-8d96-46d4-836c-c68d2bd116fd",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "64,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "ecc6784c-d4d7-44a9-9e76-266467aa60b5",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "79f521d6-494b-43e0-be62-098c4432440c",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "64,-64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "a07c666a-b6bd-48a2-b5b5-068bba1ead37",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "8f9e8e69-0259-4a03-98e0-ea068b310488",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-128,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "0ae454a8-a8b1-4dfe-9a89-ddbb0a630543",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "04a9e4e1-c55b-451c-b79e-58ed647635e9",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-128,-64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "e8358551-c144-433d-b251-e9e12e0e8e1a",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "b395d5ad-a464-490a-9aff-1024c2ed1455",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-128,64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "ab585d5a-bd4d-4698-bc26-eb85956f86f0",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "d6eabe7d-f97a-4e33-a85f-7a37a207278d",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-64,64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "851533f6-9394-4603-a3a9-fe43aed6b154",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "b2107e86-8b60-45c3-a192-98781ccfa1dd",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-128,128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "7b60885a-d6df-4c9c-9756-76913e466a2c",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "d174adc1-5c37-44f9-9fb6-24e1cefd051c",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-64,128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "467273d0-9560-48c8-a80a-b42ea898708a",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "bf080e17-2197-4b5e-bae3-d688011c6be0",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-128,-128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "95d30323-8a75-4838-b2f0-89aabbee96c9",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "71978dbc-9299-4e2d-9ee2-ddd0f388ee4e",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-64,-128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "bb468930-a5c5-477a-a23b-f2e226cad992",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "5acbd391-83f9-408c-aa7e-73c827b69c19",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-64,0,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "b6d556a4-d862-4b84-aa5e-f33335820b5e",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "262f440f-e2e7-4c69-bcaf-6b737800b180",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-64,-64,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "8e0902d0-3d9c-4c8e-91f1-2db7f17c4dfa",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "dacf053b-35e0-4aaa-89c7-aba3e21fd128",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-255.9998,128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "7283aad5-72ff-460d-bd14-39338aaece79",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "b9a2505a-eead-467c-b365-307c0ae4e508",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-128,-192,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "b649fecf-3b8a-498f-b26a-eb9acadaf82c",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "36bc2a46-531a-4d69-8d6f-6791e9e8afa7",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "0,-192,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "e22697cd-ee11-4859-8328-c80e1d491e37",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "fbc77449-749e-4822-8bfd-34c24afa72ac",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "63.99998,-192,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "45d81a04-2fd2-4f6c-a9d9-3af49678f439",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "fbd83b4d-ad1c-4596-b894-93f2c320fd37",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-64,-192,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "1a8fa948-7a9f-409f-aeb2-d210d057291b",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "60b85531-832f-4a5d-b922-2c696222571c",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-192,128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "ea7c395a-c79f-4c91-9b60-d735daf8aeb6",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "40b26045-85cd-4282-8b07-c61525b66fa2",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-256,-128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "37d99602-d1c3-4821-8389-1105f9a74c29",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "ed8fe904-9669-4236-9136-dda22a7a802a",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-192,-128,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "eba536ef-3363-4bf8-8384-aeee96dbcb75",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "bd6fe2a3-dddb-4808-a8ab-79d39ba1c2cc",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-63.99998,192,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "5a34f179-c2c1-48f2-a697-c3d9bddc421a",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "3e721c0b-91e1-4681-9975-f1c9ee0ed2c6",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "0.000007629395,192,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "eb58256b-a625-482a-9b4e-42a99a1f24ce",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "351705ed-527f-4fa2-ab38-734578830a34",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "64.00002,191.9999,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "00f689d0-9442-479b-a307-0f33ffb95f88",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "4c1742a5-bf96-4072-8cbb-ad0664fa55b9",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "LobbySpawn",
+            "Position": "-128,192,0",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Dxura.RP.Game.MinigameLobbySpawnPoint",
+                "__guid": "cf49740e-65e2-4485-8950-139b2e3a5963",
+                "__enabled": true,
+                "Flags": 0,
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null
+              }
+            ],
+            "Children": []
+          }
+        ]
+      },
+      {
+        "__guid": "36fcda6e-af98-4d29-af23-0d5242c41665",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Screen",
+        "Position": "-47.99999,207.6861,117.8394",
+        "Rotation": "0,0,0.7071068,-0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "3d13d2ca-2e84-4aa8-8c34-3899324de560",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "9800,4000",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 6,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "Dxura.RP.Game.MinigameLobbyScreen",
+            "__guid": "ad020457-6b68-48cf-bede-8e8284d8ba44",
+            "__enabled": true,
+            "Flags": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "9e7ad9ea-e877-4b6d-88f2-0ec18bbf2a12",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Map",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.MapInstance",
+            "__guid": "0340ed43-e799-423a-8325-90c7bdfba5b1",
+            "__enabled": true,
+            "Flags": 0,
+            "__version": 1,
+            "EnableCollision": true,
+            "MapName": "thieves.arenamapdxrp",
+            "NoOrigin": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnMapLoaded": null,
+            "OnMapUnloaded": null,
+            "UseMapFromLaunch": false
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "63af47b2-bc99-4139-954f-01edd8420577",
+        "__version": 2,
+        "__Prefab": "prefabs/world/doors/door_double.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
+              },
+              "Property": "Position",
+              "Value": "-495.9999,0,0"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
+              },
+              "Property": "Tags",
+              "Value": ""
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
+              },
+              "Property": "Locked",
+              "Value": true
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
+              },
+              "Property": "OwnerGroup",
+              "Value": "gameplay/jobs/groups/public.jobgroup"
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "acab9fd6-a2bb-4684-bac5-40924b575dd3": "63af47b2-bc99-4139-954f-01edd8420577",
+          "92ff1211-d124-40d5-8eb3-b9ac86e4973b": "2e437967-e536-46c2-811f-961972143bea",
+          "03c256fd-a95b-4a49-93ae-db34902f9ac9": "6a196de5-83a5-4136-92cc-7b2da0c2b61c",
+          "8179ba9b-eddd-4b11-bc9c-06484056670b": "3136cdb1-4235-4167-b5b3-4b9d1372653f",
+          "baa08284-1273-444a-b1d1-ad0413316bbb": "a9333d77-b7c7-4db6-b729-c3e440ad66f8",
+          "8fe9d86d-9144-4dd1-8a7d-98f52e87e109": "f8bd05f6-879c-4500-a954-24abdbf1efd4",
+          "163a1c48-1542-4cc3-937e-541f17cb3a6d": "59114c02-1d6f-4559-886b-e439567dbc07",
+          "940af7c0-43fa-46de-8a1b-9d132d8eb5cb": "b7836a30-e8ed-441c-8ba8-984816c8d61b",
+          "7f91f14f-bc3f-4002-9906-81caa5d98262": "8af40e77-abbf-412d-bbbc-0f985d998c17",
+          "e385640b-5f2d-4a17-b8fa-9dfbffb3056a": "083abda9-2093-491e-8a9c-1051e0d85e1f",
+          "ef069050-f372-4226-92b8-b58e98e5fd3b": "4bbf361b-d658-4e10-8b13-b30f8b024e14",
+          "c803e0bf-677c-4c1a-bee1-3e12a1883146": "e044ca3b-d805-4c65-b59c-5e2cf46bd798",
+          "440fa657-3c80-4cb5-9fb7-7761ca706085": "3b0c36e6-eecb-4248-af17-6523fbb9de91",
+          "2b4586ec-97ab-41db-9cf8-3b7971fbb927": "b4eb0ad0-0c07-490c-bd3f-9780fec33a37",
+          "9c295d3c-c460-41ac-b563-8e8f27374d34": "9b35ee1e-1d4d-4617-92e8-6eb7a54fdc7b",
+          "e41361a3-0b3b-4b24-802f-a38f82898e8c": "cc8500f5-cda8-4404-abb6-51c91e420893",
+          "706b3042-cf06-4b6c-935b-ccfab72a5036": "f583407a-b3d3-48ed-bf14-1522ecede214",
+          "60fbfc5c-f0d1-432b-8d57-263d149a51d9": "715a8486-cd6e-4d95-8bf9-205d4c14799f",
+          "4b93b9ef-afc4-44bc-ad36-a4e6f006ae69": "62810b0e-a13b-4dee-954f-75eaa3103ca2",
+          "fa26d275-2136-42ca-ab54-8b42782ca933": "b8a06672-4a88-4ecc-925a-fdce8e7b835e",
+          "608c8325-708a-42fe-b074-131000f2e0c8": "56e3bf1b-ea80-41a1-b5ad-427bda49976d",
+          "c7f991d0-a611-4473-8fbf-7d57b64a3bba": "71a0858c-cfe8-4d05-8cb3-c890d4d21f22"
+        }
+      },
+      {
+        "__guid": "8e4f036e-667f-4195-a00d-1360fbb7248f",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "glassfix",
+        "Position": "0,0,-31",
+        "Rotation": "0,0,0,1",
+        "Scale": "15,15,15",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.PlaneCollider",
+            "__guid": "8ea13a00-3b7d-4ba3-999f-8b3c0d371c47",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "0,0,0",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Normal": "0,0,1",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "100,100",
+            "Static": true,
+            "Surface": "surfaces/default.surface",
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "69371bbb-7456-4a02-858a-4cd2548c8322",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "glassfix (1)",
+        "Position": "-322.7582,0,-22.38037",
+        "Rotation": "0,0.2288938,0,0.9734514",
+        "Scale": "1,9.740003,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.PlaneCollider",
+            "__guid": "2f51ce74-e692-48e2-bb66-7b90b0c0edda",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "0,0,0",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Normal": "0,0,1",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "100,100",
+            "Static": true,
+            "Surface": "surfaces/default.surface",
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "7724d135-a22d-4b03-acec-038bd4a30de0",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "glassfix (2)",
+        "Position": "-440.6237,0,0.3179436",
+        "Rotation": "0,0,0,1",
+        "Scale": "1.48,8,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.PlaneCollider",
+            "__guid": "ad852927-31ef-4414-87bc-728d404ec61b",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "0,0,0",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Normal": "0,0,1",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "100,100",
+            "Static": true,
+            "Surface": "surfaces/default.surface",
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "a73c44fd-a183-4489-aa5c-c6e19200e08e",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Leave Hint",
+        "Position": "-495.9628,-0.00000002983143,120",
+        "Rotation": "0,0,1,-0.00000004371139",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.TextRenderer",
+            "__guid": "a165453c-ce88-4027-9820-1bc4b1657b17",
+            "__enabled": true,
+            "Flags": 0,
+            "__version": 2,
+            "BlendMode": "Normal",
+            "FogStrength": 1,
+            "HorizontalAlignment": "Center",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "Scale": 0.13432837,
+            "TextScope": {
+              "Text": "Type /mg to leave",
+              "TextColor": "1,1,1,1",
+              "FontName": "Poppins",
+              "FontSize": 64,
+              "FontWeight": 550,
+              "FontItalic": false,
+              "LineHeight": 1,
+              "LetterSpacing": 0,
+              "WordSpacing": 0,
+              "FilterMode": "Bilinear",
+              "FontSmooth": "Auto",
+              "Outline": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,1,1"
+              },
+              "Shadow": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              },
+              "OutlineUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,1,0,1"
+              },
+              "ShadowUnder": {
+                "Enabled": false,
+                "Size": 4,
+                "Color": "0,0,0,1",
+                "Offset": "4,4"
+              }
+            },
+            "VerticalAlignment": "Center"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "0cb0af37-1948-417a-bd38-0fdf36b911ac",
+        "__version": 2,
+        "__Prefab": "prefabs/world/doors/door_single.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
+              },
+              "Property": "Position",
+              "Value": "467.3999,276.316,-31"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
+              },
+              "Property": "Tags",
+              "Value": ""
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
+              },
+              "Property": "Locked",
+              "Value": true
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
+              },
+              "Property": "OwnerGroup",
+              "Value": "gameplay/jobs/groups/public.jobgroup"
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "acab9fd6-a2bb-4684-bac5-40924b575dd3": "0cb0af37-1948-417a-bd38-0fdf36b911ac",
+          "92ff1211-d124-40d5-8eb3-b9ac86e4973b": "1a542a7f-0788-4ba3-a354-c8e5410e3cf5",
+          "2f2c076b-22e0-48a5-afaa-461dbfd68225": "c93fe805-a671-442b-8f41-4480cd8f34cb",
+          "778e2db6-9c75-4ba9-a4c8-2317e04cad4d": "7c2bfd0d-b38d-4900-90fd-e2d7e218ef60",
+          "f20dfe59-1663-43f3-a474-32f9783838db": "ce1de753-928b-46b2-a83f-d8b8d0c33400",
+          "0d3d3fc1-6347-4f73-8c7b-a926a19a995d": "1f944cb2-4a84-490e-a806-a1ba2453b481",
+          "69753950-85d5-422c-adfe-f3c86978d1a2": "73568af9-d556-4f94-9079-f3cd58a2a623",
+          "7eb458d5-53a4-413c-8c59-d18822d2d92c": "8bcf59e3-01e2-4903-9eb4-3df87664d339",
+          "bb9193ac-fd65-48bd-8e4a-cf6cbde56e7c": "42e711d6-bf4a-4321-be3b-72743049e5d4",
+          "81a8bf2d-8825-4a45-af26-4f7805b5668b": "7a6f0d7f-379b-4c6e-8049-059c26483a39",
+          "df85d599-2e36-41b9-92cc-540a09fda029": "9d54569b-c10b-4a0a-bc3d-6bea7a444473",
+          "fa639408-2967-4a20-8741-46c129ee8cd6": "000021de-14bd-4fb3-b0a0-7439dae68e16",
+          "f51f5030-4e5a-45ab-a85b-04c563b21c28": "3b733389-e6b8-4d4b-a6d8-71ea091dc5be"
+        }
+      },
+      {
+        "__guid": "89e686d3-2bd2-4a75-89e4-10fc5482e8c9",
+        "__version": 2,
+        "__Prefab": "prefabs/world/doors/door_single.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
+              },
+              "Property": "Position",
+              "Value": "580.3314,212.5582,-31.84156"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
+              },
+              "Property": "Rotation",
+              "Value": "0,0,0.7071067,0.7071068"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "acab9fd6-a2bb-4684-bac5-40924b575dd3"
+              },
+              "Property": "Tags",
+              "Value": ""
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
+              },
+              "Property": "Locked",
+              "Value": true
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
+              },
+              "Property": "OwnerGroup",
+              "Value": "gameplay/jobs/groups/public.jobgroup"
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "acab9fd6-a2bb-4684-bac5-40924b575dd3": "89e686d3-2bd2-4a75-89e4-10fc5482e8c9",
+          "92ff1211-d124-40d5-8eb3-b9ac86e4973b": "a657c624-744d-4c82-807e-6a224c6a37d4",
+          "2f2c076b-22e0-48a5-afaa-461dbfd68225": "d1501c8e-5b5d-46e9-92b6-f345c7283412",
+          "778e2db6-9c75-4ba9-a4c8-2317e04cad4d": "8010ca0a-4879-4206-9cdc-108fafafac9e",
+          "f20dfe59-1663-43f3-a474-32f9783838db": "a3d29796-496b-4982-9e15-4fdaa1476181",
+          "0d3d3fc1-6347-4f73-8c7b-a926a19a995d": "9e8dc23c-5631-4cf8-8476-1b89a90d9aba",
+          "69753950-85d5-422c-adfe-f3c86978d1a2": "6bb36b70-f4c2-4347-b9ff-e69b5b7a48ff",
+          "7eb458d5-53a4-413c-8c59-d18822d2d92c": "2db00a62-7510-40d7-ba20-45c72d6a09c5",
+          "bb9193ac-fd65-48bd-8e4a-cf6cbde56e7c": "2273ff7a-e57b-4e16-962f-9d9fb7c92e5a",
+          "81a8bf2d-8825-4a45-af26-4f7805b5668b": "64f5499e-f527-441b-b5d2-f9c29e932388",
+          "df85d599-2e36-41b9-92cc-540a09fda029": "5c98b14a-2f13-4e8d-88fd-74915d683860",
+          "fa639408-2967-4a20-8741-46c129ee8cd6": "543763f7-9670-4240-88a4-bf5871849afd",
+          "f51f5030-4e5a-45ab-a85b-04c563b21c28": "c5f556f8-1b52-486f-ab86-f218fce9f028"
+        }
+      },
+      {
+        "__guid": "df2378ee-ec11-4ab0-98cc-4aa2fb670a0f",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "bar_block",
+        "Position": "472.4346,-9.632708,27.98888",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.BoxCollider",
+            "__guid": "5883b6ea-67f5-452b-8ce2-5d1a637bf14f",
+            "__enabled": true,
+            "Flags": 0,
+            "Center": "7.813766,6.488892,4.694687",
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Scale": "34.37246,402.8121,153.6748",
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "eb6353b9-0859-4402-917d-01039a27dcdb",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "bar_background",
+        "Position": "664.2566,0,42.63192",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,8.60004,2.449999",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "7c057291-937e-4c5f-98b7-c0f51b9c8cc2",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/dev/box.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "0.00465,0.00465,0.00465,1"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "9bc45b88-2c82-49a6-9609-ede1f776dd7e",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "radio",
+        "Position": "367.6793,304.5596,15.33894",
+        "Rotation": "0,0,-0.7441956,0.6679618",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "c3fbd35a-1274-4cb1-94a9-7836af1d34c8",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/props/items/radio/radio.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.ModelCollider",
+            "__guid": "eaceb93e-b628-454d-b61f-c814bc0d52c0",
+            "__enabled": true,
+            "Flags": 0,
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Model": "models/props/items/radio/radio.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          },
+          {
+            "__type": "Dxura.RP.Game.ContinuousSoundPoint",
+            "__guid": "22f8a813-dfc4-4479-89a7-ab9a0793d299",
+            "__enabled": true,
+            "Flags": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "SoundEvent": "sounds/minigame/minigame_lobby_ambient.sound"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "CustomBounds": false
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

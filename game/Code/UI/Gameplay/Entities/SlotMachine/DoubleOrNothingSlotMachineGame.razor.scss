@@ -1,0 +1,245 @@
+@import "../../../styles.scss";
+
+DoubleOrNothingSlotMachineGame {
+  pointer-events: all;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background-color: $color-primary;
+
+  root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .bottom-bar {
+    flex-shrink: 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 60px;
+    max-height: 60px;
+  }
+
+  .player-info {
+    .avatar {
+      width: 40px !important;
+      height: 40px !important;
+      min-width: 40px;
+      min-height: 40px;
+      max-width: 40px;
+      max-height: 40px;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: border-color 0.3s ease;
+      flex-shrink: 0;
+
+      &:hover {
+        border-color: $color-accent;
+      }
+    }
+  }
+
+  .owner-controls {
+    button {
+      min-width: 100px;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+
+  .glow-accent {
+    text-shadow: 0 0 20px rgba($color-accent, 0.6), 0 0 40px rgba($color-accent, 0.3);
+  }
+
+  .bet-display {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+
+  // Revealing state styles
+  .revealing-display {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .reveal-flash {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    animation: flashPulse 0.6s ease-in-out;
+  }
+
+  .flash-good {
+    background-color: rgba($color-good, 0.3);
+    border: 4px solid $color-good;
+    box-shadow: 0 0 40px rgba($color-good, 0.8), 0 0 80px rgba($color-good, 0.4);
+  }
+
+  .flash-bad {
+    background-color: rgba($color-bad, 0.3);
+    border: 4px solid $color-bad;
+    box-shadow: 0 0 40px rgba($color-bad, 0.8), 0 0 80px rgba($color-bad, 0.4);
+  }
+
+  @keyframes flashPulse {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .current-multiplier {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  // Result state styles
+  .result-display {
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  .result-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 0.6s ease-in-out;
+  }
+
+  .win-icon {
+    background-color: rgba($color-good, 0.2);
+    border: 4px solid $color-good;
+    color: $color-good;
+    box-shadow: 0 0 30px rgba($color-good, 0.5);
+  }
+
+  .lose-icon {
+    background-color: rgba($color-bad, 0.2);
+    border: 4px solid $color-bad;
+    color: $color-bad;
+    box-shadow: 0 0 30px rgba($color-bad, 0.5);
+  }
+
+  .winnings-display {
+    box-shadow: 0 6px 40px rgba($color-good, 0.6);
+    animation: glow 1.5s ease-in-out infinite;
+  }
+
+  .lost-display {
+    box-shadow: 0 6px 40px rgba($color-bad, 0.4);
+  }
+
+  .multiplier-display {
+    box-shadow: 0 4px 20px rgba($color-accent, 0.4);
+  }
+
+
+  .action-buttons {
+    button {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .continue-btn {
+      background: $color-accent;
+
+      &:hover {
+        box-shadow: 0 6px 30px rgba($color-good, 0.6);
+      }
+    }
+
+    .cash-out-btn {
+      background: $color-good;
+
+      &:hover {
+        box-shadow: 0 6px 30px rgba($color-good, 0.6);
+      }
+    }
+  }
+
+  .play-again-btn {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 25px rgba(0, 99, 176, 0.6);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .play-prompt {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 35px rgba(0, 99, 176, 0.6);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Animations
+  @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 6px 40px rgba($color-good, 0.6);
+    }
+    50% {
+      box-shadow: 0 6px 60px rgba($color-good, 0.9), 0 0 80px rgba($color-good, 0.5);
+    }
+  }
+}
+

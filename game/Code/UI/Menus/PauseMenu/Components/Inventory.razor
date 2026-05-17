@@ -1,0 +1,365 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@using Sandbox.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root>
+	<div class="inventory-container">
+		<div class="inventory-header">
+			<div class="inventory-header-left">
+				<span class="inventory-title">#inventory.title</span>
+			</div>
+			<div class="inventory-search-pill">
+				<i class="material-icons inventory-search-icon">search</i>
+				<TextEntry class="inventory-search" placeholder="#inventory.search" Value="@SearchQuery" OnTextEdited="@OnSearchEdited"/>
+			</div>
+		</div>
+
+		<div class="inventory-body">
+
+		@if ( Loading )
+		{
+			<div class="flex items-center justify-center" style="height: 300px">
+				<span class="text-gray-400">#inventory.loading</span>
+			</div>
+		}
+		else if ( Items == null || Items.Count == 0 )
+		{
+			<div class="flex items-center justify-center" style="height: 300px">
+				<span class="text-gray-400 text-xl">#inventory.empty</span>
+			</div>
+		}
+		else
+		{
+			var filtered = string.IsNullOrWhiteSpace( SearchQuery )
+				? Items
+				: Items.Where( MatchesSearchQuery ).ToList();
+
+			var grouped = filtered
+				.OrderBy( x => x.Definition.Type )
+				.ThenBy( x => GetDisplayName( x.Definition.Name ) )
+				.GroupBy( x => GetTypeLabel( x.Definition.Type ) )
+				.OrderBy( g => g.Key );
+
+
+			@foreach ( var group in grouped )
+			{
+				<div class="category-section">
+					<div class="section-group-title">
+						@group.Key
+						<span class="category-count">@group.Count()</span>
+					</div>
+
+					<div class="items-grid">
+						@foreach ( var item in group )
+						{
+							<InventoryItem Item="@item" OnDropRequested="@OnDropRequested"/>
+						}
+					</div>
+				</div>
+			}
+		}
+
+		</div>
+	</div>
+</root>
+
+@code {
+	private List<InventoryItemDto>? Items { get; set; }
+	private bool Loading { get; set; } = true;
+	private int _version;
+	private string SearchQuery { get; set; } = string.Empty;
+	private static Inventory? _current;
+	private static readonly TimeSpan CacheDuration = TimeSpan.FromSeconds( 30 );
+	private static List<InventoryItemDto>? _cachedItems;
+	private static DateTime _cacheUpdatedAt;
+
+	protected override async void OnAfterTreeRender( bool firstTime )
+	{
+		base.OnAfterTreeRender( firstTime );
+
+		if ( !firstTime )
+			return;
+
+		_current = this;
+
+		if ( TryUseCachedItems() )
+		{
+			Loading = false;
+			StateHasChanged();
+
+			if ( IsCacheFresh() )
+			{
+				return;
+			}
+
+			RefreshInventoryDeferred();
+			return;
+		}
+
+		await RefreshInventory();
+
+		Loading = false;
+		StateHasChanged();
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Items?.Count, Loading, _version, SearchQuery );
+	}
+
+	public override void OnDeleted()
+	{
+		if ( _current == this )
+		{
+			_current = null;
+		}
+
+		base.OnDeleted();
+	}
+
+	public static void RequestRefresh( Guid itemId, int expectedQuantity )
+	{
+		if ( _current == null )
+		{
+			if ( !TryUpdateCachedQuantity( itemId, expectedQuantity ) )
+			{
+				InvalidateCache();
+			}
+
+			return;
+		}
+
+		if ( _current.GetQuantity( itemId ) == expectedQuantity )
+		{
+			return;
+		}
+
+		if ( _current.TryUpdateQuantity( itemId, expectedQuantity ) )
+		{
+			return;
+		}
+
+		InvalidateCache();
+		_current.RefreshInventoryDeferred();
+	}
+
+	private void OnSearchEdited( string value )
+	{
+		SearchQuery = value;
+		StateHasChanged();
+	}
+
+	private bool MatchesSearchQuery( InventoryItemDto item )
+	{
+		var query = SearchQuery.Trim();
+		var displayName = GetDisplayName( item.Definition.Name );
+
+		return displayName.Contains( query, StringComparison.OrdinalIgnoreCase );
+	}
+
+	private static string GetDisplayName( string name )
+	{
+		return name.StartsWith( '#' ) ? Language.GetPhrase( name[1..] ) : name;
+	}
+
+	private void OnDropRequested( InventoryItemDto item, int quantity )
+	{
+		ApplyOptimisticDrop( item, quantity );
+	}
+
+	private async void RefreshInventoryDeferred()
+	{
+		await RefreshInventory();
+	}
+
+	private async global::System.Threading.Tasks.Task<List<InventoryItemDto>?> RefreshInventory()
+	{
+		Loading = Items == null;
+		StateHasChanged();
+
+		var items = await PlayerApiClient.GetInventory();
+		if ( items == null )
+		{
+			Loading = false;
+			StateHasChanged();
+			return Items;
+		}
+
+		SetItems( items );
+		Loading = false;
+		StateHasChanged();
+		return Items;
+	}
+
+	private void SetItems( List<InventoryItemDto>? items )
+	{
+		if ( items == null )
+		{
+			return;
+		}
+
+		Items = items;
+		_cachedItems = items.ToList();
+		_cacheUpdatedAt = DateTime.UtcNow;
+
+		_version++;
+		StateHasChanged();
+	}
+
+	private bool TryUseCachedItems()
+	{
+		if ( _cachedItems == null )
+		{
+			return false;
+		}
+
+		Items = _cachedItems.ToList();
+		_version++;
+		return true;
+	}
+
+	private static bool IsCacheFresh()
+	{
+		return _cachedItems != null && DateTime.UtcNow - _cacheUpdatedAt <= CacheDuration;
+	}
+
+	private static void InvalidateCache()
+	{
+		_cachedItems = null;
+		_cacheUpdatedAt = DateTime.MinValue;
+	}
+
+	private void ApplyOptimisticDrop( InventoryItemDto item, int quantity )
+	{
+		if ( Items == null || quantity <= 0 )
+		{
+			return;
+		}
+
+		var existing = Items.FirstOrDefault( x => x.Definition.Id == item.Definition.Id );
+		if ( existing == null )
+		{
+			return;
+		}
+
+		var newQuantity = existing.Quantity - quantity;
+		if ( newQuantity <= 0 )
+		{
+			Items.Remove( existing );
+		}
+		else
+		{
+			var index = Items.IndexOf( existing );
+			Items[index] = new InventoryItemDto
+			{
+				Id = existing.Id,
+				Definition = existing.Definition,
+				Quantity = newQuantity
+			};
+		}
+
+		_version++;
+		StateHasChanged();
+		UpdateCache( Items );
+	}
+
+	private int GetQuantity( Guid itemId )
+	{
+		if ( Items == null )
+		{
+			return 0;
+		}
+
+		return Items
+			.Where( x => x.Definition.Id == itemId )
+			.Sum( x => x.Quantity );
+	}
+
+	private bool TryUpdateQuantity( Guid itemId, int expectedQuantity )
+	{
+		if ( Items == null )
+		{
+			return false;
+		}
+
+		if ( TryUpdateItemQuantity( Items, itemId, expectedQuantity ) )
+		{
+			_version++;
+			StateHasChanged();
+			UpdateCache( Items );
+			return true;
+		}
+
+		return false;
+	}
+
+	private static bool TryUpdateCachedQuantity( Guid itemId, int expectedQuantity )
+	{
+		if ( _cachedItems == null )
+		{
+			return false;
+		}
+
+		if ( !TryUpdateItemQuantity( _cachedItems, itemId, expectedQuantity ) )
+		{
+			return false;
+		}
+
+		_cacheUpdatedAt = DateTime.UtcNow;
+		return true;
+	}
+
+	private static bool TryUpdateItemQuantity( List<InventoryItemDto> items, Guid itemId, int expectedQuantity )
+	{
+		var existing = items.FirstOrDefault( x => x.Definition.Id == itemId );
+		if ( existing == null )
+		{
+			return false;
+		}
+
+		if ( expectedQuantity <= 0 )
+		{
+			items.Remove( existing );
+			return true;
+		}
+
+		var index = items.IndexOf( existing );
+		items[index] = new InventoryItemDto
+		{
+			Id = existing.Id,
+			Definition = existing.Definition,
+			Quantity = expectedQuantity
+		};
+
+		return true;
+	}
+
+	private static void UpdateCache( List<InventoryItemDto>? items )
+	{
+		if ( items == null )
+		{
+			InvalidateCache();
+			return;
+		}
+
+		_cachedItems = items.ToList();
+		_cacheUpdatedAt = DateTime.UtcNow;
+	}
+
+	private static string GetTypeLabel( ItemType type ) => type switch
+	{
+		ItemType.WeaponSkin => Language.GetPhrase( "inventory.weapon_skins" ),
+		ItemType.Emote => Language.GetPhrase( "inventory.emotes" ),
+		ItemType.Currency => Language.GetPhrase( "inventory.currency" ),
+		ItemType.Clothing => Language.GetPhrase( "inventory.clothing" ),
+		ItemType.Accessory => Language.GetPhrase( "inventory.accessories" ),
+		ItemType.Vehicle => Language.GetPhrase( "inventory.vehicles" ),
+		ItemType.Title => Language.GetPhrase( "inventory.titles" ),
+		ItemType.Consumable => Language.GetPhrase( "inventory.consumables" ),
+		_ => Language.GetPhrase( "inventory.other" )
+	};
+
+}

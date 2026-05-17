@@ -1,0 +1,220 @@
+@import "../../../styles.scss";
+
+DashboardTabMenuSection {
+  padding: $space-3 $space-5;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    gap: $space-6;
+  }
+
+  .dashboard-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-1;
+    text-align: center;
+  }
+
+  // Stats row
+  .stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-5;
+    background-color: $color-secondary;
+    width: 80%;
+    padding: $space-3 $space-5;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+  }
+
+  .stat-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: rgba($color-accent, 0.1);
+    border-radius: $space-3;
+
+    i {
+      font-size: $text-lg;
+      color: $color-accent;
+    }
+  }
+
+  .stat-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stat-value {
+    font-size: $text-base;
+    color: $color-tertiary;
+    font-weight: 600;
+  }
+
+  .stat-label {
+    font-size: $text-xs;
+    color: $color-gray-400;
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 28px;
+    background-color: rgba(white, 0.08);
+  }
+
+  // Governance card
+  .governance-card {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+    width: 100%;
+    max-width: 550px;
+    background-color: $color-secondary;
+    padding: $space-5 $space-6;
+    border-left: 2px solid rgba($color-accent, 0.3);
+  }
+
+  .governance-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h2 {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .treasury-badges {
+    display: flex;
+    gap: $space-2;
+  }
+
+  .treasury-badge {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    background-color: rgba($color-primary, 0.8);
+    padding: $space-1 $space-3;
+    border-radius: $space-3;
+
+    i {
+      font-size: $text-sm;
+      color: #54be35;
+    }
+
+    .badge-label {
+      font-size: $text-xs;
+      font-weight: 600;
+      color: #54be35;
+    }
+
+    span {
+      font-size: $text-sm;
+      font-weight: 600;
+    }
+  }
+
+  .laws-list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+
+  .law-item {
+    display: flex;
+    align-items: flex-start;
+    font-size: $text-sm;
+    color: $color-tertiary;
+
+    .law-number {
+      color: $color-accent;
+      font-weight: 600;
+      margin-right: $space-2;
+      min-width: 20px;
+    }
+  }
+
+  // Actions bar
+  .actions-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-3;
+  }
+
+  .actions-row {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+    .input-combo {
+      display: flex;
+      align-items: center;
+      background-color: $color-secondary;
+      border-radius: $space-3;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px transparent inside;
+      transition: box-shadow 0.15s ease;
+
+      &:hover {
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2) inside;
+      }
+
+      &.is-focused {
+        box-shadow: 0 0 0 1px rgba($color-accent, 0.22) inside;
+      }
+
+      .combo-input {
+        width: 120px;
+        padding: $space-2 $space-3;
+        background-color: transparent;
+        border-top-left-radius: $space-3;
+        border-bottom-left-radius: $space-3;
+        box-shadow: none;
+        transition: none;
+
+        &:hover,
+        &:focus,
+        &.is-focused {
+          box-shadow: none;
+        }
+
+        .inner {
+          padding: 0;
+        }
+      }
+
+      .combo-btn {
+        padding: $space-2 $space-3;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: opacity 0.15s ease;
+
+        &:hover {
+          opacity: 0.85;
+        }
+      }
+    }
+}

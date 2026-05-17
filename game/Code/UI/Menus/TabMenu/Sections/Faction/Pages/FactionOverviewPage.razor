@@ -1,0 +1,142 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@inherits Panel
+@page "/tabmenu/faction/overview"
+
+<root>
+@if ( !FactionSystem.Instance.IsValid() )
+{
+	<p class="text-base text-gray-400 p-3">#faction.overview.loading</p>
+}
+else if ( !Player.Local.IsInFaction )
+{
+	<p class="text-base text-gray-400 p-3">#faction.overview.join_first</p>
+}
+else
+{
+	var faction = Player.Local.GetFaction();
+	var myRole = Player.Local.GetFactionRole();
+	var factionId = Player.Local.FactionId!.Value;
+	var roles = FactionSystem.Instance.GetFactionRoles( factionId ).OrderBy( r => r.Order ).ToList();
+	var onlineMembers = GameUtils.Players
+		.Where( p => p.IsValid() && p.FactionId == factionId )
+		.OrderBy( p => p.DisplayName )
+		.ToList();
+
+	<div class="section-group">
+		<div class="section-group-title">#faction.overview.stats</div>
+		<div class="flex items-center gap-4 p-3">
+			<div class="flex flex-col">
+				<span class="text-xs text-gray-400">#faction.overview.members</span>
+				<span class="text-2xl text-bold text-accent">@faction?.MemberCount / @faction?.MaxMembers</span>
+			</div>
+			<div class="flex flex-col">
+				<span class="text-xs text-gray-400">#faction.overview.balance</span>
+				<span class="text-2xl text-bold text-cash">$@(faction?.Balance.ToString( "N0" ) ?? "0")</span>
+			</div>
+			<div class="flex flex-col">
+				<span class="text-xs text-gray-400">#faction.overview.experience</span>
+				<span class="text-2xl text-bold text-accent">@(faction?.Experience.ToString( "N0" ) ?? "0")</span>
+			</div>
+			<div class="flex flex-col">
+				<span class="text-xs text-gray-400">#faction.overview.level</span>
+				<span class="text-2xl text-bold">@faction?.Level</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="section-group">
+		<div class="section-group-title">#faction.overview.your_role</div>
+		<div class="p-3">
+			@if ( myRole != null )
+			{
+				<span class="text-base text-accent text-bold">@myRole?.Name</span>
+				<span class="text-xs text-gray-400 ml-2">(@FormatPermissions( myRole!.Value.Permission ))</span>
+			}
+			else
+			{
+				<span class="text-sm text-gray-400">#faction.overview.no_role</span>
+			}
+		</div>
+	</div>
+
+	@if ( !string.IsNullOrWhiteSpace( faction?.Description ) )
+	{
+		<div class="section-group">
+			<div class="section-group-title">#faction.overview.description</div>
+			<div class="p-3">
+				<p class="text-base text-gray-400">@faction?.Description</p>
+			</div>
+		</div>
+	}
+
+	<div class="section-group">
+		<div class="section-group-title">@string.Format( Language.GetPhrase( "faction.overview.online_members" ), onlineMembers.Count )</div>
+		<div class="flex flex-col gap-1 p-3">
+			@if ( onlineMembers.Count > 0 )
+			{
+				@foreach ( var member in onlineMembers )
+				{
+					var memberRole = member.GetFactionRole();
+					<div class="flex items-center gap-2 p-2">
+						<img style="width: 28px; height: 28px; border-radius: 4px;" src="avatar:@member.SteamId" alt="avatar"/>
+						<span class="text-sm text-bold">@member.DisplayName</span>
+						@if ( memberRole != null )
+						{
+							<span class="text-xs text-accent">@memberRole?.Name</span>
+						}
+						<span class="text-xs ml-auto" style="color: @member.Job.Color.Hex()">@member.JobDisplayName</span>
+					</div>
+				}
+			}
+			else
+			{
+				<p class="text-sm text-gray-400">#faction.overview.none_online</p>
+			}
+		</div>
+	</div>
+
+	@if ( roles.Count > 0 )
+	{
+		<div class="section-group">
+		<div class="section-group-title">@string.Format( Language.GetPhrase( "faction.overview.roles" ), roles.Count )</div>
+			<div class="flex flex-col gap-1 p-3">
+				@foreach ( var role in roles )
+				{
+					<div class="flex items-center p-2">
+						<span class="text-sm text-gray-400" style="width: 30px;">@role.Order.</span>
+						<span class="text-sm text-accent text-bold">@role.Name</span>
+						<span class="text-xs text-gray-400 ml-auto">@FormatPermissions( role.Permission )</span>
+					</div>
+				}
+			</div>
+		</div>
+	}
+}
+</root>
+
+@code {
+	private static string FormatPermissions( FactionPermission perms )
+	{
+		if ( perms == FactionPermission.None ) return Language.GetPhrase( "faction.overview.no_permissions" );
+		var parts = new List<string>();
+		if ( perms.HasFlag( FactionPermission.InviteMember ) ) parts.Add( Language.GetPhrase( "faction.overview.invite" ) );
+		if ( perms.HasFlag( FactionPermission.KickMember ) ) parts.Add( Language.GetPhrase( "faction.overview.kick" ) );
+		if ( perms.HasFlag( FactionPermission.ManageFaction ) ) parts.Add( Language.GetPhrase( "faction.overview.manage" ) );
+		if ( perms.HasFlag( FactionPermission.SetRanks ) ) parts.Add( Language.GetPhrase( "faction.overview.ranks" ) );
+		if ( perms.HasFlag( FactionPermission.WithdrawMoney ) ) parts.Add( Language.GetPhrase( "faction.overview.withdraw" ) );
+		return string.Join( ", ", parts );
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !FactionSystem.Instance.IsValid() ) return 0;
+		return HashCode.Combine(
+			Player.Local?.FactionId,
+			Player.Local?.FactionRoleId,
+			FactionSystem.Instance.Factions.Count,
+			FactionSystem.Instance.FactionRoles.Count,
+			GameUtils.Players.Count()
+		);
+	}
+}

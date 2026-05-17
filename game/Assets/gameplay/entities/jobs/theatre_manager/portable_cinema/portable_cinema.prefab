@@ -1,0 +1,417 @@
+{
+  "RootObject": {
+    "__guid": "f5ead685-c12c-42b9-9e01-3b125a178cbe",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "portable_cinema",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,hands_interact,occludable,build_interact,restricted_entity",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.TvEntity",
+        "__guid": "6c6711b9-5ffe-44b9-9d6f-fbcb8003f650",
+        "__enabled": true,
+        "Flags": 0,
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "6ff86a6a-b6e9-44a2-aa88-bc6498ed6d4f",
+          "go": "f5ead685-c12c-42b9-9e01-3b125a178cbe",
+          "component_type": "HealthComponent"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerJob": null,
+        "OwnerSteamId": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "401b6f4d-6b97-41ed-ad92-c8d4a29f0944",
+          "go": "f5ead685-c12c-42b9-9e01-3b125a178cbe",
+          "component_type": "Rigidbody"
+        },
+        "Video": null,
+        "Web": {
+          "_type": "component",
+          "component_id": "ba7fe75e-9737-46cf-b703-2f5d4b431ee0",
+          "go": "3c8e8e64-9e77-4ab6-9d9e-70a4f948bf89",
+          "component_type": "Web"
+        }
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "401b6f4d-6b97-41ed-ad92-c8d4a29f0944",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "6ff86a6a-b6e9-44a2-aa88-bc6498ed6d4f",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 100,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      },
+      {
+        "__type": "Sandbox.BoxCollider",
+        "__guid": "5e069372-7d3b-47ff-be0d-55479737ad87",
+        "__enabled": true,
+        "Flags": 0,
+        "Center": "0.4561722,0.07832336,0.4206085",
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Scale": "5.396471,351.7165,205.2352",
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "3c8e8e64-9e77-4ab6-9d9e-70a4f948bf89",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Panel",
+        "Position": "2.547691,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,4.399995,5.119997",
+        "Tags": "",
+        "Enabled": false,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.Web",
+            "__guid": "ba7fe75e-9737-46cf-b703-2f5d4b431ee0",
+            "__enabled": true,
+            "Flags": 0,
+            "EnablePointerEvents": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Url": ""
+          },
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "a188a68a-5241-4143-a63b-f72b011e0379",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "1600,800",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 1,
+            "VerticalAlign": "Center"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "2498199b-5d19-4fd9-8b29-05d33fa76ca7",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Off Background",
+        "Position": "1.665442,-0.000007551103,16.11596",
+        "Rotation": "0.00000008940697,0.0000001937151,-1,0.00000000000001776357",
+        "Scale": "0.01,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.Decal",
+            "__guid": "e8adf10c-35a1-4d09-98b7-3631b0774378",
+            "__enabled": true,
+            "Flags": 0,
+            "__version": 3,
+            "AttenuationAngle": 1,
+            "ColorMix": 1,
+            "ColorTint": {
+              "Type": "Constant",
+              "Evaluation": "Life",
+              "GradientA": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0.5,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": []
+              },
+              "GradientB": {
+                "blend": "Linear",
+                "color": [
+                  {
+                    "t": 0.5,
+                    "c": "1,1,1,1"
+                  }
+                ],
+                "alpha": []
+              },
+              "ConstantA": "1,1,1,1",
+              "ConstantB": "1,1,1,1"
+            },
+            "Decals": [
+              "gameplay/entities/tv/tv-off.decal"
+            ],
+            "Depth": 5,
+            "LifeTime": 0,
+            "Looped": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parallax": 1,
+            "Rotation": 0,
+            "Scale": 1,
+            "SequenceId": 0,
+            "SheetSequence": false,
+            "Size": "21.65004,12.74",
+            "SortLayer": 0,
+            "Transient": false
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "92c731d0-9a3e-4684-985f-802fcc8a9c92",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Cube",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "0.06640846,7.067,4.108",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "14350e35-81bd-486d-a2a3-6541c5575885",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/dev/box.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "0.0093,0.0093,0.0093,1"
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "5300af2d-6f1c-46a0-974d-0d6cad270e15"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "c47c1e0d-2a9f-46ed-979e-aab3e13fb252"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "975e815a-92fb-436a-953c-b957003300a1"
+        }
+      ]
+    },
+    "__variables": [
+      {
+        "Id": "Owner Job",
+        "Title": "Owner Job",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "6c6711b9-5ffe-44b9-9d6f-fbcb8003f650",
+            "Property": "OwnerJob"
+          }
+        ]
+      },
+      {
+        "Id": "Play Distance",
+        "Title": "Play Distance",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "6c6711b9-5ffe-44b9-9d6f-fbcb8003f650",
+            "Property": "PlayDistance"
+          }
+        ]
+      },
+      {
+        "Id": "Is God Mode",
+        "Title": "Is God Mode",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "6ff86a6a-b6e9-44a2-aa88-bc6498ed6d4f",
+            "Property": "IsGodMode"
+          }
+        ]
+      },
+      {
+        "Id": "Motion Enabled",
+        "Title": "Motion Enabled",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "401b6f4d-6b97-41ed-ad92-c8d4a29f0944",
+            "Property": "MotionEnabled"
+          }
+        ]
+      },
+      {
+        "Id": "Locking",
+        "Title": "Locking",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "401b6f4d-6b97-41ed-ad92-c8d4a29f0944",
+            "Property": "Locking"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

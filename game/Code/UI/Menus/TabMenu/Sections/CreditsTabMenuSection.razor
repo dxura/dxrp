@@ -1,0 +1,108 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+<root>
+	<div class="flex flex-col bg-secondary-35 rounded-lg p-4 overflow-y-scroll w-full">
+		<div class="flex flex-col gap-4">
+			<div class="flex flex-col">
+				<h2 class="text-xl text-accent mb-2">#credits.models</h2>
+				<p class="text-gray-400 mb-2">#credits.models.license</p>
+				<ul class="flex flex-col gap-2">
+					@foreach ( var item in ModelCredits )
+					{
+						<li class="text-tertiary p-2 rounded">@Language.GetPhrase( item.Key ) <a class="text-accent cursor-pointer ml-2" href="@item.Url">@item.Url</a></li>
+					}
+				</ul>
+			</div>
+
+			<div class="flex flex-col">
+				<h2 class="text-xl text-accent mb-2">#credits.maps_assets</h2>
+				<ul class="flex flex-col gap-2">
+					@foreach ( var key in MapAssetCredits )
+					{
+						<li class="text-tertiary p-2 rounded">@Language.GetPhrase( key )</li>
+					}
+				</ul>
+			</div>			
+			
+			<div class="flex flex-col">
+				<h2 class="text-xl text-accent mb-2">#credits.sounds</h2>
+				<ul class="flex flex-col gap-2">
+					@foreach ( var key in SoundCredits )
+					{
+						<li class="text-tertiary p-2 rounded">@Language.GetPhrase( key )</li>
+					}
+				</ul>
+			</div>
+
+			<div class="flex flex-col">
+				<h2 class="text-xl text-accent mb-2">#credits.special_thanks</h2>
+				<ul class="flex flex-col gap-2">
+					@foreach ( var key in ThanksCredits )
+					{
+						<li class="text-tertiary p-2 rounded">@Language.GetPhrase( key )</li>
+					}
+				</ul>
+			</div>
+
+			<div class="flex flex-col">
+				<h2 class="text-xl text-accent mb-2">#credits.resources</h2>
+				<ul class="flex flex-col gap-2">
+					@foreach ( var key in ResourceCredits )
+					{
+						<li class="text-tertiary p-2 rounded">@Language.GetPhrase( key )</li>
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	private static readonly (string Key, string Url)[] ModelCredits =
+	{
+		( "credits.model.hammer", "https://skfb.ly/p8I6T" ),
+		( "credits.model.money", "https://skfb.ly/6yvDv" ),
+		( "credits.model.small_snack_pack", "https://skfb.ly/oBGNs" ),
+		( "credits.model.crate_box", "https://skfb.ly/RMpW" ),
+		( "credits.model.defender_arcade", "https://skfb.ly/6Vx6n" ),
+		( "credits.model.medkit_low", "https://skfb.ly/oSorz" ),
+		( "credits.model.manhole_cover", "https://skfb.ly/6nPqX" ),
+		( "credits.model.police_baton", "https://skfb.ly/oY6tJ" ),
+		( "credits.model.flatscreen_tv", "https://skfb.ly/DBrF" ),
+		( "credits.model.hand_cuffs", "https://skfb.ly/6FYzq" ),
+		( "credits.model.tin_can", "https://skfb.ly/oxKvW" ),
+		( "credits.model.speaker_silver", "https://skfb.ly/oULMC" ),
+		( "credits.model.office_desk", "https://skfb.ly/oVYPS" ),
+		( "credits.model.laundry_machine", "https://skfb.ly/oIRAJ" ),
+		( "credits.model.poop", "https://skfb.ly/YIR7" ),
+		( "credits.model.ammo_box", "https://skfb.ly/oBZAD" ),
+		( "credits.model.soccer_ball", "https://skfb.ly/6QU9Z" )
+	};
+
+	private static readonly string[] MapAssetCredits =
+	{
+		"credits.maps.original_map",
+		"credits.maps.printer_model"
+	};
+
+	private static readonly string[] SoundCredits =
+	{
+		"credits.sound.band_aid"
+	};
+
+	private static readonly string[] ThanksCredits =
+	{
+		"credits.thanks.current_contributors",
+		"credits.thanks.past_contributors",
+		"credits.thanks.staff_team",
+		"credits.thanks.fptje",
+		"credits.thanks.facepunch"
+	};
+
+	private static readonly string[] ResourceCredits =
+	{
+		"credits.resources.pixabay"
+	};
+}

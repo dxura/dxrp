@@ -1,0 +1,206 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@page "/tabmenu/faction/browse"
+
+<root>
+@if ( !FactionSystem.Instance.IsValid() )
+{
+	<p class="text-base text-gray-400 p-3">#faction.loading</p>
+	return;
+}
+
+@{
+	var factions = FactionSystem.Instance.Factions.Values
+		.OrderByDescending( f => f.Level )
+		.ThenBy( f => f.Name )
+		.ToList();
+}
+
+<div class="section-group">
+	<div class="section-group-title">@string.Format( Language.GetPhrase( "faction.count" ), factions.Count )</div>
+	<div class="p-3">
+		@if ( factions.Count > 0 )
+		{
+			<div class="flex flex-col gap-1">
+				<div class="flex text-xs text-gray-400 uppercase pb-1" style="border-bottom: 1px solid rgba(136,139,145,0.2)">
+					<span style="width: 80px; flex-shrink: 0;">#faction.browse.tag</span>
+					<span style="flex: 1; min-width: 120px;">#faction.browse.name</span>
+					<span style="width: 60px; flex-shrink: 0;">#faction.browse.level</span>
+					<span style="width: 100px; flex-shrink: 0;">#faction.browse.members</span>
+				</div>
+
+				@foreach ( var f in factions )
+				{
+					var isSelected = _selectedFactionId == f.Id;
+					<div class="flex items-center text-sm py-2 cursor-pointer @( isSelected ? "bg-secondary rounded" : "" )"
+					     @onclick="@(() => _selectedFactionId = isSelected ? null : f.Id)">
+						<span class="text-accent text-bold" style="width: 80px; flex-shrink: 0;">[@f.Tag]</span>
+						<span style="flex: 1; min-width: 120px;">@f.Name</span>
+						<span class="text-gray-400" style="width: 60px; flex-shrink: 0;">@f.Level</span>
+						<span class="text-gray-400" style="width: 100px; flex-shrink: 0;">@f.MemberCount / @f.MaxMembers</span>
+					</div>
+				}
+			</div>
+		}
+		else
+		{
+			<p class="text-base text-gray-400">#faction.none_exist</p>
+		}
+	</div>
+</div>
+
+@if ( _selectedFactionId.HasValue )
+{
+	var selected = factions.FirstOrDefault( f => f.Id == _selectedFactionId.Value );
+	if ( selected.Id != Guid.Empty )
+	{
+		var selectedRoles = FactionSystem.Instance.GetFactionRoles( _selectedFactionId.Value ).OrderBy( r => r.Order ).ToList();
+		var selectedMembers = GameUtils.Players
+			.Where( p => p.IsValid() && p.FactionId == selected.Id )
+			.OrderBy( p => p.DisplayName )
+			.ToList();
+
+		<div class="section-group">
+			<div class="section-group-title">@selected.Name <span class="text-gray-400">[@selected.Tag]</span></div>
+			<div class="flex flex-col gap-3 p-3">
+				<div class="flex items-center gap-4">
+					<div class="flex flex-col">
+						<span class="text-xs text-gray-400">#faction.browse.members</span>
+						<span class="text-lg text-accent text-bold">@selected.MemberCount / @selected.MaxMembers</span>
+					</div>
+					<div class="flex flex-col">
+						<span class="text-xs text-gray-400">#faction.browse.balance</span>
+						<span class="text-lg text-cash text-bold">$@selected.Balance.ToString( "N0" )</span>
+					</div>
+					<div class="flex flex-col">
+						<span class="text-xs text-gray-400">#faction.browse.xp</span>
+						<span class="text-lg text-accent text-bold">@selected.Experience.ToString( "N0" )</span>
+					</div>
+					<div class="flex flex-col">
+						<span class="text-xs text-gray-400">#faction.browse.level</span>
+						<span class="text-lg text-bold">@selected.Level</span>
+					</div>
+				</div>
+
+				@if ( !string.IsNullOrWhiteSpace( selected.Description ) )
+				{
+					<p class="text-sm text-gray-400">@selected.Description</p>
+				}
+
+				@if ( selectedMembers.Count > 0 )
+				{
+					<div class="flex flex-col gap-1">
+						<span class="text-xs text-gray-400 uppercase">@string.Format( Language.GetPhrase( "faction.browse.online_members" ), selectedMembers.Count )</span>
+						@foreach ( var member in selectedMembers )
+						{
+							var memberRole = member.GetFactionRole();
+							<div class="flex items-center gap-2 p-1">
+								<img style="width: 24px; height: 24px; border-radius: 4px;" src="avatar:@member.SteamId" alt="avatar"/>
+								<span class="text-sm">@member.DisplayName</span>
+								@if ( memberRole != null )
+								{
+									<span class="text-xs text-accent">@memberRole?.Name</span>
+								}
+							</div>
+						}
+					</div>
+				}
+
+				@if ( selectedRoles.Count > 0 )
+				{
+					<div class="flex flex-col gap-1">
+						<span class="text-xs text-gray-400 uppercase">#faction.browse.roles</span>
+						<div class="flex gap-1">
+							@foreach ( var role in selectedRoles )
+							{
+								<span class="bg-secondary rounded px-2 py-1 text-xs text-accent">@role.Name</span>
+							}
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	}
+}
+
+@if ( !Player.Local.IsInFaction )
+{
+	<div class="section-group">
+		<div class="section-group-title">#faction.create</div>
+		<div class="flex flex-col gap-2 p-3">
+			<TabMenuTextEntry
+				class="bg-secondary text-tertiary rounded"
+				placeholder="#faction.name_label"
+				MaxLength=@( 30 )
+				Value:bind="@_createName"/>
+
+			<div class="flex gap-2">
+				<TabMenuTextEntry
+					class="bg-secondary text-tertiary rounded"
+					placeholder="#faction.tag_label"
+					MaxLength=@( 5 )
+					style="width: 120px;"
+					Value:bind="@_createTag"/>
+				<TabMenuTextEntry
+					class="bg-secondary text-tertiary rounded flex-grow"
+					placeholder="#faction.description_label"
+					MaxLength=@( 200 )
+					Value:bind="@_createDescription"/>
+			</div>
+
+			<div class="flex items-center justify-between">
+				<span class="text-sm text-gray-400"><span>#faction.cost</span> <span class="text-cash text-bold">$@(Config.Current.Game.FactionCreateCost.ToString( "N0" ))</span></span>
+				<button class="btn btn-good" onclick="@TryCreateFaction">#faction.create</button>
+			</div>
+		</div>
+	</div>
+}
+</root>
+
+@code {
+	private Guid? _selectedFactionId;
+	private string _createName = "";
+	private string _createTag = "";
+	private string _createDescription = "";
+
+	private void TryCreateFaction()
+	{
+		if ( string.IsNullOrWhiteSpace( _createName ) || string.IsNullOrWhiteSpace( _createTag ) )
+		{
+			Notify.Error( Language.GetPhrase( "faction.name_tag_required" ) );
+			return;
+		}
+
+		if ( Player.Local.WalletBalance < Config.Current.Game.FactionCreateCost )
+		{
+			Notify.Error( "#notify.cash.poor" );
+			return;
+		}
+
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:create", Config.Current.Game.ActionLongCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.CreateFactionHost( _createName.Trim(), _createTag.Trim(),
+			string.IsNullOrWhiteSpace( _createDescription ) ? null : _createDescription.Trim() );
+
+		_createName = "";
+		_createTag = "";
+		_createDescription = "";
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !FactionSystem.Instance.IsValid() ) return 0;
+		return HashCode.Combine(
+			_selectedFactionId,
+			Player.Local?.FactionId,
+			FactionSystem.Instance.Factions.Count,
+			FactionSystem.Instance.FactionRoles.Count,
+			GameUtils.Players.Count(),
+			_createName, _createTag
+		);
+	}
+}

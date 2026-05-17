@@ -1,0 +1,212 @@
+{
+  "RootObject": {
+    "__guid": "95ad80cb-0fa1-425a-b8b5-927d8e5f1371",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "weed_harvest",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "entity,occludable,hands_interact",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Entities.WeedHarvestEntity",
+        "__guid": "4b0c181b-c1ed-40a3-aa34-e383bbc991a0",
+        "__enabled": true,
+        "Flags": 0,
+        "Dried": false,
+        "HealthComponent": {
+          "_type": "component",
+          "component_id": "023ec45b-a16a-4393-b9cb-a4e948cd1a33",
+          "go": "95ad80cb-0fa1-425a-b8b5-927d8e5f1371",
+          "component_type": "HealthComponent"
+        },
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "36f780bb-95fd-47af-978e-0043f3930733",
+          "go": "95ad80cb-0fa1-425a-b8b5-927d8e5f1371",
+          "component_type": "ModelRenderer"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0",
+        "OwnerSteamId": 0,
+        "Rigidbody": {
+          "_type": "component",
+          "component_id": "feedec0d-ac9c-4311-9f8c-4d8e6d51db6f",
+          "go": "95ad80cb-0fa1-425a-b8b5-927d8e5f1371",
+          "component_type": "Rigidbody"
+        }
+      },
+      {
+        "__type": "Sandbox.ModelRenderer",
+        "__guid": "36f780bb-95fd-47af-978e-0043f3930733",
+        "__enabled": true,
+        "Flags": 0,
+        "BodyGroups": 1,
+        "CreateAttachments": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "gameplay/entities/jobs/drug_dealer/weed_harvest/models/weed_harvest.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Tint": "1,1,1,1"
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "feedec0d-ac9c-4311-9f8c-4d8e6d51db6f",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": "DisableCollisionSounds",
+        "StartAsleep": false
+      },
+      {
+        "__type": "Sandbox.ModelCollider",
+        "__guid": "5b1d4061-1d8f-4c6b-8fbc-9e1f982ccf74",
+        "__enabled": true,
+        "Flags": 0,
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "Model": "gameplay/entities/jobs/drug_dealer/weed_harvest/models/weed_harvest.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Static": false,
+        "Surface": "surfaces/grass.surface",
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Dxura.RP.Game.HealthComponent",
+        "__guid": "023ec45b-a16a-4393-b9cb-a4e948cd1a33",
+        "__enabled": true,
+        "Flags": 0,
+        "Health": 100,
+        "IsGodMode": false,
+        "MaxHealth": 30,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "427e42a9-af71-425c-a6b1-44b66a421314"
+        },
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "e8176e74-1e65-42ba-91cc-9107ba321c1b"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "c5b584d7-085e-4fec-9adf-f101c69f984a"
+        }
+      ]
+    },
+    "__variables": [
+      {
+        "Id": "Dried",
+        "Title": "Dried",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "4b0c181b-c1ed-40a3-aa34-e383bbc991a0",
+            "Property": "Dried"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

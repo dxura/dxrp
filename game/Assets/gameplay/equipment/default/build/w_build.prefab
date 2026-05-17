@@ -1,0 +1,287 @@
+{
+  "RootObject": {
+    "__guid": "537a3752-47c2-491f-b7a8-84d06247b15b",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "w_build",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "player",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": true,
+    "NetworkOrphaned": 3,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Equipment",
+        "__guid": "fe1fe626-a1a6-40ab-b2f5-1ce554531845",
+        "__enabled": true,
+        "DeploySound": "sounds/equipment/switch/equipment_switch.sound",
+        "EjectionPort": {
+          "_type": "gameobject",
+          "go": "93b70621-3326-4689-b0dd-82371b9b8594"
+        },
+        "Handedness": "Right",
+        "HoldType": "Pistol",
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "6b738c5f-a783-4ebf-be5d-d7ae3062e78a",
+          "go": "fccf584a-67cf-4b26-ae4b-c0fafa897f5e",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "Muzzle": {
+          "_type": "gameobject",
+          "go": "93b70621-3326-4689-b0dd-82371b9b8594"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnlyShowCrosshairDot": true,
+        "Resource": "gameplay/equipment/default/build/build.equip",
+        "SpeedPenalty": 20,
+        "UseCrosshair": true
+      },
+      {
+        "__type": "Dxura.RP.Game.TagBinder",
+        "__guid": "8acf7f5b-f598-4b06-bee2-07501c3e874f",
+        "__enabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "fccf584a-67cf-4b26-ae4b-c0fafa897f5e",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Model",
+        "Position": "1.048961,1.678623,-5.031126",
+        "Rotation": "-0.6172464,-0.00000002980232,0.00000001490116,0.7867698",
+        "Scale": "0.25,0.25,0.25",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "6b738c5f-a783-4ebf-be5d-d7ae3062e78a",
+            "__enabled": true,
+            "AnimationGraph": null,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": false,
+            "CreateBoneObjects": false,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "gameplay/equipment/default/build/model/hammer.vmdl",
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Sequence": {
+              "Name": null,
+              "Looping": true,
+              "Blending": false
+            },
+            "Tint": "1,1,1,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": [
+          {
+            "__guid": "93b70621-3326-4689-b0dd-82371b9b8594",
+            "__version": 1,
+            "Flags": 0,
+            "Name": "Muzzle",
+            "Position": "11.02609,-50.47574,-0.000004768372",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkInterpolation": true,
+            "NetworkOrphaned": 0,
+            "OwnerTransfer": 1,
+            "Components": [],
+            "Children": []
+          }
+        ]
+      },
+      {
+        "__guid": "6a5b70e8-f9db-4408-b52a-b13eacbede77",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "Functions",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.Equipments.BuildEquipment",
+            "__guid": "beffd33f-ae21-491d-89c6-99438683c989",
+            "__enabled": true,
+            "Beam": {
+              "_type": "component",
+              "component_id": "321f26b4-2761-4daa-9732-506ecded8f19",
+              "go": "6a5b70e8-f9db-4408-b52a-b13eacbede77",
+              "component_type": "LineRenderer"
+            },
+            "InputActions": [
+              "Attack1"
+            ],
+            "MaxTargetDistance": 300,
+            "MinTargetDistance": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RequiresAllInputActions": false,
+            "RotateSnapAt": 45,
+            "RotateSpeed": 0.225,
+            "TargetDistanceSpeed": 25
+          },
+          {
+            "__type": "Sandbox.LineRenderer",
+            "__guid": "321f26b4-2761-4daa-9732-506ecded8f19",
+            "__enabled": false,
+            "Additive": true,
+            "AutoCalculateNormals": true,
+            "CastShadows": false,
+            "Color": {
+              "blend": "Linear",
+              "color": [
+                {
+                  "t": 0.5,
+                  "c": "0,0.75449,0.96279,1"
+                }
+              ],
+              "alpha": [
+                {
+                  "t": 0,
+                  "a": 1
+                },
+                {
+                  "t": 1,
+                  "a": 1
+                }
+              ]
+            },
+            "CylinderSegments": 12,
+            "DepthFeather": 0,
+            "EndCap": "None",
+            "Face": "Camera",
+            "FogStrength": 1,
+            "Lighting": false,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Opaque": true,
+            "Points": [],
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": true,
+              "AfterUILayer": false
+            },
+            "SplineBias": 0,
+            "SplineContinuity": 0,
+            "SplineInterpolation": 10,
+            "SplineTension": 0,
+            "StartCap": "None",
+            "Texturing": {
+              "Texture": null,
+              "Material": null,
+              "WorldSpace": true,
+              "UnitsPerTexture": 10,
+              "Scale": 1,
+              "Offset": 0,
+              "Scroll": 0,
+              "Clamp": false
+            },
+            "UseVectorPoints": true,
+            "VectorPoints": [],
+            "Width": [
+              {
+                "x": 0.5,
+                "y": 0.25,
+                "in": 0,
+                "out": 0,
+                "mode": "Linear"
+              }
+            ],
+            "Wireframe": false
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

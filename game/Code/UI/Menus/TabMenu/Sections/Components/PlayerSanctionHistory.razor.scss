@@ -1,0 +1,147 @@
+@import "../../../../styles.scss";
+
+PlayerSanctionHistory {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .profile-sanctions {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    margin-top: $space-3;
+  }
+
+  .sanctions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-3;
+  }
+
+  .loading {
+    color: $color-gray-400;
+    font-size: $text-xs;
+    padding: 0 $space-4 $space-2;
+  }
+
+  .count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 72px;
+    padding: 2px 8px;
+    color: rgba(white, 0.72);
+    font-size: $text-xs;
+    font-weight: 600;
+  }
+
+  .sanctions-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-top: $space-3;
+  }
+
+  .sanction-list {
+    display: flex;
+    flex-direction: row;
+    gap: $space-2;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 0 $space-4 $space-2;
+  }
+
+  .empty-state {
+    width: 100%;
+    min-height: 88px;
+    padding: $space-2 $space-3;
+    border-radius: $space-2;
+    background-color: rgba($color-secondary, 0.95);
+    color: rgba(white, 0.58);
+    text-align: left;
+  }
+
+  .sanction-entry {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    flex-shrink: 0;
+    width: 260px;
+    min-height: 96px;
+    padding: $space-2;
+    border-radius: $space-2;
+    background-color: rgba($color-secondary, 0.95);
+  }
+
+  .entry-top,
+  .entry-badges {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-wrap: wrap;
+  }
+
+  .entry-top {
+    justify-content: space-between;
+  }
+
+  .type-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: $text-xs;
+    font-weight: 700;
+    color: white;
+  }
+
+  .type-marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: rgba($color-primary, 0.75);
+
+    &.type-warning {
+      background-color: #f7c843;
+    }
+
+    &.type-jail {
+      background-color: #fd7a45;
+    }
+
+    &.type-ban {
+      background-color: #ff7d7d;
+    }
+
+    &.type-gag {
+      background-color: #00b8d9;
+    }
+
+    &.type-kick {
+      background-color: #7ef29a;
+    }
+
+    &.type-note {
+      background-color: #b49cff;
+    }
+  }
+
+  .type-label {
+    color: white;
+  }
+
+  .issued-at {
+    color: $color-gray-400;
+    font-size: $text-xs;
+  }
+
+  .reason {
+    color: white;
+    font-size: $text-xs;
+    font-weight: 600;
+    flex-grow: 1;
+  }
+}

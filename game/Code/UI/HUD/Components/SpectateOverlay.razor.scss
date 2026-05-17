@@ -1,0 +1,126 @@
+@import "../../styles.scss";
+
+SpectateOverlay {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 300;
+
+  .spectate-container {
+    background-color: $color-primary;
+    box-shadow: 0 8px 28px rgba(black, 0.45);
+    min-width: 480px;
+    flex-direction: column;
+  }
+
+  .top-row {
+    padding: 5px 10px;
+    gap: 10px;
+  }
+
+  .profile-picture {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .info-section {
+    gap: 1px;
+    flex-grow: 1;
+  }
+
+  .spectate-label {
+    font-size: 9px;
+    color: $color-accent;
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+
+  .spectate-target {
+    font-size: 16px;
+    color: $color-white;
+    font-weight: bold;
+  }
+
+  .hints {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .hint {
+    background-color: $color-secondary;
+    padding-right: 8px;
+    gap: 2px;
+  }
+
+  .hint label {
+    color: $color-gray-400;
+    font-size: 11px;
+  }
+
+  .bottom-row {
+    padding: 4px 12px;
+    gap: 8px;
+    background-color: rgba(black, 0.3);
+    border-top: 1px solid rgba(white, 0.05);
+  }
+
+  .stat {
+    gap: 4px;
+  }
+
+  .stat-sep {
+    width: 1px;
+    height: 12px;
+    background-color: rgba(white, 0.1);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: $color-gray-400;
+  }
+
+  .stat-icon {
+    font-size: 12px;
+  }
+
+  .stat-value {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .health-icon {
+    color: $color-good;
+  }
+
+  .stat-value.health {
+    color: $color-good;
+  }
+
+  .armor-icon {
+    color: $counter-terror-color;
+  }
+
+  .stat-value.armor {
+    color: $counter-terror-color;
+  }
+
+  .stat-value.dead {
+    color: $color-bad;
+  }
+
+  .neutral-icon,
+  .stat-value.neutral {
+    color: $color-gray-400;
+  }
+
+  .money-icon {
+    color: $color-gray-400;
+    font-size: 11px;
+  }
+
+  .stat-value.money {
+    color: $color-good;
+  }
+}

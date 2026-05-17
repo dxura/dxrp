@@ -1,0 +1,137 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@page "/settings/audio"
+
+<root class="flex flex-col gap-4 p-4 text-white">
+
+	<div class="flex gap-2 ml-2">
+		<button class="btn btn-good" @onclick="@( () => { ConsoleSystem.Run( "dx_toggle_soundscape" );})">#settings.audio.soundscape</button>
+	</div>
+	
+	<h2 class="text-bold text-lg p-2 bg-primary-75 text-center">#settings.audio.mixers</h2>
+
+	<div class="flex flex-col gap-4">
+		<div class="flex gap-4" style="width: 100%;">
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.equipment</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_equipment_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_equipment_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.footsteps</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_footsteps_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_footsteps_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.printer</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_printer_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_printer_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+		</div>
+
+		<div class="flex gap-4" style="width: 100%;">
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.world</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_world_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_world_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.tts</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_tts_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_tts_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.wire</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_wire_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_wire_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+		</div>
+
+		<div class="flex gap-4" style="width: 100%;">
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.notification</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_notification_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_notification_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.cinema</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_cinema_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_cinema_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.lockdown</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_lockdown_volume", 1.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_lockdown_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+		</div>
+
+		<div class="flex gap-4" style="width: 100%;">
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.radio</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_radio_volume", 0.15.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_radio_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div class="flex flex-col" style="flex-grow: 1; width: 0;">
+				<p class="text-base">#settings.audio.tv</p>
+				<SliderControl Min=@( 0 ) Max=@( 1f ) Step=@(0.05f)
+				               Value="@( float.Parse(ConsoleSystem.GetValue("dx_mixer_tv_volume", 0.3.ToString())) )"
+				               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_mixer_tv_volume", value); } )
+				               ShowTextEntry=@( false )
+				/>
+			</div>
+
+			<div style="flex-grow: 1; width: 0;"></div>
+		</div>
+	</div>
+
+	<div class="flex flex-row gap-2 ml-2">
+		<button class="btn btn-bad" @onclick=@ResetMixerVolumes>#settings.audio.reset</button>
+	</div>
+
+</root>
+
+@code {
+	private void ResetMixerVolumes()
+	{
+		DxSound.ResetMixerVolumes();
+		StateHasChanged();
+	}
+}

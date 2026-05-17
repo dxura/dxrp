@@ -1,0 +1,98 @@
+@import "../../../styles.scss";
+
+JobTabMenuSection {
+  padding: $space-3 $space-5;
+  .job-group-list {
+    height: 100%;
+  }
+
+  .job-group {
+    padding: $space-4;
+    margin-bottom: $space-4;
+  }
+
+  .job-group-title {
+    padding: $space-2;
+    text-align: center;
+  }
+
+  .job-list {
+    gap: $space-4;
+  }
+
+  .job-entry {
+    background-color: $color-secondary;
+    border-radius: $space-2;
+    transition: all 0.2s ease;
+    padding: $space-3 $space-4 $space-4;
+    margin-top: $space-3;
+
+    &:hover {
+      background-color: rgba($color-secondary, 0.3);
+      transform: translateY(-2px);
+    }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+      background-color: rgba($color-secondary, 0.1);
+
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+
+  .label {
+    font-size: $text-base;
+    flex-shrink: 0;
+    margin-bottom: $space-1;
+  }
+
+  .job-stats {
+    display: flex;
+    gap: $space-3;
+    margin-bottom: $space-3;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: $text-sm;
+
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .material-icons {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .salary {
+    color: $color-good;
+    font-weight: 500;
+    order: 1;
+  }
+
+  .player-count {
+    color: $color-gray-400;
+    order: 2;
+
+    &.full {
+      color: $color-bad;
+    }
+  }
+
+  .vote-badge {
+    color: $color-accent;
+    font-weight: 500;
+    order: 3;
+  }
+
+  .description {
+    display: flex;
+    flex-direction: column;
+    color: $color-gray-400;
+  }
+}

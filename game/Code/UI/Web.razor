@@ -1,0 +1,25 @@
+@using Sandbox.UI
+@inherits PanelComponent
+@namespace Dxura.RP.Game
+
+<root>
+	<WebPanel @ref=" WebPanel" class="@($"web-panel {(EnablePointerEvents ? "pointer-enabled" : "pointer-disabled")}")"
+	          Url="@Url"/>
+</root>
+
+@code
+{
+	[Property] [TextArea] public string Url { get; set; } = "wwww.google.com";
+
+	[Property] public bool EnablePointerEvents { get; set; } = true;
+
+	public WebPanel WebPanel;
+
+	/// <summary>
+	///     the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+	/// </summary>
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Url, EnablePointerEvents );
+	}
+}

@@ -1,0 +1,52 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+<root class="@AvatarClasses">
+	<div class="avatar" style="@( Player.IsValid() ? $"border: 0.5px solid {PlayerColor.Hex}" : "" )">
+		<img class="image" src="avatar:@Player.SteamId"/>
+	</div>
+
+	@if ( !Player.IsValid() || IsDead )
+	{
+		<div style="background-image: url( ui/dead.png )" class="overlay"/>
+
+		return;
+	}
+
+	@if ( ShowHealth && Player.HealthComponent.State == LifeState.Alive )
+	{
+		<div class="health">
+			<div class="health-inner" style="width:@( Player.HealthComponent.Health )%"/>
+		</div>
+	}
+</root>
+
+@code
+{
+	public Player Player { get; set; }
+	public Color PlayerColor => Player.IsValid() ? Player.PlayerColor : Color.White;
+	private bool IsDead => !Player.IsValid() || Player?.HealthComponent.State != LifeState.Alive;
+
+	public bool ShowHealth { get; set; } = true;
+
+	private string AvatarClasses
+	{
+		get
+		{
+			if ( IsDead ) return "dead";
+			return "";
+		}
+	}
+
+	protected override int BuildHash()
+	{
+		var hash = HashCode.Combine( Player );
+
+		if ( Player.IsValid() )
+			hash = HashCode.Combine( hash, Player.HealthComponent.Health, Player.HealthComponent.State, Player.PlayerColor );
+
+		return hash;
+	}
+}

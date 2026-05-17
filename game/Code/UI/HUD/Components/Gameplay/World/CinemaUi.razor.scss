@@ -1,0 +1,51 @@
+@import "../../../../styles.scss";
+
+CinemaUi {
+  position: absolute;
+  left: 1%;
+  top: 15%;
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  max-height: 85%;
+  color: $color-tertiary;
+
+  .cinema-panel {
+    width: 100%;
+  }
+
+  .cinema-queue {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .cinema-input {
+    width: 190px;
+    min-width: 190px;
+    max-width: 190px;
+  }
+
+  .divider {
+    height: 1px;
+    background-color: rgba(white, 0.06);
+  }
+
+  .btn {
+    padding: $space-1 $space-3;
+    font-size: $text-xs;
+    font-weight: 700;
+    cursor: pointer;
+    color: $color-tertiary;
+    transition: background-color 0.15s;
+
+    &[disabled] {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+  }
+  
+  .btn-skip {
+    background-color: rgba(white, 0.08);
+    &:hover { background-color: rgba(white, 0.16); }
+  }
+}

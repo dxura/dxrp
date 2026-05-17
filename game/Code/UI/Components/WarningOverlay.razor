@@ -1,0 +1,68 @@
+@inherits PanelComponent
+@namespace Dxura.RP.Game
+
+<root>
+	<div class="modal-content shadow-lg rounded-lg">
+		<div class="flex flex-col items-center justify-center gap-4 w-full h-full">
+			<div class="title">
+				<span class="text-bad">@Title</span>
+			</div>
+			
+			<p class="text-sm text-gray-400 -mt-4">#warning.overlay.read</p>
+
+			@if (!string.IsNullOrEmpty(Message))
+			{
+				<div class="warning-message">
+					@Message
+				</div>
+			}
+
+			<button 
+				class="btn @(CountdownPending ? "btn-disabled" : "btn-good")" 
+				onclick=@Acknowledge
+				disabled=@(CountdownPending)>
+				@if (CountdownPending)
+				{
+					<span>@string.Format( Language.GetPhrase( "warning.overlay.wait" ), CountdownRemaining )</span>
+				}
+				else
+				{
+					<span>@ConfirmText</span>
+				}
+			</button>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	public string Title { get; set; } = Language.GetPhrase( "warning.overlay.title.default" );
+	public string Message { get; set; } = string.Empty;
+	public string ConfirmText { get; set; } = Language.GetPhrase( "warning.overlay.confirm" );
+	private Action OnConfirm { get; set; } = null!;
+	
+	private readonly TimeSince _timeSinceStart = 0;
+	
+	private const float WarningTime = 10.0f;
+	
+	private bool CountdownPending => _timeSinceStart < WarningTime;
+	private int CountdownRemaining => (int)MathF.Ceiling(WarningTime - _timeSinceStart);
+	
+	private void Acknowledge()
+	{
+		if (CountdownPending)
+		{
+			return;
+		}
+
+		Sound.Play( "pop" );
+		OnConfirm?.Invoke();
+		Destroy();
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(Time.Now, Title, Message, ConfirmText);
+	}
+}
+

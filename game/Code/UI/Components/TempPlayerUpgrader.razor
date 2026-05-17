@@ -1,0 +1,111 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@using Game=Sandbox.Game
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+	@if ( CurrentLevel >= 3 )
+	{
+		// Early return if player is at max level
+		return;
+	}
+
+	<div class="btn btn-secondary flex flex-col items-center justify-center p-2 rounded-lg cursor-pointer"
+	     onclick="@UpgradeLevel"
+	     tooltip="#tabmenu.upgrader.tooltip">
+		<div class="flex flex-col items-center justify-center gap-1">
+			@switch ( CurrentLevel )
+			{
+				case 0:
+					<span class="text-lg text-bold">@string.Format( Language.GetPhrase( "tabmenu.upgrader.upgrade_to" ), Language.GetPhrase( "tabmenu.players.builder" ) )</span>
+					<span class="text-cash text-lg text-bold">$75,000</span>
+					<span class="text-sm text-center text-center">#tabmenu.upgrader.builder</span>
+					break;
+				case 1:
+					<span class="text-lg text-bold">@string.Format( Language.GetPhrase( "tabmenu.upgrader.upgrade_to" ), Language.GetPhrase( "tabmenu.players.builder_plus" ) )</span>
+					<span class="text-cash text-lg text-bold">$300,000</span>
+					<span class="text-sm text-center">#tabmenu.upgrader.builder_plus</span>
+					break;
+				case 2:
+					<span class="text-lg text-bold">@string.Format( Language.GetPhrase( "tabmenu.upgrader.upgrade_to" ), Language.GetPhrase( "tabmenu.players.builder_plus_plus" ) )</span>
+					<span class="text-cash text-lg text-bold">$1,000,000</span>
+					<span class="text-sm text-center">#tabmenu.upgrader.builder_plus_plus</span>
+					break;
+			}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	private int CurrentLevel => Player.Local?.Level ?? 0;
+	private bool IsOnCooldown => Cooldown.Current.IsOnCooldown( "level:upgrade" );
+	private string _statusMessage = "";
+
+	private uint GetUpgradeCost()
+	{
+		return CurrentLevel switch
+		{
+			0 => 75000,
+			1 => 300000,
+			2 => 1000000,
+			_ => 0
+		};
+	}
+
+	private bool CanAfford => Player.Local?.BankBalance >= GetUpgradeCost();
+
+	private async void UpgradeLevel()
+	{
+		if ( IsOnCooldown )
+		{
+			Notify.Cooldown( "level:upgrade" );
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+		
+		if (!CanAfford)
+		{
+			Notify.Error( Language.GetPhrase( "tabmenu.upgrader.cant_afford" ) );
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
+		Cooldown.Current.StartCooldown( "level:upgrade", 120 );
+
+		_statusMessage = "";
+		StateHasChanged();
+
+		try
+		{
+			var success = await PlayerApiClient.Upgrade();
+
+			if (success)
+			{
+				Sound.Play( "purchase", Player.Local.WorldPosition );
+				Player.Local.ForceApiRefresh();
+				Notify.Success( Language.GetPhrase( "tabmenu.upgrader.applied" ) );
+			}
+			else
+			{
+				Notify.Error( Language.GetPhrase( "tabmenu.upgrader.failed" ) );
+			}
+		}
+		catch (Exception )
+		{
+			Notify.Error( Language.GetPhrase( "tabmenu.upgrader.failed" ) );
+		}
+		finally
+		{
+			StateHasChanged();
+		}
+		
+		TabMenu.RequestCloseMenu();
+	}
+	
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( _statusMessage, CurrentLevel, IsOnCooldown, Player.Local.BankBalance );
+	}
+}

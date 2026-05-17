@@ -1,0 +1,221 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() || !Player.Job.IsHitmanRole() || !HitSystem.IsValid() ) return;
+
+<root>
+	@switch ( _isHidden )
+	{
+		case false when HasHit:
+			{
+				var target = GameUtils.GetPlayerById( HitSystem.ActiveHit!.Value.TargetSteamId );
+
+				<div class="bg-primary-75 rounded p-2 flex flex-col items-center gap-2">
+					<div class="header flex justify-between items-center">
+						<label class="text-xl font-bold text-accent text-bold">#hit.panel.active_hit</label>
+					</div>
+
+					@if (target.IsValid())
+					{
+						<div class="active-hit-info flex flex-col items-center gap-1">
+							<span class="text-lg text-white">@target.DisplayName</span>
+							<span class="text-base text-good">$@HitSystem.ActiveHit.Value.Price.ToString("N0")</span>
+							<span class="text-sm text-tertiary">@string.Format( Language.GetPhrase( "hit.panel.time" ), FormatTimeRemaining(HitSystem.ActiveHit.Value.TimeSinceRequested) )</span>
+						</div>
+					}
+					else
+					{
+						<span class="text-sm text-tertiary">#hit.panel.target_not_found</span>
+					}
+
+					<div class="flex gap-2 items-center">
+						<div tooltip="#hit.panel.hide">
+							<i class="text-xl cursor-pointer" onclick="@ToggleHide">arrow_back</i>
+						</div>
+						<div class="hint flex items-center gap-2 justify-center opacity-50">
+							<InputHint Action="Mouse" Size="@InputGlyphSize.Small" Animate="@(false)"/>
+						</div>
+					</div>
+				</div>
+				break;
+			}
+		case false when !HasHit:
+			{
+				<div class="bg-primary-75 rounded p-2 flex flex-col items-center gap-1">
+					<div class="header flex justify-between items-center">
+						<label class="text-xl font-bold text-accent text-bold">#hit.panel.title</label>
+						@* <button class="hide-btn text-sm text-tertiary opacity-75" onclick=@ToggleHide>Hide</button> *@
+					</div>
+
+					<div class="flex gap-1 items-center">
+						<span class="text-lg text-good">$@Price.ToString( "N0" )</span>
+
+						<span class="text-lg text-bad cursor-pointer hit-btn" onclick=@(() => TryUpdatePrice( false ))>
+							<i>indeterminate_check_box</i>
+						</span>
+						<span class="text-lg text-good cursor-pointer hit-btn" onclick=@(() => TryUpdatePrice( true ))>
+							<i>add_box</i>
+						</span>
+					</div>
+
+					<div class="requests-section flex flex-col gap-2">
+						<div class="requests-list flex flex-col gap-2">
+							@if (HitSystem.PendingHitRequests.Any())
+							{
+								foreach(var request in HitSystem.PendingHitRequests)
+								{
+									var target = GameUtils.GetPlayerById( request.TargetSteamId );
+
+									if(!target.IsValid())
+									{
+										continue;
+									}
+
+									<div class="request-item bg-primary-75 rounded p-2 flex flex-col gap-2">
+										<div class="flex justify-between">
+											<span class="text-sm text-white"><span class="text-bad mr-1">#hit.panel.kill</span> @target.DisplayName</span>
+										</div>
+										<span class="text-xs text-tertiary opacity-75">@request.Reason</span>
+										<div class="flex gap-2">
+											<button class="btn-compact btn-good flex-1 text-sm" onclick=@(() => AcceptRequest(request.Id))>#hit.panel.accept</button>
+											<button class="btn-compact btn-bad flex-1 text-sm" onclick=@(() => DenyRequest(request.Id))>#hit.panel.deny</button>
+										</div>
+									</div>
+								}
+							}
+							else
+							{
+								<div class="no-requests bg-primary-75 rounded p-2">
+									<label class="text-sm text-tertiary opacity-75">#hit.panel.none</label>
+								</div>
+							}
+						</div>
+					</div>
+
+					<div class="flex gap-2 items-center">
+						<div tooltip="#hit.panel.hide">
+							<i class="text-xl cursor-pointer" onclick="@ToggleHide">arrow_back</i>
+						</div>
+						<div class="hint flex items-center gap-2 justify-center opacity-50">
+							<InputHint Action="Mouse" Size="@InputGlyphSize.Small" Animate="@(false)"/>
+						</div>
+					</div>
+
+				</div>
+				break;
+			}
+		default:
+			<button tooltip="#hit.panel.open" class="bg-primary-75 backdrop-blur rounded p-2" onclick=@ToggleHide>
+				<i class="text-xl text-accent">contacts</i>
+			</button>
+			break;
+	}
+</root>
+
+@code
+{
+	/// The player
+	private Player Player => Player.Local;
+	
+	private HitSystem HitSystem => HitSystem.Instance;
+
+	private bool _isHidden;
+	private string CurrentTargetName => Language.GetPhrase( "hit.panel.none_target" );
+	
+	private bool HasHit => HitSystem.ActiveHit.HasValue;
+
+	private uint Price => HitSystem.Instance.IsValid() ? HitSystem.Instance.GetHitPrice(Player.SteamId) : Config.Current.Game.MinHitPrice;
+
+
+	protected override int BuildHash()
+	{
+		if ( !Player.IsValid() || !HitSystem.IsValid() ) return 0;
+
+		return HashCode.Combine( Player.Job, _isHidden, Price, CurrentTargetName, HitSystem.PendingHitRequests.Count, HasHit, Time.Now );
+	}
+
+	private string FormatTimeRemaining( TimeSince timeSince )
+	{
+		var totalSeconds = Config.Current.Game.HitmanActiveHitDuration - timeSince;
+		if ( totalSeconds <= 0 )
+			return Language.GetPhrase( "hit.panel.expired" );
+
+		var minutes = (int)(totalSeconds / 60);
+		var seconds = (int)(totalSeconds % 60);
+
+		return $"{minutes}:{seconds:D2}";
+	}
+
+	private void ToggleHide()
+	{
+		_isHidden = !_isHidden;
+		Sound.Play( "pop" );
+	}
+
+	private void TryUpdatePrice(bool increase)
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( $"hitman:price:change", Config.Current.Game.ActionQuickCooldown, true ) )
+		{
+			return;
+		}
+		
+		var currentPrice = Price;
+		var newPrice = increase ? currentPrice + Config.Current.Game.HitPriceIncrement : currentPrice - Config.Current.Game.HitPriceIncrement;
+		
+		if (newPrice < Config.Current.Game.MinHitPrice)
+		{
+			Notify.Error( Language.GetPhrase( "hit.panel.min_price" ) );
+			return;
+		}
+
+		if ( newPrice > Config.Current.Game.MaxHitPrice )
+		{
+			Notify.Error( Language.GetPhrase( "hit.panel.max_price" ) );
+			return;
+		}
+		
+		if (!HitSystem.Instance.IsValid())
+		{
+			Notify.Error( Language.GetPhrase( "hit.panel.unavailable" ) );
+			return;
+		}
+		
+		HitSystem.Instance.SetHitPrice(newPrice);
+		Notify.Success( string.Format( Language.GetPhrase( "hit.panel.price_set" ), newPrice ) );
+		Sound.Play( "pop" );
+	}
+
+	private void AcceptRequest(Guid requestId)
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "hitman:accept", Config.Current.Game.ActionQuickCooldown, true ) )
+		{
+			return;
+		}
+
+		if ( !HitSystem.Instance.IsValid() )
+		{
+			Notify.Error( Language.GetPhrase( "hit.panel.unavailable" ) );
+			return;
+		}
+
+		HitSystem.Instance.AcceptHitRequestHost(requestId);
+	}
+
+	private void DenyRequest(Guid requestId)
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "hitman:deny", Config.Current.Game.ActionQuickCooldown, true ) )
+		{
+			return;
+		}
+
+		if ( !HitSystem.Instance.IsValid() )
+		{
+			Notify.Error( Language.GetPhrase( "hit.panel.unavailable" ) );
+			return;
+		}
+
+		HitSystem.Instance.DenyHitRequestHost(requestId);
+	}
+}

@@ -1,0 +1,115 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.Services
+@inherits Panel
+
+<root>
+	<div class="job-group-list flex flex-col w-full">
+		@{
+			var groupedJobs = GameModeJobs.All
+				.Where( x => x.Selectable || x == Player.Local.Job )
+				.GroupBy( x => x.GameModeJobGroupId )
+				.Select( g => new
+				{
+					Group = GameModeJobs.FindGroupById( g.Key ),
+					Jobs = g.ToList()
+				} )
+				.OrderBy( x => x.Group?.Name ?? "zzzz" )
+				.ToList();
+		}
+
+		@foreach ( var groupEntry in groupedJobs )
+		{
+			var group = groupEntry.Group;
+			var groupJobs = groupEntry.Jobs;
+			if ( groupJobs.Count == 0 ) continue;
+
+			<div class="job-group flex flex-col w-full">
+				<div class="job-group-title text-white text-lg text-bold" style="background-color: @(group?.Color.Hex() ?? "#4B5563")">
+					@if ( group != null )
+					{
+						<span>@group.DisplayName()</span>
+					}
+					else
+					{
+						<span>Ungrouped</span>
+					}
+				</div>
+				<div class="job-list">
+					@foreach ( var job in groupJobs )
+					{
+						// Check prerequisites
+						var prerequisiteJobs = GameModeJobs.GetPrerequisiteJobs( job );
+						if ( prerequisiteJobs.Length > 0 && !prerequisiteJobs.Contains( Player.Local.Job ) && job != Player.Local.Job )
+						{
+							continue;
+						}
+
+						var currentPlayers = GameUtils.GetPlayersByJob( job ).Count();
+						var isFull = job.MaxCount > 0 && currentPlayers >= job.MaxCount;
+						var requiredPlayTime = job.PlayTime ?? 0;
+						var currentPlayTime = Player.Local.PlayTime;
+						var needsMorePlayTime = requiredPlayTime > currentPlayTime && !IgnoreJobRequirements;
+						var remainingPlayTime = requiredPlayTime - currentPlayTime;
+
+						<div class="job-entry cursor-pointer flex flex-col gap-1" 
+						     onclick="@( () => { SelectJob( job ); } )">
+							<div class="label text-bold" style="color: @job.Color.Hex()">@job.DisplayName()</div>
+								
+							<div class="job-stats flex items-center gap-1">
+								@if ( job.Salary > 0 )
+								{
+									<span class="salary flex items-center gap-1">
+										<i class="material-icons">payments</i>
+										<span>$@(job.Salary.ToString("N0"))</span>
+									</span>
+								}
+								@if ( job.MaxCount != 0 )
+								{
+									<span class="player-count flex items-center gap-1 @(isFull ? "full" : "")">
+										<i class="material-icons">group</i>
+										@currentPlayers/@( job.MaxCount )
+									</span>
+								}
+								@if ( job.VoteRequired && !IgnoreJobRequirements )
+								{
+									<span class="vote-badge flex items-center gap-1">
+										<i class="material-icons">how_to_vote</i>
+										<span>#generic.vote</span>
+									</span>
+								}
+							</div>
+
+							<div class="description">
+								<span class="text-sm">@job.DisplayDescription()</span>
+							</div>
+							
+							@if ( needsMorePlayTime )
+							{
+								<div class="mt-2">
+									<span class="text-bad text-xs whitespace-nowrap"><span class="mr-1">#generic.unlocks</span> @TimeSpan.FromMinutes(remainingPlayTime).Humanize(1)</span>
+								</div>
+							}
+						</div>
+					}
+				</div>
+			</div>
+		}
+	</div>
+</root>
+
+@code
+{
+	bool IgnoreJobRequirements => GameManager.Instance.IsValid() && GameManager.Instance.IgnoreJobRequirements;
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( GameModeJobs.All, Player.Local.PlayTime, Player.Local.Job, IgnoreJobRequirements );
+	}
+
+	private void SelectJob( GameModeJobDto job )
+	{
+		Game.Chat.Current.ExecuteCommandHost( "job", job.Id.ToString() );
+		TabMenu.RequestCloseMenu();
+	}
+
+}

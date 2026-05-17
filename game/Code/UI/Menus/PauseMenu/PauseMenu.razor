@@ -1,0 +1,198 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.Modals
+@using Game=Sandbox.Game
+@inherits PanelComponent
+
+@attribute [StyleSheet]
+
+<root class="@(_isOpen ? "active" : "") ">
+    @if (!_isOpen)
+    {
+        return;
+    }
+
+    <div class="w-full h-full flex flex-col backdrop-blur bg-black-50">
+	    
+        <!-- Header -->
+        <div class="bg-secondary px-4 py-1 flex justify-end items-center shadow-lg">
+	        <div class="absolute left-0 ml-3 -mt-1">
+		        <h1 class="text-3xl text-accent text-bold poppins">DX</h1>
+		        @switch ( Game.Ident )
+		        {
+			        case "dxura.rp":
+				        <span>
+					        <h1 class="text-3xl text-white text-bold poppins">RP</h1>
+				        </span>
+				        break;
+			        case "dxura.sandbox":
+				        <h1 class="text-3xl text-white text-bold poppins">plore</h1>
+				        break;
+		        }
+	        </div>
+
+	        <div class="flex items-center gap-8 px-4">
+		        <div class="flex flex-col items-center gap-1">
+			        <span class="text-gray-400 text-xs uppercase">
+				        <span>#pausemenu.time</span>
+			        </span>
+			        <span class="text-white text-lg text-semibold">@DateTime.Now.ToString( "hh:mm tt" )</span>
+		        </div>
+		        <div class="flex flex-col items-center gap-1">
+			        <span class="text-gray-400 text-xs uppercase">
+				        <span>#pausemenu.players</span>
+			        </span>
+			        <span class="text-white text-lg text-semibold">@( GameUtils.Players.Count() )/@( Networking.MaxPlayers )</span>
+		        </div>
+
+		        @if ( Config.Current.Game.MoneyEnabled )
+		        {
+			        <div class="flex flex-col items-center gap-1">
+				        <span class="text-gray-400 text-xs uppercase">
+					        <span>#pausemenu.bank</span>
+				        </span>
+				        <span class="text-cash text-lg text-semibold">$@( Player.Local?.BankBalance.ToString( "N0" ) ?? "0" )</span>
+			        </div>
+			        <div class="flex flex-col items-center gap-1">
+				        <span class="text-gray-400 text-xs uppercase">
+					        <span>#pausemenu.wallet</span>
+				        </span>
+				        <span class="text-cash text-lg text-semibold">$@( Player.Local?.WalletBalance.ToString( "N0" ) ?? "0" )</span>
+			        </div>
+		        }
+	        </div>
+
+	        <div></div>
+
+        </div>
+
+        <div class="flex justify-between items-center flex-grow w-full">
+	        <!-- Menu Items -->
+	        <div class="flex flex-col items-start justify-start gap-6">
+		        <div class="flex flex items-center gap-4 p-3 pl-6 bg-secondary shadow-lg cursor-pointer hover-scale" @onclick="@ResumeGame">
+			        <i class="material-icons text-5xl text-good">play_circle</i>
+			        <span class="text-white text-xl text-bold ">
+				        <span>#pausemenu.resume</span>
+			        </span>
+		        </div>
+	        
+		        <div class="flex flex items-center gap-4 p-3 pl-6 bg-secondary shadow-lg cursor-pointer hover-scale" @onclick="@OpenServers">
+			        <i class="material-icons text-5xl text-warning">dns</i>
+			        <span class="text-white text-xl text-bold ">
+				        <span>#pausemenu.servers</span>
+			        </span>
+		        </div>
+        
+		        <div class="flex flex items-center gap-4 p-3 pl-6 bg-secondary shadow-lg cursor-pointer hover-scale" @onclick="@OpenSettings">
+			        <i class="material-icons text-5xl text-tertiary">settings</i>
+			        <span class="text-white text-xl text-bold ">
+				        <span>#pausemenu.settings</span>
+			        </span>
+		        </div>
+		        
+		        <div style="height: 25vh"></div>
+	        
+		        <div class="flex flex items-center gap-4 p-3 pl-6 bg-secondary shadow-lg cursor-pointer hover-scale absolute bottom-0 mb-4"
+		             @onclick="@ExitToMenu">
+			        <i class="material-icons text-5xl text-bad">logout</i>
+			        <span class="text-white text-xl text-bold ">
+				        <span>#pausemenu.disconnect</span>
+			        </span>
+		        </div>
+	        </div>
+	        
+	        <div></div>
+	        
+	        <!-- Right side -->
+	        <div class="bg-primary-75 m-8 items-center justify-center">
+		        @if ( _settingsOpen )
+		        {
+			        <Settings/>
+		        }
+		        else if ( ServerApiLink.HasAuthorizationKey )
+		        {
+			        <Inventory/>
+		        }
+	        </div>
+
+        </div>
+
+        @* <!-- Footer --> *@
+        @* <div class="bg-secondary px-4 py-2 text-center flex items-center justify-center w-full shadow-lg"> *@
+	       @*  <span class="text-gray-400 text-sm">Proudly crafted by <span class="text-accent text-bold ml-1">Dxura</span></span> *@
+        @* </div> *@
+    </div>
+</root>
+
+@code {
+    private bool _isOpen;
+    public static bool IsOpen { get; private set; }
+    private static bool _closeRequested;
+
+    private bool _settingsOpen;
+
+    protected override void OnStart()
+    {
+	    IsOpen = false;
+    }
+
+    protected override void OnUpdate()
+    {
+	    if ( _closeRequested )
+	    {
+		    _closeRequested = false;
+		    _isOpen = false;
+		    _settingsOpen = false;
+		    IsOpen = false;
+		    StateHasChanged();
+		    return;
+	    }
+
+	    if ( !Input.EscapePressed ) return;
+
+	    _isOpen = !_isOpen;
+	    IsOpen = _isOpen;
+	    _settingsOpen = false;
+	    Input.EscapePressed = false;
+	    Game.Overlay.CloseAll();
+	    StateHasChanged();
+    }
+
+    private void ResumeGame()
+    {
+	    Sound.Play( "pop" );
+        _isOpen = false;
+        IsOpen = false;
+        StateHasChanged();
+    }
+
+    public static void Close()
+    {
+	    _closeRequested = true;
+    }
+    
+    private void OpenServers()
+    {
+	    Sound.Play( "pop" );
+	    Game.Overlay.ShowServerList(new ServerListConfig
+	    {
+		    GamePackageFilter = Game.Ident
+	    });
+    }
+
+    private void OpenSettings()
+    {
+	    Sound.Play( "pop" );
+	    _settingsOpen = !_settingsOpen;
+    }
+
+    private void ExitToMenu()
+    {
+	    Sound.Play( "pop" );
+	    Game.Close();
+    }
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(_isOpen, _settingsOpen, GameUtils.Players.Count(), Player.Local?.WalletBalance, Player.Local?.BankBalance);
+    }
+}

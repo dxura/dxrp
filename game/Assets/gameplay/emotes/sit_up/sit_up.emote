@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_sit_up",
+  "Repeat": true,
+  "Duration": 2.23,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

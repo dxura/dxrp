@@ -1,0 +1,45 @@
+@import "../styles.scss";
+
+HUD {
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  color: $color-white;
+
+  Canvas {
+    opacity: 1;
+    transition: all 1s 0.5s ease-in-out;
+  }
+
+
+  .crosshair {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: white;
+  }
+
+  .centerHud {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+ContextSystem {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+Context {
+  position: absolute;
+  transform: translateX(-50%);
+  transition: transform 0.01s ease;
+  pointer-events: none;
+}
+

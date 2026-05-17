@@ -1,0 +1,13 @@
+# Blender 4.4.0 MTL File: 'DryRack2.blend'
+# www.blender.org
+
+newmtl Final.002
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd X:/Blender Library/DXRP/Weed Dealer/DryingRack/T_dryingrack.png
+map_Ns X:/Blender Library/DXRP/Weed Dealer/DryingRack/R_dryingrack.png
+map_Ke X:/Blender Library/DXRP/Weed Dealer/DryingRack/E_dryingrack.png
+map_Bump -bm 1.000000 X:/Blender Library/DXRP/Weed Dealer/DryingRack/N_dryingrack.png

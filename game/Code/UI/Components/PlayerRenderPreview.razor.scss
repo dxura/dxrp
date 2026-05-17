@@ -1,0 +1,31 @@
+@import "../styles.scss";
+
+PlayerRenderPreview {
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  .player-render-preview,
+  .preview-shell {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-shell {
+    border-radius: $space-2;
+    background-color: rgba($color-secondary, 0.95);
+    overflow: hidden;
+    cursor: grab;
+  }
+
+  .preview-scene,
+  ScenePanel {
+    width: 100%;
+    height: 100%;
+  }
+
+  .dragging .preview-shell {
+    cursor: grabbing;
+  }
+}

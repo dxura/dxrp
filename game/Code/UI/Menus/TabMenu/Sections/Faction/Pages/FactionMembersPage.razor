@@ -1,0 +1,185 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@inherits Panel
+@page "/tabmenu/faction/members"
+
+<root>
+@if ( !FactionSystem.Instance.IsValid() )
+{
+	<p class="text-base text-gray-400 p-3">#faction.members.loading</p>
+}
+else if ( !Player.Local.IsInFaction )
+{
+	<p class="text-base text-gray-400 p-3">#faction.members.join_first</p>
+}
+else
+{
+	var factionId = Player.Local.FactionId!.Value;
+	var faction = Player.Local.GetFaction();
+	var myRole = Player.Local.GetFactionRole();
+	var canInvite = myRole != null && myRole.Value.Permission.HasFlag( FactionPermission.InviteMember );
+	var canKick = myRole != null && myRole.Value.Permission.HasFlag( FactionPermission.KickMember );
+	var canSetRanks = myRole != null && myRole.Value.Permission.HasFlag( FactionPermission.SetRanks );
+	var roles = FactionSystem.Instance.GetFactionRoles( factionId ).OrderBy( r => r.Order ).ToList();
+
+	var factionMembers = GameUtils.Players
+		.Where( p => p.IsValid() && p.FactionId == factionId )
+		.OrderBy( p => p.DisplayName )
+		.ToList();
+
+	<div class="section-group">
+		<div class="section-group-title">@string.Format( Language.GetPhrase( "faction.members.count" ), factionMembers.Count, faction?.MemberCount ?? 0 )</div>
+		<div class="flex flex-col gap-1 p-3">
+			@if ( factionMembers.Count > 0 )
+			{
+				@foreach ( var member in factionMembers )
+				{
+					var memberRole = member.GetFactionRole();
+					var isSelf = member.SteamId == Player.Local.SteamId;
+
+					<div class="flex items-center gap-2 p-2" style="border-bottom: 1px solid rgba(136,139,145,0.1);">
+						<img style="width: 28px; height: 28px; border-radius: 4px;" src="avatar:@member.SteamId" alt="avatar"/>
+						<span class="text-sm text-bold">@member.DisplayName</span>
+						@if ( isSelf )
+						{
+							<span class="text-xs text-accent">#faction.members.you</span>
+						}
+						@if ( memberRole != null )
+						{
+							<span class="text-xs text-gray-400">@memberRole?.Name</span>
+						}
+						<span class="text-xs ml-auto" style="color: @member.Job.Color.Hex()">@member.JobDisplayName</span>
+
+						@if ( !isSelf )
+						{
+							@if ( canSetRanks )
+							{
+								@if ( _changingRoleFor == member.SteamId )
+								{
+									@foreach ( var role in roles )
+									{
+										<button class="btn-compact @( member.FactionRoleId == role.Id ? "btn-primary" : "btn-secondary" ) text-xs"
+										        onclick="@(() => TrySetRole( factionId, member.SteamId, role.Id ))">
+											@role.Name
+										</button>
+									}
+									<button class="btn-compact btn-secondary text-xs" onclick="@(() => _changingRoleFor = null)">#faction.members.close</button>
+								}
+								else
+								{
+									<button class="btn-compact btn-secondary text-xs" onclick="@(() => _changingRoleFor = member.SteamId)">#generic.role</button>
+								}
+							}
+
+							@if ( canKick )
+							{
+								<button class="btn-compact btn-bad text-xs" onclick="@(() => TryKick( factionId, member.SteamId ))">#faction.members.kick</button>
+							}
+						}
+					</div>
+				}
+			}
+			else
+			{
+				<p class="text-sm text-gray-400">#faction.members.none_online</p>
+			}
+		</div>
+	</div>
+
+	@if ( canInvite )
+	{
+		<div class="section-group">
+			<div class="section-group-title">#faction.members.invite</div>
+			<div class="flex flex-col gap-2 p-3">
+				<TabMenuTextEntry
+					class="bg-secondary text-tertiary rounded"
+					placeholder="#faction.members.search"
+					Value:bind="@_inviteFilter"/>
+
+				@{
+					var candidates = GameUtils.Players
+						.Where( p => p.IsValid() && p.IsConnected && !p.IsInFaction && ( string.IsNullOrWhiteSpace( _inviteFilter ) ||
+							p.DisplayName.Contains( _inviteFilter, StringComparison.OrdinalIgnoreCase ) ) )
+						.OrderBy( p => p.DisplayName )
+						.Take( 10 )
+						.ToList();
+				}
+
+				@if ( candidates.Count > 0 )
+				{
+					<div class="flex flex-col gap-1" style="max-height: 240px; overflow-y: scroll;">
+						@foreach ( var p in candidates )
+						{
+							<div class="flex items-center justify-between gap-2 p-2" style="border-bottom: 1px solid rgba(136,139,145,0.1);">
+								<div class="flex items-center gap-2">
+									<img style="width: 24px; height: 24px; border-radius: 4px;" src="avatar:@p.SteamId" alt="avatar"/>
+									<span class="text-sm">@p.DisplayName</span>
+									<span class="text-xs" style="color: @p.Job.Color.Hex()">@p.JobDisplayName</span>
+								</div>
+								<button class="btn-compact btn-good text-xs" onclick="@(() => TryInvite( factionId, p.SteamId ))">#faction.members.invite_button</button>
+							</div>
+						}
+					</div>
+				}
+				else if ( !string.IsNullOrWhiteSpace( _inviteFilter ) )
+				{
+					<p class="text-xs text-gray-400">#faction.members.no_match</p>
+				}
+				else
+				{
+					<p class="text-xs text-gray-400">#faction.members.no_available</p>
+				}
+			</div>
+		</div>
+	}
+}
+</root>
+
+@code {
+	private string _inviteFilter = "";
+	private long? _changingRoleFor;
+
+	private void TryInvite( Guid factionId, long steamId )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:invite", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.InviteFactionMemberHost( factionId, steamId );
+	}
+
+	private void TryKick( Guid factionId, long steamId )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:kick", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.KickFactionMemberHost( factionId, steamId );
+	}
+
+	private void TrySetRole( Guid factionId, long steamId, Guid roleId )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "faction:setrole", Config.Current.Game.ActionCooldown, true ) )
+		{
+			return;
+		}
+
+		FactionSystem.Instance.SetMemberRoleHost( factionId, steamId, roleId );
+		_changingRoleFor = null;
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !FactionSystem.Instance.IsValid() ) return 0;
+		return HashCode.Combine(
+			Player.Local?.FactionId,
+			Player.Local?.FactionRoleId,
+			GameUtils.Players.Count(),
+			FactionSystem.Instance.FactionRoles.Count,
+			_inviteFilter,
+			_changingRoleFor
+		);
+	}
+}

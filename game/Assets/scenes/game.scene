@@ -1,0 +1,196 @@
+{
+  "__guid": "f5970d75-f8d5-4aaa-9daa-eec9fc102751",
+  "GameObjects": [
+    {
+      "__guid": "84e03202-2922-4854-adce-6e04f1fa03e8",
+      "__version": 2,
+      "__Prefab": "prefabs/core.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "Component",
+              "IdValue": "aa450cd2-18d6-40da-a11a-a3a21060beaa"
+            },
+            "Property": "LastRepairTime",
+            "Value": {
+              "Absolute": 0,
+              "Relative": 1717.8013
+            }
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "e237b3b6-67f2-4a25-abba-103a472e15d2": "84e03202-2922-4854-adce-6e04f1fa03e8",
+        "b999d0ce-4883-4f99-ba80-07bd9603540c": "e1eb434d-c45d-4f87-bd11-ee2a6338a091",
+        "4c778bea-0a5c-4bb0-8f09-a1be9e3b04b9": "06e57555-73d1-48a5-b0ab-3334d3605e6d",
+        "850b6328-2b86-4a7e-bc83-261075aaf5f4": "50c82afa-c1d0-415a-ab9a-e2eb65e401b3",
+        "24a493cc-1674-4688-b7f5-6fffedf11097": "4ad7d9bf-9603-4159-9679-41d723a034f2",
+        "86031451-ffc2-41a9-b7e7-a23bab3d3f51": "81f6d3d7-c425-4b5d-b810-d7d2ac450836",
+        "06dfad86-35ed-4b74-ab94-2f3da03015b6": "832f1d9d-6794-42ab-9c2c-50934e3cb1cb",
+        "6a40179e-125e-4808-a1a2-e3e2d29e2770": "eceb9c91-c182-4b95-bc61-927d7ab23651",
+        "1a75445d-7426-4dd0-b899-136b81ea80d8": "60f11bd0-a06c-4677-9e87-29792d5b839f",
+        "fb380380-a3d2-43c2-8e6d-f8d04a3592e0": "467566a8-b731-40b7-9e7a-a5d585eae1a1",
+        "a3361b18-6dd3-4caa-9a9a-03e648d77b17": "4626929b-9b27-495a-a3a7-9c7bd0600bd0",
+        "aa450cd2-18d6-40da-a11a-a3a21060beaa": "ed188daf-a30c-45f0-a0c8-e172cd842a6c",
+        "ea736b63-f807-45d6-ac30-75eef000f451": "0555084a-209d-4110-8517-84a6273efd19",
+        "2a674a66-e755-4b31-8d77-df2562bac68d": "04e3fa69-3c24-463e-920a-9f9bfd04b05a",
+        "70340812-83a3-4db9-b5c1-2d4088a8b25e": "c8aae3ba-69b6-4b05-b0be-7d8a168b24f3",
+        "771d5c55-fcc9-45c5-a455-3e6d3251eb61": "fc81f69e-f964-47dd-b24a-905c0111f3c8",
+        "8ed85e3a-2dfc-4791-8da0-42f1adc7d804": "69a0507d-0ad1-4beb-bb8e-bab241cc2df0",
+        "3dfd1ed1-a9a5-444a-b5c5-62cf744a63db": "671a49b5-698f-4be5-bad5-cfef0b05dec7",
+        "405a89d3-03dc-49eb-8e8a-9a452597f567": "ad16ede2-459b-43ec-b30b-e5f07b570bf5",
+        "61e83893-d88b-45fa-98fe-eaeae6febb62": "f978082f-7af8-42d6-9dfa-18f44fae0d3b",
+        "ad27c8bd-8cdb-4250-ac5a-321be9ed79e1": "57e8e6a3-37f2-49be-b192-caca49e9e312",
+        "debb2eff-37ee-42b8-a51f-e9a204dc3ded": "0ebfa81b-d5bc-40dc-b7c7-63644b1653f7",
+        "acb8ffc1-afec-46fc-afbd-c446b04cdab2": "161967d3-c535-4e7b-998c-836d180b2a2a",
+        "3f5f124d-fc36-4791-99c9-4922c5e45675": "f4718e4c-57d8-41c7-924d-7da39e517504",
+        "f72f217c-bd15-4aaa-b2bc-8c4e3d9b1b0f": "59d8cdef-594c-410e-be8d-cdb172cbc848",
+        "bb68b613-9ce7-453e-b9c9-01d922705890": "6ea328a8-64af-4826-bb44-ecf4a1515589",
+        "f9bfa9c6-31d1-43c1-b7ea-873aac74f34b": "9cded154-eba1-415a-9f51-5cd9f1799960",
+        "a76b3fb3-d0f2-4d9a-8ac2-68150dd4c418": "d1d6c376-3aa8-4606-bf63-691d1917bacf",
+        "8b87d6bc-df83-4817-88ed-1dd94f89be74": "e4d0f4cb-dcbd-4274-b7d6-a7e757f52d04",
+        "8fe2d568-d58e-421c-983d-d3fe1ef53bb6": "8e93f15d-4085-4062-997a-eb9350c1a8b2",
+        "1f5c4980-ed18-4678-abb2-e739a17393e6": "ff22fd40-2c27-480c-b00e-01ff465439e1",
+        "eee428f4-69a6-42ef-ae6b-65f5744eab7a": "6676b0d1-48e1-4cd9-a8fa-275115580d10",
+        "854f28e4-adfb-4ce6-a4b1-d58c1ce3b507": "aabfe459-1a93-4e7f-bd45-6eb82b97cefc",
+        "a55df077-ccbd-445f-8bd9-622ee02922da": "f03bb14e-6d2d-4789-a3fe-5265f6f3c893",
+        "66f75654-d094-4f72-bbb4-93dac2cbd9ca": "d3c6817d-24b7-4ce9-a910-cd23507399d0",
+        "a6e8c291-ef7b-43c6-b771-4d460d0c04e1": "b98f7b84-14ef-4b25-bbf2-46e78a80e40f",
+        "448e90a2-718d-4298-81a7-cf68ff32d0ba": "9986d4d0-dc9e-4176-91f6-b6329771feb2",
+        "c97861aa-b1f7-4243-9dad-cfddf8e9dbe9": "66c6fef6-6da6-4901-bccf-ed909a35d414",
+        "33724108-1c5c-47f6-ad64-28e3eb52dfea": "018e2d3d-fd18-4833-9de1-6686aa72bebd",
+        "ffbe1951-d3ca-4ee0-beda-cd4c6e43277f": "61af0afe-17ad-4a8d-9a74-fa16989ec67c",
+        "aeae26a8-832a-4583-b83e-c66641c54748": "a80358b2-adda-4c42-87ea-14930afec3e1",
+        "d8f7edb3-39b5-4e7a-8263-c0f49effeb57": "6703ff44-342c-473d-985a-2d3c0fb558a7",
+        "7f4d4993-5d45-4215-bd12-8a914cf33030": "d2bf512b-f9bf-447b-960a-82db9ec946cc",
+        "dcba2133-ca3d-406e-bb61-e32f84060d30": "81c725d3-7fd2-496c-8cec-16a68f59ee83",
+        "6322be43-9b42-4bc8-9fd4-0a0c3d853c13": "a524985c-bac0-4829-a9a5-b2f480ccf633",
+        "8d202bc6-c3e8-4f5c-bb8a-3167f30fb386": "d1a63fc9-a3e9-486f-89c0-269434039060",
+        "aaecf5ef-e321-4d9f-b8a9-b36bf17af383": "246328d4-5f02-4517-bc13-32eaa5d3787c",
+        "ae42363f-25eb-4127-adf3-076777c827b2": "4938ecf5-09a9-4844-9760-1a97278ccbe5",
+        "038160fa-2f54-4dcb-bd89-5e8b50140b4f": "cd6b91eb-c661-4a44-bbd7-3f2cc18faf5a",
+        "4950a2cc-a4d0-4364-b5ca-af94930dc002": "75de1c46-2690-45b8-856b-be1d7472a4a7",
+        "6afda59a-a84d-43bb-8582-8f648efbff63": "2a3ade57-7602-429d-8ee7-2fa96a2e6414",
+        "5a75dc11-00d7-4291-83c0-4770ef8dfb6f": "13b422bb-399b-4cff-842a-0c2edfd6386e"
+      }
+    },
+    {
+      "__guid": "5566448f-646b-47ec-853a-ce9b391860f9",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Map",
+      "Position": "0,0,0",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "map",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.MapInstance",
+          "__guid": "1335aca9-0780-4a2b-9805-dc9de22a3689",
+          "__enabled": true,
+          "Flags": 0,
+          "__version": 1,
+          "EnableCollision": true,
+          "MapName": "dxura.rp_downtown_scuffed",
+          "NoOrigin": false,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnMapLoaded": null,
+          "OnMapUnloaded": null,
+          "UseMapFromLaunch": true
+        },
+        {
+          "__type": "Dxura.RP.Game.MapFitter",
+          "__guid": "c11a1045-cabd-49af-afd7-99a3cef5daac",
+          "__enabled": true,
+          "Flags": 0,
+          "FittedMapPrefabs": {
+            "thieves.rpdowntown3t": {
+              "_type": "gameobject",
+              "prefab": "prefabs/maps/rp_downtown_3t_fitting.prefab"
+            },
+            "dxura.rp_downtown_scuffed": {
+              "_type": "gameobject",
+              "prefab": "prefabs/maps/rp_downtown_scuffed_fitting.prefab"
+            }
+          },
+          "GlassPrefab": {
+            "_type": "gameobject",
+            "prefab": "prefabs/world/glass.prefab"
+          },
+          "MapInstance": {
+            "_type": "component",
+            "component_id": "1335aca9-0780-4a2b-9805-dc9de22a3689",
+            "go": "5566448f-646b-47ec-853a-ce9b391860f9",
+            "component_type": "MapInstance"
+          },
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null
+        }
+      ],
+      "Children": []
+    }
+  ],
+  "SceneProperties": {
+    "NetworkInterpolation": true,
+    "TimeScale": 1,
+    "WantsSystemScene": true,
+    "Metadata": {},
+    "NavMesh": {
+      "Enabled": false,
+      "IncludeStaticBodies": true,
+      "IncludeKeyframedBodies": true,
+      "EditorAutoUpdate": true,
+      "AgentHeight": 64,
+      "AgentRadius": 16,
+      "AgentStepSize": 18,
+      "AgentMaxSlope": 40,
+      "ExcludedBodies": "",
+      "IncludedBodies": "",
+      "CustomBounds": false
+    },
+    "GameObjectSystems": {
+      "Sandbox.MovieMaker.MovieRecorderSystem": {
+        "DisableClientRecording": false
+      },
+      "Dxura.RP.Game.Wire.Wire": {
+        "Connections": []
+      },
+      "Sandbox.Clutter.ClutterGridSystem": {
+        "Storage": {
+          "$blob": "50924e80-8c3a-4c35-ab74-761461787c13"
+        }
+      },
+      "Dxura.RP.Game.Governance": {
+        "Prisoners": {}
+      },
+      "Dxura.RP.Game.ServerApiLink": {
+        "TenantId": "",
+        "ServerId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  "ResourceVersion": 3,
+  "Title": null,
+  "Description": null,
+  "__references": [],
+  "__version": 3
+}

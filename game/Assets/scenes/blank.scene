@@ -1,0 +1,221 @@
+{
+  "__guid": "a75b7eed-fc50-49ab-a9db-17f4474bc194",
+  "GameObjects": [
+    {
+      "__guid": "0dde9af0-7e4f-41a4-b64d-049aed3e7300",
+      "__version": 2,
+      "__Prefab": "prefabs/core.prefab",
+      "__PrefabInstancePatch": {
+        "AddedObjects": [],
+        "RemovedObjects": [],
+        "PropertyOverrides": [
+          {
+            "Target": {
+              "Type": "GameObject",
+              "IdValue": "e237b3b6-67f2-4a25-abba-103a472e15d2"
+            },
+            "Property": "Position",
+            "Value": "0,0,21.62003"
+          }
+        ],
+        "MovedObjects": []
+      },
+      "__PrefabIdToInstanceId": {
+        "e237b3b6-67f2-4a25-abba-103a472e15d2": "0dde9af0-7e4f-41a4-b64d-049aed3e7300",
+        "b999d0ce-4883-4f99-ba80-07bd9603540c": "953a1e25-97d1-4316-9821-f09f25e84377",
+        "4c778bea-0a5c-4bb0-8f09-a1be9e3b04b9": "296726a3-f12b-4a81-b628-884e7a6fbd99",
+        "850b6328-2b86-4a7e-bc83-261075aaf5f4": "e7aa147d-82a7-454f-8b1e-33b37f7a7877",
+        "24a493cc-1674-4688-b7f5-6fffedf11097": "e99e2192-f0a5-46d6-b83e-fa296f93fd9f",
+        "86031451-ffc2-41a9-b7e7-a23bab3d3f51": "37f67ee1-fba9-431d-9045-61f0c01b41c0",
+        "06dfad86-35ed-4b74-ab94-2f3da03015b6": "7615c269-4790-4f79-870d-10e0bd4906b9",
+        "6a40179e-125e-4808-a1a2-e3e2d29e2770": "e6020bea-0e96-40a4-9b2e-b622917284a4",
+        "1a75445d-7426-4dd0-b899-136b81ea80d8": "b5534eba-f113-4488-b00c-106fced30c1a",
+        "fb380380-a3d2-43c2-8e6d-f8d04a3592e0": "8ac8a32c-ad59-4223-98d5-17fa7bb2fbf8",
+        "a3361b18-6dd3-4caa-9a9a-03e648d77b17": "6fc6f914-4045-4245-89bf-b3fd41177409",
+        "aa450cd2-18d6-40da-a11a-a3a21060beaa": "48f1a98e-933c-4a5b-854b-5a95325536ec",
+        "70340812-83a3-4db9-b5c1-2d4088a8b25e": "b6068e6e-8ad0-450d-9cb8-185ef22531ca",
+        "771d5c55-fcc9-45c5-a455-3e6d3251eb61": "13a35887-8081-42e8-a727-1222e2a63b1e",
+        "8ed85e3a-2dfc-4791-8da0-42f1adc7d804": "d1397668-2053-4cee-9e2c-dc2690872732",
+        "3dfd1ed1-a9a5-444a-b5c5-62cf744a63db": "a3c8c848-4026-42bb-8de8-69a093629b6d",
+        "405a89d3-03dc-49eb-8e8a-9a452597f567": "a91bdaad-5045-4acb-975e-69d98f360394",
+        "61e83893-d88b-45fa-98fe-eaeae6febb62": "c9a0f003-15ba-492c-9f3e-b99a13be4877",
+        "d8f7edb3-39b5-4e7a-8263-c0f49effeb57": "8465fc39-c2c2-4022-a354-25bda5b16947",
+        "7f4d4993-5d45-4215-bd12-8a914cf33030": "2d0e0419-95a2-4547-b67b-9cec2ba1b108",
+        "2a674a66-e755-4b31-8d77-df2562bac68d": "ed59337a-89b1-4d87-b0f7-a17c781078df",
+        "ea736b63-f807-45d6-ac30-75eef000f451": "e395846f-449e-43c3-ace3-666b09ee8846",
+        "dcba2133-ca3d-406e-bb61-e32f84060d30": "d10d344f-ed76-4e22-9457-59a2ef845386",
+        "6322be43-9b42-4bc8-9fd4-0a0c3d853c13": "28cbc1ba-49b9-4b3f-a865-657becd6a7f5",
+        "ad27c8bd-8cdb-4250-ac5a-321be9ed79e1": "515ae34e-ee25-410d-b2f8-8a2d0dc5425e",
+        "debb2eff-37ee-42b8-a51f-e9a204dc3ded": "9f3ccd31-53bd-45ed-bef0-2f0511274c22",
+        "acb8ffc1-afec-46fc-afbd-c446b04cdab2": "fbd1124c-4a1f-4606-8ab4-47059f40e0fc",
+        "3f5f124d-fc36-4791-99c9-4922c5e45675": "0c29d102-6799-41b2-9fb6-4e514814c208",
+        "8d202bc6-c3e8-4f5c-bb8a-3167f30fb386": "44d0d13d-9abc-4639-bad8-6bc885ca3ae7",
+        "f72f217c-bd15-4aaa-b2bc-8c4e3d9b1b0f": "c3ddd87f-27f9-4262-9ffc-fe95a622468e",
+        "bb68b613-9ce7-453e-b9c9-01d922705890": "e30d370e-342e-4612-9ac5-4afda4120439",
+        "f9bfa9c6-31d1-43c1-b7ea-873aac74f34b": "a5f2c5bd-2464-4f56-bbe3-e74216671cf8",
+        "a76b3fb3-d0f2-4d9a-8ac2-68150dd4c418": "718b8078-3af0-482f-93fc-6d5f84b33180",
+        "8fe2d568-d58e-421c-983d-d3fe1ef53bb6": "494c3d9e-8ae4-4f6d-a40d-3ac97edef8c1",
+        "1f5c4980-ed18-4678-abb2-e739a17393e6": "57c0d79d-415e-4238-9427-4e46938fc5e1",
+        "8b87d6bc-df83-4817-88ed-1dd94f89be74": "7ab8ef87-a56b-4ea5-bfae-f9781fb425d6",
+        "eee428f4-69a6-42ef-ae6b-65f5744eab7a": "a8070cf0-e744-466d-a400-b297ccdba279",
+        "854f28e4-adfb-4ce6-a4b1-d58c1ce3b507": "4ebcb040-054e-4c49-9359-04a920ac88e1",
+        "a55df077-ccbd-445f-8bd9-622ee02922da": "8dcd354d-1284-471e-bab9-3820fabcaa93",
+        "66f75654-d094-4f72-bbb4-93dac2cbd9ca": "07fd56cc-f7b6-4e2e-a028-4138e4a291f5",
+        "448e90a2-718d-4298-81a7-cf68ff32d0ba": "51146c44-f64f-4082-8f26-c9c37505fabe",
+        "c97861aa-b1f7-4243-9dad-cfddf8e9dbe9": "e5266bc3-d89f-4b6b-aa06-bcb5b52b8fab",
+        "33724108-1c5c-47f6-ad64-28e3eb52dfea": "b18cb95b-ec1b-476c-9c8c-575f43876008",
+        "ffbe1951-d3ca-4ee0-beda-cd4c6e43277f": "2310eafb-1e14-4ff8-a0e8-1511c6e4d228",
+        "aeae26a8-832a-4583-b83e-c66641c54748": "a99c785b-8245-4533-9836-55c47d59fbf4",
+        "aaecf5ef-e321-4d9f-b8a9-b36bf17af383": "0b388ae2-46d2-445f-9014-5c2db133af84",
+        "a6e8c291-ef7b-43c6-b771-4d460d0c04e1": "a1e067e2-b9c9-4e25-bde7-e99ff9777019"
+      }
+    },
+    {
+      "__guid": "0ea38e42-eb43-41f9-a887-5a66a5925603",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "Ground",
+      "Position": "0,0,0",
+      "Rotation": "0,0,0,1",
+      "Scale": "100,100,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "4c984bf2-b035-44ee-8dcd-b715e10282b2",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Materials": null,
+          "Model": "models/dev/plane.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.PlaneCollider",
+          "__guid": "f61afb71-547d-4a26-8116-b6a9da3ff7d3",
+          "__enabled": true,
+          "Flags": 0,
+          "Center": "0,0,0",
+          "ColliderFlags": 0,
+          "Elasticity": null,
+          "Friction": null,
+          "IsTrigger": false,
+          "Normal": "0,0,1",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnObjectTriggerEnter": null,
+          "OnObjectTriggerExit": null,
+          "OnTriggerEnter": null,
+          "OnTriggerExit": null,
+          "RollingResistance": null,
+          "Scale": "100,100",
+          "Static": true,
+          "Surface": null,
+          "SurfaceVelocity": "0,0,0"
+        }
+      ],
+      "Children": []
+    },
+    {
+      "__guid": "5783dd44-58ed-4e63-ba1f-b33a9535c2d4",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "2D Skybox",
+      "Position": "-138.9693,80.55344,81.32954",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "skybox",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.SkyBox2D",
+          "__guid": "b8b01a3a-cf68-4ffd-9d6e-6b11eaee317d",
+          "__enabled": true,
+          "Flags": 0,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "SkyIndirectLighting": true,
+          "SkyMaterial": "materials/skybox/skybox_day_01.vmat",
+          "Tint": "1,1,1,1"
+        }
+      ],
+      "Children": []
+    }
+  ],
+  "SceneProperties": {
+    "NetworkInterpolation": true,
+    "TimeScale": 1,
+    "WantsSystemScene": true,
+    "Metadata": {},
+    "NavMesh": {
+      "Enabled": false,
+      "IncludeStaticBodies": true,
+      "IncludeKeyframedBodies": true,
+      "EditorAutoUpdate": true,
+      "AgentHeight": 64,
+      "AgentRadius": 16,
+      "AgentStepSize": 18,
+      "AgentMaxSlope": 40,
+      "ExcludedBodies": "",
+      "IncludedBodies": ""
+    },
+    "GameObjectSystems": [
+      {
+        "Prisoners": {},
+        "__type": "Governance",
+        "__guid": "854ca833-19bf-4dd9-b50e-de095fd37e7d"
+      },
+      {
+        "Connections": [],
+        "__type": "Wire",
+        "__guid": "51f98514-6e72-48a3-b5b3-75b5ddd3818d"
+      },
+      {
+        "TenantId": "",
+        "__type": "ServerApiLink",
+        "__guid": "a961a39e-da4a-4d21-9d0b-1170d70834c0"
+      }
+    ]
+  },
+  "ResourceVersion": 3,
+  "Title": null,
+  "Description": null,
+  "__references": [],
+  "__version": 3
+}

@@ -1,0 +1,26 @@
+@using Sandbox.UI
+@inherits PanelComponent
+@namespace Dxura.RP.Game
+
+<root>
+	<WebPanel class="web-panel" Url="@Url"/>
+</root>
+
+@code
+{
+	[Property]
+	private string Url => Config.Current.Game.MotdUrlOverride ?? $"{Constants.BaseWebsiteUrl}/embed/motd/{ServerApiLink.Current.ServerId}";
+	
+	protected override void OnStart()
+	{
+		if ( !Config.Current.Game.MotdEnabled)
+		{
+			GameObject.Destroy();
+		}
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Url );
+	}
+}

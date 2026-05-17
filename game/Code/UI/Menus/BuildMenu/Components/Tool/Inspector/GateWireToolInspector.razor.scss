@@ -1,0 +1,92 @@
+@import "../../../../../styles.scss";
+
+GateWireToolInspector {
+  position: relative;
+
+  .tabs {
+    padding: $space-2 $space-3;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tab-btn {
+    padding: 6px $space-3;
+    background-color: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: $text-xs;
+    font-weight: 500;
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.9);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &.active {
+      background-color: $color-accent;
+      color: whitesmoke;
+      border-color: $color-accent;
+      font-weight: 600;
+    }
+  }
+
+  .content {
+    flex: 1;
+    padding: $space-3;
+    min-height: 0;
+    padding-bottom: 60px;
+  }
+
+  .gate-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: $space-2;
+  }
+
+  .gate-item {
+    padding: 5px $space-4;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: $text-sm;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &.active {
+      background-color: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: white;
+      font-weight: 700;
+    }
+  }
+
+  .bottom-actions {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+
+    .btn {
+      width: 200px;
+    }
+  }
+}

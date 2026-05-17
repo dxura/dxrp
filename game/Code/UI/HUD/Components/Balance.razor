@@ -1,0 +1,22 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() ) return;
+
+<root>
+	<label class="important">$@Player.WalletBalance.ToString( "N0" )</label>
+</root>
+
+@code
+{
+	/// The player
+	public Player Player => Player.Local;
+
+	protected override int BuildHash()
+	{
+		if ( !Player.IsValid() ) return 0;
+
+		return HashCode.Combine( Player?.WalletBalance );
+	}
+}

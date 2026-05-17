@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_dance",
+  "Repeat": true,
+  "Duration": 3.37,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

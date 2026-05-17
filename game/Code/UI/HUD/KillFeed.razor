@@ -1,0 +1,180 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.Diagnostics
+@using Sandbox.Utility
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+	@foreach ( var entry in Entries )
+	{
+		<div class="entry">
+			@if ( entry.Attacker is not null )
+			{
+				<div class="attacker @( IsMe( entry.Attacker ) ? "is-me" : "" )">
+					@if ( entry.DamageFlags.HasFlag( DamageFlags.AirShot ) )
+					{
+						<Icon style="background-tint: black;" File="/ui/wings.png" size="24"/>
+					}
+
+					@if ( IsMe( entry.Attacker ) )
+					{
+						<label class="text-base text-bold">@entry.Attacker</label>
+					}
+					else
+					{
+						<label class="text-base text-bold" style="color:@entry.AttackerColor.Hex">@entry.Attacker</label>
+					}
+				</div>
+			}
+
+			<div class="method">
+				@if ( entry.DamageFlags.HasFlag( DamageFlags.Burn ) )
+				{
+					<Icon File="/ui/fire.png" size="24"/>
+				}
+
+				@if ( entry.DamageFlags.HasFlag( DamageFlags.Explosion ) )
+				{
+					<Icon File="/ui/explosion.png" size="24"/>
+				}
+
+				@if ( entry.Inflictor is not null )
+				{
+					@if ( entry.Inflictor.StartsWith( "icon:" ) )
+					{
+						<div class="icon">
+							<Icon class="flip" File="@entry.InflictorIcon" size="64"/>
+						</div>
+					}
+					else
+					{
+						<label class="text-base text-bold">@entry.Inflictor</label>
+					}
+
+					if ( entry.DamageFlags.HasFlag( DamageFlags.WallBang ) )
+					{
+						<Icon File="/ui/wallbang.png" size="32"/>
+					}
+					
+					@if ( entry.HitboxTags.HasFlag( HitboxTags.Head ) )
+					{
+						<Icon class="headshot" File="/ui/headshot.png" size="24"/>
+					}
+				}
+				else
+				{
+					<label>#hud.killfeed.killed</label>
+				}
+			</div>
+
+			@if ( entry.Victim is not null )
+			{
+				<div class="victim @( IsMe( entry.Victim ) ? "is-me" : "" )">
+					@if ( IsMe( entry.Victim ) )
+					{
+						<label class="text-base text-bold">@entry.Victim</label>
+					}
+					else
+					{
+						<label class="text-base text-bold" style="color:@entry.VictimColor.Hex">@entry.Victim</label>
+					}
+				</div>
+			}
+		</div>
+	}
+</root>
+
+@code
+{
+	private static KillFeed Instance { get; set; }
+
+	public KillFeed()
+	{
+		Instance = this;
+	}
+
+	public bool IsMe( string name )
+	{
+		return Steam.PersonaName.Equals( name );
+	}
+
+	public record KillFeedEntry(
+		string Attacker,
+		Color AttackerColor,
+		string Inflictor,
+		string Victim,
+		Color VictimColor,
+		HitboxTags HitboxTags,
+		DamageFlags DamageFlags,
+		RealTimeSince TimeSinceAdded )
+	{
+		public string AttackerIcon => Attacker.Replace( "icon:", "" );
+		public string InflictorIcon => Inflictor.Replace( "icon:", "" );
+		public string VictimIcon => Victim.Replace( "icon:", "" );
+	}
+
+	private List<KillFeedEntry> Entries { get; set; } = new();
+
+	private float Lifetime => 10f;
+
+	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Reliable )]
+	public static void BroadcastKillFeedEvent( string attacker, Color attackerColor, string inflictor, string victim, Color victimColor, HitboxTags tags, DamageFlags flags )
+	{
+		if ( !Instance.IsValid() )
+			return;
+
+		Instance.Entries.Add( new KillFeedEntry( attacker, attackerColor, inflictor, victim, victimColor, tags, flags, 0 ) );
+		
+		Instance.StateHasChanged();
+	}
+
+	public static void RecordEventHost( DamageInfo damageInfo )
+	{
+		Assert.True( Networking.IsHost );
+		
+		var attackerDesc = GameUtils.GetDescription( damageInfo.Attacker );
+		var inflictorDesc = GameUtils.GetDescription( damageInfo.Inflictor );
+		var victimDesc = GameUtils.GetDescription( damageInfo.Victim );
+
+		if ( victimDesc == null || attackerDesc == null )
+		{
+			return;
+		}
+
+		var attacker = attackerDesc?.DisplayName;
+		if ( !string.IsNullOrEmpty( attackerDesc?.Icon ) ) attacker = $"icon:{attackerDesc.Icon}";
+
+		var inflictor = inflictorDesc?.DisplayName;
+		if ( !string.IsNullOrEmpty( inflictorDesc?.Icon ) ) inflictor = $"icon:{inflictorDesc.Icon}";
+
+		var victim = victimDesc?.DisplayName;
+		if ( !string.IsNullOrEmpty( victimDesc?.Icon ) ) victim = $"icon:{victimDesc.Icon}";
+
+		var attackerPlayer = GameUtils.GetPlayerFromComponent( damageInfo.Attacker );
+		var victimPlayer = GameUtils.GetPlayerFromComponent( damageInfo.Victim );
+		var attackerAuditName = attackerPlayer?.SteamName ?? attacker;
+		var victimAuditName = victimPlayer?.SteamName ?? victim;
+
+		_ = ServerApiClient.Audit("Kill", $"{attackerAuditName} KILLED {victimAuditName}" + (string.IsNullOrEmpty( inflictorDesc?.DisplayName ) ? "" : $" WITH {inflictorDesc.DisplayName}"), attackerPlayer?.SteamId);
+
+		BroadcastKillFeedEvent(
+			attacker ?? "", attackerDesc?.Color ?? Color.White,
+			inflictor ?? "",
+			victim ?? "", victimDesc?.Color ?? Color.White,
+			damageInfo.Hitbox,
+			damageInfo.Flags
+		);
+	}
+
+	public override void Tick()
+	{
+		// Limit entries so we don't get too busy
+		Entries = Entries.TakeLast( 3 ).ToList();
+
+		// Did we remove something?
+		if ( Entries.RemoveAll( x => x.TimeSinceAdded > Lifetime ) > 0 )
+		{
+			StateHasChanged();
+		}
+	}
+}

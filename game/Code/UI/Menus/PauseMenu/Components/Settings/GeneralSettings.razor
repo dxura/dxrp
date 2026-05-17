@@ -1,0 +1,40 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@page "/settings/general"
+
+<root class="flex flex-col gap-4 p-4 text-white">
+	<h2 class="text-bold text-lg p-2 bg-primary-75 text-center">#settings.general.chat</h2>
+
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.general.tts</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_chat_tts" )) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_chat_tts", value); }
+		                              )/>
+	</div>
+
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.general.tts_multiple</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_chat_tts_multiple", "false" )) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_chat_tts_multiple", value); }
+		                              )/>
+	</div>
+
+	<div class="flex gap-2 ml-2">
+		<p class="text-base">#settings.general.filter_explicit</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_chat_explicit", "false" )) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_chat_explicit", value); }
+		                              )/>
+	</div>
+	
+	<h2 class="text-bold text-lg p-2 bg-primary-75 text-center">#settings.general.entities</h2>
+
+	<div class="flex flex-col ml-2" style=" max-width: 300px;">
+		<p class="text-base">#settings.general.tv_distance</p>
+		<SliderControl Min=@( 0 ) Max=@( 5000 )
+		               Value="@( float.Parse(ConsoleSystem.GetValue("dx_tv_range")) )"
+		               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_tv_range", value); } )
+		/>
+	</div>
+
+</root>

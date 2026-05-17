@@ -1,0 +1,205 @@
+@import "../../../styles.scss";
+
+MarketTabMenuSection {
+  padding: $space-3 $space-5;
+  display: flex;
+  width: 100%;
+  height: 100%;
+
+  .market {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .market-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $space-3;
+    background-color: rgba($color-secondary, 0.6);
+    border-bottom: none;
+    border-radius: $space-1;
+  }
+
+  .lock-toggle {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background-color: $color-primary;
+    border-radius: $space-3;
+    cursor: pointer;
+    font-size: $text-sm;
+    color: $color-gray-400;
+    transition: all 0.15s ease;
+    i { font-size: $text-base; }
+
+    &:hover {
+      color: $color-tertiary;
+    }
+
+    &.active {
+      color: $color-accent;
+      background-color: rgba($color-accent, 0.08);
+    }
+  }
+
+  .market-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    flex-grow: 1;
+    padding: 0;
+  }
+
+  // Category
+  .category {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    flex-shrink: 0;
+  }
+
+  .category-bar {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  .category-name {
+    font-size: $text-base;
+    font-weight: 600;
+    color: $color-accent;
+    text-transform: uppercase;
+  }
+
+  .category-count {
+    font-size: $text-xs;
+    color: $color-gray-400;
+    background-color: $color-secondary;
+    padding: 2px $space-2;
+    border-radius: $space-3;
+  }
+
+  // Horizontal rail
+  .card-rail {
+    display: flex;
+    gap: $space-3;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    flex-shrink: 0;
+  }
+
+  // Card
+  .entity-card {
+    display: flex;
+    width: 150px;
+    min-width: 150px;
+    height: 90px;
+    flex-shrink: 0;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: $space-2;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    }
+
+    &.is-locked {
+      opacity: 0.3;
+      cursor: default;
+
+      &:hover {
+        transform: none;
+        box-shadow: none;
+      }
+    }
+  }
+
+  // Entity color as a subtle tinted layer
+  .card-chip {
+    width: 8px;
+    min-width: 8px;
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  .card-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    height: 100%;
+    padding: $space-3;
+    background-color: $color-secondary;
+  }
+
+  .card-lock {
+    position: absolute;
+    top: $space-2;
+    right: $space-2;
+
+    i {
+      font-size: $text-sm;
+      color: white;
+      opacity: 0.4;
+    }
+  }
+
+  .card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .card-name {
+    font-size: $text-sm;
+    font-weight: 700;
+    color: white;
+  }
+
+  .card-limit {
+    font-size: $text-xs;
+    color: $color-gray-400;
+  }
+
+  .card-bottom {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+  }
+
+  .card-price {
+    font-size: $text-base;
+    font-weight: 700;
+    color: #54be35;
+  }
+
+  .card-tax {
+    font-size: $text-xs;
+    color: $color-gray-400;
+  }
+
+  // Empty
+  .market-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $space-3;
+    padding: $space-8;
+    color: $color-gray-400;
+    flex-grow: 1;
+
+    i {
+      font-size: $text-5xl;
+      opacity: 0.2;
+    }
+  }
+}

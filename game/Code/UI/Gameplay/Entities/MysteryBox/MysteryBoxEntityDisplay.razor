@@ -1,0 +1,136 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Shared
+@using WorldPanel = Sandbox.WorldPanel
+@inherits PanelComponent
+@implements IOcclusionEvents
+@implements IGameEvents
+
+<root>
+	@if ( Entity.State.Phase == MysteryBoxEntity.MysteryBoxPhase.Win )
+	{
+		<div class="mystery-box-reward">
+			<InventoryItem Item="@GetInventoryItem()" ShowActions="@false"></InventoryItem>
+		</div>
+	}
+	else if ( Entity.State.Phase == MysteryBoxEntity.MysteryBoxPhase.Refund )
+	{
+		<div class="mystery-box-badge refund">#mystery_box.refunded</div>
+	}
+	else if ( Entity.State.Phase == MysteryBoxEntity.MysteryBoxPhase.Lose )
+	{
+		<div class="mystery-box-badge lose">#mystery_box.empty</div>
+	}
+	else if ( Entity.IsOpening )
+	{
+		<div class="mystery-box-opening">
+			<div class="mystery-box-shimmer" style="left: @(GetShimmerLeft())px"></div>
+			<div class="mystery-box-spinner" style="transform: rotate(@(GetSpinnerRotation())deg)"></div>
+			<div class="mystery-box-opening-label">#mystery_box.opening</div>
+		</div>
+	}
+	else
+	{
+		<div class="mystery-box-idle">
+			<div class="mystery-box-mark">?</div>
+		</div>
+	}
+</root>
+
+@code {
+	[Property] public MysteryBoxEntity Entity { get; set; } = null!;
+	[Property] public WorldPanel WorldPanel { get; set; } = null!;
+	private ItemDefinitionDto? _definition;
+	private Guid _loadedDefinitionId;
+	private bool _isLoadingDefinition;
+
+	protected override void OnStart()
+	{
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !GameObject.Root.Tags.Has( Constants.OccludeTag );
+	}
+
+	public void OnOcclusionChanged( bool occlude )
+	{
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !occlude;
+	}
+
+	public void OnSecondlyUpdate()
+	{
+		if ( Entity.State.Phase != MysteryBoxEntity.MysteryBoxPhase.Win )
+		{
+			return;
+		}
+
+		var definitionId = Entity.State.WonItemDefinitionId;
+		if ( definitionId == Guid.Empty || _loadedDefinitionId == definitionId || _isLoadingDefinition )
+		{
+			return;
+		}
+
+		_ = LoadDefinition( definitionId );
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !WorldPanel.IsValid() || !WorldPanel.Enabled )
+		{
+			return 0;
+		}
+
+		return HashCode.Combine(
+			Entity.State,
+			_definition?.Name,
+			_definition?.ImageUrl,
+			_definition?.Rarity,
+			Entity.IsOpening ? Time.Now : 0f );
+	}
+
+	private InventoryItemDto GetInventoryItem()
+	{
+		var definitionId = Entity.State.WonItemDefinitionId;
+		return new InventoryItemDto
+		{
+			Id = definitionId,
+			Definition = _definition ?? new ItemDefinitionDto
+			{
+				Id = definitionId,
+				Name = "#mystery_box.reward",
+				Description = string.Empty,
+				ImageUrl = string.Empty,
+				Rarity = ItemRarity.Common,
+				Type = ItemType.Other,
+				IsTradable = true
+			},
+			Quantity = 1
+		};
+	}
+
+	private async global::System.Threading.Tasks.Task LoadDefinition( Guid definitionId )
+	{
+		_isLoadingDefinition = true;
+		_definition = null;
+		try
+		{
+			_definition = Networking.IsHost
+				? await ServerApiClient.GetItemDefinition( definitionId )
+				: await PlayerApiClient.GetItemDefinition( definitionId );
+			_loadedDefinitionId = definitionId;
+			StateHasChanged();
+		}
+		finally
+		{
+			_isLoadingDefinition = false;
+		}
+	}
+
+	private static float GetSpinnerRotation()
+	{
+		return (Time.Now * 480f) % 360f;
+	}
+
+	private static float GetShimmerLeft()
+	{
+		return -60f + (Time.Now * 160f % 210f);
+	}
+}

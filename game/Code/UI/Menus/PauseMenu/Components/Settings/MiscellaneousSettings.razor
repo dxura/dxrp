@@ -1,0 +1,63 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Entities
+@using global::System.Globalization
+@using Sandbox.UI
+@inherits Panel
+@page "/settings/miscellaneous"
+
+<root class="flex flex-col gap-4 p-4 text-white">
+	<div class="flex gap-2">
+		<p class="text-base">#settings.misc.proxy_frames</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_proxy_frames")) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_proxy_frames", value); } 
+		                              )/>
+	</div>	
+	
+	<div class="flex gap-2">
+		<p class="text-base">#settings.misc.render_hud</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_hud")) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_hud", value); } 
+		                              )/>
+	</div>	
+
+	<div class="flex gap-2">
+		<p class="text-base">#settings.misc.tp_dot</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_thirdperson_dot", "true")) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_thirdperson_dot", value); }
+		                              )/>
+	</div>
+	
+	<div class="flex gap-2">
+		<p class="text-base">#settings.misc.nameplates</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_nameplates")) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_nameplates", value); } 
+		                              )/>
+	</div>	
+	
+	<div class="flex gap-2">
+		<p class="text-base">#settings.misc.civilian_clothing</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_civilian_job_clothing")) )" 
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_civilian_job_clothing", value); } 
+		                              )/>
+	</div>
+	
+	<p class="text-sm text-gray-400 -mt-2">#settings.misc.clothing_note</p>
+
+	<div class="flex flex-col ml-2" style=" max-width: 300px;">
+		<p class="text-base">#settings.misc.radio_distance</p>
+		<SliderControl Min=@( 0 ) Max=@( 5000 )
+		               Value="@( float.Parse(ConsoleSystem.GetValue("dx_radio_distance", RadioEntity.RadioDistance.ToString( CultureInfo.InvariantCulture ))) )"
+		               OnValueChanged=@( ( float value ) => { ConsoleSystem.SetValue("dx_radio_distance", value); } )
+		/>
+	</div>
+
+	<div class="flex gap-2">
+		<p class="text-base">#settings.misc.radio_autoplay</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_radio_autoplay", "false")) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_radio_autoplay", value ); }
+		                              )/>
+	</div>
+
+
+
+</root>

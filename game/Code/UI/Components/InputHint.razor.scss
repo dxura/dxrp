@@ -1,0 +1,21 @@
+﻿InputHint {
+  justify-content: center;
+  align-items: center;
+  
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 48px;
+  height: 48px;
+  
+  transition: all 0.1s ease;
+  transform: scale(1);
+
+  &.is-down {
+    transform: scale(1.15);
+  }
+
+  &.small {
+    height: 32px;
+    width: 32px;
+  }
+}

@@ -1,0 +1,100 @@
+@using Sandbox;
+@inherits PanelComponent
+@namespace Dxura.RP.UI
+
+<root>
+	@if ( !Player.Local.IsValid() ) return;
+	
+	<div class="header">
+		<div class="title">
+			<span>#atm.bank_name</span>
+		</div>
+		<div class="balance-indicator text-good">$@( NumberUtils.FormatNumberWithSuffix( Player.Local.BankBalance ) )</div>
+	</div>
+
+	<div class="content">
+		<div class="transaction-section">
+			<div class="amount-buttons left">
+				<button class="btn btn-bad" @onclick="@(() => UpdateAmount( -10 ))">-10</button>
+				<button class="btn btn-bad" @onclick="@(() => UpdateAmount( -100 ))">-100</button>
+				<button class="btn btn-bad" @onclick="@(() => UpdateAmount( -1000 ))">-1000</button>
+			</div>
+
+			<div class="amount-display">
+				<div class="amount-value">$@NumberUtils.FormatNumberWithSuffix( CurrentAmount )</div>
+			</div>
+
+			<div class="amount-buttons right">
+				<button class="btn btn-good" @onclick="@(() => UpdateAmount( 10 ))">+10</button>
+				<button class="btn btn-good" @onclick="@(() => UpdateAmount( 100 ))">+100</button>
+				<button class="btn btn-good" @onclick="@(() => UpdateAmount( 1000 ))">+1000</button>
+			</div>
+		</div>
+
+		<div class="action-buttons">
+			<button class="btn btn-bad" @onclick="@(() => Withdraw( CurrentAmount ))">#atm.withdraw</button>
+			<button class="btn m-0 p-0 flex flex-col " @onclick="@(SetWalletAmount)">
+				<i class="material-icons text-3xl text-accent">wallet</i>
+				<span style="font-size: 0.5rem" class="text-white">#atm.quick</span>
+			</button>
+			<button class="btn btn-good" @onclick="@(() => Deposit( CurrentAmount ))">#atm.deposit</button>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	[Property] public required Atm Atm { get; set; }
+	
+	[Property] public SoundEvent? BeepSound { get; set; }
+	
+	private uint CurrentAmount { get; set; } = 0;
+	
+	private void UpdateAmount(int amount)
+	{
+		if (amount < 0 && CurrentAmount < (uint)Math.Abs(amount))
+		{
+			CurrentAmount = 0;
+			return;
+		}
+		
+		BeepSound.Broadcast( WorldPosition );
+
+		
+		if (amount > 0)
+		{
+			CurrentAmount += (uint)amount;
+		}
+		else
+		{
+			CurrentAmount -= (uint)Math.Abs(amount);
+		}
+		
+	}
+	
+	private void SetWalletAmount()
+	{
+		if (!Player.Local.IsValid()) return;
+		Deposit( Player.Local.WalletBalance );
+	}
+	
+	private void Deposit(uint amount)
+	{
+		BeepSound.Broadcast( WorldPosition );
+
+		if (amount == 0) return;
+		
+		Atm.Deposit(amount);
+		CurrentAmount = 0;
+	}
+	
+	private void Withdraw(uint amount)
+	{
+		BeepSound.Broadcast( WorldPosition );
+
+		if (amount == 0) return;
+		
+		Atm.Withdraw(amount);
+		CurrentAmount = 0;
+	}
+}

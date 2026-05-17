@@ -1,0 +1,25 @@
+@import "../styles.scss";
+
+DraggablePanel {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-self: flex-start;
+  flex-shrink: 0;
+
+  .draggable-panel {
+    position: relative;
+  }
+
+  .draggable-panel.is-detached-ticket {
+    z-index: 1;
+  }
+
+  .draggable-panel.is-dragging {
+    z-index: 2;
+  }
+
+  .draggable-handle {
+    cursor: move;
+  }
+}

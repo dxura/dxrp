@@ -1,0 +1,189 @@
+{
+  "RootObject": {
+    "__guid": "052e05a7-7d9d-406d-a2ef-2bfe018d9685",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "light",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "construct,occludable,no_collide,build_interact,hands_interact,costly",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Light",
+        "__guid": "686e4e16-ee7a-45d1-9458-6bddef54063f",
+        "__enabled": true,
+        "Flags": 0,
+        "Collider": {
+          "_type": "component",
+          "component_id": "ac2c79b8-e81f-43eb-84fa-f445cd5ff610",
+          "go": "4c86173b-b549-4ea2-91a5-246d6b19a9b1",
+          "component_type": "ModelCollider"
+        },
+        "DataJson": "",
+        "LightComponent": null,
+        "LightEnabled": true,
+        "LightRoot": {
+          "_type": "gameobject",
+          "go": "313954f6-f54c-434a-98ea-d99e015cde91"
+        },
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "89e5fb11-b3e5-4651-be1b-c9a770265c08",
+          "go": "4c86173b-b549-4ea2-91a5-246d6b19a9b1",
+          "component_type": "ModelRenderer"
+        },
+        "NetworkOwner": "00000000-0000-0000-0000-000000000000",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Owner": "0"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "4c86173b-b549-4ea2-91a5-246d6b19a9b1",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Model",
+        "Position": "0,0,0",
+        "Rotation": "0,0,1,-0.00000004371139",
+        "Scale": "0.4,0.4,0.4",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "89e5fb11-b3e5-4651-be1b-c9a770265c08",
+            "__enabled": true,
+            "Flags": 0,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "models/sbox_props/studio_light_projector/studio_light_projector.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "Off",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.ModelCollider",
+            "__guid": "ac2c79b8-e81f-43eb-84fa-f445cd5ff610",
+            "__enabled": true,
+            "Flags": 0,
+            "ColliderFlags": 0,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Model": "models/sbox_props/studio_light_projector/studio_light_projector.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Static": false,
+            "Surface": null,
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "313954f6-f54c-434a-98ea-d99e015cde91",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Light",
+        "Position": "-1.713897,0,-0.3398759",
+        "Rotation": "0,0,1,-0.00000004371139",
+        "Scale": "1,1,1",
+        "Tags": "light_point,light,light_directional,light_spot",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      },
+      "GameObjectSystems": [
+        {
+          "TenantId": "",
+          "__type": "ServerApiLink",
+          "__guid": "eeabe564-2230-4b7e-a4f2-6c0e8b37ce0a"
+        },
+        {
+          "Prisoners": {},
+          "__type": "Governance",
+          "__guid": "6e76f88d-33bf-4297-8530-8bd6e7fe26bc"
+        },
+        {
+          "Connections": [],
+          "__type": "Wire",
+          "__guid": "84221030-60f1-49c9-b11a-5587de48a3ea"
+        }
+      ]
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.studio_light_projector#143933"
+  ],
+  "__version": 2
+}

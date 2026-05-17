@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_angry",
+  "Repeat": false,
+  "Duration": 3.27,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

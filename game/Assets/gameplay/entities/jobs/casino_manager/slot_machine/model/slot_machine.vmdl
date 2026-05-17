@@ -1,0 +1,109 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc30:version{8c2d7a91-9c42-4bf0-883a-5a3b1762d4f1} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "wire_134006006.001.vmat"
+								to = "materials/default/black.vmat"
+							},
+							{
+								from = "wire_143224087.001.vmat"
+								to = "gameplay/entities/jobs/casino_manager/slot_machine/model/slot_machine_body.vmat"
+							},
+							{
+								from = "slot_screen.vmat"
+								to = "materials/default/black.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = "materials/default.vmat"
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "gameplay/entities/jobs/casino_manager/slot_machine/model/slot_machine.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 0.04
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"slot_machine",
+								"slot_machine_monitor",
+								"slot_screen",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ 4.940803, -0.052034, 2.340134 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 30.01598, 28.072323, 5.319733 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ 1.124061, -0.052034, 15.897585 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 22.382498, 28.072323, 32.434635 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ -6.63694, -0.052034, 60.757648 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 6.860489, 28.072323, 65.086891 ]
+					},
+					{
+						_class = "PhysicsShapeBox"
+						parent_bone = ""
+						surface_prop = "default"
+						collision_tags = "solid"
+						origin = [ 16.582308, -0.052034, 27.464798 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						dimensions = [ 14.226101, 28.072323, 4.18346 ]
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

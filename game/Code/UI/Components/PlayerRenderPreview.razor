@@ -1,0 +1,363 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox
+@using Sandbox.UI
+@inherits Panel
+
+@attribute [StyleSheet]
+
+@if ( Player == null || !Player.IsValid() )
+{
+	return;
+}
+
+<root class="player-render-preview @(_isDragging ? "dragging" : string.Empty)">
+	<div class="preview-shell">
+		<ScenePanel @ref="_scenePanel" class="preview-scene"/>
+	</div>
+</root>
+
+@code
+{
+	private static readonly Vector3 Origin = new( 0f, 0f, -9000f );
+
+	public Player? Player { get; set; }
+
+	private ScenePanel? _scenePanel;
+	private Scene? _scene;
+	private GameObject? _cameraObject;
+	private CameraComponent? _camera;
+	private GameObject? _pivot;
+	private GameObject? _body;
+	private GameObject? _light;
+	private string? _signature;
+	private Vector3 _focusPoint = Origin + Vector3.Up * 12f;
+	private Vector3 _modelSize = new( 32f, 32f, 72f );
+	private float _fitDistance = 80f;
+	private float _zoomOffset;
+	private float _minDistance = 52f;
+	private float _maxDistance = 128f;
+	private float _yaw = -10f;
+	private float _yawVelocity;
+	private bool _isDragging;
+	private Vector2 _lastMousePosition;
+
+	public override void Tick()
+	{
+		base.Tick();
+
+		if ( Player == null || !Player.IsValid() )
+		{
+			ClearPreview();
+			return;
+		}
+
+		if ( _scenePanel == null )
+		{
+			return;
+		}
+
+		EnsureScene();
+
+		var signature = BuildSignature( Player );
+		if ( signature != _signature )
+		{
+			RebuildPreview( Player );
+			_signature = signature;
+		}
+
+		if ( !_isDragging && _pivot.IsValid() && MathF.Abs( _yawVelocity ) > 0.01f )
+		{
+			_yaw += _yawVelocity * Time.Delta;
+			_pivot.WorldRotation = Rotation.From( 0f, _yaw, 0f );
+			_yawVelocity *= MathF.Pow( 0.12f, Time.Delta );
+
+			if ( MathF.Abs( _yawVelocity ) < 2f )
+			{
+				_yawVelocity = 0f;
+			}
+		}
+
+		UpdateScenePanel();
+	}
+
+	protected override void OnMouseDown( MousePanelEvent e )
+	{
+		base.OnMouseDown( e );
+		_isDragging = true;
+		_yawVelocity = 0f;
+		_lastMousePosition = e.LocalPosition;
+		e.StopPropagation();
+	}
+
+	protected override void OnMouseUp( MousePanelEvent e )
+	{
+		base.OnMouseUp( e );
+		_isDragging = false;
+		e.StopPropagation();
+	}
+
+	protected override void OnMouseMove( MousePanelEvent e )
+	{
+		base.OnMouseMove( e );
+
+		if ( !_isDragging || !_pivot.IsValid() )
+		{
+			return;
+		}
+
+		var delta = e.LocalPosition - _lastMousePosition;
+		_lastMousePosition = e.LocalPosition;
+
+		if ( delta.LengthSquared < 0.01f )
+		{
+			return;
+		}
+
+		var yawDelta = delta.x * 0.35f;
+		_yaw += yawDelta;
+		_yawVelocity = yawDelta / MathF.Max( Time.Delta, 0.001f );
+		_pivot.WorldRotation = Rotation.From( 0f, _yaw, 0f );
+		e.StopPropagation();
+	}
+
+	public override void OnMouseWheel( Vector2 value )
+	{
+		base.OnMouseWheel( value );
+		var distance = Math.Clamp( _fitDistance + _zoomOffset - value.y * 4f, _minDistance, _maxDistance );
+		_zoomOffset = distance - _fitDistance;
+	}
+
+	public override void OnDeleted()
+	{
+		base.OnDeleted();
+		ClearPreview();
+	}
+
+	private void UpdateScenePanel()
+	{
+		if ( _scenePanel == null || _scene == null || !_scene.IsValid() || !_camera.IsValid() )
+		{
+			return;
+		}
+
+		if ( _scenePanel.Box.Rect.Width < 10 || _scenePanel.Box.Rect.Height < 10 )
+		{
+			return;
+		}
+
+		var aspectRatio = _scenePanel.Box.Rect.Height > 0f
+			? _scenePanel.Box.Rect.Width / _scenePanel.Box.Rect.Height
+			: 1f;
+		var distance = Math.Clamp( CalculateFitDistance( aspectRatio ) + _zoomOffset, _minDistance, _maxDistance );
+		var cameraPosition = _focusPoint + new Vector3( distance, -2f, 0f );
+
+		_camera.WorldPosition = cameraPosition;
+		_camera.WorldRotation = Rotation.LookAt( _focusPoint - cameraPosition, Vector3.Up );
+		_camera.FieldOfView = 25f;
+		_camera.BackgroundColor = Color.Transparent;
+		_camera.ZNear = 1f;
+		_camera.ZFar = 256f;
+
+		if ( _light.IsValid() )
+		{
+			_light.WorldPosition = _focusPoint + Vector3.Forward * 80f + Vector3.Left * 30f + Vector3.Up * 90f;
+			_light.WorldRotation = Rotation.LookAt( _focusPoint - _light.WorldPosition, Vector3.Up );
+		}
+	}
+
+	private void RebuildPreview( Player player )
+	{
+		DestroyPreviewObjects();
+		EnsureScene();
+		if ( _scene == null || !_scene.IsValid() )
+		{
+			return;
+		}
+
+		using ( _scene.Push() )
+		{
+			_yaw = -10f;
+			_yawVelocity = 0f;
+			_pivot = new GameObject( true, "player_preview_pivot" )
+			{
+				WorldPosition = Origin,
+				WorldRotation = Rotation.From( 0f, _yaw, 0f )
+			};
+
+			_body = new GameObject( true, "player_preview_display" )
+			{
+				Parent = _pivot
+			};
+
+			var renderer = _body.AddComponent<SkinnedModelRenderer>();
+			renderer.Model = GetPreviewModel( player );
+
+			ApplyClothing( renderer, player );
+			EnsureLight();
+			CenterPreview( renderer );
+		}
+	}
+
+	private void CenterPreview( SkinnedModelRenderer renderer )
+	{
+		var bounds = renderer.Bounds;
+		if ( bounds.Size.LengthSquared <= 1f )
+		{
+			bounds = renderer.Model.Bounds;
+		}
+
+		var localCenter = bounds.Center - Origin;
+		var localMins = bounds.Mins - Origin;
+		var width = MathF.Max( MathF.Max( bounds.Size.x, bounds.Size.y ), 18f );
+		var height = MathF.Max( bounds.Size.z, 48f );
+
+		_modelSize = new Vector3( width, width, height );
+		_body!.LocalPosition = new Vector3( -localCenter.x, -localCenter.y, -localMins.z );
+		_focusPoint = Origin + Vector3.Up * Math.Clamp( height * 0.58f, 22f, height * 0.72f );
+		_fitDistance = Math.Clamp( MathF.Max( height * 0.62f, width * 1.3f ), 44f, 96f );
+		_zoomOffset = 0f;
+		_minDistance = Math.Clamp( _fitDistance * 0.72f, 36f, 84f );
+		_maxDistance = Math.Clamp( _fitDistance * 1.45f, 60f, 144f );
+	}
+
+	private float CalculateFitDistance( float aspectRatio )
+	{
+		aspectRatio = MathF.Max( aspectRatio, 0.75f );
+
+		const float verticalCoverage = 1.08f;
+		const float horizontalCoverage = 0.98f;
+		const float fieldOfViewDegrees = 25f;
+
+		var halfVerticalFov = MathF.Tan( fieldOfViewDegrees * 0.5f * MathF.PI / 180f );
+		var halfHorizontalFov = halfVerticalFov * aspectRatio;
+		var heightDistance = _modelSize.z / ( 2f * halfVerticalFov * verticalCoverage );
+		var widthDistance = _modelSize.x / ( 2f * halfHorizontalFov * horizontalCoverage );
+
+		return MathF.Max( _fitDistance, MathF.Max( heightDistance, widthDistance ) );
+	}
+
+	private void EnsureLight()
+	{
+		if ( _light.IsValid() )
+		{
+			return;
+		}
+
+		_light = new GameObject( true, "player_preview_light" );
+		var spotLight = _light.AddComponent<SpotLight>();
+		spotLight.LightColor = Color.White * 2.2f;
+		spotLight.Radius = 320f;
+		spotLight.Attenuation = 0.55f;
+		spotLight.ConeOuter = 70f;
+		spotLight.Shadows = false;
+	}
+
+	private void EnsureScene()
+	{
+		if ( _scenePanel == null )
+		{
+			return;
+		}
+
+		_scene = _scenePanel.RenderScene;
+		if ( _cameraObject.IsValid() && _camera.IsValid() )
+		{
+			return;
+		}
+
+		if ( _scene == null || !_scene.IsValid() )
+		{
+			return;
+		}
+
+		using ( _scene.Push() )
+		{
+			_cameraObject = new GameObject( true, "player_preview_camera" );
+			_camera = _cameraObject.AddComponent<CameraComponent>();
+			_camera.IsMainCamera = true;
+			_camera.BackgroundColor = Color.Transparent;
+			_camera.ZNear = 1f;
+			_camera.ZFar = 256f;
+			_camera.FieldOfView = 25f;
+		}
+	}
+
+	private static void ApplyClothing( SkinnedModelRenderer renderer, Player player )
+	{
+		var clothing = new ClothingContainer();
+		var avatarData = player.Network.Owner?.GetUserData( "avatar" );
+
+		if ( !string.IsNullOrWhiteSpace( avatarData ) )
+		{
+			clothing.Deserialize( avatarData );
+		}
+
+		if ( player.Job.IsValid() )
+		{
+			clothing.AddRange( player.Job.GetClothingEntries() );
+		}
+
+		clothing.Apply( renderer );
+	}
+
+	private void ClearPreview()
+	{
+		_isDragging = false;
+		_signature = null;
+		DestroyPreviewObjects();
+	}
+
+	private void DestroyPreviewObjects()
+	{
+		if ( _body.IsValid() )
+		{
+			_body.DestroyImmediate();
+		}
+
+		_body = null;
+
+		if ( _pivot.IsValid() )
+		{
+			_pivot.DestroyImmediate();
+		}
+
+		_pivot = null;
+
+		if ( _cameraObject.IsValid() )
+		{
+			_cameraObject.DestroyImmediate();
+		}
+
+		_cameraObject = null;
+		_camera = null;
+
+		if ( _light.IsValid() )
+		{
+			_light.DestroyImmediate();
+		}
+
+		_light = null;
+	}
+
+	private static string BuildSignature( Player player )
+	{
+		var avatarData = player.Network.Owner?.GetUserData( "avatar" ) ?? string.Empty;
+		var modelHash = player.Renderer.IsValid() && player.Renderer.Model.IsValid() ? player.Renderer.Model.GetHashCode() : 0;
+		return $"{player.SteamId}:{player.Job.Id}:{modelHash}:{avatarData}";
+	}
+
+	private static Model GetPreviewModel( Player player )
+	{
+		if ( player.Renderer.IsValid() && player.Renderer.Model.IsValid() )
+		{
+			return player.Renderer.Model;
+		}
+
+		if ( player.Job.IsValid() )
+		{
+			return player.Job.GetPrimaryModel();
+		}
+
+		return GameModeJobs.Default.GetPrimaryModel();
+	}
+}

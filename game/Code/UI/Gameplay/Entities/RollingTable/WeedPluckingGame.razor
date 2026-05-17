@@ -1,0 +1,155 @@
+@using Sandbox;
+@inherits Panel
+@namespace Dxura.RP.Game.UI
+
+<div class="w-full h-full flex flex-col items-center justify-center">
+    <div class="game-info flex justify-between w-full mb-4">
+        <div class="progress text-base text-gray-400">
+            Progress: <span class="text-green-400">@_pluckedCount/@RequiredPlucks</span>
+        </div>
+        <div class="timer text-base text-gray-400">
+            Time: <span class="text-green-400">@((int)_remainingTime)s</span>
+        </div>
+    </div>
+
+    <div class="w-full h-full">
+
+	    @foreach ( var weed in _weedItems )
+	    {
+		    <div class="weed-icon"
+		         style="left: @( weed.X )px; top: @( weed.Y )px; transform: rotate(@( weed.Rotation )deg);"
+		         @onclick=@(() => OnWeedClick( weed ))>
+
+			    <Icon class="icon" file="/ui/resources/hemp.png" size="50"/>
+		    </div>
+	    }
+    </div>
+</div>
+
+@code {
+    public class WeedItem
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Rotation { get; set; }
+    }
+
+    private readonly List<WeedItem> _weedItems = new();
+    private int _pluckedCount = 0;
+    private float _remainingTime = 30f;
+    private bool _gameActive;
+    private readonly Random _random = new();
+
+    [Property] public Action<bool> OnGameComplete { get; set; }
+    [Property] public int RequiredPlucks { get; set; } = 24;
+    [Property] public SoundEvent? PluckSound { get; set; }
+    
+    protected override void OnAfterTreeRender( bool firstTime )
+    {
+	    base.OnAfterTreeRender( firstTime );
+
+	    if ( firstTime )
+	    {
+		    StartGame();
+	    }
+    }
+
+    private void StartGame()
+    {
+        _weedItems.Clear();
+        _pluckedCount = 0;
+        _remainingTime = 30f;
+        _gameActive = true;
+
+        const int iconSize = 50;  // Updated to match CSS
+        const int padding = 20;
+        const int minDistance = iconSize + padding;
+
+        // Create scattered weed icons with random rotations
+        for (var i = 0; i < RequiredPlucks + 3; i++)
+        {
+            var attempts = 0;
+            var maxAttempts = 50;
+            var validPosition = false;
+            WeedItem newWeed;
+
+            do
+            {
+	            const int containerWidth = 750;  // Adjust based on your actual container size
+	            const int containerHeight = 320; // Adjust based on your actual container size
+
+	            newWeed = new WeedItem
+	            {
+		            X = _random.Next(0, containerWidth - iconSize),
+		            Y = _random.Next(0, containerHeight - iconSize),
+		            Rotation = _random.Next(0, 360)
+	            };
+
+                // Check distance from all other weeds
+                validPosition = true;
+                foreach (var existingWeed in _weedItems)
+                {
+                    var distance = Math.Sqrt(
+                        Math.Pow((newWeed.X + iconSize/2) - (existingWeed.X + iconSize/2), 2) +
+                        Math.Pow((newWeed.Y + iconSize/2) - (existingWeed.Y + iconSize/2), 2));
+
+                    if (distance < minDistance)
+                    {
+                        validPosition = false;
+                        break;
+                    }
+                }
+
+                attempts++;
+            } while (!validPosition && attempts < maxAttempts);
+
+            if (validPosition)
+            {
+                _weedItems.Add(newWeed);
+            }
+        }
+    }
+
+    public override void Tick()
+    {
+	    if (!_gameActive) return;
+
+	    _remainingTime -= Time.Delta;
+
+	    if (_remainingTime <= 0)
+	    {
+		    _gameActive = false;
+		    OnGameComplete?.Invoke(false);
+	    }
+
+	    StateHasChanged();
+    }
+
+
+    private void OnWeedClick(WeedItem item)
+    {
+	    if(Cooldown.Current.CheckAndStartCooldown( "pluck", 0.20f ))
+	    {
+		    return;
+	    }
+	    
+	    if (!_gameActive || !_weedItems.Contains( item )) return;
+
+	    _weedItems.Remove( item );
+
+	    _pluckedCount++;
+	    
+	    if (_pluckedCount >= RequiredPlucks)
+	    {
+		    _gameActive = false;
+		    OnGameComplete?.Invoke(true);
+	    }
+
+	    Sound.Play( "pop" );
+		    
+	    StateHasChanged();
+    }
+}
+
+
+

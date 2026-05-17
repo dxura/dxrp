@@ -1,0 +1,47 @@
+@namespace Dxura.RP.Game.UI
+@using Dxura.RP.Game.Entities
+@using Dxura.RP.Shared
+@using WorldPanel = Sandbox.WorldPanel
+@inherits PanelComponent
+@implements IOcclusionEvents
+
+<root>
+	<InventoryItem Item="@GetInventoryItem()" ShowActions="@false"></InventoryItem>
+</root>
+
+@code {
+	[Property] public ItemEntity Entity { get; set; } = null!;
+	[Property] public WorldPanel WorldPanel { get; set; } = null!;
+
+	protected override void OnStart()
+	{
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !GameObject.Root.Tags.Has( Constants.OccludeTag );
+	}
+
+	public void OnOcclusionChanged( bool occlude )
+	{
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !occlude;
+	}
+
+	protected override int BuildHash()
+	{
+		if ( !WorldPanel.IsValid() || !WorldPanel.Enabled )
+		{
+			return 0;
+		}
+
+		return HashCode.Combine(
+			Entity.ItemDefinitionId,
+			Entity.Quantity,
+			Entity.Definition?.Name,
+			Entity.Definition?.ImageUrl,
+			Entity.Definition?.Rarity );
+	}
+
+	private InventoryItemDto GetInventoryItem()
+	{
+		return Entity.GetInventoryItem();
+	}
+}

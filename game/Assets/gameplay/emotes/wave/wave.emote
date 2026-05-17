@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_wave",
+  "Repeat": false,
+  "Duration": 4.73,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

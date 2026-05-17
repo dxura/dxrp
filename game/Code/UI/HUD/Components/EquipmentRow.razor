@@ -1,0 +1,51 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+<root class="@( IsActive ? "is-active" : "" )">
+
+	@if ( !Equipment.IsValid() || !Player.IsValid() )
+		return;
+	
+	@if ( !string.IsNullOrEmpty( Equipment.Resource.DisplayIcon() ) )
+	{
+		<div class="column">
+
+			<div class="icon">
+				<div class="image" style="background-image:url(@Equipment.Resource.DisplayIcon());"/>
+			</div>
+
+			<span style="gap: 4px; align-items: flex-end;">
+					<label class="gunname text-base text-bold">@Equipment.Resource.DisplayName()</label>
+			</span>
+
+		</div>
+	}
+	else
+	{
+		<div class="row">
+			<label class="gunname text-base text-bold">@Equipment.Resource.DisplayName()</label>
+		</div>
+	}
+</root>
+
+@code
+{
+	/// <summary>
+	///     The equipment's slot
+	/// </summary>
+	public EquipmentSlot Slot => Equipment?.Resource.SlotValue() ?? default;
+
+	/// <summary>
+	///     The player's equipment.
+	/// </summary>
+	public Equipment? Equipment { get; set; }
+
+	private AmmoComponent? AmmoComponent => Equipment?.Components?.Get<AmmoComponent>( FindMode.EverythingInSelfAndDescendants );
+	private Player? Player => Equipment?.Owner;
+	private bool IsActive => Player?.CurrentEquipment == Equipment;
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( IsActive, Equipment, AmmoComponent?.Ammo );
+	}
+}

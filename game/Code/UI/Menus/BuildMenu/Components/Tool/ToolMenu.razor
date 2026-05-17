@@ -1,0 +1,160 @@
+@using Dxura.RP.Game.Equipments
+@using Dxura.RP.Game.Tools
+@using Dxura.RP.Shared
+@using Sandbox.UI
+@inherits Panel
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+
+<root>
+	<div class="listcontainer">
+		<TextEntry @ref=" _searchEntry" Placeholder="#assetlist.search"/>
+		<div class="toollist">
+			@if ( true )
+			{
+				var tools = GetTools();
+				var groups = GetGroups( tools );
+				foreach ( var group in groups )
+				{
+					var groupTools = tools
+						.Where( x => x.Attribute.Group == group )
+						.Where( x => !x.Attribute.RequiredPermissions.Any() || x.Attribute.RequiredPermissions.All( RankSystem.HasLocalPermission ) )
+						.Where( x => x.Attribute.MinimumLevel == 0 || Player.Local.IsValid() && Player.Local.Level >= x.Attribute.MinimumLevel )
+						.OrderBy( x => GetText( x.Attribute.Title ) )
+						.ToList();
+
+					if ( groupTools.Count == 0 ) continue;
+
+					<label class="header">@Language.GetPhrase(group.ToLowerInvariant())</label>
+					foreach ( var item in groupTools )
+					{
+						<div class="tool @( IsCurrentTool( item.ToolType.TargetType ) ? "active" : "" )"
+						     onclick=@( () => GiveTool( item.ToolType ) )>
+							@( GetText( item.Attribute.Title ) )
+						</div>
+					}
+
+					<div class="mt-2 w-full"></div>
+				}
+			}
+		</div>
+	</div>
+	<Panel class="inspector" @ref="_inspectorPanel">
+	</Panel>
+</root>
+
+@code
+{
+	public static ToolMenu Instance { get; private set; } = null!;
+	
+	public ToolCategory Category { get; set; } = ToolCategory.Default;
+
+	TextEntry? _searchEntry;
+	Panel? _inspectorPanel;
+	
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		base.OnAfterTreeRender( firstTime );
+
+		if ( firstTime )
+		{
+			Instance = this;
+
+			UpdateInspector();
+		}
+	}
+
+	List<(TypeDescription ToolType, ToolAttribute Attribute)> GetTools()
+	{
+		var tools = TypeLibrary.GetTypes<BaseTool>()
+			.Where( x => x.Name != "BaseTool" )
+			.Select( x => (x, TypeLibrary.GetAttribute<ToolAttribute>( x.TargetType )) )
+			.Where( t => t.Item2 != null )
+			.Where( t => t.Item2.Category == Category );
+		
+		if ( !string.IsNullOrWhiteSpace( _searchEntry?.Text ) )
+		{
+			tools = tools.Where( x =>
+			{
+				var text = _searchEntry.Text.ToLower();
+				return GetText( x.Item2.Title ).ToLower().Contains( text )
+				       || Language.GetPhrase( $"tool.group.{x.Item2.Group.ToLowerInvariant()}" ).ToLower().Contains( text );
+			} );
+		}
+
+		return tools.ToList();
+	}
+
+	void GiveTool( TypeDescription tool )
+	{
+		if ( !Player.Local.IsValid() ) return;
+		
+		_inspectorPanel?.Blur();
+		
+		var toolgun = Player.Local.Components.Get<ToolEquipment>( FindMode.EverythingInSelfAndDescendants );
+		if ( toolgun != null && toolgun.IsValid() )
+		{
+			toolgun.SetTool( tool );
+		}
+		
+		// Equip tool if selected
+		var player = Player.Local.GetComponent<Player>();
+		player?.SetCurrentEquipment( player.Equipment.FirstOrDefault( wep => GameModeEquipments.IsTool( wep.Resource ) ) );
+	}
+
+	IEnumerable<string> GetGroups( List<(TypeDescription, ToolAttribute)> tools )
+	{
+		return tools.Select( x => x.Item2.Group ).Distinct().OrderBy( x => x );
+	}
+
+	private static string GetText( string? text )
+	{
+		if ( string.IsNullOrWhiteSpace( text ) ) return string.Empty;
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+
+	public void UpdateInspector()
+	{
+		// Check if InspectorPanel is valid before proceeding
+		if ( _inspectorPanel == null || !_inspectorPanel.IsValid() ) return;
+
+		_inspectorPanel.DeleteChildren();
+
+		// Check if Player.Local is valid before accessing its components
+		if ( !Player.Local.IsValid() ) return;
+
+		var toolgun = Player.Local.Components.Get<ToolEquipment>( FindMode.EverythingInSelfAndDescendants );
+		if ( toolgun == null || !toolgun.IsValid() ) return;
+
+		var tool = toolgun.CurrentTool;
+		if ( tool == null ) return;
+
+		var panelTypes = TypeLibrary.GetTypesWithAttribute<ToolInspectorAttribute>();
+		var panelType = panelTypes.FirstOrDefault( x => x.Attribute.Type == tool.GetType() );
+		if ( panelType.Type is not null )
+		{
+			var panel = TypeLibrary.Create<Panel>( panelType.Type.TargetType );
+			if ( panel is IToolInspector inspectorPanel )
+			{
+				inspectorPanel.ToolEquipment = toolgun;
+			}
+
+			_inspectorPanel.AddChild( panel );
+		}
+		else
+		{
+			var defaultPanel = new DefaultToolInspector { ToolEquipment = toolgun };
+			_inspectorPanel.AddChild( defaultPanel );
+		}
+	}
+
+	bool IsCurrentTool( Type toolType )
+	{
+		return BaseTool.CurrentTool?.GetType() == toolType;
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( _searchEntry?.Text, Category );
+	}
+}

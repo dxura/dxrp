@@ -1,0 +1,198 @@
+{
+  "RootObject": {
+    "__guid": "9d75f86f-cc98-41ec-82da-c5bd318da88f",
+    "__version": 1,
+    "Flags": 0,
+    "Name": "recycler",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "map,occludable",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkInterpolation": false,
+    "NetworkOrphaned": 0,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.ContinuousSoundPoint",
+        "__guid": "215d1226-e8ef-4794-bc79-092f3e6faceb",
+        "__enabled": false,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "SoundEvent": "gameplay/world/recycler/sound/recycler_churn.sound"
+      },
+      {
+        "__type": "Dxura.RP.Game.Recycler",
+        "__guid": "68557157-8fcc-49a3-b78e-dc4e7dda92d3",
+        "__enabled": true,
+        "DropPoint": {
+          "_type": "gameobject",
+          "go": "f447a689-1661-4906-9730-d344c7683e3b"
+        },
+        "FinishSound": "gameplay/world/recycler/sound/recycler_finish.sound",
+        "Model": {
+          "_type": "gameobject",
+          "go": "e281b5a8-c93b-40f6-8f3e-7e97f6d010cd"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "ProcessingSoundPoint": {
+          "_type": "component",
+          "component_id": "215d1226-e8ef-4794-bc79-092f3e6faceb",
+          "go": "9d75f86f-cc98-41ec-82da-c5bd318da88f",
+          "component_type": "ContinuousSoundPoint"
+        }
+      },
+      {
+        "__type": "Sandbox.CapsuleCollider",
+        "__guid": "9b879db0-ece5-4637-9958-0e9a2af6cf4c",
+        "__enabled": true,
+        "Elasticity": null,
+        "End": "-54.60767,0,30",
+        "Friction": null,
+        "IsTrigger": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "Radius": 43.06992,
+        "RollingResistance": null,
+        "Start": "50.57508,0,30",
+        "Static": true,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "e281b5a8-c93b-40f6-8f3e-7e97f6d010cd",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "model",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": false,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ModelRenderer",
+            "__guid": "028316a3-d3ec-4c4f-bfb2-f124565e41fa",
+            "__enabled": true,
+            "BodyGroups": 18446744073709551615,
+            "CreateAttachments": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": {
+              "indexed": {
+                "0": "gameplay/world/recycler/model/recycler.vmat"
+              }
+            },
+            "Model": "gameplay/world/recycler/model/recycler.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Tint": "1,1,1,1"
+          },
+          {
+            "__type": "Sandbox.ModelCollider",
+            "__guid": "b1d89196-b212-4e47-a858-2b7a6e9a5565",
+            "__enabled": true,
+            "Elasticity": null,
+            "Friction": null,
+            "IsTrigger": false,
+            "Model": "gameplay/world/recycler/model/recycler.vmdl",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "OnObjectTriggerEnter": null,
+            "OnObjectTriggerExit": null,
+            "OnTriggerEnter": null,
+            "OnTriggerExit": null,
+            "RollingResistance": null,
+            "Static": true,
+            "Surface": "surfaces/metal.surface",
+            "SurfaceVelocity": "0,0,0"
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "f447a689-1661-4906-9730-d344c7683e3b",
+        "__version": 1,
+        "Flags": 0,
+        "Name": "drop",
+        "Position": "-23.00823,25.7143,58.63183",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkInterpolation": true,
+        "NetworkOrphaned": 0,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": false,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

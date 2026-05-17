@@ -1,0 +1,23 @@
+@import "../../styles.scss";
+
+MinigameLobbyScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  border-radius: 5%;
+  
+  
+  background-color: $color-primary;
+  color: white;
+  
+  height: 100%;
+  width: 100%;
+}

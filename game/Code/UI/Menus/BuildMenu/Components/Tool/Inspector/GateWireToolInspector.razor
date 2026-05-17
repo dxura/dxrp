@@ -1,0 +1,102 @@
+@inherits Panel
+@using Dxura.RP.Game.Equipments
+@using Dxura.RP.Game.Tools
+@using Dxura.RP.Game.Wire
+@using Sandbox.UI
+@implements IToolInspector
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+@attribute [ToolInspector(typeof(GateWireTool))]
+
+<root class="flex flex-col w-full h-full poppins">
+
+	@if ( ToolEquipment == null || ToolEquipment.CurrentTool is not GateWireTool gateTool ) return;
+
+	<label class="header">@gateTool.GetName()</label>
+	<label class="text-xs p-3">@gateTool.GetLongDescription()</label>
+
+	<div class="tabs">
+		@foreach ( var category in Enum.GetValues<GateCategory>() )
+		{
+			if(category == GateCategory.All) continue;
+			
+			<div class="tab-btn @( _selectedCategory == category ? "active" : "" )"
+			     @onclick="@(() => _selectedCategory = category)">
+				@GetCategoryName(category)
+			</div>
+		}
+	</div>
+
+	<div class="content">
+		<div class="gate-grid">
+			@foreach ( var gateType in GetFilteredGateTypes() )
+			{
+				<div class="gate-item @( gateTool.GateType == gateType ? "active" : "" )"
+				     @onclick="@(() => gateTool.GateType = gateType)"
+				     tooltip="@GetGateDescription(gateType)">
+					@gateType.ToString()
+				</div>
+			}
+		</div>
+	</div>
+
+	<div class="bottom-actions">
+		<button class="btn btn-secondary" @onclick="@ResetToolSettings">
+			<span>#tool.inspector.reset_settings</span>
+		</button>
+	</div>
+</root>
+
+@code
+{
+	public ToolEquipment? ToolEquipment { get; set; }
+	private GateCategory _selectedCategory = GateCategory.Logic;
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( _selectedCategory, (ToolEquipment?.CurrentTool as GateWireTool)?.GateType );
+	}
+
+	private void ResetToolSettings()
+	{
+		if (ToolEquipment?.CurrentTool != null)
+		{
+			ToolEquipment.CurrentTool.ResetSettings();
+			_selectedCategory = GateCategory.Logic;
+			ToolMenu.Instance?.UpdateInspector();
+		}
+	}
+
+	private string GetCategoryName( GateCategory category )
+	{
+		return $"#gatecategory.{category.ToString().ToLower()}";
+	}
+
+	private List<GateType> GetFilteredGateTypes()
+	{
+		var allTypes = Enum.GetValues<GateType>().ToList();
+
+		return allTypes.Where( type => GetCategoryForGateType( type ) == _selectedCategory ).ToList();
+	}
+
+	private GateCategory GetCategoryForGateType( GateType type )
+	{
+		return (int)type switch
+		{
+			>= 0 and < 100 => GateCategory.Logic,
+			>= 100 and < 200 => GateCategory.Arithmetic,
+			>= 200 and < 300 => GateCategory.Comparison,
+			>= 300 and < 400 => GateCategory.Math,
+			>= 400 and < 500 => GateCategory.Control,
+			>= 500 and < 600 => GateCategory.String,
+			>= 600 and < 700 => GateCategory.Time,
+			>= 700 and < 800 => GateCategory.Vector,
+			_ => GateCategory.Logic
+		};
+	}
+
+	private static string GetGateDescription( GateType type )
+	{
+		return $"#gatetype.{type.ToString().ToLower()}";
+	}
+}

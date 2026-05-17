@@ -1,0 +1,40 @@
+@import "../../../styles.scss";
+
+HealthStationEntityDisplay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: all;
+
+  root {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .station-card {
+    position: absolute;
+    left: 50%;
+    top: 105px;
+    transform: translateX(-50%);
+    width: 175px;
+    min-height: 112px;
+    padding: 12px 14px 14px;
+    background-color: black;
+    overflow: visible;
+  }
+
+  .station-title-area {
+    position: absolute;
+    left: 50%;
+    top: 42px;
+    transform: translateX(-50%);
+    width: 155px;
+    height: 50px;
+    background-color: black;
+    pointer-events: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}

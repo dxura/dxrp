@@ -1,0 +1,71 @@
+@import "../../styles.scss";
+
+AdminTickets {
+  position: absolute;
+  top: $space-3;
+  left: $space-3;
+  z-index: 999000;
+  
+  .ticket-stack {
+    max-height: calc(100vh - ($space-3 * 2));
+    align-items: flex-start;
+    overflow: visible;
+  }
+
+  .ticket-window {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    width: 320px;
+    min-width: 320px;
+    flex-shrink: 0;
+    margin-bottom: $space-2;
+  }
+
+  .ticket-window.is-detached-ticket {
+    position: absolute;
+    margin-bottom: 0;
+  }
+
+  .ticket-header {
+    border-bottom: 0.2px solid rgba(white, 0.05);
+  }
+
+  .ticket-close {
+    padding: 0 $space-1;
+    color: rgba(white, 0.75);
+    background-color: rgba(black, 0);
+    border: 0;
+    cursor: pointer;
+  }
+
+  .ticket-body {
+    padding: 0;
+    min-width: 0;
+  }
+
+  .ticket-main {
+    min-width: 0;
+  }
+  
+  .ticket-actions {
+    flex-shrink: 0;
+    align-self: stretch;
+    overflow: hidden;
+  }
+
+  .ticket-action {
+    padding: $space-1 $space-3;
+    background-color: rgba(white, 0.015);
+
+    border: 0;
+  }
+
+  .ticket-action-primary {
+    background-color: rgba($color-accent, 0.28);
+  }
+
+  .ticket-action-good {
+    background-color: rgba($color-good, 0.3);
+  }
+}

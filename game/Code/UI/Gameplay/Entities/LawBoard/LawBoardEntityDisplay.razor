@@ -1,0 +1,105 @@
+@namespace Dxura.RP.Game.UI
+@using WorldPanel=Sandbox.WorldPanel
+@inherits PanelComponent
+@implements IOcclusionEvents
+
+<root>
+	@{
+		if( !WorldPanel.IsValid() || !WorldPanel.Enabled || !Config.Current.Game.GovernanceLawEnabled || Governance.Current is null ) return;
+
+		var laws = Governance.Current.GetAllLaws().ToList();
+		var taxEnabled = Config.Current.Game.GovernanceTaxEnabled;
+		var townName = Governance.Current.TownName;
+	}
+
+
+		<div class="town-header">
+			<div class="town-divider"></div>
+				@if ( !string.IsNullOrEmpty( townName ) )
+				{
+					<h1 class="town-name"><span>@townName</span> <span class="ml-2">#governance.lawboard.laws</span></h1>
+				}
+				else
+				{
+					<h1 class="town-name">#governance.lawboard.laws_of_the_land</h1>
+				}
+			<div class="town-divider"></div>
+		</div>
+
+	@if ( laws.Count == 0 )
+	{
+		<div class="w-full flex-grow flex items-center justify-center">
+			<img class="image" src="ui/anarchy.svg" alt="anarchy"/>
+		</div>
+	}
+	else
+	{
+		<div class="flex flex-col gap-2">
+			@{
+				var lawNumber = 1;
+			}
+			@foreach ( var law in laws )
+			{
+				<div class="flex items-center">
+					<span class="text-base">@lawNumber</span>
+					<span class="text-base ml-1 mr-1">-</span>
+					<span class="text-base">@law</span>
+				</div>
+
+				{
+					lawNumber++;
+				}
+			}
+		</div>
+	}
+
+	@if ( taxEnabled )
+	{
+		<div class="footer">
+			<div class="footer-item">
+				<span class="footer-label">#governance.lawboard.tax</span>
+				<span class="footer-value text-cash">@($"{Governance.Current.TaxRate * 100f:0.#}%")</span>
+			</div>
+			<div class="footer-item">
+				<span class="footer-label">#governance.lawboard.treasury</span>
+				<span class="footer-value text-cash">$@(Governance.Current.GovernmentBalance.ToString("N0"))</span>
+			</div>
+		</div>
+	}
+
+</root>
+
+@code
+{
+
+	[Property] public WorldPanel WorldPanel { get; set; } = null!;
+
+	protected override void OnStart()
+	{
+		WorldPanel = GameObject.GetComponentInChildren<WorldPanel>( true );
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !GameObject.Tags.Has( Constants.OccludeTag );
+	}
+
+	public void OnOcclusionChanged( bool occlude )
+	{
+		if ( WorldPanel.IsValid() )
+			WorldPanel.Enabled = !occlude;
+	}
+
+	/// <summary>
+	///     the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+	/// </summary>
+	protected override int BuildHash()
+	{
+		if ( !WorldPanel.IsValid() || !WorldPanel.Enabled || Governance.Current is null ) return 0;
+
+		return HashCode.Combine(
+			Governance.Current.GetAllLaws().Count(),
+			Governance.Current.TownName,
+			Governance.Current.TaxRate,
+			Governance.Current.GovernmentBalance,
+			Time.Now.FloorToInt() / 5
+		);
+	}
+}

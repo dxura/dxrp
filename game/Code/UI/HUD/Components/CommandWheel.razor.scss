@@ -1,0 +1,294 @@
+@import "../../styles.scss";
+
+CommandWheel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2500;
+  pointer-events: none;
+
+  &.editing {
+    pointer-events: all;
+
+    .command-slot {
+      pointer-events: all;
+    }
+
+    .editor,
+    .editor * {
+      pointer-events: all;
+    }
+  }
+
+  .scrim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(black, 0.35);
+    pointer-events: none;
+  }
+
+  .wheel {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 520px;
+    height: 520px;
+    transform: translate(-50%, -50%);
+  }
+
+  .center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    transform: translate(-50%, -50%);
+    border-radius: 75px;
+    background-color: rgba($color-primary, 0.96);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 12px 32px rgba(black, 0.45);
+
+    i {
+      font-size: 34px;
+      color: $color-accent;
+    }
+
+    label {
+      max-width: 130px;
+      font-size: 14px;
+      font-weight: bold;
+      color: $color-white;
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .hint-icon {
+      font-size: 28px;
+      color: rgba($color-white, 0.6);
+    }
+
+    .hint-label {
+      font-size: 11px;
+      font-weight: normal;
+      color: rgba($color-white, 0.6);
+      max-width: 120px;
+      white-space: normal;
+      text-align: center;
+    }
+  }
+
+  .command-slot {
+    position: absolute;
+    width: 112px;
+    min-height: 82px;
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    background-color: rgba($color-primary, 0.88);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    opacity: 0.72;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.92;
+      background-color: rgba($color-primary, 0.98);
+    }
+
+    i {
+      font-size: 28px;
+      color: $color-white;
+    }
+
+    label {
+      max-width: 92px;
+      font-size: 12px;
+      color: $color-white;
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    &.selected {
+      background-color: rgba($color-accent, 0.96);
+      opacity: 1;
+
+      i,
+      label {
+        color: $color-white;
+      }
+    }
+  }
+
+  .editor-panel {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 280px);
+    transform: translateY(-50%);
+    width: 260px;
+    flex-direction: column;
+    z-index: 30;
+    pointer-events: all;
+  }
+
+  .editor {
+    width: 100%;
+    background-color: rgba($color-primary, 0.98);
+    border-radius: 8px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    box-shadow: 0 16px 40px rgba(black, 0.55);
+  }
+
+  .editor-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .editor-header-info {
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+
+      i {
+        font-size: 16px;
+        color: $color-accent;
+      }
+
+      label {
+        font-size: 13px;
+        font-weight: bold;
+        color: $color-white;
+      }
+    }
+  }
+
+  .action-clear {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background-color: rgba(white, 0.06);
+    color: $color-gray-400;
+    font-size: 11px;
+    font-weight: bold;
+    pointer-events: all;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba($color-bad, 0.4);
+      color: $color-white;
+    }
+  }
+
+  .editor-preview {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba($color-accent, 0.1);
+    border-radius: 6px;
+    padding: 8px 10px;
+
+    i {
+      font-size: 22px;
+      color: $color-accent;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: bold;
+      color: $color-white;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  .editor-divider {
+    width: 100%;
+    height: 1px;
+    background-color: rgba(white, 0.06);
+  }
+
+  .editor-field {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: $color-gray-400;
+    text-transform: uppercase;
+  }
+
+  .field-hint {
+    font-size: 11px;
+    color: rgba($color-gray-400, 0.6);
+  }
+
+  .command-input {
+    width: 100%;
+    height: 32px;
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+
+  .panel-close-button {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 6px;
+    margin-top: 8px;
+    background-color: rgba($color-primary, 0.98);
+    color: $color-gray-400;
+    font-size: 12px;
+    font-weight: bold;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    pointer-events: all;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(black, 0.3);
+
+    i {
+      font-size: 14px;
+    }
+
+    &:hover {
+      color: $color-white;
+      background-color: rgba($color-primary, 0.85);
+    }
+  }
+
+  .done-button {
+    position: absolute;
+    top: calc(50% + 290px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 28px;
+    border-radius: 6px;
+    background-color: rgba($color-accent, 0.22);
+    color: $color-white;
+    font-size: 13px;
+    font-weight: bold;
+    pointer-events: all;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba($color-accent, 0.55);
+    }
+  }
+}

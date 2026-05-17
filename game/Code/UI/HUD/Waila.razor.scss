@@ -1,0 +1,23 @@
+@import "../styles.scss";
+
+Waila {
+  position: absolute;
+  top: 20%;
+  left: 1%;
+}
+
+.health-bar-bg {
+  position: relative;
+  width: 60px;
+  height: 8px;
+  background-color: $color-bad;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.health-bar {
+  height: 100%;
+  background-color: $color-good;
+  border-radius: 2px;
+}
+

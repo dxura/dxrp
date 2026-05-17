@@ -1,0 +1,162 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.Services
+@inherits Panel
+
+<root>
+	<div class="market">
+		<div class="section-header market-toolbar">
+			<h1>@Language.GetPhrase( "tabmenu.market" )</h1>
+			<button class="lock-toggle @( _showLocked ? "active" : "" )"
+			        onclick="@( () => { _showLocked = !_showLocked; Sound.Play( "pop" ); } )">
+				<i class="material-icons">@( _showLocked ? "visibility" : "visibility_off" )</i>
+				<span>@Language.GetPhrase( _showLocked ? "tabmenu.market.hide_locked" : "tabmenu.market.show_locked" )</span>
+			</button>
+		</div>
+
+		<div class="market-scroll">
+			@{
+				var allItems = GameModeMarketItems.All
+					.Select( item => (Item: item, Permitted: IsPermitted( item )) )
+					.Where( x => _showLocked || x.Permitted )
+					.GroupBy( x => { var g = GameModeMarketItems.Grouping( x.Item ); return string.IsNullOrEmpty( g ) ? "other" : g; } )
+					.OrderBy( g => g.Key );
+			}
+
+			@foreach ( var group in allItems )
+			{
+				<div class="category">
+					<div class="category-bar">
+						<span class="category-name">@GetCategoryText( group.Key )</span>
+						<span class="category-count">@group.Count()</span>
+					</div>
+
+					<div class="card-rail">
+						@foreach ( var (item, isPermitted) in group )
+						{
+							<div class="entity-card @( isPermitted ? "" : "is-locked" )"
+							     @onclick=@( () => HandleClick( item, isPermitted ) )
+							     tooltip="@( !string.IsNullOrEmpty( GameModeMarketItems.DisplayDescription( item ) ) ? GameModeMarketItems.DisplayDescription( item ) : null )">
+								<div class="card-chip" style="background-color: @GetItemColor( item ).Hex"></div>
+								<div class="card-inner">
+									@if ( !isPermitted )
+									{
+										<div class="card-lock">
+											<i class="material-icons">lock</i>
+										</div>
+									}
+									<div class="card-top">
+										<span class="card-name">@GameModeMarketItems.DisplayName( item )</span>
+										<span class="card-limit">@GetLimitText( item )</span>
+									</div>
+									<div class="card-bottom">
+										<span class="card-price">$@GetPriceText( item)</span>
+									</div>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			}
+
+			@if ( !allItems.Any() )
+			{
+				<div class="market-empty">
+					<i class="material-icons">storefront</i>
+					<span>@Language.GetPhrase( "tabmenu.market.empty" )</span>
+				</div>
+			}
+		</div>
+	</div>
+</root>
+
+@code
+{
+	private bool _showLocked;
+
+	protected override int BuildHash()
+	{
+		var ownedWorldCount = Player.Local.IsValid()
+			? Scene.GetAllComponents<BaseEntity>().Count( entity => entity.IsValid() &&
+				entity.GameModeEntityId != Guid.Empty &&
+				entity.Owner == Player.Local.SteamId )
+			: 0;
+		var ownedEquipmentCount = Player.Local.IsValid()
+			? Player.Local.Equipment.Count( equipment => equipment.IsValid() && equipment.Enabled && equipment.MarketItemId != Guid.Empty )
+			: 0;
+		return HashCode.Combine( Player.Local.Job, _showLocked, ownedWorldCount, ownedEquipmentCount );
+	}
+
+	private static string GetCategoryText( string? category )
+	{
+		if ( string.IsNullOrWhiteSpace( category ) ) return string.Empty;
+		if ( category.StartsWith( '#' ) ) return Language.GetPhrase( category[1..] );
+		return Language.GetPhrase( $"entity.category.{category.ToLowerInvariant()}" );
+	}
+
+	private bool IsPermitted( GameModeMarketItemDto item )
+	{
+		if ( !Player.Local.IsValid() )
+		{
+			return false;
+		}
+
+		return GameModeMarketItems.CanPurchase( Player.Local, item );
+	}
+
+	private string GetLimitText( GameModeMarketItemDto item )
+	{
+		if ( !Player.Local.IsValid() || item.Limit <= 0 )
+		{
+			return "Unlimited";
+		}
+
+		var owned = GameModeMarketItems.GetOwnedCount( Player.Local, item );
+		return $"{owned}/{item.Limit}";
+	}
+
+	private string GetPriceText( GameModeMarketItemDto item )
+	{
+		var price = Math.Max( 0, (int)MathF.Ceiling( item.Cost * GameManager.Instance.EntityPriceMultiplier ) );
+		return price.ToString( "N0" );
+	}
+
+	private static Color GetItemColor( GameModeMarketItemDto item )
+	{
+		return item.Color.ToColor();
+	}
+
+	private void HandleClick( GameModeMarketItemDto item, bool isPermitted )
+	{
+		if ( !isPermitted )
+		{
+			Notify.Error( "#generic.forbidden" );
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
+		switch ( GameModeMarketItems.Grouping( item ) )
+		{
+			case "printer":
+				Achievements.Unlock( "illegal_print" );
+				break;
+			case "shipment":
+				Achievements.Unlock( "self_supply" );
+				break;
+		}
+
+		var basePrice = (uint)Math.Max( 0, (int)MathF.Ceiling( item.Cost * GameManager.Instance.EntityPriceMultiplier ) );
+		if ( Config.Current.Game.MoneyEnabled && Player.Local.WalletBalance + Player.Local.BankBalance < basePrice )
+		{
+			Notify.Error( "#notify.cash.poor" );
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+		if ( Cooldown.Current.CheckAndStartCooldown( Constants.EntityTag, Config.Current.Game.EntityCooldown, true ) )
+		{
+			return;
+		}
+
+		GameManager.Instance.PurchaseMarketItemHost( item.Id );
+		TabMenu.RequestCloseMenu();
+	}
+}

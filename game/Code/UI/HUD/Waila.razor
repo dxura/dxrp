@@ -1,0 +1,140 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+<root>
+	@if ( _displayName != null || _owner != null || _healthPercentage != null || _fadingDoor || _noCollide )
+	{
+		<div class="bg-primary-75 rounded p-2 flex flex-col items-center gap-1">
+			@if ( _displayName != null )
+			{
+				<span class="text-accent text-base text-bold">@_displayName</span>
+			}
+			
+			@if ( _owner != null )
+			{
+				if ( _hasConstructPermission.HasValue )
+				{
+					<span class="text-base text-bold @( _hasConstructPermission.Value ? "text-good" : "text-bad")">@_owner</span>
+				}
+				else
+				{
+					<span class="text-xs text-bold text-gray-400">@_owner</span>
+				}
+			}
+			
+			@if ( _healthPercentage != null )
+			{
+				<div class="health-bar-bg">
+					<div class="health-bar" style="width: @_healthPercentage%"></div>
+				</div>
+			}
+			
+			@if ( _fadingDoor )
+			{
+				<span class="text-warning text-xs font-mono text-bold">#waila.fading</span>
+			}
+			
+			@if ( _noCollide )
+			{
+				<span class="text-gray-400 text-xs font-mono text-bold">#waila.no_collide</span>
+			}			
+			
+			@if ( _playerClip && !_noCollide )
+			{
+				<span class="text-gray-200 text-xs font-mono text-bold">#waila.ghosted</span>
+			}
+		</div>
+	}
+</root>
+
+@code
+{
+	string? _displayName;
+	string? _owner;
+	float? _healthPercentage;
+	bool? _hasConstructPermission;
+	bool _fadingDoor;
+	bool _noCollide;
+	bool _playerClip;
+
+	TimeSince _lastUpdate = 0;
+
+	public override void Tick()
+	{
+		if ( _lastUpdate < 0.2 )
+		{
+			return;
+		}
+
+		_lastUpdate = 0;
+
+		if ( !Player.Local.IsValid() ) return;
+
+		var eyeTrace = Player.Local.CachedEyeTrace;
+		if ( !eyeTrace.Hit || !eyeTrace.GameObject.IsValid() || eyeTrace.GameObject.Tags.Contains( Constants.PlayerTag ) )
+		{
+			_owner = null;
+			_healthPercentage = null;
+			_displayName = null;
+			_fadingDoor = false;
+			_noCollide = false;
+			_playerClip = false;
+			_hasConstructPermission = null;
+			return;
+		}
+
+		var root = eyeTrace.GameObject.Root;
+		
+		var isConstruct = root.Tags.Has( Constants.ConstructTag );
+		
+		var description = root.GetComponent<IDescription>();
+		_displayName = description?.DisplayName;
+		
+		var owned = root.GetComponent<IOwned>();
+		if ( owned != null && owned.Owner != 0 )
+		{
+			var player = GameUtils.GetPlayerById( owned.Owner );
+			_owner = player?.DisplayName ?? owned.Owner.ToString();
+
+			if ( isConstruct )
+			{
+				_hasConstructPermission = FriendSystem.Instance.IsValid() &&
+					FriendSystem.Instance.HasConstructPermission( owned.Owner, Player.Local.SteamId );
+			}
+			else
+			{
+				_hasConstructPermission = null;
+			}
+		}
+		else
+		{
+			_owner = null;
+		}
+
+		var health = root.GetComponent<HealthComponent>();
+		if ( health.IsValid() )
+		{
+			_healthPercentage = health.Health / health.MaxHealth * 100;
+		}
+		else
+		{
+			_healthPercentage = null;
+		}
+
+		_fadingDoor = false;
+		if ( root.Tags.Has( Constants.ConstructTag ) )
+		{
+			var prop = root.GetComponent<Prop>();
+			_fadingDoor = prop.IsValid() && prop.FadingDoor;
+		}
+		
+		_noCollide = root.Tags.Has( Constants.NoCollideTag );
+		_playerClip = root.Tags.Has( Constants.PlayerClip );
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( _owner, _hasConstructPermission, _healthPercentage, _displayName, _fadingDoor, _noCollide, _playerClip );
+	}
+}

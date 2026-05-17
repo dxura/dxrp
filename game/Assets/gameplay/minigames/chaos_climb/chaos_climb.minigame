@@ -1,0 +1,28 @@
+{
+  "Identifier": "chaos_climb",
+  "MainPrefab": {
+    "_type": "gameobject",
+    "prefab": "gameplay/minigames/chaos_climb/chaos_climb.prefab"
+  },
+  "SecondaryPrefabs": [],
+  "Name": "#minigame.chaosclimb.name",
+  "Description": "#minigame.chaosclimb.description",
+  "Icon": null,
+  "Color": null,
+  "LobbyOffset": "1000,0,4000",
+  "MaxPlayers": 32,
+  "MinPlayers": 2,
+  "IsSelectable": false,
+  "Weight": 50,
+  "Duration": 300,
+  "LobbyDuration": 15,
+  "StartingEquipment": [],
+  "GiveMaxAmmo": true,
+  "SpawnRuleset": "Respawn",
+  "RespawnDuration": 3,
+  "SpawnMethod": "RoundRobin",
+  "MakeDeadPlayersSpectators": true,
+  "WinCondition": "None",
+  "__references": [],
+  "__version": 0
+}

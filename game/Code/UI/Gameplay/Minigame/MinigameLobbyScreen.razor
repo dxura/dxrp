@@ -1,0 +1,104 @@
+@using Dxura.RP.Game.Minigame
+@using Dxura.RP.Game.Minigame.Minigames
+@inherits PanelComponent
+@namespace Dxura.RP.Game
+
+@if(!MinigameResource.IsValid()) return;
+
+<root>
+	<div class="flex flex-col items-center justify-center gap-4 w-full">
+		<div class="flex flex-col items-center gap-1">
+			<p class="text-xs uppercase text-gray-400 text-bold">#minigame.title</p>
+			<h1 class="text-4xl text-accent text-bold ">@GetText( MinigameResource.Name )</h1>
+			<p class="text-base text-center">@GetText( MinigameResource.Description )</p>
+		</div>
+
+		<div class="bg-secondary w-full flex justify-center p-4">
+			@switch (CurrentState)
+			{
+				case MinigameState.Seeding:
+					var seedingRemaining = Math.Max(0, 30f - _stateTimer);
+					<div class="flex flex-col items-center gap-1">
+						<p class="text-xs text-gray-400 -mb-2 uppercase">#minigame.accepting</p>
+						<h2 class="text-xl text-white text-bold">@Math.Ceiling(seedingRemaining)s</h2>
+					</div>
+					break;
+					
+				case MinigameState.Creating:
+					<div class="flex flex-col items-center gap-2">
+						<div class="flex flex-col items-center gap-1">
+							<p class="text-xs text-gray-400 -mb-2 uppercase">#minigame.creating</p>
+						</div>
+					</div>
+					break;
+
+				case MinigameState.PreLobby:
+					var lobbyRemaining = Math.Max(0, MinigameResource.LobbyDuration - _stateTimer);
+					<div class="flex flex-col items-center gap-1">
+						<p class="text-xs text-gray-400 -mb-2 uppercase">#minigame.starting_in</p>
+						<h2 class="text-xl text-white text-bold">@Math.Ceiling(lobbyRemaining)s</h2>
+					</div>
+					break;
+
+				case MinigameState.Playing:
+					var playingRemaining = Math.Max(0, MinigameResource.Duration - _stateTimer);
+					<div class="flex flex-col items-center gap-1">
+						<p class="text-xs text-gray-400 -mb-2 uppercase">#minigame.time_remaining</p>
+						<h2 class="text-xl text-white text-bold">@Math.Ceiling(playingRemaining)s</h2>
+					</div>
+					break;
+
+				case MinigameState.PostLobby:
+					<div class="flex flex-col items-center gap-2">
+						<div class="flex flex-col items-center gap-1">
+							<p class="text-xs text-gray-400 -mb-2 uppercase">#minigame.winners</p>
+							<h2 class="text-xl text-white text-bold">@Winners</h2>
+						</div>
+					</div>
+					break;
+
+				case MinigameState.Finished:
+					<div class="flex flex-col items-center gap-1">
+						<p class="text-xs text-gray-400 -mb-2 uppercase">#minigame.game_over</p>
+						<h2 class="text-xl text-white text-bold">#minigame.finished</h2>
+					</div>
+					break;
+			}
+		</div>
+		
+		@if (CurrentState == MinigameState.PostLobby)
+		{
+			var postLobbyRemaining = Math.Max(0, MinigameResource.LobbyDuration - _stateTimer);
+			<p class="text-xs text-gray-400">@string.Format( Language.GetPhrase( "minigame.lobby_closing" ), Math.Ceiling( postLobbyRemaining ) )</p>
+		}
+	</div>
+</root>
+
+@code
+{
+	MinigameResource? MinigameResource => MinigameSystem.Instance.IsValid() ? MinigameSystem.Instance.CurrentMinigame : null;
+	MinigameState CurrentState => MinigameSystem.Instance.IsValid() ? MinigameSystem.Instance.CurrentState : MinigameState.Idle;
+	
+	string Winners => MinigameSystem.Instance.IsValid() ? MinigameSystem.Instance.GetWinnerPlayerNames() : "";
+
+	RealTimeSince _stateTimer = 0f;
+	MinigameState _lastState = MinigameState.Idle;
+
+	private static string GetText( string? text )
+	{
+		if ( string.IsNullOrWhiteSpace( text ) ) return string.Empty;
+		return text.StartsWith( '#' ) ? Language.GetPhrase( text[1..] ) : text;
+	}
+
+	protected override void OnUpdate()
+	{
+		// Reset timer when state changes
+		if (CurrentState != _lastState)
+		{
+			_stateTimer = 0f;
+			_lastState = CurrentState;
+		}
+	}
+
+	protected override int BuildHash() => HashCode.Combine( Time.Now );
+}

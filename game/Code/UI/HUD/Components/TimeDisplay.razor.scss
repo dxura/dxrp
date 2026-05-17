@@ -1,0 +1,14 @@
+@import "../../styles.scss";
+
+TimeDisplay {
+  position: absolute;
+  bottom: 0.75%;
+  right: 1%;
+  
+	.time-value {
+      font-size: $text-base;
+      color: rgba(246, 249, 255, 0.5);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+	}
+}

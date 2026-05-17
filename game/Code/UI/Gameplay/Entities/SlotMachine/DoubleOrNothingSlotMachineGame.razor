@@ -1,0 +1,79 @@
+@namespace Dxura.RP.Game.UI
+@inherits BaseSlotMachineGame
+
+<root>
+	<SlotMachineTemplate Game="@this">
+		<GameContent>
+			<div class="game-header flex flex-col items-center gap-2">
+				<h1 class="text-5xl text-white text-bold glow-accent text-center">#slotmachine.double_or_nothing</h1>
+				<div class="bet-display px-5 py-2 rounded-lg backdrop-blur flex items-center">
+					<span class="text-base text-gray-400">#slotmachine.bet_amount</span>
+					<span class="text-xl text-cash text-bold ml-2">@( BetAmount.ToString( "C0" ) )</span>
+				</div>
+			</div>
+
+			@if ( CurrentState == GameState.Idle )
+			{
+				<button onclick=@OnPlayClicked class="play-prompt bg-gradient-blue px-6 py-3 rounded-lg mt-6">
+					<span class="text-xl text-white text-bold">#slotmachine.press_play</span>
+				</button>
+			}
+			else if ( CurrentState == GameState.Revealing )
+			{
+				<div class="spinning-display flex flex-col items-center gap-2">
+					<div class="spinner-container">
+						<div class="spinner"></div>
+					</div>
+					<h2 class="text-2xl text-white text-bold">#slotmachine.processing</h2>
+				</div>
+			}
+			else if ( CurrentState == GameState.Result )
+			{
+				@if ( IsWin )
+				{
+					<div class="result-display win flex flex-col items-center gap-3 mt-6">
+						<div class="winnings-display bg-good px-6 py-3 rounded-lg">
+							<span class="text-5xl text-white text-bold">@( CurrentWinnings.ToString( "C0" ) )</span>
+						</div>
+						<div class="multiplier-display px-5 py-2 rounded-lg">
+							<span class="text-lg text-accent text-bold">@string.Format( Language.GetPhrase( "slotmachine.multiplier" ), CurrentMultiplier )</span>
+						</div>
+
+						@if ( IsLocalPlayerPlaying )
+						{
+							<div class="action-buttons flex gap-4 mt-4 flex flex-col">
+								<button onclick=@OnContinueClicked class="continue-btn bg-good px-2 py-2 rounded-lg flex flex-col items-center">
+									<span class="text-xl text-white text-bold">#slotmachine.double_it</span>
+									<span class="text-sm text-white block mt-1">@string.Format( Language.GetPhrase( "slotmachine.risk" ), CurrentMultiplier + 1 )</span>
+								</button>
+								<button onclick=@OnCashOutClicked class="cash-out-btn bg-cash px-2 py-2 rounded-lg flex flex-col items-center">
+									<span class="text-xl text-white text-bold">#slotmachine.cash_out</span>
+									<span class="text-sm text-white block mt-1">@string.Format( Language.GetPhrase( "slotmachine.take" ), CurrentWinnings.ToString( "C0" ) )</span>
+								</button>
+							</div>
+						}
+						else
+						{
+							<div class="spectator-info mt-4">
+								<span class="text-lg text-gray-400">@string.Format( Language.GetPhrase( "slotmachine.deciding" ), CurrentPlayer?.DisplayName ?? Language.GetPhrase( "tabmenu.players.player" ) )</span>
+							</div>
+						}
+					</div>
+				}
+				else
+				{
+					<div class="result-display lose flex flex-col items-center gap-3 mt-6">
+						<div class="lost-display bg-bad px-6 py-3 rounded-lg">
+							<span class="text-3xl text-white text-bold">@string.Format( Language.GetPhrase( "slotmachine.lost" ), LostAmount.ToString( "C0" ) )</span>
+						</div>
+						<span class="text-base text-gray-400">#slotmachine.better_luck</span>
+						<button onclick=@OnPlayAgainClicked
+						        class="play-again-btn bg-gradient-blue px-6 py-3 rounded-lg mt-4">
+							<span class="text-xl text-white text-bold">#slotmachine.play_again</span>
+						</button>
+					</div>
+				}
+			}
+		</GameContent>
+	</SlotMachineTemplate>
+</root>

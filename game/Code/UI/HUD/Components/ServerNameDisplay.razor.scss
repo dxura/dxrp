@@ -1,0 +1,18 @@
+@import "../../styles.scss";
+
+ServerNameDisplay {
+  position: absolute;
+  top: 0.50%;
+  right: 1%;
+  max-width: 32%;
+
+  .server-name-value {
+    font-size: $text-sm;
+    color: rgba(246, 249, 255, 0.2);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

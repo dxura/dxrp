@@ -1,0 +1,10 @@
+@import "../../../styles.scss";
+
+GovernanceTabMenuSection {
+  padding: $space-3 $space-5;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}

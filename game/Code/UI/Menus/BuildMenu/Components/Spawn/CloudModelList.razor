@@ -1,0 +1,85 @@
+@inherits Panel
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+
+<root class="spawnpage columned">
+	<AssetList @ref="_assetList" Query="@BuildQuery()">
+		@if ( Config.Current.Game.RestrictCloudOrg == null )
+		{
+			<ExtraFilters>
+				<div class="filter-toggle">
+					<label>#buildmenu.filter_dxrp</label>
+					<SwitchControl Value="@ShowDxrpOnly" OnValueChanged="@( ( bool value ) => { ShowDxrpOnly = value; } )"/>
+				</div>
+			</ExtraFilters>
+		}
+	</AssetList>
+</root>
+
+@code
+{
+	AssetList _assetList = null!;
+
+	bool ShowDxrpOnly
+	{
+		get;
+		set
+		{
+			if ( field != value )
+			{
+				field = value;
+				StateHasChanged();
+			}
+		}
+	} = false;
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( firstTime )
+		{
+			_assetList.OnSelected += Spawn;
+		}
+	}
+
+	string BuildQuery()
+	{
+		var baseQuery = "type:model sort:popular";
+
+		// If RestrictCloudOrg is set (e.g., in RP config), always apply it
+		if ( Config.Current.Game.RestrictCloudOrg != null )
+		{
+			return $"org:{Config.Current.Game.RestrictCloudOrg} {baseQuery}";
+		}
+
+		// Otherwise, apply the filter if the toggle is on
+		if ( ShowDxrpOnly )
+		{
+			return $"org:facepunch {baseQuery}";
+		}
+
+		return baseQuery;
+	}
+
+	void Spawn( Package package )
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( Constants.ConstructTag, Config.Current.Game.ConstructCooldown, true ) )
+		{
+			return;
+		}
+
+		var positon = GameUtils.GetSpawnPosition( Player.Local.AimRay, 30 );
+
+		Construct.Current.SpawnConstructPlayer( ConstructType.Prop, new PropData
+		{
+			Model = package.FullIdent,
+		},
+		positon, 
+		Rotation.Identity,
+		false
+		);
+		
+		Sound.Play( "spawn" );
+
+		Blur();
+	}
+}

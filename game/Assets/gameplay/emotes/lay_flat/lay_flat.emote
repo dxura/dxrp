@@ -1,0 +1,8 @@
+{
+  "SequenceName": "emote_lay_flat",
+  "Repeat": true,
+  "Duration": 6.83,
+  "CancelOnMove": true,
+  "__references": [],
+  "__version": 0
+}

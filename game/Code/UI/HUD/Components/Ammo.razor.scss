@@ -1,0 +1,39 @@
+@import "../../styles.scss";
+
+Ammo {
+  .input-hint {
+    width: 24px;
+    height: 24px;
+    opacity: 0.8;
+  }
+
+  .firemode-icon {
+    margin-right: $space-3;
+    opacity: 0.8;
+  }
+
+  .ammo-count {
+    gap: $space-2;
+    font-family: monospace;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .vital, .important {
+    text-align: center;
+    color: $color-white;
+  }
+
+  .vital {
+    color: $color-accent;
+    font-weight: bold;
+  }
+
+  .divider {
+    color: rgba(white, 0.4);
+    font-weight: 300;
+    margin: 0;
+  }
+}

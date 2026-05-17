@@ -1,0 +1,104 @@
+{
+  "RootObject": {
+    "__guid": "c8eab8fc-3a57-491f-b52b-b4ef16c6acce",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "glass",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "map",
+    "Enabled": true,
+    "NetworkMode": 2,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Glass",
+        "__guid": "f8c6e134-a326-4b12-8f7b-78ca0a9504fb",
+        "__enabled": true,
+        "Flags": 0,
+        "Material": "materials/glass/glass_a.vmat",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Points": [
+          "-50,-50",
+          "50,-50",
+          "50,50",
+          "-50,50"
+        ],
+        "ShardLifeTime": 5,
+        "Surface": "surfaces/glass.surface",
+        "TextureAxisU": "1,0,0",
+        "TextureAxisV": "0,-1,0",
+        "TextureOffset": "0,0",
+        "TextureScale": "1,1",
+        "TextureSize": "512,512",
+        "Thickness": 0.8
+      }
+    ],
+    "Children": [],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "CustomBounds": false
+      }
+    },
+    "__variables": [
+      {
+        "Id": "Points",
+        "Title": "Points",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "f8c6e134-a326-4b12-8f7b-78ca0a9504fb",
+            "Property": "Points"
+          }
+        ]
+      },
+      {
+        "Id": "Material",
+        "Title": "Material",
+        "Description": null,
+        "Group": null,
+        "Order": 0,
+        "Targets": [
+          {
+            "Id": "f8c6e134-a326-4b12-8f7b-78ca0a9504fb",
+            "Property": "Material"
+          }
+        ]
+      }
+    ]
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [
+    "facepunch.glass_a#111263"
+  ],
+  "__version": 2
+}

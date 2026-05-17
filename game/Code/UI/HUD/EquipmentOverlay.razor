@@ -1,0 +1,37 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+
+<root
+	style="position: absolute; bottom: 12rem; left: 50%; transform: translateX(-50%);"
+	class="p-2 px-4 bg-black-50 flex items-center justify-center flex-col gap-2 rounded @BuildClass()">
+	<label class="emphasis text-bold text-base">@Status</label>
+	@if ( Progress.HasValue )
+	{
+		<ProgressBar Value="@( Progress.Value * 100 )" width="100"/>
+	}
+</root>
+
+@code
+{
+	public static EquipmentOverlay Instance { get; set; } = null!;
+
+	public string Status { get; set; } = "";
+	public float? Progress = 0.5f;
+
+	public bool IsActive { get; set; }
+
+	public EquipmentOverlay()
+	{
+		Instance = this;
+	}
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine( Status, Progress, IsActive );
+	}
+
+	private string BuildClass()
+	{
+		return IsActive ? "visible" : "hidden";
+	}
+}

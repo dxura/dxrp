@@ -1,0 +1,307 @@
+@using Sandbox.UI
+@using Dxura.RP.Shared
+@inherits Panel
+@namespace Dxura.RP.Game.UI
+@attribute [StyleSheet]
+
+<root>
+	@if ( !Player.Local.IsValid() ) return;
+	
+	<div class="w-full h-full bg-primary rounded flex flex-col gap-0">
+		<div class="section-group">
+			<div class="section-group-title">#utilities.sharing</div>
+			<div class="p-3">
+				@if ( GetCurrentFriends().Any() )
+				{
+					<div class="flex flex-col gap-1 w-full">
+						@foreach ( var friend in GetCurrentFriends() )
+						{
+							<div class="flex items-center justify-between bg-primary-90 rounded p-2 gap-2">
+								<div class="flex items-center gap-2">
+									<img style="width: 16px; height: 16px; border-radius: 50%;" src="avatar:@friend.SteamId" alt="@friend.DisplayName's avatar"/>
+									<span class="text-sm">@friend.DisplayName</span>
+								</div>
+								<div class="flex gap-1">
+									(
+									@if ( HasConstructPermission( friend.SteamId ) )
+									{
+										<i class="material-icons text-good text-sm">construction</i>
+									}
+									@if ( HasDoorPermission( friend.SteamId ) )
+									{
+										<i class="material-icons text-good text-sm">key</i>
+									}
+									)
+								</div>
+							</div>
+						}
+					</div>
+				}
+				else
+				{
+					<span class="text-sm text-gray-400">#utilities.grant_access</span>
+				}
+			</div>
+		</div>
+
+		@if ( Construct.Current == null ) return;
+
+		<div class="section-group">
+			<div class="section-group-title">#utilities.constructs</div>
+			<div class="flex flex-col gap-2 p-3">
+				<div class="flex gap-2 w-full items-center">
+					<DropDown class="cleanup-dropdown" @ref="_cleanupDropdown"
+						Options=@GetCleanupOptions()
+						Value="@_selectedCleanupType" />
+
+					<button class="btn btn-warn" @onclick="@( () => ClearSelectedConstructs() )">
+						<span>#utilities.clear</span>
+					</button>
+
+					<button tooltip="#utilities.refresh" @onClick="@( () => UpdateLimits( true, true ) )" class="text-sm text-gray-400 cursor-pointer">
+						<i class="material-icons text-sm cursor-pointer">refresh</i>
+					</button>
+				</div>
+
+				<div class="flex">
+					<button class="btn btn-bad" @onclick="@( () => ClearConstructs( null ) )">
+						<span>#utilities.clear_all</span>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		@if ( RankSystem.HasLocalPermission( Permission.Permanent ) )
+		{
+			<div class="section-group">
+				<div class="section-group-title">#utilities.permanent</div>
+				<div class="flex flex-col gap-2 p-3">
+					@{ var permanentBreakdown = GetPermanentBreakdown(); }
+					@if ( permanentBreakdown.Count > 0 )
+					{
+						<div class="flex flex-col gap-1 w-full text-sm">
+							@foreach ( var (label, count) in permanentBreakdown )
+							{
+								<div class="flex justify-between">
+									<span>@label</span>
+									<span class="text-accent">@count</span>
+								</div>
+							}
+						</div>
+					}
+					else
+					{
+						<p class="text-sm text-gray-400 text-center">#utilities.no_permanent</p>
+					}
+
+					<div class="flex">
+						<button class="btn btn-bad" @onclick="@ClearAllPermanent">
+							<span>@(_clearPermanentPrimed ? Language.GetPhrase( "utilities.confirm_clear_all" ) : Language.GetPhrase( "utilities.clear_all_permanent" ))</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+</root>
+
+@code
+{
+	private Dictionary<ConstructType, int> _cachedConstructCounts = new();
+	private int _cachedDoorCount;
+	private string _selectedCleanupType = "";
+	private DropDown _cleanupDropdown;
+
+	private bool _clearPermanentPrimed;
+	private RealTimeSince _clearPermanentPrimedTime;
+
+	private List<Option> GetCleanupOptions()
+	{
+		var options = new List<Option>();
+		var counts = GetPlayerConstructCount();
+		foreach ( ConstructType type in Enum.GetValues( typeof( ConstructType ) ) )
+		{
+			var limit = Construct.Current.GetLimit( type, Player.Local.SteamId );
+			if ( limit == 0 ) continue;
+			var count = counts.GetValueOrDefault( type, 0 );
+			options.Add( new Option( $"{type} ({count}/{limit})", type.ToString() ) );
+		}
+
+		var doorCount = GetCurrentDoorCount();
+		var doorLimit = Config.Current.Game.DoorLimit;
+		options.Add( new Option( string.Format( Language.GetPhrase( "utilities.doors_count" ), doorCount, doorLimit ), "Doors" ) );
+
+		return options;
+	}
+
+	private void ClearSelectedConstructs()
+	{
+		var selected = _cleanupDropdown?.Value?.ToString();
+		if ( string.IsNullOrEmpty( selected ) ) return;
+
+		if ( Enum.TryParse<ConstructType>( selected, out var type ) )
+		{
+			ClearConstructs( type );
+		}
+	}
+
+	private List<(string Label, int Count)> GetPermanentBreakdown()
+	{
+		var breakdown = new List<(string, int)>();
+
+		var constructs = Scene.GetAllComponents<IConstruct>()
+			.Where( x => x.IsValid() && !x.IsPreview && x.Owner == 0 )
+			.GroupBy( x => x.Type )
+			.ToDictionary( g => g.Key, g => g.Count() );
+
+		foreach ( var (type, count) in constructs )
+		{
+			breakdown.Add( (type.ToString(), count) );
+		}
+
+		var entities = Scene.GetAllComponents<BaseEntity>()
+			.Count( x => x.IsValid() && x.Owner == 0 );
+
+		if ( entities > 0 )
+		{
+			breakdown.Add( (Language.GetPhrase( "utilities.entities" ), entities) );
+		}
+
+		return breakdown;
+	}
+
+	private void ClearAllPermanent()
+	{
+		if ( _clearPermanentPrimed && _clearPermanentPrimedTime < 3f )
+		{
+			GameManager.Instance.ClearAllPermanentHost();
+			Notify.Warn( "#utilities.cleared_permanent" );
+			_clearPermanentPrimed = false;
+		}
+		else
+		{
+			_clearPermanentPrimed = true;
+			_clearPermanentPrimedTime = 0;
+			Notify.Info( "#utilities.click_again_confirm" );
+		}
+	}
+
+	protected override void OnAfterTreeRender( bool firstTime )
+	{
+		if ( firstTime )
+		{
+			UpdateLimits( true, false );
+		}
+	}
+
+	private void UpdateLimits(bool count, bool notify)
+	{
+		if(Cooldown.Current.CheckAndStartCooldown( "limits:refresh", Config.Current.Game.ActionCooldown, notify ))
+		{
+			return;
+		}
+		
+		_cachedConstructCounts = GetPlayerConstructCountInternal(count);
+		_cachedDoorCount = GetCurrentDoorCountInternal(count);
+		
+		StateHasChanged();
+
+		if ( notify )
+		{
+			Notify.Success( "#utilities.limits_updated" );
+
+		}
+	}
+	
+	private void ClearConstructs(ConstructType? type)
+	{
+		if ( Cooldown.Current.CheckAndStartCooldown( "clear:constructs", Config.Current.Game.UtilityClearCooldown, true ) )
+		{
+			return;
+		}
+		
+		CleanupSystem.Current.ClearConstructsHost( type );
+		UpdateLimits(false, false);
+	}
+
+	private IEnumerable<Player> GetCurrentFriends()
+	{
+		if ( !FriendSystem.Instance.IsValid() )
+			return Enumerable.Empty<Player>();
+
+		var allPlayers = GameUtils.Players.ToList();
+		var friends = new List<Player>();
+
+		foreach ( var player in allPlayers )
+		{
+			if ( player.IsLocalPlayer )
+				continue;
+
+			if ( HasConstructPermission( player.SteamId ) || HasDoorPermission( player.SteamId ) )
+			{
+				friends.Add( player );
+			}
+		}
+
+		return friends.OrderBy( p => p.DisplayName );	
+	}
+
+	private bool HasConstructPermission( long steamId )
+	{
+		return FriendSystem.Instance.IsValid() && 
+		       FriendSystem.Instance.HasConstructPermission( Player.Local.SteamId, steamId );
+	}
+
+	private bool HasDoorPermission( long steamId )
+	{
+		return FriendSystem.Instance.IsValid() && 
+		       FriendSystem.Instance.HasDoorPermission( Player.Local.SteamId, steamId );
+	}
+	
+	private Dictionary<ConstructType, int> GetPlayerConstructCount()
+	{
+		return _cachedConstructCounts;
+	}
+	
+	private Dictionary<ConstructType, int> GetPlayerConstructCountInternal(bool count)
+	{
+		if ( !Player.Local.IsValid() || !count)
+			return Enum.GetValues(typeof(ConstructType))
+				.Cast<ConstructType>()
+				.ToDictionary(t => t, t => 0);
+
+		var counts = Scene.GetAllComponents<IConstruct>()
+			.Where(x => x.Owner == Player.Local.SteamId && !x.IsPreview)
+			.GroupBy(x => x.Type)
+			.ToDictionary(g => g.Key, g => g.Count());
+	
+		foreach (ConstructType type in Enum.GetValues(typeof(ConstructType)))
+		{
+			counts.TryAdd( type, 0 );
+		}
+	
+		return counts;
+	}
+
+	private int GetCurrentDoorCount()
+	{
+		return _cachedDoorCount;
+	}
+
+	private int GetCurrentDoorCountInternal(bool count)
+	{
+		if ( !Player.Local.IsValid() || !count )
+			return 0;
+
+		return Scene.GetAllComponents<Door>()
+			.Count( x => x.Owner == Player.Local.SteamId );
+	}
+
+	protected override int BuildHash()
+	{
+		if(!FriendSystem.Instance.IsValid() || !Player.Local.IsValid() )
+			return 0;
+		
+		return HashCode.Combine( FriendSystem.Instance.GetPlayerFriendCount( Player.Local.SteamId ));
+	}
+}
