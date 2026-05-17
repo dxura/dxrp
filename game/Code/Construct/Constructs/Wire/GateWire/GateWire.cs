@@ -246,9 +246,9 @@ public class GateWire() : BaseWireConstruct( ConstructType.GateWire ), IWireEven
 
 	private bool IsEqual( object? a, object? b )
 	{
-		if ( a is string strA && b is string strB )
+		if ( a is string || b is string )
 		{
-			return strA.Equals( strB, StringComparison.Ordinal );
+			return (a?.ToString() ?? "").Equals( b?.ToString() ?? "", StringComparison.Ordinal );
 		}
 
 		var numA = ConvertToFloat( a );
