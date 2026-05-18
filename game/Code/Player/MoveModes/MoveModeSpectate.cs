@@ -61,9 +61,16 @@ public class MoveModeSpectate : MoveMode
 		return Vector3.Zero;
 	}
 
+	public override void AddVelocity()
+	{
+		Controller.Body.Velocity = Vector3.Zero;
+	}
+
 	public override void OnModeBegin()
 	{
 		base.OnModeBegin();
+
+		ClearLocalMovement();
 		
 		var player = GameObject.Root.GetComponent<Player>();
 		if ( !player.IsValid() )
@@ -85,6 +92,10 @@ public class MoveModeSpectate : MoveMode
 			Controller.Body.PhysicsBody.BodyType = PhysicsBodyType.Dynamic;
 		}
 
+		Controller.WishVelocity = Vector3.Zero;
+		Controller.GroundVelocity = Vector3.Zero;
+		Controller.Body.Velocity = Vector3.Zero;
+
 		var player = GameObject.Root.GetComponent<Player>();
 		if ( !player.IsValid() )
 			return;
@@ -100,6 +111,7 @@ public class MoveModeSpectate : MoveMode
 	public void StartSpectating( GameObject target )
 	{
 		_isFreeLookToggled = true;
+		ClearLocalMovement();
 		SetSpectateTarget( target );
 		SetSpectateTargetOwner( target );
 
@@ -144,6 +156,13 @@ public class MoveModeSpectate : MoveMode
 		{
 			_isFreeLookToggled = false;
 		}
+	}
+
+	private void ClearLocalMovement()
+	{
+		Controller.WishVelocity = Vector3.Zero;
+		Controller.GroundVelocity = Vector3.Zero;
+		Controller.Body.Velocity = Vector3.Zero;
 	}
 
 	public bool TryGetSpectateTargetPlayer( out Player targetPlayer )

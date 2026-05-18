@@ -134,7 +134,13 @@ public partial class Player
 	{
 		UpdateFreeLook();
 
-		Controller.UseLookControls = !LockCamera;
+		var spectateMode = Controller.Components.Get<MoveModeSpectate>();
+		var isSpectatingOther =
+			spectateMode.IsValid()
+			&& Controller.Mode == spectateMode
+			&& spectateMode.SpectateTarget.IsValid();
+
+		Controller.UseLookControls = !LockCamera && !isSpectatingOther;
 
 		if ( HealthComponent.State == LifeState.Alive && Input.Pressed( "View" ) && CanChangeView )
 		{
