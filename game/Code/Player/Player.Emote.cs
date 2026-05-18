@@ -46,6 +46,7 @@ public partial class Player
 		}
 
 		CurrentEmote = null;
+		SwitchToHandsHost();
 	}
 
 	private void OnEmoteChanged( EmoteResource? oldEmote, EmoteResource? newEmote )
