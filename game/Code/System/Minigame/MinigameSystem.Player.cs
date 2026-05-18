@@ -22,6 +22,7 @@ public partial class MinigameSystem
 			player.SpawnHost( true );
 		}
 
+		player.RemoveStatus( Constants.CloakStatus );
 		player.RemoveStatus( Constants.WeedHighStatus );
 		player.RemoveStatus( Constants.SatiatedStatus );
 		player.HealthComponent.Health = player.HealthComponent.MaxHealth;

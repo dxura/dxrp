@@ -8,6 +8,8 @@ public class CloakStatus : BaseStatus
 	public override Color Color => Color.FromRgb( 0x9E9E9E );
 
 	public override bool RemoveOnDeath => true;
+	public override bool RemoveOnRespawn => true;
+	public override bool RemoveOnJobChange => true;
 
 	public override void OnAddedBroadcast( Player player )
 	{
