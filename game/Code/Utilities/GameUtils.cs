@@ -121,9 +121,9 @@ public static class GameUtils
 			return exactMatches;
 		}
 
-		// Partial match - players whose names start with the target name
+		// Partial match: players whose names contain the target name
 		var partialMatches = allPlayers.Where( p =>
-				p.DisplayName.StartsWith( name, StringComparison.OrdinalIgnoreCase ) )
+				p.DisplayName.Contains( name, StringComparison.OrdinalIgnoreCase ) )
 			.ToList();
 
 		return partialMatches;

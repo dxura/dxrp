@@ -42,14 +42,6 @@ public static class CommandHelper
 
 			if ( matches.Count == 0 )
 			{
-				matches = GameUtils.Players
-					.Where( p => p.IsValid() &&
-					             p.DisplayName.Contains( identifier, StringComparison.OrdinalIgnoreCase ) )
-					.ToList();
-			}
-
-			if ( matches.Count == 0 )
-			{
 				caller.SendMessage( string.Format( Language.GetPhrase( "command.player.not_found" ), identifier ) );
 				return null;
 			}
