@@ -148,6 +148,15 @@ public class FreeLookCameraSystem : GameObjectSystem<FreeLookCameraSystem>
 
 	private Rotation ResolveTrackedFreeLookRotation( Player player, Angles baseAngles )
 	{
+		if ( TryGetSpectateTargetPlayer( player, out _ )
+		     && !IsSpectateFreelookEnabled( player )
+		     && !Input.Down( "FreeLook" ) )
+		{
+			_isTrackedFreeLooking = false;
+			_wasTrackedFreeLookDown = false;
+			return baseAngles.ToRotation();
+		}
+
 		var freeLookDown = Input.Down( "FreeLook" ) || IsSpectateFreelookEnabled( player );
 
 		if ( freeLookDown && !_wasTrackedFreeLookDown )
