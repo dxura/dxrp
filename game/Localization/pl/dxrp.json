@@ -1135,7 +1135,7 @@
   "chat.label.mg_join": "Wpisz /mg aby dołączyć",
   "chat.label.mg_spectate": "Wpisz /mg aby oglądać",
   "chat.label.mg_no_winner": "Brak zwycięzcy",
-  "chat.label.mg_live": "W TRAKCIE — gra trwa",
+  "chat.label.mg_live": "LIVE",
   "chat.label.mg_winner": "Zwycięzca: {0}",
   "chat.label.mg_winners": "Zwycięzcy: {0}",
   "chat.label.mg_wrap_up": "Koniec gry",

@@ -1134,7 +1134,7 @@
   "chat.label.mg_join": "Tapez /mg pour rejoindre",
   "chat.label.mg_spectate": "Tapez /mg pour observer",
   "chat.label.mg_no_winner": "Aucun gagnant",
-  "chat.label.mg_live": "EN DIRECT — partie lancée",
+  "chat.label.mg_live": "EN DIRECT",
   "chat.label.mg_winner": "Gagnant : {0}",
   "chat.label.mg_winners": "Gagnants : {0}",
   "chat.label.mg_wrap_up": "Fin du mini-jeu",

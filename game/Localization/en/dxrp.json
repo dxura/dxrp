@@ -1136,7 +1136,7 @@
   "chat.label.mg_join": "Type /mg to join",
   "chat.label.mg_spectate": "Type /mg to spectate",
   "chat.label.mg_no_winner": "No winner",
-  "chat.label.mg_live": "LIVE — game on",
+  "chat.label.mg_live": "LIVE",
   "chat.label.mg_winner": "Winner : {0}",
   "chat.label.mg_winners": "Winners : {0}",
   "chat.label.mg_wrap_up": "Game over",

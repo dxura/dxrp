@@ -1134,7 +1134,7 @@
   "chat.label.mg_join": "Введите /mg для входа",
   "chat.label.mg_spectate": "Введите /mg чтобы наблюдать",
   "chat.label.mg_no_winner": "Победителей нет",
-  "chat.label.mg_live": "ИДЁТ ИГРА — раунд активен",
+  "chat.label.mg_live": "LIVE",
   "chat.label.mg_winner": "Победитель: {0}",
   "chat.label.mg_winners": "Победители: {0}",
   "chat.label.mg_wrap_up": "Игра окончена",

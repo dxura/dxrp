@@ -1135,7 +1135,7 @@
   "chat.label.mg_join": "/mg 입력하여 참가",
   "chat.label.mg_spectate": "/mg 입력하여 관전",
   "chat.label.mg_no_winner": "우승자 없음",
-  "chat.label.mg_live": "진행 중 — 라이브",
+  "chat.label.mg_live": "라이브",
   "chat.label.mg_winner": "우승자: {0}",
   "chat.label.mg_winners": "우승자들: {0}",
   "chat.label.mg_wrap_up": "게임 종료",
