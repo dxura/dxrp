@@ -4,7 +4,9 @@
 
 <root class="voting flex flex-col">
 	@{
-		if(!VoteSystem.Instance.IsValid()) return;
+		if ( !VoteSystem.Instance.IsValid() ) return;
+
+		CleanDismissedVotes();
 
 		var votes = VoteSystem.Instance.ActiveVotes
 			.Where( vote => !_dismissedVotes.Contains( vote.Key ) )
@@ -90,7 +92,7 @@
 
 @code
 {
-	private readonly HashSet<Guid> _dismissedVotes = [];
+	private static readonly HashSet<Guid> _dismissedVotes = [];
 
 	private void CastVote( Guid voteId, bool inFavor )
 	{
@@ -106,10 +108,17 @@
 	private void DismissVote( Guid voteId )
 	{
 		_dismissedVotes.Add( voteId );
+		StateHasChanged();
 	}
 
-	private void CleanDismissedVotes()
+	private static void CleanDismissedVotes()
 	{
+		if ( !VoteSystem.Instance.IsValid() )
+		{
+			_dismissedVotes.Clear();
+			return;
+		}
+
 		_dismissedVotes.RemoveWhere( voteId => !VoteSystem.Instance.ActiveVotes.ContainsKey( voteId ) );
 	}
 
