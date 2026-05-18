@@ -6,7 +6,7 @@ public partial class Player : IContextualObject, Component.IPressable
 	public Vector3 ContextPosition => WorldPosition + Controller.BodyHeight * 0.60f * Vector3.Up;
 	public bool ShouldShow()
 	{
-		return !IsDead && !IsLocalPlayer && !string.IsNullOrWhiteSpace( Job.Interaction );
+		return !IsDead && !IsLocalPlayer && !HasStatus( Constants.CloakStatus ) && !string.IsNullOrWhiteSpace( Job.Interaction );
 	}
 	public float ContextMaxDistance => Config.Current.Game.PlayerInteractDistance;
 	public bool LookOpacity => false;
