@@ -148,6 +148,7 @@
   "command.ban.duration_permanent": "définitivement",
   "command.ban.duration_temporary": "pendant {0}",
   "command.ban.success": "Banni {0} {1} : {2}",
+  "command.sanction.cannot_target_higher_rank": "Vous ne pouvez pas sanctionner un joueur de rang supérieur au vôtre.",
   "command.clearprops.not_found": "Aucun joueur trouvé pour '{0}'",
   "command.clearprops.multiple": "Plusieurs joueurs trouvés pour '{0}' : {1}",
   "command.clearprops.cleared_for": "Tous les props de {0} ont été supprimés",
