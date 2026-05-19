@@ -148,9 +148,10 @@ static class Launcher
                 Console.WriteLine($"  r{a.RevisionNumber}");
                 Console.ResetColor();
 
-                await DownloadAndExtract(http, a.CodePackageUrl,
-                    Path.Combine(codeBase, a.NetworkIdentifier, a.AddonIdentifier),
-                    "code");
+                if (!string.IsNullOrEmpty(a.CodePackageUrl))
+                    await DownloadAndExtract(http, a.CodePackageUrl,
+                        Path.Combine(codeBase, a.NetworkIdentifier, a.AddonIdentifier),
+                        "code");
 
                 if (!string.IsNullOrEmpty(a.AssetsPackageUrl))
                     await DownloadAndExtract(http, a.AssetsPackageUrl,
@@ -479,6 +480,6 @@ class AddonInfo
     [JsonPropertyName("networkIdentifier")] public string  NetworkIdentifier { get; set; } = "";
     [JsonPropertyName("revisionNumber")]    public int     RevisionNumber    { get; set; }
     [JsonPropertyName("sboxVersion")]       public string? SboxVersion       { get; set; }
-    [JsonPropertyName("codePackageUrl")]    public string  CodePackageUrl    { get; set; } = "";
+    [JsonPropertyName("codePackageUrl")]    public string? CodePackageUrl    { get; set; }
     [JsonPropertyName("assetsPackageUrl")]  public string? AssetsPackageUrl  { get; set; }
 }
