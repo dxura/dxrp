@@ -467,7 +467,7 @@ class Config
     [JsonPropertyName("repoUrl")]     public string RepoUrl        { get; set; } = "https://github.com/dxura/dxrp.git";
     [JsonPropertyName("branch")]      public string Branch         { get; set; } = "main";
     [JsonPropertyName("apiEndpoint")] public string ApiEndpoint    { get; set; } = "https://api.dxrp.net";
-    [JsonPropertyName("verifyAddons")] public bool   VerifyAddons   { get; set; } = true;
+    [JsonPropertyName("verifyAddons")] public bool   VerifyAddons   { get; set; } = false;
     [JsonPropertyName("map")]         public string Map            { get; set; } = "";
     [JsonPropertyName("extraArgs")]   public string ExtraArgs      { get; set; } = "";
 }
