@@ -35,7 +35,7 @@ public class JailCommand : ICommand
 
 		if ( !RankSystem.CanTarget( caller.SteamId, targetPlayer.SteamId ) )
 		{
-			caller.SendMessage( "You cannot sanction a player with a higher rank." );
+			caller.SendMessage( "#command.sanction.cannot_target_higher_rank" );
 			return true;
 		}
 
