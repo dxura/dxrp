@@ -23,7 +23,7 @@ public class CancelDemoteCommand : ICommand
 
 		if ( !RankSystem.CanTarget( caller.SteamId, targetPlayer.SteamId ) )
 		{
-			caller.SendMessage( Language.GetPhrase( "command.canceldemote.rank_blocked" ) );
+			caller.SendMessage( "#command.errors.higher_rank" );
 			return true;
 		}
 

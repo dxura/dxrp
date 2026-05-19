@@ -29,6 +29,7 @@ public class BaseEntity : Component, IDamageEvents, IDescription, IOwned, IGameO
 
 	public GameModeEntityDto? GameModeEntity => GameModeEntities.FindById( GameModeEntityId ) ?? Resource;
 	public GameModeAddonContentDto? Content => GameModeEntity.Content();
+	
 	public bool DestroyOnDisconnect => GameModeEntity?.DestroyOnDisconnect ?? true;
 	public bool DestroyOnJobChange => GameModeEntity?.DestroyOnJobChange ?? true;
 	public bool AllowOwnershipTransfer => GameModeEntity?.AllowOwnershipTransfer ?? false;
@@ -45,15 +46,22 @@ public class BaseEntity : Component, IDamageEvents, IDescription, IOwned, IGameO
 	public virtual string? DisplayName => string.IsNullOrWhiteSpace( Identifier )
 		? GameObject.Name
 		: GameModeEntity.DisplayName();
+	
 	public virtual Color Color => Color.White;
 
 	protected override void OnStart()
 	{
 		base.OnStart();
 
-		if ( Networking.IsHost && GameModeEntity != null )
+		if ( Networking.IsHost )
 		{
-			ApplyGameModeEntityHostSettings( GameModeEntity );
+			var entityToApply = GameModeEntityId != Guid.Empty
+				? GameModeEntities.FindById( GameModeEntityId )
+				: GameModeEntities.FindByIdentifier( Identifier );
+			if ( entityToApply != null )
+			{
+				ApplyGameModeEntityHostSettings( entityToApply );
+			}
 		}
 
 		if ( Rigidbody.IsValid() )
@@ -138,6 +146,7 @@ public class BaseEntity : Component, IDamageEvents, IDescription, IOwned, IGameO
 	{
 		if ( !entity.HealthEnabled )
 		{
+			Log.Info( "HEALH NOT ENABLED" );
 			if ( HealthComponent.IsValid() )
 			{
 				HealthComponent.Destroy();

@@ -43,15 +43,6 @@ public partial class Player
 			Torch.WorldRotation = Scene.Camera.WorldRotation;
 		}
 	}
-
-	[Rpc.Owner( NetFlags.HostOnly | NetFlags.Reliable )]
-	public void ToggleOpenMic()
-	{
-		var isEnabled = Voice.Mode == Sandbox.Voice.ActivateMode.PushToTalk;
-		Voice.Mode = isEnabled ? Sandbox.Voice.ActivateMode.AlwaysOn : Sandbox.Voice.ActivateMode.PushToTalk;
-		
-		Chat.Current.Echo(  isEnabled ? "#command.openmic.enabled" : "#command.openmic.disabled"  );
-	}
 	
 	public Vector3 GetListenerPosition()
 	{

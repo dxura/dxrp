@@ -139,7 +139,7 @@ public class JobCommand : ICommand
 
 		if ( !RankSystem.CanTarget( caller.SteamId, targetPlayer.SteamId ) )
 		{
-			caller.SendMessage( Language.GetPhrase( "command.job.rank_blocked" ) );
+			caller.SendMessage( "#command.errors.higher_rank" );
 			return;
 		}
 

@@ -17,7 +17,7 @@ public class AmmoEntity : BaseEntity, Component.IPressable
 
 	protected override void OnStart()
 	{
-
+		base.OnStart();
 	}
 
 	public bool Press( IPressable.Event e )

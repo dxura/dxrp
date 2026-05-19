@@ -59,7 +59,8 @@ public static class GameModeEquipmentDtoExtensions
 			return string.Empty;
 		}
 
-		return dto.Name();
+		var name = dto.Name();
+		return name.StartsWith( '#' ) ? Language.GetPhrase( name[1..] ) : name;
 	}
 
 	public static string DisplayDescription( this GameModeEquipmentDto? dto )

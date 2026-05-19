@@ -6,7 +6,6 @@
 .vs/*
 .vscode/*
 obj
-**/*.csproj
 bin
 Properties/*
 code/obj/*
@@ -19,7 +18,6 @@ Exports/*
 # Auto-generated asset related files
 .sbox/*
 *.generated.*
-*.*_c
 !*.shader_c
 *.los
 **/*launchSettings.json
@@ -445,7 +443,6 @@ code/Properties/*
 # Auto-generated asset related files
 .sbox/*
 *.generated.*
-*.*_c
 !*.shader_c
 *.los
 *.vpk
@@ -457,14 +454,12 @@ Exports/
 
 game/.sbox/
 
-game/rp.sln
-
 game/Code/.claude/
 
 game/.claude/
 
 .claude/
 
-*.slnx
-
 game/.vscode/
+
+dxrp-server-config.json

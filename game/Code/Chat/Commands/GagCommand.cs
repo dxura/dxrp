@@ -33,6 +33,12 @@ public class GagCommand : ICommand
 		if ( !targetPlayer.IsValid() )
 			return true;
 
+		if ( !RankSystem.CanTarget( caller.SteamId, targetPlayer.SteamId ) )
+		{
+			caller.SendMessage( "#command.errors.higher_rank" );
+			return true;
+		}
+
 		_ = ServerApiClient.SanctionPlayer( targetPlayer.SteamId, new CreateSanctionDto
 		{
 			Reason = reason,

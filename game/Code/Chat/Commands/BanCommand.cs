@@ -37,7 +37,7 @@ public class BanCommand : ICommand
 
 		if ( !RankSystem.CanTarget( caller.SteamId, targetPlayer.SteamId ) )
 		{
-			caller.SendMessage( "You cannot sanction a player with a higher rank." );
+			caller.SendMessage( "#command.errors.higher_rank" );
 			return true;
 		}
 		var durationDisplay = permanent

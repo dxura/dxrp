@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AssemblyName>rp</AssemblyName>
+		<PackageId>rp</PackageId>
+		<LangVersion>14</LangVersion>
+		<NoWarn>1701;1702;1591;</NoWarn>
+		<WarningsAsErrors></WarningsAsErrors>
+		<TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DefineConstants>SANDBOX;ADDON;DEBUG</DefineConstants>
+		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+		<OutputPath>C:/Program Files (x86)/Steam/steamapps/common/sbox/.vs/output/</OutputPath>
+		<DocumentationFile>C:/Program Files (x86)/Steam/steamapps/common/sbox/.vs/output/rp.xml</DocumentationFile>
+		<RootNamespace>Dxura.RP.Game</RootNamespace>
+		<Nullable>enable</Nullable>
+		<DefaultItemExcludes>$(DefaultItemExcludes);**/editor/**;**/unittest/**</DefaultItemExcludes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="Sandbox.Internal.GlobalGameNamespace" Static="true" />
+		<Using Include="Microsoft.AspNetCore.Components" />
+		<Using Include="Microsoft.AspNetCore.Components.Rendering" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Analyzer Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.CodeUpgrader.dll"/> 
+		<Analyzer Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Generator.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.System.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Engine.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Filesystem.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Reflection.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Mounting.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Microsoft.AspNetCore.Components.dll"/> 
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/addons/base/code/Base Library.csproj" />
+	</ItemGroup>
+
+</Project>

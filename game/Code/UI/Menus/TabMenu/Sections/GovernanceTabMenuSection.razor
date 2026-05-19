@@ -57,7 +57,7 @@
 
 				<div class="section-group">
 					<div class="section-group-title">#governance.upgrade.title</div>
-					<div class="flex gap-2 p-3" style="overflow-x: scroll; flex-shrink: 0;">
+					<div class="flex gap-2 p-3" style="overflow-x: scroll; overflow-y: hidden; flex-shrink: 0;">
 						@foreach ( var type in Enum.GetValues<Governance.PdUpgradeType>() )
 						{
 							var isActive = Governance.Current.IsUpgradeActive( type );
