@@ -29,7 +29,7 @@ public class ForceRpNameCommand : ICommand
 
 		if ( !RankSystem.CanTarget( caller.SteamId, targetPlayer.SteamId ) )
 		{
-			caller.SendMessage( Language.GetPhrase( "command.freeze.rank_blocked" ) );
+			caller.SendMessage( "#command.errors.higher_rank" );
 			return true;
 		}
 
