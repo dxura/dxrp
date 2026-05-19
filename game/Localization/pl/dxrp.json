@@ -148,6 +148,7 @@
   "command.ban.duration_permanent": "permanentnie",
   "command.ban.duration_temporary": "na {0}",
   "command.ban.success": "Zbanowano {0} {1}: {2}",
+  "command.sanction.cannot_target_higher_rank": "Nie możesz ukarać gracza o wyższej randze.",
   "command.clearprops.not_found": "Nie znaleziono gracza pasującego do '{0}'",
   "command.clearprops.multiple": "Znaleziono wielu graczy pasujących do '{0}': {1}",
   "command.clearprops.cleared_for": "Usunięto wszystkie obiekty gracza {0}",

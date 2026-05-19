@@ -148,6 +148,7 @@
   "command.ban.duration_permanent": "навсегда",
   "command.ban.duration_temporary": "на {0}",
   "command.ban.success": "Забанен {0} {1}: {2}",
+  "command.sanction.cannot_target_higher_rank": "Вы не можете санкционировать игрока с более высоким рангом.",
   "command.clearprops.not_found": "Игрок '{0}' не найден",
   "command.clearprops.multiple": "Найдено несколько игроков '{0}': {1}",
   "command.clearprops.cleared_for": "Все пропы игрока {0} удалены",

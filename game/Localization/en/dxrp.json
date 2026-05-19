@@ -148,6 +148,7 @@
   "command.ban.duration_permanent": "permanently",
   "command.ban.duration_temporary": "for {0}",
   "command.ban.success": "Banned {0} {1}: {2}",
+  "command.sanction.cannot_target_higher_rank": "You cannot sanction a player with a higher rank.",
   "command.clearprops.not_found": "No player found matching '{0}'",
   "command.clearprops.multiple": "Multiple players found matching '{0}': {1}",
   "command.clearprops.cleared_for": "Cleared all props for {0}",

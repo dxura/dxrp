@@ -148,6 +148,7 @@
   "command.ban.duration_permanent": "영구적으로",
   "command.ban.duration_temporary": "{0} 동안",
   "command.ban.success": "{0}을(를) {1} 동안 밴했습니다: {2}",
+  "command.sanction.cannot_target_higher_rank": "자신보다 높은 등급의 플레이어는 제재할 수 없습니다.",
   "command.clearprops.not_found": "'{0}'와 일치하는 플레이어를 찾을 수 없습니다.",
   "command.clearprops.multiple": "'{0}'와 일치하는 플레이어가 여러 명입니다: {1}",
   "command.clearprops.cleared_for": "{0}의 모든 프롭을 제거했습니다.",
