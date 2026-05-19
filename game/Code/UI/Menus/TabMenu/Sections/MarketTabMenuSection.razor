@@ -36,7 +36,11 @@
 							<div class="entity-card @( isPermitted ? "" : "is-locked" )"
 							     @onclick=@( () => HandleClick( item, isPermitted ) )
 							     tooltip="@( !string.IsNullOrEmpty( GameModeMarketItems.DisplayDescription( item ) ) ? GameModeMarketItems.DisplayDescription( item ) : null )">
-								<div class="card-chip" style="background-color: @GetItemColor( item ).Hex"></div>
+								@{ var chipColor = GetItemColor( item ); }
+								@if ( chipColor != Color.White )
+								{
+									<div class="card-chip" style="background-color: @chipColor.Hex"></div>
+								}
 								<div class="card-inner">
 									@if ( !isPermitted )
 									{
