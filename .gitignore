@@ -6,7 +6,6 @@
 .vs/*
 .vscode/*
 obj
-**/*.csproj
 bin
 Properties/*
 code/obj/*

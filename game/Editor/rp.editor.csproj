@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AssemblyName>rp.editor</AssemblyName>
+		<PackageId>rp.editor</PackageId>
+		<LangVersion>14</LangVersion>
+		<NoWarn>1701;1702;1591;</NoWarn>
+		<WarningsAsErrors></WarningsAsErrors>
+		<TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DefineConstants>SANDBOX;ADDON;DEBUG</DefineConstants>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<OutputPath>C:/Program Files (x86)/Steam/steamapps/common/sbox/.vs/output/</OutputPath>
+		<DocumentationFile>C:/Program Files (x86)/Steam/steamapps/common/sbox/.vs/output/rp.editor.xml</DocumentationFile>
+		<RootNamespace>Dxura.RP.Game</RootNamespace>
+		<Nullable>enable</Nullable>
+		<DefaultItemExcludes>$(DefaultItemExcludes);**/editor/**;**/unittest/**</DefaultItemExcludes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="Sandbox.Internal.GlobalToolsNamespace" Static="true" />
+		<Using Include="Sandbox.Internal.GlobalGameNamespace" Static="true" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Analyzer Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.CodeUpgrader.dll"/> 
+		<Analyzer Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Generator.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.System.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Engine.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Filesystem.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Reflection.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Mounting.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Microsoft.AspNetCore.Components.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.AppSystem.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Tools.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Compiling.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Microsoft.CodeAnalysis.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Microsoft.CodeAnalysis.CSharp.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Sandbox.Bind.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/Facepunch.ActionGraphs.dll"/> 
+		<Reference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/bin/managed/SkiaSharp.dll"/> 
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/editor/ActionGraph/Code/actiongraph.csproj" />
+		<ProjectReference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/editor/DooEditor/Code/dooeditor.csproj" />
+		<ProjectReference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/editor/Hammer/Code/hammer.csproj" />
+		<ProjectReference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/addons/tools/Code/Base Editor Library.csproj" />
+		<ProjectReference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/editor/MovieMaker/Code/moviemaker.csproj" />
+		<ProjectReference Include="../Code/rp.csproj" />
+		<ProjectReference Include="C:/Program Files (x86)/Steam/steamapps/common/sbox/editor/ShaderGraph/Code/shadergraph.csproj" />
+	</ItemGroup>
+
+</Project>
