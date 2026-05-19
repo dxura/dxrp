@@ -461,3 +461,5 @@ game/.claude/
 .claude/
 
 game/.vscode/
+
+dxrp-server-config.json
