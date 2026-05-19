@@ -35,7 +35,7 @@ public class GagCommand : ICommand
 
 		if ( !RankSystem.CanTarget( caller.SteamId, targetPlayer.SteamId ) )
 		{
-			caller.SendMessage( Language.GetPhrase( "command.sanction.cannot_target_higher_rank" ) );
+			caller.SendMessage( "#command.sanction.cannot_target_higher_rank" );
 			return true;
 		}
 
