@@ -146,7 +146,6 @@ public class BaseEntity : Component, IDamageEvents, IDescription, IOwned, IGameO
 	{
 		if ( !entity.HealthEnabled )
 		{
-			Log.Info( "HEALH NOT ENABLED" );
 			if ( HealthComponent.IsValid() )
 			{
 				HealthComponent.Destroy();
