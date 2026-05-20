@@ -5,11 +5,13 @@ namespace Dxura.RP.Game;
 
 public class DroppedEquipment : Component, Component.IPressable
 {
+	[Property]
 	public GameModeEquipmentDto? Resource { get; private set; }
+	
 	public string Identifier { get; private set; } = "";
+	
 	public string PrefabPath { get; private set; } = "";
 	public Guid MarketItemId { get; private set; }
-
 	public Rigidbody Rigidbody { get; private set; } = null!;
 
 	public bool CanPress( IPressable.Event e )
