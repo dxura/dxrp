@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace Dxura.RP.Game.Entities;
 
-public sealed class PrinterEntityConfigDto
+public sealed class PrinterEntityConfig
 {
 	public uint BaseMoneyGeneration { get; init; } = 25;
 	public uint BalanceCapacity { get; init; } = 8000;
 	public float GenerationInterval { get; init; } = 60f;
-	public int Tint { get; init; } = 0xFFFFFF;
+	public string ColorHex{ get; init; } = "0xFFFFFF";
 }
 
 [Title( "Printer" )]
@@ -73,10 +73,11 @@ public sealed class PrinterEntity : BaseEntity, IAreaDamageReceiver, Component.I
 				MathF.Max( 0f, Config.Current.Game.PrinterDestroyAfterDisconnectTime - TimeSinceOwnerDisconnect.Value.Relative ) )
 			: base.DisplayName ?? string.Empty;
 	
-	public override Color Color => GetPrinterTint();
+	public override Color Color => Color.Parse( _printerConfig.ColorHex ) ?? Color.White;
 
 	private static readonly SemaphoreSlim WithdrawSemaphore = new( 1, 1 );
 
+	private PrinterEntityConfig _printerConfig = null!;
 	private bool _occluded;
 	private TimeSince _lastServerTick = 0f;
 
@@ -86,6 +87,8 @@ public sealed class PrinterEntity : BaseEntity, IAreaDamageReceiver, Component.I
 
 		TimeSinceOwnerDisconnect = null;
 		PrinterFan.Flags |= GameObjectFlags.NoInterpolation;
+		
+		_printerConfig = GetConfig(new PrinterEntityConfig());
 
 		UpdateState();
 	}
@@ -145,13 +148,11 @@ public sealed class PrinterEntity : BaseEntity, IAreaDamageReceiver, Component.I
 		}
 
 		// If the timer has passed, add money
-		var printerConfig = GetConfig<PrinterEntityConfigDto>();
-
-		if ( _lastGeneration >= printerConfig.GenerationInterval )
+		if ( _lastGeneration >= _printerConfig.GenerationInterval )
 		{
-			if ( CurrentBalance < printerConfig.BalanceCapacity )
+			if ( CurrentBalance < _printerConfig.BalanceCapacity )
 			{
-				CurrentBalance += printerConfig.BaseMoneyGeneration;
+				CurrentBalance += _printerConfig.BaseMoneyGeneration;
 				PrintSound.Broadcast( WorldPosition );
 			}
 
@@ -175,15 +176,10 @@ public sealed class PrinterEntity : BaseEntity, IAreaDamageReceiver, Component.I
 
 	private void UpdateState()
 	{
-		GameObject.Name = DisplayName ?? GameObject.Name;
-		ModelRenderer.Tint = GetPrinterTint();
+		GameObject.Name = DisplayName;
+		ModelRenderer.Tint = Color.TryParse(_printerConfig.ColorHex, out var color) ? color : Color.White;
 	}
-
-	private Color GetPrinterTint()
-	{
-		return GetConfig<PrinterEntityConfigDto>().Tint.ToColor();
-	}
-
+	
 	public bool Press( IPressable.Event e )
 	{
 		if ( CurrentBalance <= 0 )
