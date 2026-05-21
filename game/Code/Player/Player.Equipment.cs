@@ -1,3 +1,4 @@
+using Dxura.RP.Game.Equipments;
 using Dxura.RP.Shared;
 using Sandbox.Diagnostics;
 
@@ -480,6 +481,30 @@ public partial class Player
 	}
 
 	/// <summary>
+	///     Switches to bare hands when the player has them and switching is allowed (e.g. after holstering for an emote).
+	/// </summary>
+	public void SwitchToHandsHost()
+	{
+		Assert.True( Networking.IsHost );
+
+		var hands = ResolveHandsEquipment();
+		if ( !hands.IsValid() || CantSwitch )
+		{
+			return;
+		}
+
+		Switch( hands );
+
+		// Holster/emote flow can deploy the same frame the camera leaves third person; rebuild the FP viewmodel once.
+		if ( !IsLocalPlayer || !Controller.IsValid() || Controller.ThirdPerson || !CurrentEquipment.IsValid() )
+		{
+			return;
+		}
+
+		CurrentEquipment.CreateViewModel( false );
+	}
+
+	/// <summary>
 	///     Removes the given weapon and destroys it.
 	/// </summary>
 	public void RemoveEquipment( Equipment equipment )
@@ -595,6 +620,18 @@ public partial class Player
 	public Equipment? FindEquipment( GameModeEquipmentDto resource )
 	{
 		return Equipment.FirstOrDefault( weapon => weapon.Enabled && string.Equals( weapon.Identifier, resource.Identifier(), StringComparison.OrdinalIgnoreCase ) );
+	}
+
+	/// <summary>
+	///     Finds bare hands: <see cref="GameModeEquipments.Hands" /> lookup can miss when the content key differs (e.g. prefab name), so we also match <see cref="HandsEquipment" />.
+	/// </summary>
+	private Equipment? ResolveHandsEquipment()
+	{
+		var byHandsComponent = Equipment.FirstOrDefault( eq =>
+			eq.Enabled &&
+			eq.Components.Get<HandsEquipment>( FindMode.EverythingInSelfAndDescendants ).IsValid() );
+
+		return byHandsComponent ?? FindEquipment( GameModeEquipments.Hands );
 	}
 
 	public bool CanPurchaseEquipment( GameModeEquipmentDto resource )
