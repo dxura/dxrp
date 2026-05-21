@@ -85,14 +85,47 @@
 							    {
 								    var minigame = MinigameSystem.Instance.CurrentMinigame;
 								    var playerCount = MinigameSystem.Instance.TotalPlayerCount;
+									var mgState = MinigameSystem.Instance.CurrentState;
 
-								    <span class="flex flex-row gap-sm w-full items-center justify-between">
-									    <span class="flex flex-row gap-sm items-center">
-										    <label class="bg-primary px-2 py-1 tiny rounded text-bold uppercase text-accent">#chat.label.minigame</label>
+								    <span class="flex flex-row gap-sm w-full items-start justify-between">
+									    <span class="flex flex-row gap-sm items-center flex-wrap min-w-0">
+										    <label class="bg-primary px-2 py-1 tiny rounded text-bold uppercase text-accent shrink-0">#chat.label.minigame</label>
 										    <label class="text-base text-bold text-white no-shadow">@((minigame?.Name?.StartsWith( '#' ) ?? false) ? Language.GetPhrase( minigame.Name[1..] ) : minigame?.Name ?? Language.GetPhrase( "generic.unknown" ))</label>
-										    <label class="tiny slight text-bold">@GetPlayerCountLabel( playerCount )</label>
+										    @if ( ShouldShowMinigameEndedSubtitle() )
+										    {
+											    @if ( MinigameSystem.Instance.WinnerPlayers.Count > 0 )
+											    {
+												    <label class="tiny text-bold text-accent min-w-0">@FormatMinigameWinnerSubtitle()</label>
+											    }
+											    else
+											    {
+												    <label class="tiny slight text-bold shrink-0">#chat.label.mg_no_winner</label>
+											    }
+										    }
+										    else
+										    {
+											    <label class="tiny slight text-bold shrink-0">@GetPlayerCountLabel( playerCount )</label>
+										    }
 									    </span>
-									    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.mg_join</label>
+									    <span class="flex flex-col gap-1 items-end shrink-0">
+										    @if ( TryGetMinigameSeedingCountdownText( out var joinCountdown ) )
+										    {
+											    <label class="tiny bg-primary px-2 py-1 rounded text-white text-bold">@joinCountdown</label>
+										    }
+										    @if ( mgState == MinigameState.Playing )
+										    {
+											    <label class="tiny bg-secondary px-2 py-1 rounded text-white text-bold text-accent">#chat.label.mg_live</label>
+											    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.mg_spectate</label>
+										    }
+										    else if ( mgState == MinigameState.PostLobby )
+										    {
+											    <label class="tiny bg-secondary px-2 py-1 rounded text-white slight" style="opacity: 0.75;">#chat.label.mg_wrap_up</label>
+										    }
+										    else
+										    {
+											    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.mg_join</label>
+										    }
+									    </span>
 								    </span>
 							    }
 							    else
@@ -149,6 +182,111 @@
 				    </div>
 			    }
 	    </div>
+
+	    @if ( PinMinigameBanner() || PinVoteBetBanner() )
+	    {
+		    <div class="chat-pinned flex flex-col gap-1 w-full shrink-0">
+			    @if ( PinMinigameBanner() )
+			    {
+				    <div class="flex flex-row gap-sm items-center bg-secondary-35 p-1">
+					    @if ( MinigameSystem.Instance.IsValid() && MinigameSystem.Instance.CurrentMinigame != null )
+					    {
+						    var minigame = MinigameSystem.Instance.CurrentMinigame;
+						    var playerCount = MinigameSystem.Instance.TotalPlayerCount;
+							var mgStatePinned = MinigameSystem.Instance.CurrentState;
+
+						    <span class="flex flex-row gap-sm w-full items-start justify-between">
+							    <span class="flex flex-row gap-sm items-center flex-wrap min-w-0">
+								    <label class="bg-primary px-2 py-1 tiny rounded text-bold uppercase text-accent shrink-0">#chat.label.minigame</label>
+								    <label class="text-base text-bold text-white no-shadow">@((minigame?.Name?.StartsWith( '#' ) ?? false) ? Language.GetPhrase( minigame.Name[1..] ) : minigame?.Name ?? Language.GetPhrase( "generic.unknown" ))</label>
+								    @if ( ShouldShowMinigameEndedSubtitle() )
+								    {
+									    @if ( MinigameSystem.Instance.WinnerPlayers.Count > 0 )
+									    {
+										    <label class="tiny text-bold text-accent min-w-0">@FormatMinigameWinnerSubtitle()</label>
+									    }
+									    else
+									    {
+										    <label class="tiny slight text-bold shrink-0">#chat.label.mg_no_winner</label>
+									    }
+								    }
+								    else
+								    {
+									    <label class="tiny slight text-bold shrink-0">@GetPlayerCountLabel( playerCount )</label>
+								    }
+							    </span>
+							    <span class="flex flex-col gap-1 items-end shrink-0">
+								    @if ( TryGetMinigameSeedingCountdownText( out var joinCountdownPinned ) )
+								    {
+									    <label class="tiny bg-primary px-2 py-1 rounded text-white text-bold">@joinCountdownPinned</label>
+								    }
+								    @if ( mgStatePinned == MinigameState.Playing )
+								    {
+									    <label class="tiny bg-secondary px-2 py-1 rounded text-white text-bold text-accent">#chat.label.mg_live</label>
+									    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.mg_spectate</label>
+								    }
+								    else if ( mgStatePinned == MinigameState.PostLobby )
+								    {
+									    <label class="tiny bg-secondary px-2 py-1 rounded text-white slight" style="opacity: 0.75;">#chat.label.mg_wrap_up</label>
+								    }
+								    else
+								    {
+									    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.mg_join</label>
+								    }
+							    </span>
+						    </span>
+					    }
+					    else
+					    {
+						    <label>#chat.label.mg_ended</label>
+					    }
+				    </div>
+			    }
+			    @if ( PinVoteBetBanner() )
+			    {
+				    <div class="flex flex-row gap-sm items-center bg-secondary-35 p-1">
+					    @if ( VoteBetSystem.Instance.IsValid() && VoteBetSystem.Instance.GetActiveVoteBet() != null )
+					    {
+						    var vb = VoteBetSystem.Instance.GetActiveVoteBet()!.Value;
+						    var pot = VoteBetSystem.Instance.GetTotalPot( vb.Id );
+
+						    <span class="flex flex-row gap-sm w-full items-start justify-between">
+							    <span class="flex flex-col gap-1">
+								    <span class="flex flex-row gap-sm items-center">
+									    <label class="bg-primary px-2 py-1 tiny rounded text-bold uppercase text-warning">#chat.label.votebet</label>
+									    <label class="text-base text-bold text-white no-shadow">@vb.Description</label>
+								    </span>
+								    <span class="flex flex-row gap-xs items-center">
+									    @for ( var i = 0; i < vb.Outcomes.Count; i++ )
+									    {
+										    <label class="bg-primary px-1 py-1 tiny rounded slight">@(i + 1). @vb.Outcomes[i]</label>
+									    }
+								    </span>
+							    </span>
+							    <span class="flex flex-col gap-1 items-end">
+								    @if ( vb.IsLocked )
+								    {
+									    <label class="tiny bg-secondary px-2 py-1 rounded text-warning text-bold">#chat.label.locked</label>
+								    }
+								    else
+								    {
+									    <label class="tiny bg-secondary px-2 py-1 rounded text-white" style="opacity: 0.6;">#chat.label.vb_join</label>
+								    }
+								    @if ( pot > 0 )
+								    {
+									    <label class="tiny text-cash text-bold">@string.Format( Language.GetPhrase( "chat.label.pot" ), pot.ToString( "N0" ) )</label>
+								    }
+							    </span>
+						    </span>
+					    }
+					    else
+					    {
+						    <label>#chat.label.vb_ended</label>
+					    }
+				    </div>
+			    }
+		    </div>
+	    }
 
 	    <div class="chat-input-stack">
 		    @if ( _emojiPickerOpen )
@@ -252,9 +390,16 @@
 	private bool CanStaffChat => RankSystem.HasLocalPermission( Permission.StaffChat );
 
 	private bool Open => _isOpen;
-	
+
+	private const float MinigameChatSeedingDuration = 30f;
+
+	private TimeSince _minigameJoinWindowClock;
+	private MinigameState _minigameJoinWindowPrevState = MinigameState.Idle;
+
 	public void OnUpdate()
 	{
+		SyncMinigameJoinWindowClock();
+
 		if ( !InputBox.IsValid() )
 			return;
 
@@ -285,13 +430,29 @@
 
 	protected override int BuildHash()
 	{
-		var minigameHash = MinigameSystem.Instance.IsValid() && MinigameSystem.Instance.Active ?
-			HashCode.Combine( MinigameSystem.Instance.CurrentState, MinigameSystem.Instance.TotalPlayerCount ) :
-			0;
+		var mg = MinigameSystem.Instance;
+		var minigameHash = 0;
+		if ( mg.IsValid() && mg.CurrentState != MinigameState.Idle )
+		{
+			minigameHash = HashCode.Combine( mg.CurrentState, mg.TotalPlayerCount, mg.CurrentMinigame != null );
+			if ( mg.CurrentState == MinigameState.Seeding )
+			{
+				minigameHash = HashCode.Combine( minigameHash, (int)Time.Now );
+			}
+			else if ( mg.CurrentState == MinigameState.PostLobby )
+			{
+				minigameHash = HashCode.Combine( minigameHash, mg.WinnerPlayers.Count );
+				foreach ( var steamId in mg.WinnerPlayers )
+				{
+					minigameHash = HashCode.Combine( minigameHash, steamId );
+				}
+			}
+		}
 
-		var voteBetHash = VoteBetSystem.Instance.IsValid() && VoteBetSystem.Instance.GetActiveVoteBet() != null ?
-			HashCode.Combine( VoteBetSystem.Instance.GetActiveVoteBet()!.Value.Id, VoteBetSystem.Instance.GetTotalPot( VoteBetSystem.Instance.GetActiveVoteBet()!.Value.Id ) ) :
-			0;
+		var vb = VoteBetSystem.Instance.IsValid() ? VoteBetSystem.Instance.GetActiveVoteBet() : null;
+		var voteBetHash = vb != null
+			? HashCode.Combine( vb.Value.Id, VoteBetSystem.Instance.GetTotalPot( vb.Value.Id ), vb.Value.IsLocked )
+			: 0;
 
 		var recentMessagesHash = !Open && _showingRecentMessages ? (int)Time.Now : 0;
 
@@ -593,21 +754,35 @@
 		{
 			_showingRecentMessages = false;
 
-			// Chat is open: return all entries (already stored newest-first)
 			foreach ( var entry in Game.Chat.Current.Entries )
 			{
+				if ( SkipEntryShownInPinnedBanner( entry ) )
+				{
+					continue;
+				}
+
 				yield return entry;
 			}
 		}
 		else
 		{
-			// Chat is closed: return only recent messages (< 20 seconds)
-			// Since entries are newest-first, we can break early when we hit an old message
 			var messageCount = 0;
 			foreach ( var entry in Game.Chat.Current.Entries )
 			{
-				if ( !ShouldPersist( entry ) && entry.TimeSinceAdded > 15f || messageCount >= 10 )
+				if ( SkipEntryShownInPinnedBanner( entry ) )
+				{
+					continue;
+				}
+
+				if ( !ShouldPersist( entry ) && entry.TimeSinceAdded > 15f )
+				{
 					break;
+				}
+
+				if ( messageCount >= 10 )
+				{
+					break;
+				}
 
 				messageCount++;
 				yield return entry;
@@ -617,17 +792,105 @@
 		}
 	}
 
+	private void SyncMinigameJoinWindowClock()
+	{
+		var mg = MinigameSystem.Instance;
+		if ( !mg.IsValid() || mg.CurrentState == MinigameState.Idle )
+		{
+			_minigameJoinWindowPrevState = MinigameState.Idle;
+			return;
+		}
+
+		if ( mg.CurrentState != _minigameJoinWindowPrevState )
+		{
+			_minigameJoinWindowClock = 0;
+			_minigameJoinWindowPrevState = mg.CurrentState;
+		}
+	}
+
+	private bool TryGetMinigameSeedingCountdownText( out string text )
+	{
+		text = string.Empty;
+		var mg = MinigameSystem.Instance;
+		if ( !mg.IsValid() || mg.CurrentMinigame == null )
+		{
+			return false;
+		}
+
+		if ( mg.CurrentState != MinigameState.Seeding )
+		{
+			return false;
+		}
+
+		var elapsed = (float)_minigameJoinWindowClock;
+		var remaining = Math.Max( 0f, MinigameChatSeedingDuration - elapsed );
+		text = $"{Math.Ceiling( remaining )}s";
+		return true;
+	}
+
+	private static bool ShouldShowMinigameEndedSubtitle()
+	{
+		var mg = MinigameSystem.Instance;
+		return mg.IsValid()
+		       && mg.CurrentMinigame != null
+		       && mg.CurrentState == MinigameState.PostLobby;
+	}
+
+	private static string FormatMinigameWinnerSubtitle()
+	{
+		var mg = MinigameSystem.Instance;
+		if ( !ShouldShowMinigameEndedSubtitle() || mg.WinnerPlayers.Count == 0 )
+		{
+			return string.Empty;
+		}
+
+		var names = mg.GetWinnerPlayerNames();
+		var phraseKey = mg.WinnerPlayers.Count > 1 ? "chat.label.mg_winners" : "chat.label.mg_winner";
+		return string.Format( Language.GetPhrase( phraseKey ), names );
+	}
+
+	private static bool SkipEntryShownInPinnedBanner( ChatEntry entry )
+	{
+		if ( entry.Type == MessageType.Minigame && PinMinigameBanner() )
+		{
+			return true;
+		}
+
+		if ( entry.Type == MessageType.VoteBet && PinVoteBetBanner() )
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	private static bool PinMinigameBanner()
+	{
+		return MinigameSystem.Instance.IsValid()
+		       && MinigameSystem.Instance.CurrentState != MinigameState.Idle;
+	}
+
+	private static bool PinVoteBetBanner()
+	{
+		return VoteBetSystem.Instance.IsValid()
+		       && VoteBetSystem.Instance.GetActiveVoteBet() != null;
+	}
+
 	private static bool ShouldPersist( ChatEntry entry )
 	{
 		if ( entry.Type == MessageType.Minigame
 			&& MinigameSystem.Instance.IsValid()
-			&& MinigameSystem.Instance.CurrentState == MinigameState.Seeding )
+			&& MinigameSystem.Instance.CurrentState != MinigameState.Idle )
+		{
 			return true;
+		}
 
 		if ( entry.Type == MessageType.VoteBet
 			&& VoteBetSystem.Instance.IsValid()
 			&& VoteBetSystem.Instance.GetActiveVoteBet() != null )
+		{
 			return true;
+		}
 
 		return false;
 	}
