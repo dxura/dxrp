@@ -101,26 +101,6 @@ public static class GameModeMarketItems
 		return worldOwned + equippedOwned;
 	}
 
-	public static int GetOwnedEquipmentCount( Player player, Guid? equipmentId )
-	{
-		if ( !player.IsValid() || !equipmentId.HasValue || equipmentId == Guid.Empty )
-		{
-			return 0;
-		}
-
-		var marketItemIds = All
-			.Where( item => item.Type == GameModeMarketItemType.Equipment && item.ReferenceId == equipmentId.Value )
-			.Select( item => item.Id )
-			.ToHashSet();
-
-		var worldOwned = player.Scene.GetAllComponents<ShipmentEntity>()
-			.Count( entity => entity.IsValid() &&
-			                 marketItemIds.Contains( entity.MarketItemId ) &&
-			                 entity.Owner == player.SteamId );
-		var equippedOwned = player.Equipment.Count( equipment => equipment.IsValid() && equipment.Enabled && marketItemIds.Contains( equipment.MarketItemId ) );
-		return worldOwned + equippedOwned;
-	}
-
 	public static int GetOwnedEntityCount( Player player, Guid? entityId )
 	{
 		if ( !player.IsValid() || !entityId.HasValue || entityId == Guid.Empty )
@@ -165,10 +145,6 @@ public static class GameModeMarketItems
 				{
 					return false;
 				}
-				if ( equipment.Limit > 0 && GetOwnedEquipmentCount( player, equipment.Id ) >= equipment.Limit )
-				{
-					return false;
-				}
 				break;
 
 			default:
@@ -196,7 +172,7 @@ public static class GameModeMarketItems
 			}
 		}
 
-		return true;
+		return item.Type != GameModeMarketItemType.Equipment || item.Limit <= 0 || GetOwnedCount( player, item ) < item.Limit;
 	}
 
 	private static string GetEquipmentDisplayName( GameModeEquipmentDto equipment, int quantity )

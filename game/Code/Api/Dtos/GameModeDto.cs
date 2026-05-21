@@ -23,6 +23,8 @@ public class GameModeDto
 	public DateTimeOffset Created { get; init; }
 	public DateTimeOffset LastModified { get; init; }
 
+	public static GameModeDto Default => new() { Name = "Default" };
+
 #if ASPNETCORE
 	public static GameModeDto FromEntity( Domain.Entities.Content.GameMode entity ) => new()
 	{

@@ -6,7 +6,6 @@ public class GameModeEquipmentDto
 	public Guid GameModeAddonContentId { get; init; }
 	public string? NameOverride { get; init; }
 	public string? DescriptionOverride { get; init; }
-	public int Limit { get; init; }
 
 #if ASPNETCORE
 	public static GameModeEquipmentDto FromEntity( GameModeEquipment entity ) => new()
@@ -14,8 +13,7 @@ public class GameModeEquipmentDto
 		Id = entity.Id,
 		GameModeAddonContentId = entity.GameModeAddonContentId,
 		NameOverride = entity.NameOverride,
-		DescriptionOverride = entity.DescriptionOverride,
-		Limit = entity.Limit
+		DescriptionOverride = entity.DescriptionOverride
 	};
 
 	public GameModeEquipment ToEntity( GameMode gameMode ) => new()
@@ -25,8 +23,7 @@ public class GameModeEquipmentDto
 		GameModeId = gameMode.Id,
 		GameModeAddonContentId = GameModeAddonContentId,
 		NameOverride = GameModeDtoHelpers.Trim( NameOverride ),
-		DescriptionOverride = GameModeDtoHelpers.Trim( DescriptionOverride ),
-		Limit = Limit
+		DescriptionOverride = GameModeDtoHelpers.Trim( DescriptionOverride )
 	};
 #endif
 }
