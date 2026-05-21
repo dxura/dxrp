@@ -7,7 +7,6 @@ public class GameModeMarketItemDto
 	public Guid? ReferenceId { get; init; }
 	public string? Grouping { get; init; }
 	public int Cost { get; init; }
-	public int Limit { get; init; }
 	public int Color { get; init; }
 	public int Quantity { get; init; } = 1;
 	public Guid[] WhitelistJobIds { get; init; } = [];
@@ -23,7 +22,6 @@ public class GameModeMarketItemDto
 		ReferenceId = entity.ReferenceId,
 		Grouping = entity.Grouping,
 		Cost = entity.Cost,
-		Limit = entity.Limit,
 		Color = entity.Color,
 		Quantity = entity.Quantity,
 		WhitelistJobIds = entity.WhitelistJobIds,
@@ -41,7 +39,6 @@ public class GameModeMarketItemDto
 		ReferenceId = ReferenceId,
 		Grouping = GameModeDtoHelpers.Trim( Grouping ),
 		Cost = Cost,
-		Limit = Limit,
 		Color = Color,
 		Quantity = Quantity,
 		WhitelistJobIds = GameModeDtoHelpers.Dedup( WhitelistJobIds ),
