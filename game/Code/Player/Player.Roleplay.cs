@@ -97,6 +97,12 @@ public partial class Player
 			return true;
 		}
 
+		if ( amount > int.MaxValue )
+		{
+			this.Error( "#generic.error" );
+			return false;
+		}
+
 		await _transactionLock.WaitAsync();
 		try
 		{
@@ -109,13 +115,17 @@ public partial class Player
 					didCharge = await ServerApiClient.ModifyPlayerBalance( SteamId, -(int)amount, reason );
 					if ( didCharge )
 					{
-						BankBalance -= amount;
+						if ( BankBalance >= amount )
+						{
+							BankBalance -= amount;
+						}
+
 						this.Money( -(int)amount, true );
 					}
 				}
 				else
 				{
-					if ( BankBalance + WalletBalance < amount )
+					if ( (ulong)BankBalance + WalletBalance < amount )
 					{
 						this.Error( "#notify.cash.poor" );
 						return false;
@@ -124,10 +134,25 @@ public partial class Player
 					var bankPortion = BankBalance;
 					var walletPortion = amount - BankBalance;
 
-					didCharge = await ServerApiClient.ModifyPlayerBalance( SteamId, -(int)bankPortion, $"{reason} (${amount} total, ${walletPortion} from wallet)" );
+					didCharge = bankPortion == 0 || await ServerApiClient.ModifyPlayerBalance( SteamId, -(int)bankPortion, $"{reason} (${amount} total, ${walletPortion} from wallet)" );
 					if ( didCharge )
 					{
-						BankBalance -= bankPortion;
+						if ( WalletBalance < walletPortion )
+						{
+							if ( bankPortion > 0 )
+							{
+								_ = ServerApiClient.ModifyPlayerBalance( SteamId, (int)bankPortion, $"{reason} refund - balance changed" );
+							}
+
+							this.Error( "#notify.cash.poor" );
+							return false;
+						}
+
+						if ( BankBalance >= bankPortion )
+						{
+							BankBalance -= bankPortion;
+						}
+
 						WalletBalance -= walletPortion;
 						this.Money( -(int)bankPortion, true );
 						this.Money( -(int)walletPortion );
@@ -176,6 +201,12 @@ public partial class Player
 			return true;
 		}
 
+		if ( amount > int.MaxValue )
+		{
+			this.Error( "#generic.error" );
+			return false;
+		}
+
 		await _transactionLock.WaitAsync();
 		try
 		{
@@ -183,15 +214,31 @@ public partial class Player
 
 			if ( inBank ) // Deposit directly into bank
 			{
+				if ( uint.MaxValue - BankBalance < amount )
+				{
+					this.Error( "#generic.error" );
+					return false;
+				}
+
 				if ( await ServerApiClient.ModifyPlayerBalance( SteamId, (int)amount, reason ) )
 				{
+					if ( uint.MaxValue - BankBalance >= amount )
+					{
+						BankBalance += amount;
+					}
+
 					didPay = true;
-					BankBalance += amount;
 					this.Money( (int)amount, true );
 				}
 			}
 			else // Pay into wallet
 			{
+				if ( uint.MaxValue - WalletBalance < amount )
+				{
+					this.Error( "#generic.error" );
+					return false;
+				}
+
 				WalletBalance += amount;
 				didPay = true;
 				this.Money( (int)amount );
