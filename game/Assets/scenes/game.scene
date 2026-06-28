@@ -17,7 +17,7 @@
             "Property": "LastRepairTime",
             "Value": {
               "Absolute": 0,
-              "Relative": 1717.8013
+              "Relative": 64975.887
             }
           }
         ],
@@ -165,11 +165,35 @@
       "AgentMaxSlope": 40,
       "ExcludedBodies": "",
       "IncludedBodies": "",
+      "DeferGeneration": false,
       "CustomBounds": false
     },
     "GameObjectSystems": {
-      "Sandbox.MovieMaker.MovieRecorderSystem": {
-        "DisableClientRecording": false
+      "Dxura.RP.Game.Config": {
+        "GameMode": {
+          "Id": "00000000-0000-0000-0000-000000000000",
+          "Name": "Default",
+          "Description": null,
+          "Visibility": "Private",
+          "DefaultJobId": "00000000-0000-0000-0000-000000000000",
+          "StartingBalance": 0,
+          "DefaultEquipmentIds": [],
+          "Addons": [],
+          "Equipments": [],
+          "Entities": [],
+          "MarketItems": [],
+          "Jobs": [],
+          "JobGroups": [],
+          "Created": "0001-01-01T00:00:00+00:00",
+          "LastModified": "0001-01-01T00:00:00+00:00"
+        }
+      },
+      "Dxura.RP.Game.Governance": {
+        "Prisoners": {}
+      },
+      "Dxura.RP.Game.ServerApiLink": {
+        "RulesetId": null,
+        "TenantId": ""
       },
       "Dxura.RP.Game.Wire.Wire": {
         "Connections": []
@@ -179,12 +203,10 @@
           "$blob": "50924e80-8c3a-4c35-ab74-761461787c13"
         }
       },
-      "Dxura.RP.Game.Governance": {
-        "Prisoners": {}
-      },
-      "Dxura.RP.Game.ServerApiLink": {
-        "TenantId": "",
-        "ServerId": "00000000-0000-0000-0000-000000000000"
+      "Sandbox.SelectionSetsSystem": {
+        "Data": {
+          "SelectionSets": []
+        }
       }
     }
   },

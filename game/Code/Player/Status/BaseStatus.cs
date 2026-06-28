@@ -36,6 +36,7 @@ public abstract class BaseStatus : IStatus
 	// Lifecycle
 
 	public virtual void OnAddedServer( Player player ) {}
+	public virtual void OnRefreshedServer( Player player ) {}
 	public virtual void OnAddedOwner( Player player ) {}
 	public virtual void OnAddedBroadcast( Player player ) {}
 

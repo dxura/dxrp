@@ -89,6 +89,13 @@ public partial class Governance : IGameEvents
 			}
 		}
 
+		// Target must be stunned before they can be arrested
+		if ( !targetPlayer.HasStatus( Constants.StunStatus ) )
+		{
+			arrestingPlayer.Error( "#governance.jail.arrest.not_stunned" );
+			return false;
+		}
+
 		// Check dist
 		var distance = arrestingPlayer.WorldPosition.Distance( targetPlayer.WorldPosition );
 
@@ -185,8 +192,9 @@ public partial class Governance : IGameEvents
 			return;
 		}
 
-		// If target is s, force them out
+		// If target is sitting, force them out
 		arrestedPlayer.SetSit( null );
+		arrestedPlayer.RemoveStatus( Constants.StunStatus );
 
 		// Check if mayor is arresting a police officer
 		var isMayorArrest = arrestingPlayer.Job.IsMayoralRole() && arrestedPlayer.Job.IsPoliceRole();
