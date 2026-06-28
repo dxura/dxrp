@@ -617,55 +617,6 @@ public partial class Player
 		return component;
 	}
 
-	/// <summary>
-	///     Gives equipment directly from a prefab path. Intended for debug commands when gamemode content is missing.
-	/// </summary>
-	public Equipment? GiveFromPrefabHost( string identifier, string prefabPath, bool makeActive = true, bool canDrop = true )
-	{
-		Assert.True( Networking.IsHost );
-
-		if ( string.IsNullOrWhiteSpace( identifier ) || string.IsNullOrWhiteSpace( prefabPath ) )
-		{
-			return null;
-		}
-
-		var existingEquipment = Equipment.FirstOrDefault( weapon =>
-			weapon.Enabled && string.Equals( weapon.Identifier, identifier, StringComparison.OrdinalIgnoreCase ) );
-		if ( existingEquipment.IsValid() )
-		{
-			if ( makeActive && !CantSwitch )
-			{
-				SetCurrentEquipment( existingEquipment );
-			}
-
-			return existingEquipment;
-		}
-
-		var prefab = GameObject.GetPrefab( prefabPath );
-		if ( !prefab.IsValid() )
-		{
-			Log.Warning( $"Equipment prefab could not be loaded: {prefabPath}" );
-			return null;
-		}
-
-		var gameObject = prefab.Clone( new CloneConfig
-		{
-			Transform = new Transform(), Parent = WeaponGameObject
-		} );
-		var component = gameObject.Components.Get<Equipment>( FindMode.EverythingInSelfAndDescendants );
-		component.Identifier = identifier;
-		component.OwnerId = Id;
-		component.CanDrop = canDrop;
-		gameObject.NetworkSpawn( Network.Owner );
-
-		if ( makeActive && !CantSwitch )
-		{
-			SetCurrentEquipment( component );
-		}
-
-		return component;
-	}
-
 	public Equipment? FindEquipment( GameModeEquipmentDto resource )
 	{
 		return Equipment.FirstOrDefault( weapon => weapon.Enabled && weapon.EquipmentId == resource.Id );
