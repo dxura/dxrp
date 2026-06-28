@@ -38,6 +38,11 @@ public interface ICommand
 	bool IsUsableWhileFrozen => true;
 
 	/// <summary>
+	/// Whether this command can be used while stunned. Defaults to false.
+	/// </summary>
+	bool IsUsableWhileStunned => false;
+
+	/// <summary>
 	/// Override the default command cooldown for this command (in seconds).
 	/// Return null to use the default <see cref="GameConfig.CommandCooldown"/>.
 	/// </summary>

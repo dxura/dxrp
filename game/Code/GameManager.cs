@@ -304,7 +304,7 @@ public class GameManager : SingletonComponent<GameManager>, IGameEvents, IConfig
 			return;
 		}
 
-		if ( player.Restricted )
+		if ( player.Restricted || player.IsStunned )
 		{
 			return;
 		}

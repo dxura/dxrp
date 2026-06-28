@@ -1,22 +1,22 @@
-using Dxura.RP.Game.UI;
-
 namespace Dxura.RP.Game.Statuses;
 
-public class StunStatus : FreezeStatus
+/// <summary>
+///     Stun lasts <see cref="GameConfig.StunDuration" /> seconds total.
+///     The target ragdolls for <see cref="GameConfig.StunRagdollDuration" /> seconds, then stands immobile until the status expires.
+/// </summary>
+public class StunStatus : BaseStatus
 {
-	public const float RagdollDuration = 5f;
-
 	public override string Id => Constants.StunStatus;
 	public override string Name => "#generic.stunned";
 	public override string? MaterialIcon => "bolt";
 	public override Color Color => Color.FromRgb( 0xFFC107 );
-	public override float? DefaultDuration => 10f;
+	public override float? DefaultDuration => Config.Current.Game.StunDuration;
 	public override bool RemoveOnDeath => true;
+	public override bool RemoveOnJobChange => true;
 	public override bool ShowOnNameplate => true;
 
 	public override void OnAddedServer( Player player )
 	{
-		base.OnAddedServer( player );
 		player.BeginStunRagdollHost();
 	}
 
@@ -32,22 +32,20 @@ public class StunStatus : FreezeStatus
 
 	public override void OnAddedOwner( Player player )
 	{
-		base.OnAddedOwner( player );
-
-		player.Holster();
-
-		if ( EquipmentOverlay.Instance.IsValid() )
-		{
-			EquipmentOverlay.Instance.IsActive = false;
-		}
-
-		player.Controller.ThirdPerson = true;
+		player.ApplyStunOwnerEffects();
+		ApplyImmobilization( player );
 	}
 
 	public override void OnRemovedOwner( Player player )
 	{
-		base.OnRemovedOwner( player );
+		player.CantSwitch = false;
+		RestoreMovement( player );
 		player.UpdatePerspective();
+	}
+
+	public override void OnUpdateOwner( Player player )
+	{
+		ApplyImmobilization( player );
 	}
 
 	public override void OnRemovedBroadcast( Player player )
@@ -56,5 +54,30 @@ public class StunStatus : FreezeStatus
 		{
 			player.AnimationHelper.HoldTypePose = 0;
 		}
+	}
+
+	private static void ApplyImmobilization( Player player )
+	{
+		player.CantSwitch = true;
+
+		player.Controller.WalkSpeed = 0f;
+		player.Controller.RunSpeed = 0f;
+		player.Controller.DuckedSpeed = 0f;
+		player.Controller.JumpSpeed = 0f;
+		player.Controller.WishVelocity = Vector3.Zero;
+		player.Controller.GroundVelocity = Vector3.Zero;
+
+		if ( player.Controller.Body.IsValid() )
+		{
+			player.Controller.Body.Velocity = Vector3.Zero;
+		}
+	}
+
+	private static void RestoreMovement( Player player )
+	{
+		player.Controller.WalkSpeed = GameConfig.WalkSpeed;
+		player.Controller.RunSpeed = GameConfig.RunSpeed;
+		player.Controller.DuckedSpeed = GameConfig.DuckedSpeed;
+		player.Controller.JumpSpeed = GameConfig.JumpSpeed;
 	}
 }

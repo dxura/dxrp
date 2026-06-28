@@ -101,6 +101,12 @@ public sealed partial class Chat
 			return false;
 		}
 
+		if ( player.IsStunned && !command.IsUsableWhileStunned )
+		{
+			player.SendMessage( "#command.stunned" );
+			return false;
+		}
+
 		return true;
 	}
 
@@ -117,6 +123,11 @@ public sealed partial class Chat
 		}
 
 		if ( player.HasStatus( Constants.FreezeStatus ) && !command.IsUsableWhileFrozen )
+		{
+			return false;
+		}
+
+		if ( player.IsStunned && !command.IsUsableWhileStunned )
 		{
 			return false;
 		}

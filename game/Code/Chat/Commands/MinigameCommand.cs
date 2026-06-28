@@ -10,6 +10,7 @@ public class MinigameCommand : ICommand
 	public string Help => Language.GetPhrase( "command.minigame.help" );
 	public bool IsUsableWhileDead => false;
 	public bool IsUsableWhileRestricted => true;
+	public bool IsUsableWhileStunned => true;
 
 	public bool ExecuteHost( Player caller, string[] args, string raw )
 	{

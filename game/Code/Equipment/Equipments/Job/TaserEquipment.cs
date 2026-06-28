@@ -4,7 +4,7 @@ public class TaserEquipment : InputWeaponComponent, IEquipmentEvents
 {
 	[Property]
 	[Group( "Taser" )]
-	public float MaxRange { get; set; } = 512f;
+	public float MaxRange { get; set; } = 215f;
 
 	[Property]
 	[Group( "Taser" )]
@@ -73,7 +73,7 @@ public class TaserEquipment : InputWeaponComponent, IEquipmentEvents
 			return;
 		}
 
-		if ( !Input.Pressed( "attack1" ) )
+		if ( !InputActions.Any( action => Input.Pressed( action ) ) )
 		{
 			return;
 		}
@@ -156,7 +156,7 @@ public class TaserEquipment : InputWeaponComponent, IEquipmentEvents
 	{
 		var callerId = Rpc.CallerId;
 
-		if ( Cooldown.Current.CheckAndStartCooldown( $"{callerId}:taser:shoot", Delay * 0.85f ) )
+		if ( Cooldown.Current.CheckAndStartCooldown( $"{callerId}:taser:shoot", Delay * Config.Current.Game.TaserShootCooldownFactor ) )
 		{
 			return;
 		}
@@ -190,7 +190,7 @@ public class TaserEquipment : InputWeaponComponent, IEquipmentEvents
 		}
 
 		var target = GameUtils.GetPlayerById( targetSteamId );
-		if ( !TryValidateStun( owner, target ) )
+		if ( !CanStunTarget( owner, target ) )
 		{
 			return;
 		}
@@ -233,7 +233,7 @@ public class TaserEquipment : InputWeaponComponent, IEquipmentEvents
 		StunSound?.Broadcast( target.WorldPosition, target.GameObject );
 	}
 
-	private static bool TryValidateStun( Player owner, Player? target )
+	private bool CanStunTarget( Player owner, Player? target )
 	{
 		if ( !target.IsValid() || target == owner )
 		{
@@ -245,33 +245,7 @@ public class TaserEquipment : InputWeaponComponent, IEquipmentEvents
 			return false;
 		}
 
-		if ( !owner.Job.IsGovernmentRole() )
-		{
-			owner.Error( "#equipment.taser.not_government" );
-			return false;
-		}
-
-		if ( target.Job.IsPoliticalPrisonerRole() )
-		{
-			owner.Error( "#governance.jail.political.cannot_arrest" );
-			return false;
-		}
-
-		if ( owner.Job.IsMayoralRole() )
-		{
-			if ( !target.Job.IsPoliceRole() )
-			{
-				owner.Error( "#governance.jail.mayor.only_police" );
-				return false;
-			}
-		}
-		else if ( target.Job.IsGovernmentRole() )
-		{
-			owner.Error( "#governance.jail.government.cannot_arrest" );
-			return false;
-		}
-
-		return true;
+		return Governance.Current.CanGovernmentRestrainTarget( owner, target, GovernmentRestrainAction.Taser );
 	}
 
 	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Unreliable )]

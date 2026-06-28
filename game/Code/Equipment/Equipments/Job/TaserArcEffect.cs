@@ -7,6 +7,7 @@ public sealed class TaserArcEffect : Component
 	private static readonly Color ElectricColor = new( 0.35f, 0.85f, 1f, 1f );
 
 	private LineRenderer? _line;
+	private readonly List<Vector3> _points = new();
 	private Vector3 _start;
 	private Vector3 _end;
 	private Vector3 _forward;
@@ -88,7 +89,7 @@ public sealed class TaserArcEffect : Component
 		var distance = _start.Distance( _end );
 		var segmentCount = Math.Clamp( (int)(distance / 12f), 4, 24 );
 		var curved = MathUtils.GetCurvedPoints( _start, _forward, _end, segmentCount );
-		var points = new List<Vector3>( curved.Count );
+		_points.Clear();
 
 		for ( var i = 0; i < curved.Count; i++ )
 		{
@@ -99,9 +100,9 @@ public sealed class TaserArcEffect : Component
 				point += Vector3.Random * JitterStrength * falloff;
 			}
 
-			points.Add( point );
+			_points.Add( point );
 		}
 
-		_line.VectorPoints = points;
+		_line.VectorPoints = _points;
 	}
 }

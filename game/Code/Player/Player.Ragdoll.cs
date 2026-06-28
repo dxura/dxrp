@@ -109,9 +109,21 @@ public partial class Player
 		_ = EndStunRagdollAfterDelay( this, generation );
 	}
 
+	public void ApplyStunOwnerEffects()
+	{
+		Holster();
+
+		if ( EquipmentOverlay.Instance.IsValid() )
+		{
+			EquipmentOverlay.Instance.IsActive = false;
+		}
+
+		Controller.ThirdPerson = true;
+	}
+
 	private static async Task EndStunRagdollAfterDelay( Player player, int generation )
 	{
-		await GameTask.DelaySeconds( global::Dxura.RP.Game.Statuses.StunStatus.RagdollDuration );
+		await GameTask.DelaySeconds( Config.Current.Game.StunRagdollDuration );
 
 		if ( !player.IsValid() || !player.HasStatus( Constants.StunStatus ) )
 		{
@@ -129,14 +141,7 @@ public partial class Player
 	[Rpc.Owner( NetFlags.HostOnly | NetFlags.Reliable )]
 	private void OnStunRagdollRefreshOwner()
 	{
-		Holster();
-
-		if ( EquipmentOverlay.Instance.IsValid() )
-		{
-			EquipmentOverlay.Instance.IsActive = false;
-		}
-
-		Controller.ThirdPerson = true;
+		ApplyStunOwnerEffects();
 	}
 
 	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Reliable )]

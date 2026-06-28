@@ -8,6 +8,7 @@ public class StaffCommand : ICommand
 	public string Help => Language.GetPhrase( "command.staff.help" );
 	public bool IsUsableWhileRestricted => true;
 	public bool IsUsableWhileDead => true;
+	public bool IsUsableWhileStunned => true;
 
 	public bool ExecuteHost( Player caller, string[] args, string raw )
 	{

@@ -16,7 +16,7 @@ public class HandCuffsEquipment : InputWeaponComponent, IInputHints
 
 	protected override void OnInputDown()
 	{
-		if ( Cooldown.Current.CheckAndStartCooldown( "handcuff:use", Config.Current.Game.EquipmentHandCuffUseCooldown, true ) )
+		if ( Cooldown.Current.CheckAndStartCooldown( "hand_cuffs:use", Config.Current.Game.EquipmentHandCuffUseCooldown, true ) )
 		{
 			return;
 		}
@@ -49,20 +49,16 @@ public class HandCuffsEquipment : InputWeaponComponent, IInputHints
 
 	private void TryArrest( Player player )
 	{
-		var validArrest = Governance.Current.ValidateArrest( player, Player.Local );
-
-		if ( !validArrest )
+		if ( !Player.IsValid() || !Governance.Current.ValidateArrest( player, Player ) )
 		{
 			return;
 		}
 
 		Governance.Current.ArrestHost( player.SteamId );
-		ArrestSound.Broadcast( WorldPosition );
 	}
 
 	private void TryRelease( Player player )
 	{
-
 		if ( player.Job.IsPoliticalPrisonerRole() )
 		{
 			Notify.Warn( "#equipment.handcuffs.political" );
@@ -76,15 +72,28 @@ public class HandCuffsEquipment : InputWeaponComponent, IInputHints
 		}
 
 		Governance.Current.ReleaseHost( player.SteamId );
-		ReleaseSound.Broadcast( WorldPosition );
-		Notify.Success( string.Format( Language.GetPhrase( "equipment.handcuffs.released" ), player.DisplayName ) );
+	}
+
+	internal static HandCuffsEquipment? FromPlayer( Player player )
+	{
+		return player.CurrentEquipment?.Components.Get<HandCuffsEquipment>( FindMode.EverythingInSelfAndDescendants );
+	}
+
+	internal void PlayArrestSoundFromHost()
+	{
+		ArrestSound?.Broadcast( WorldPosition, GameObject );
+	}
+
+	internal void PlayReleaseSoundFromHost()
+	{
+		ReleaseSound?.Broadcast( WorldPosition, GameObject );
 	}
 
 	[Rpc.Host( NetFlags.OwnerOnly | NetFlags.Unreliable )]
 	private void DoSwingEffectsHost()
 	{
 		var callerId = Rpc.CallerId;
-		if ( Cooldown.Current.CheckAndStartCooldown( $"{callerId}:handcuff:use",
+		if ( Cooldown.Current.CheckAndStartCooldown( $"{callerId}:hand_cuffs:use",
 			Config.Current.Game.EquipmentHandCuffUseCooldown ) )
 		{
 			return;

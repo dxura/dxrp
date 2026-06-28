@@ -11,6 +11,7 @@ public class ProfileCommand : ICommand
 	public string Help => "Open your profile or another player's profile in the tab menu. Usage: /profile [name] (alias: /pf)";
 	public bool IsUsableWhileDead => true;
 	public bool IsUsableWhileRestricted => true;
+	public bool IsUsableWhileStunned => true;
 
 	public bool ExecuteLocal( string[] args, string raw )
 	{

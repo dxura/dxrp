@@ -1,3 +1,4 @@
+using Dxura.RP.Game.Equipments;
 using Sandbox.Diagnostics;
 namespace Dxura.RP.Game;
 
@@ -54,43 +55,15 @@ public partial class Governance : IGameEvents
 
 	public bool ValidateArrest( Player targetPlayer, Player arrestingPlayer )
 	{
-		// Why would someone not in government be arresting?
-		if ( !arrestingPlayer.Job.IsGovernmentRole() )
+		if ( !CanGovernmentRestrainTarget( arrestingPlayer, targetPlayer, GovernmentRestrainAction.Arrest ) )
 		{
 			return false;
 		}
 
-		// Cannot arrest political prisoners
-		if ( targetPlayer.Job.IsPoliticalPrisonerRole() )
-		{
-			arrestingPlayer.Error( "#governance.jail.political.cannot_arrest" );
-			return false;
-		}
+		var isMayorPoliceDemote = IsMayorPoliceDemote( arrestingPlayer, targetPlayer );
 
-		// Check if arresting player is mayor
-		var isMayor = arrestingPlayer.Job.IsMayoralRole();
-
-		// Mayor can only arrest police officers
-		if ( isMayor )
-		{
-			if ( !targetPlayer.Job.IsPoliceRole() )
-			{
-				arrestingPlayer.Error( "#governance.jail.mayor.only_police" );
-				return false;
-			}
-		}
-		else
-		{
-			// Non-mayor government officials cannot arrest other government
-			if ( targetPlayer.Job.IsGovernmentRole() )
-			{
-				arrestingPlayer.Error( "#governance.jail.government.cannot_arrest" );
-				return false;
-			}
-		}
-
-		// Target must be stunned before they can be arrested
-		if ( !targetPlayer.HasStatus( Constants.StunStatus ) )
+		// Normal arrests require a prior taser stun; mayor police demotes use handcuffs directly.
+		if ( !isMayorPoliceDemote && !targetPlayer.HasStatus( Constants.StunStatus ) )
 		{
 			arrestingPlayer.Error( "#governance.jail.arrest.not_stunned" );
 			return false;
@@ -199,6 +172,8 @@ public partial class Governance : IGameEvents
 		// Check if mayor is arresting a police officer
 		var isMayorArrest = arrestingPlayer.Job.IsMayoralRole() && arrestedPlayer.Job.IsPoliceRole();
 
+		HandCuffsEquipment.FromPlayer( arrestingPlayer )?.PlayArrestSoundFromHost();
+
 		if ( isMayorArrest )
 		{
 			// Demote police officer to citizen instead of jailing
@@ -249,6 +224,11 @@ public partial class Governance : IGameEvents
 			return;
 		}
 
+		if ( !prisoner.HasStatus( Constants.PrisonerStatus ) )
+		{
+			return;
+		}
+
 		// Check dist
 		var distance = unarrestingPlayer.WorldPosition.Distance( prisoner.WorldPosition );
 
@@ -258,7 +238,16 @@ public partial class Governance : IGameEvents
 			return;
 		}
 
+		if ( !Prisoners.ContainsKey( steamId ) )
+		{
+			return;
+		}
+
+		var prisonerName = prisoner.DisplayName;
 		Release( steamId, inPlace );
+
+		unarrestingPlayer.Success( string.Format( Language.GetPhrase( "equipment.handcuffs.released" ), prisonerName ) );
+		HandCuffsEquipment.FromPlayer( unarrestingPlayer )?.PlayReleaseSoundFromHost();
 	}
 
 	public void Release( long steamId, bool inPlace = false )

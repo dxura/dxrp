@@ -53,6 +53,7 @@ public abstract partial class GameConfig
 	public virtual float FadingDoorCreateCooldown { get; set; } = 5f;
 
 	public virtual float EquipmentHandCuffUseCooldown { get; set; } = 1;
+	public virtual float TaserShootCooldownFactor { get; set; } = 0.85f;
 	public virtual float HoboTauntCooldown { get; set; } = 10f;
 
 	// Weapons

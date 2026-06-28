@@ -40,6 +40,10 @@ public abstract partial class GameConfig
 	// Jail
 	public virtual int JailTime { get; set; } = 120;
 
+	// Taser
+	public virtual float StunDuration { get; set; } = 10f;
+	public virtual float StunRagdollDuration { get; set; } = 5f;
+
 	// Warrant
 	public virtual int WarrantTime { get; set; } = 300;
 

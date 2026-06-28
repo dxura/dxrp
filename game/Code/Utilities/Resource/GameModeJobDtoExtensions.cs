@@ -201,6 +201,12 @@ public static class GameModeJobDtoExtensions
 			return false;
 		}
 
+		if ( player.IsStunned )
+		{
+			player.Error( "#notify.job.stunned" );
+			return false;
+		}
+
 		if ( job.MaxCount != 0 && GameUtils.GetPlayersByJob( job ).Count() >= job.MaxCount )
 		{
 			player.Error( "#notify.job.full" );

@@ -8,6 +8,7 @@ public class UnarrestCommand : ICommand
 	public string Help => "/unarrest [username/steamid] - Release yourself or another player from arrest";
 	public bool IsUsableWhileDead => true;
 	public bool IsUsableWhileRestricted => true;
+	public bool IsUsableWhileStunned => true;
 	public Permission[] RequiredPermissions => [Permission.CommandUnarrest];
 
 	public bool ExecuteHost( Player caller, string[] args, string raw )
