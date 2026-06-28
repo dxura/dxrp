@@ -19,17 +19,21 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 	public Guid EquipmentId { get; set; }
 
 	[Property]
+	[Sync( SyncFlags.FromHost )]
 	public int MaxQuantity { get; set; } = 10;
 
 	[Property] public required GameObject EquipmentPreview { get; set; }
 	[Property] public required ModelRenderer EquipmentRenderer { get; set; }
-
 	[Property] public required TextRenderer TypeText { get; set; }
 	[Property] public required TextRenderer QuantityText { get; set; }
 
+	private readonly HashSet<GameObject> _depositBlockedUntilExit = new();
+
+	private BoxCollider? _collider;
 	private float _totalAnimationTime;
 	private Vector3 _originalPreviewPosition;
 	private bool _previewPositionSaved;
+	private bool _occluded;
 
 	public override string DisplayName
 	{
@@ -40,21 +44,34 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 			{
 				name = Language.GetPhrase( name[1..] );
 			}
+
 			return $"{name} ({QuantityText.Text})";
 		}
 	}
-
-	private bool _occluded;
 
 	protected override void OnStart()
 	{
 		base.OnStart();
 
+		_collider = GameObject.Components.GetAll<BoxCollider>( FindMode.EverythingInSelf )
+			.FirstOrDefault( collider => collider.IsValid() && !collider.IsTrigger );
+
 		UpdateState();
 
-		// Save the original position of the preview
 		_originalPreviewPosition = EquipmentPreview.LocalPosition;
 		_previewPositionSaved = true;
+	}
+
+	protected override void OnFixedUpdate()
+	{
+		base.OnFixedUpdate();
+
+		if ( !Networking.IsHost || !_collider.IsValid() )
+		{
+			return;
+		}
+
+		ProcessDeposits();
 	}
 
 	protected override void OnUpdate()
@@ -70,27 +87,23 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 	public override void OnOcclusionChanged( bool occlude )
 	{
 		base.OnOcclusionChanged( occlude );
-
 		_occluded = occlude;
 	}
 
-	private void UpdateState()
+	protected override void OnDestroyed()
 	{
-		if ( !EquipmentRenderer.IsValid() || !TypeText.IsValid() || !QuantityText.IsValid() )
+		Assert.True( Networking.IsHost );
+
+		var equipment = GetEquipment();
+		if ( equipment != null )
 		{
-			return;
+			for ( var i = 0; i < Quantity; i++ )
+			{
+				DropEquipmentHost( equipment );
+			}
 		}
 
-		if ( Networking.IsHost && Quantity <= 0 )
-		{
-			Quantity = MaxQuantity;
-		}
-
-		var equipment = GameModeEquipments.FindById( EquipmentId );
-		EquipmentRenderer.Model = equipment.GetWorldModel();
-		EquipmentRenderer.WorldScale = 1.1f;
-		TypeText.Text = equipment.DisplayName();
-		QuantityText.Text = $"{Quantity}/{MaxQuantity}";
+		base.OnDestroyed();
 	}
 
 	public void ConfigureHost( GameModeEquipmentDto equipment, int quantity )
@@ -103,9 +116,38 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 		UpdateState();
 	}
 
+	private void ProcessDeposits()
+	{
+		var bounds = _collider!.GetWorldBounds().Grow( 4f );
+		var insideRoots = new HashSet<GameObject>();
+
+		foreach ( var gameObject in Scene.FindInPhysics( bounds ) )
+		{
+			if ( gameObject.Root.IsValid() )
+			{
+				insideRoots.Add( gameObject.Root );
+			}
+		}
+
+		_depositBlockedUntilExit.RemoveWhere( go => !go.IsValid() || !insideRoots.Contains( go ) );
+
+		if ( Quantity >= MaxQuantity )
+		{
+			return;
+		}
+
+		foreach ( var root in insideRoots )
+		{
+			var droppedEquipment = root.GetComponent<DroppedEquipment>();
+			if ( droppedEquipment.IsValid() )
+			{
+				TryDeposit( droppedEquipment );
+			}
+		}
+	}
+
 	public bool Press( IPressable.Event e )
 	{
-		// Prevent using while rotating in hands
 		var hands = Player.Local.GetComponentInChildren<HandsEquipment>();
 		if ( hands.IsValid() && hands.IsHolding( GameObject, true ) )
 		{
@@ -118,7 +160,6 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 		}
 
 		UseHost();
-
 		return true;
 	}
 
@@ -136,7 +177,6 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 			return;
 		}
 
-		// LOS check to prevent remote toggling
 		var player = GameUtils.GetPlayerByConnectionId( callerId );
 		if ( !player.IsValid() )
 		{
@@ -158,15 +198,14 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 
 	private void InternalUse()
 	{
-		var equipment = GameModeEquipments.FindById( EquipmentId );
+		var equipment = GetEquipment();
 		if ( equipment == null )
 		{
 			return;
 		}
 
 		Quantity--;
-		DroppedEquipment.CreateHost( equipment, EquipmentPreview.WorldPosition,
-			EquipmentPreview.WorldRotation, marketItemId: MarketItemId );
+		DropEquipmentHost( equipment );
 
 		if ( Quantity == 0 )
 		{
@@ -174,22 +213,77 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 		}
 	}
 
-	protected override void OnDestroyed()
+	private DroppedEquipment DropEquipmentHost( GameModeEquipmentDto equipment )
 	{
-		Assert.True( Networking.IsHost );
+		var dropped = DroppedEquipment.CreateHost(
+			equipment,
+			EquipmentPreview.WorldPosition,
+			EquipmentPreview.WorldRotation,
+			marketItemId: MarketItemId );
 
-		// Drop everything on destroy 
-		var equipment = GameModeEquipments.FindById( EquipmentId );
-		if ( equipment != null )
+		BlockDepositUntilExit( dropped.GameObject );
+		return dropped;
+	}
+
+	private bool TryDeposit( DroppedEquipment droppedEquipment )
+	{
+		if ( Quantity >= MaxQuantity || droppedEquipment.Resource == null )
 		{
-			for ( var x = 0; x < Quantity; x++ )
-			{
-				DroppedEquipment.CreateHost( equipment, EquipmentPreview.WorldPosition,
-					EquipmentPreview.WorldRotation, marketItemId: MarketItemId );
-			}
+			return false;
 		}
 
-		base.OnDestroyed();
+		if ( IsDepositBlocked( droppedEquipment.GameObject ) || !MatchesEquipment( droppedEquipment ) )
+		{
+			return false;
+		}
+
+		if ( Cooldown.Current.CheckAndStartCooldown( $"{GameObject.Id}:shipment:deposit", Config.Current.Game.ShipmentUseCooldown ) )
+		{
+			return false;
+		}
+
+		Quantity++;
+		droppedEquipment.GameObject.Destroy();
+		return true;
+	}
+
+	private void BlockDepositUntilExit( GameObject droppedObject )
+	{
+		_depositBlockedUntilExit.Add( droppedObject );
+	}
+
+	private bool IsDepositBlocked( GameObject droppedObject )
+	{
+		return _depositBlockedUntilExit.Contains( droppedObject );
+	}
+
+	private bool MatchesEquipment( DroppedEquipment droppedEquipment )
+	{
+		return string.Equals( droppedEquipment.Identifier, EquipmentIdentifier, StringComparison.OrdinalIgnoreCase );
+	}
+
+	private GameModeEquipmentDto? GetEquipment()
+	{
+		return GameModeEquipments.FindByIdentifier( EquipmentIdentifier );
+	}
+
+	private void UpdateState()
+	{
+		if ( !EquipmentRenderer.IsValid() || !TypeText.IsValid() || !QuantityText.IsValid() )
+		{
+			return;
+		}
+
+		if ( Networking.IsHost && Quantity <= 0 )
+		{
+			Quantity = MaxQuantity;
+		}
+
+		var equipment = GetEquipment();
+		EquipmentRenderer.Model = equipment.GetWorldModel();
+		EquipmentRenderer.WorldScale = 1.1f;
+		TypeText.Text = equipment.DisplayName();
+		QuantityText.Text = $"{Quantity}/{MaxQuantity}";
 	}
 
 	private void OnQuantityChange( int oldValue, int newValue )
@@ -199,25 +293,20 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 
 	private void AnimatePreview()
 	{
-		// Increment total time
 		_totalAnimationTime = (_totalAnimationTime + Time.Delta) % 360f;
-		
-		// Base values for animation
+
 		const float bobHeight = 2f;
 		const float bobSpeed = 2.0f;
 		const float rotationSpeed = 45.0f;
 
-		// Calculate vertical position using a sine wave
 		var verticalOffset = MathF.Sin( _totalAnimationTime * bobSpeed ) * bobHeight;
 
-		// Update position based on original position
 		EquipmentPreview.LocalPosition = new Vector3(
 			_originalPreviewPosition.x,
 			_originalPreviewPosition.y,
 			_originalPreviewPosition.z + verticalOffset
 		);
 
-		// Rotate around Y axis
 		EquipmentPreview.LocalRotation = Rotation.FromYaw( _totalAnimationTime * rotationSpeed );
 	}
 }

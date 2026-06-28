@@ -39,7 +39,7 @@
 							@foreach ( var (item, isPermitted) in group )
 							{
 								<div class="entity-card @( isPermitted ? "" : "is-locked" )"
-								     @onclick=@( () => HandleClick( item, isPermitted ) )
+								     @onclick=@( () => HandleClick( item ) )
 								     tooltip="@( !string.IsNullOrEmpty( GameModeMarketItems.DisplayDescription( item ) ) ? GameModeMarketItems.DisplayDescription( item ) : null )">
 									@{ var chipColor = GetItemColor( item ); }
 									@if ( chipColor != Color.White )
@@ -161,9 +161,9 @@
 		return item.Color.ToColor();
 	}
 
-	private void HandleClick( GameModeMarketItemDto item, bool isPermitted )
+	private void HandleClick( GameModeMarketItemDto item )
 	{
-		if ( !isPermitted )
+		if ( !IsPermitted( item ) )
 		{
 			Notify.Error( "#generic.forbidden" );
 			TabMenu.RequestCloseMenu();
