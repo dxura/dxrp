@@ -30,7 +30,7 @@ public partial class Governance : IGameEvents
 			return GovernmentRestrainDenial.NotGovernment;
 		}
 
-		if ( target.Job.IsPoliticalPrisonerRole() )
+		if ( target.Job.IsPoliticalPrisonerRole() && action == GovernmentRestrainAction.Arrest )
 		{
 			return GovernmentRestrainDenial.PoliticalPrisoner;
 		}
@@ -83,8 +83,6 @@ public partial class Governance : IGameEvents
 		var errorKey = taserContext
 			? denial switch
 			{
-				GovernmentRestrainDenial.PoliticalPrisoner => "#equipment.taser.cannot_target.political",
-				GovernmentRestrainDenial.MayorOnlyPolice => "#equipment.taser.cannot_target.mayor_only_police",
 				GovernmentRestrainDenial.GovernmentTarget => "#equipment.taser.cannot_target.government",
 				_ => null
 			}
