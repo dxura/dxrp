@@ -1746,6 +1746,7 @@
   "entity.shipment.rocketlauncher.description": "",
   "entity.shipment.spaghelli.name": "스파겔리 배송품",
   "entity.shipment.usp.name": "USP 배송품",
+  "entity.shipment.combine.status": "배송품 {0}/{1}",
   "entity.shipment.usp.description": "",
   "entity.soccerball.name": "축구공",
   "entity.soccerball.description": "찰 수 있는 축구공",

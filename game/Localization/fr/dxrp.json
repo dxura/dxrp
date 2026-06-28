@@ -1746,6 +1746,7 @@
   "entity.shipment.usp.name": "Caisse d'USP",
   "entity.shipment.generic.name": "Caisse de {0}",
   "entity.shipment.quantity": "{0} x{1}",
+  "entity.shipment.combine.status": "Caisse {0}/{1}",
   "entity.shipment.usp.description": "",
   "entity.soccerball.name": "Ballon de foot",
   "entity.soccerball.description": "Un ballon à frapper",

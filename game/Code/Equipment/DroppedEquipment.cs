@@ -14,6 +14,62 @@ public class DroppedEquipment : Component, Component.IPressable
 	public Guid MarketItemId { get; private set; }
 	public Rigidbody Rigidbody { get; private set; } = null!;
 
+	private TextRenderer? _combineIndicator;
+
+	protected override void OnStart()
+	{
+		if ( GameManager.IsHeadless )
+		{
+			return;
+		}
+
+		var indicatorObject = new GameObject( true, "CombineIndicator" )
+		{
+			Parent = GameObject,
+			LocalPosition = Vector3.Up * 12f
+		};
+
+		_combineIndicator = indicatorObject.Components.Create<TextRenderer>();
+		_combineIndicator.Enabled = false;
+		_combineIndicator.Scale = 0.025f;
+		_combineIndicator.TextScope = _combineIndicator.TextScope with
+		{
+			TextColor = Color.White,
+			FontName = "Poppins",
+			FontSize = 80,
+			FontWeight = 600,
+			Shadow = new TextRendering.Shadow
+			{
+				Enabled = true,
+				Size = 4,
+				Color = Color.Black,
+				Offset = new Vector2( 2, 2 )
+			}
+		};
+	}
+
+	public void SetCombineIndicator( int count, int maxQuantity )
+	{
+		if ( !_combineIndicator.IsValid() )
+		{
+			return;
+		}
+
+		_combineIndicator.Enabled = true;
+		_combineIndicator.TextScope = _combineIndicator.TextScope with
+		{
+			Text = string.Format( Language.GetPhrase( "entity.shipment.combine.status" ), count, maxQuantity )
+		};
+	}
+
+	public void ClearCombineIndicator()
+	{
+		if ( _combineIndicator.IsValid() )
+		{
+			_combineIndicator.Enabled = false;
+		}
+	}
+
 	public bool CanPress( IPressable.Event e )
 	{
 		if ( !e.Source.IsValid() || e.Source is not PlayerController playerController )

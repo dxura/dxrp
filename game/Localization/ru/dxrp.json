@@ -1746,6 +1746,7 @@
   "entity.shipment.usp.name": "Ящик USP",
   "entity.shipment.generic.name": "Ящик {0}",
   "entity.shipment.quantity": "{0} x{1}",
+  "entity.shipment.combine.status": "Ящик {0}/{1}",
   "entity.shipment.usp.description": "",
   "entity.soccerball.name": "Футбольный мяч",
   "entity.soccerball.description": "Мяч, который можно пинать",

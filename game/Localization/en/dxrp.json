@@ -1749,6 +1749,7 @@
   "entity.shipment.usp.name": "USP Shipment",
   "entity.shipment.generic.name": "{0} Shipment",
   "entity.shipment.quantity": "{0} x{1}",
+  "entity.shipment.combine.status": "Shipment {0}/{1}",
   "entity.shipment.usp.description": "",
   "entity.soccerball.name": "Soccer Ball",
   "entity.soccerball.description": "Soccer Ball that can be kicked",

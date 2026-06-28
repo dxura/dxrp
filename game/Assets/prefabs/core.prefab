@@ -359,6 +359,18 @@
             "OnComponentUpdate": null
           },
           {
+            "__type": "Dxura.RP.Game.ShipmentCombineSystem",
+            "__guid": "b3c4d5e6-f7a8-4901-bcde-f23456789012",
+            "__enabled": true,
+            "Flags": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null
+          },
+          {
             "__type": "Dxura.RP.Game.HitSystem",
             "__guid": "dcba2133-ca3d-406e-bb61-e32f84060d30",
             "__enabled": true,

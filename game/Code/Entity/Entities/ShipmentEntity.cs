@@ -5,6 +5,7 @@ namespace Dxura.RP.Game.Entities;
 
 public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 {
+	private const float DepositBoundsPadding = 4f;
 	[Property]
 	[ReadOnly]
 	[Sync( SyncFlags.FromHost )]
@@ -106,19 +107,95 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 		base.OnDestroyed();
 	}
 
-	public void ConfigureHost( GameModeEquipmentDto equipment, int quantity )
+	public void ConfigureHost( GameModeEquipmentDto equipment, int maxQuantity )
+	{
+		ConfigureHost( equipment, maxQuantity, maxQuantity );
+	}
+
+	public void ConfigureHost( GameModeEquipmentDto equipment, int maxQuantity, int quantity )
 	{
 		Assert.True( Networking.IsHost );
 
 		EquipmentId = equipment.GameModeAddonContentId;
-		MaxQuantity = Math.Max( 1, quantity );
-		Quantity = MaxQuantity;
+		MaxQuantity = Math.Max( 1, maxQuantity );
+		Quantity = Math.Clamp( quantity, 1, MaxQuantity );
 		UpdateState();
+	}
+
+	public bool ContainsDepositPoint( Vector3 position )
+	{
+		if ( !_collider.IsValid() )
+		{
+			return false;
+		}
+
+		var bounds = GetDepositBounds();
+		return position.x >= bounds.Mins.x && position.x <= bounds.Maxs.x
+		       && position.y >= bounds.Mins.y && position.y <= bounds.Maxs.y
+		       && position.z >= bounds.Mins.z && position.z <= bounds.Maxs.z;
+	}
+
+	public static bool TryCreateFromDropsHost( IReadOnlyList<DroppedEquipment> drops )
+	{
+		Assert.True( Networking.IsHost );
+
+		if ( drops.Count < 2 )
+		{
+			return false;
+		}
+
+		var equipment = drops[0].Resource;
+		if ( equipment == null || drops.Any( drop => drop.Resource == null ||
+		                                            !string.Equals( drop.Identifier, equipment.Identifier(), StringComparison.OrdinalIgnoreCase ) ) )
+		{
+			return false;
+		}
+
+		var marketItem = GameModeMarketItems.FindShipmentMarketItem( equipment );
+		var maxQuantity = marketItem?.Quantity ?? 10;
+		var quantity = Math.Min( drops.Count, maxQuantity );
+		var marketItemId = drops.Select( drop => drop.MarketItemId ).FirstOrDefault( id => id != Guid.Empty );
+		if ( marketItemId == Guid.Empty && marketItem != null )
+		{
+			marketItemId = marketItem.Id;
+		}
+
+		var position = drops.Aggregate( Vector3.Zero, ( sum, drop ) => sum + drop.WorldPosition ) / drops.Count;
+
+		var shipmentPrefab = GameObject.GetPrefab( GameModeMarketItems.ShipmentPrefabPath );
+		if ( !shipmentPrefab.IsValid() )
+		{
+			return false;
+		}
+
+		var shipmentObject = shipmentPrefab.Clone();
+		shipmentObject.WorldPosition = position;
+
+		var shipmentEntity = shipmentObject.GetComponent<ShipmentEntity>();
+		var shipmentBaseEntity = shipmentObject.GetComponent<BaseEntity>();
+		if ( !shipmentEntity.IsValid() || !shipmentBaseEntity.IsValid() )
+		{
+			shipmentObject.Destroy();
+			return false;
+		}
+
+		shipmentBaseEntity.Identifier = equipment.Identifier();
+		shipmentEntity.MarketItemId = marketItemId;
+		shipmentEntity.ConfigureHost( equipment, maxQuantity, quantity );
+
+		foreach ( var drop in drops )
+		{
+			drop.GameObject.Destroy();
+		}
+
+		shipmentObject.NetworkSpawn();
+		GameManager.Instance.PurchaseSound?.Broadcast( position, shipmentObject );
+		return true;
 	}
 
 	private void ProcessDeposits()
 	{
-		var bounds = _collider!.GetWorldBounds().Grow( 4f );
+		var bounds = GetDepositBounds();
 		var insideRoots = new HashSet<GameObject>();
 
 		foreach ( var gameObject in Scene.FindInPhysics( bounds ) )
@@ -260,6 +337,11 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 	private bool MatchesEquipment( DroppedEquipment droppedEquipment )
 	{
 		return string.Equals( droppedEquipment.Identifier, EquipmentIdentifier, StringComparison.OrdinalIgnoreCase );
+	}
+
+	private BBox GetDepositBounds()
+	{
+		return _collider!.GetWorldBounds().Grow( DepositBoundsPadding );
 	}
 
 	private GameModeEquipmentDto? GetEquipment()

@@ -1746,6 +1746,7 @@
   "entity.shipment.rocketlauncher.description": "",
   "entity.shipment.spaghelli.name": "Przesyłka Spaghelli",
   "entity.shipment.usp.name": "Przesyłka USP",
+  "entity.shipment.combine.status": "Przesyłka {0}/{1}",
   "entity.shipment.usp.description": "",
   "entity.soccerball.name": "Piłka nożna",
   "entity.soccerball.description": "Piłka nożna, którą można kopać",

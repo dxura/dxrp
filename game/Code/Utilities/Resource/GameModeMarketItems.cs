@@ -81,6 +81,19 @@ public static class GameModeMarketItems
 		return item.Grouping.Trim();
 	}
 
+	public static GameModeMarketItemDto? FindShipmentMarketItem( GameModeEquipmentDto? equipment )
+	{
+		if ( equipment == null )
+		{
+			return null;
+		}
+
+		return All.FirstOrDefault( item =>
+			item.Type == GameModeMarketItemType.Equipment &&
+			item.ReferenceId == equipment.Id &&
+			item.Quantity > 1 );
+	}
+
 	public static int GetOwnedCount( Player player, GameModeMarketItemDto? item )
 	{
 		if ( !player.IsValid() || item == null )
