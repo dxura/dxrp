@@ -6,11 +6,14 @@ namespace Dxura.RP.Game;
 public class DroppedEquipment : Component, Component.IPressable
 {
 	[Property]
-	public GameModeEquipmentDto? Resource { get; private set; }
-	
+	[Sync( SyncFlags.FromHost )]
 	public Guid EquipmentId { get; private set; }
 	
+	public GameModeEquipmentDto? Resource => GameModeEquipments.FindById( EquipmentId );
+	
 	public string PrefabPath { get; private set; } = "";
+	[Property]
+	[Sync( SyncFlags.FromHost )]
 	public Guid MarketItemId { get; private set; }
 	public Rigidbody Rigidbody { get; private set; } = null!;
 
@@ -200,7 +203,6 @@ public class DroppedEquipment : Component, Component.IPressable
 		go.Tags.Add( Constants.HandsInteractTag, Constants.OccludableTag, Constants.PocketItemTag, Constants.EntityTag );
 
 		var droppedWeapon = go.Components.Create<DroppedEquipment>();
-		droppedWeapon.Resource = dto;
 		droppedWeapon.EquipmentId = dto.GameModeAddonContentId;
 		droppedWeapon.PrefabPath = dto.PrefabPath();
 		droppedWeapon.MarketItemId = marketItemId != Guid.Empty ? marketItemId : heldWeapon?.MarketItemId ?? Guid.Empty;

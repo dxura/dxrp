@@ -36,7 +36,7 @@ public class ShipmentCombineSystem : SingletonComponent<ShipmentCombineSystem>, 
 	private void RefreshCombineIndicators()
 	{
 		var drops = Scene.GetAllComponents<DroppedEquipment>()
-			.Where( drop => drop.IsValid() && drop.Resource != null )
+			.Where( drop => drop.IsValid() && drop.EquipmentId != Guid.Empty )
 			.ToList();
 
 		var clusters = BuildCombineClusters( drops );
@@ -62,7 +62,7 @@ public class ShipmentCombineSystem : SingletonComponent<ShipmentCombineSystem>, 
 		}
 
 		var drops = Scene.GetAllComponents<DroppedEquipment>()
-			.Where( drop => drop.IsValid() && drop.Resource != null && IsSettled( drop ) )
+			.Where( drop => drop.IsValid() && drop.EquipmentId != Guid.Empty && IsSettled( drop ) )
 			.ToList();
 
 		var processed = new HashSet<GameObject>();
@@ -124,8 +124,15 @@ public class ShipmentCombineSystem : SingletonComponent<ShipmentCombineSystem>, 
 
 	private static List<DroppedEquipment> FindCluster( IReadOnlyList<DroppedEquipment> drops, DroppedEquipment origin )
 	{
+		var originResource = origin.Resource;
+		if ( originResource == null )
+		{
+			return [];
+		}
+
 		return drops
-			.Where( drop => string.Equals( drop.Identifier, origin.Identifier, StringComparison.OrdinalIgnoreCase ) &&
+			.Where( drop => drop.EquipmentId == origin.EquipmentId &&
+			                drop.Resource?.Id == originResource.Id &&
 			                drop.WorldPosition.Distance( origin.WorldPosition ) <= CombineRadius &&
 			                !IsWithinAnyDepositZone( drop.Scene, drop.WorldPosition ) )
 			.ToList();

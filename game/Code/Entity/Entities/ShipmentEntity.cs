@@ -17,6 +17,7 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 	public int Quantity { get; private set; }
 
 	[Property]
+	[Sync( SyncFlags.FromHost )]
 	public Guid EquipmentId { get; set; }
 
 	[Property]
@@ -144,9 +145,8 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 			return false;
 		}
 
-		var equipment = drops[0].Resource;
-		if ( equipment == null || drops.Any( drop => drop.Resource == null ||
-		                                            !string.Equals( drop.Identifier, equipment.Identifier(), StringComparison.OrdinalIgnoreCase ) ) )
+		var equipment = drops[0].Resource ?? GameModeEquipments.FindById( drops[0].EquipmentId );
+		if ( equipment == null || drops.Any( drop => drop.EquipmentId != equipment.GameModeAddonContentId ) )
 		{
 			return false;
 		}
@@ -172,14 +172,12 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 		shipmentObject.WorldPosition = position;
 
 		var shipmentEntity = shipmentObject.GetComponent<ShipmentEntity>();
-		var shipmentBaseEntity = shipmentObject.GetComponent<BaseEntity>();
-		if ( !shipmentEntity.IsValid() || !shipmentBaseEntity.IsValid() )
+		if ( !shipmentEntity.IsValid() )
 		{
 			shipmentObject.Destroy();
 			return false;
 		}
 
-		shipmentBaseEntity.Identifier = equipment.Identifier();
 		shipmentEntity.MarketItemId = marketItemId;
 		shipmentEntity.ConfigureHost( equipment, maxQuantity, quantity );
 
@@ -336,7 +334,7 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 
 	private bool MatchesEquipment( DroppedEquipment droppedEquipment )
 	{
-		return string.Equals( droppedEquipment.Identifier, EquipmentIdentifier, StringComparison.OrdinalIgnoreCase );
+		return droppedEquipment.EquipmentId == EquipmentId;
 	}
 
 	private BBox GetDepositBounds()
@@ -346,7 +344,7 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 
 	private GameModeEquipmentDto? GetEquipment()
 	{
-		return GameModeEquipments.FindByIdentifier( EquipmentIdentifier );
+		return GameModeEquipments.FindById( EquipmentId );
 	}
 
 	private void UpdateState()
@@ -362,6 +360,11 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 		}
 
 		var equipment = GetEquipment();
+		if ( equipment == null )
+		{
+			return;
+		}
+
 		EquipmentRenderer.Model = equipment.GetWorldModel();
 		EquipmentRenderer.WorldScale = 1.1f;
 		TypeText.Text = equipment.DisplayName();
