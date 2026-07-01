@@ -54,6 +54,10 @@ public partial class ServerApiLink : GameObjectSystem<ServerApiLink>, IGameEvent
 	[Property]
 	[Sync( SyncFlags.FromHost )]
 	public Guid? RulesetId { get; set; }
+
+	[Property]
+	[Sync( SyncFlags.FromHost )]
+	public bool IsApiAuthorized { get; private set; }
 	
 	public ServerApiLink( Scene scene ) : base( scene )
 	{
@@ -93,6 +97,7 @@ public partial class ServerApiLink : GameObjectSystem<ServerApiLink>, IGameEvent
 		// Store IDs for this server instance
 		TenantId = initializeResponse.TenantId.ToString();
 		ServerId = initializeResponse.Id;
+		IsApiAuthorized = HasAuthorizationKey;
 		
 		// Create lobby
 		Networking.CreateLobby( new LobbyConfig
