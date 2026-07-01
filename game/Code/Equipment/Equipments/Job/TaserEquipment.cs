@@ -229,7 +229,7 @@ public class TaserEquipment : InputWeaponComponent, IEquipmentEvents
 			target.DamageTakenForce * 0.1f,
 			serverTrace.Value.GetHitboxTags() ) );
 
-		target.AddStatus( Constants.StunStatus, StunDuration );
+		target.AddStatus( Constants.StunStatus, Config.Current.Game.StunDuration );
 		StunSound?.Broadcast( target.WorldPosition, target.GameObject );
 	}
 
