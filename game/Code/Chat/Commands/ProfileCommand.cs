@@ -7,8 +7,8 @@ public class ProfileCommand : ICommand
 	public const string Name = "profile";
 
 	public string Command => Name;
-	public string[] Aliases => ["p"];
-	public string Help => "Open your profile or another player's profile in the tab menu. Usage: /profile [name]";
+	public string[] Aliases => ["pf"];
+	public string Help => "Open your profile or another player's profile in the tab menu. Usage: /profile [name] (alias: /pf)";
 	public bool IsUsableWhileDead => true;
 	public bool IsUsableWhileRestricted => true;
 

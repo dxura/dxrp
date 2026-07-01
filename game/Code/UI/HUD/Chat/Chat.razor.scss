@@ -24,6 +24,10 @@ Chat {
     color: #F59E0B;
   }
 
+  .party-color {
+    color: #2ECC40;
+  }
+
   .chat-container {
     width: 550px;
 
@@ -252,6 +256,10 @@ Chat {
 
       &.mode-faction {
         color: #22d3ee;
+      }
+
+      &.mode-party {
+        color: #2ECC40;
       }
     }
 

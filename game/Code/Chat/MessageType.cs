@@ -12,5 +12,6 @@ public enum MessageType
 	System,
 	Minigame,
 	VoteBet,
-	ItemShare
+	ItemShare,
+	PartyChat
 }

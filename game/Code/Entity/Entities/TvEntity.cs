@@ -29,6 +29,9 @@ public class TvEntity : BaseEntity, IDescription, Component.IPressable
 	[ConVar( "dx_tv_range", ConVarFlags.Saved, Min = 0, Max = 5000 )]
 	private static int TvRange { get; set; } = 600;
 
+	[ConVar( "dx_tv_line_of_sight", ConVarFlags.Saved )]
+	private static bool RequireLineOfSight { get; set; }
+
 	// True if the TV is currently active and playing content
 	private bool _isCurrentlyPlaying;
 
@@ -87,33 +90,48 @@ public class TvEntity : BaseEntity, IDescription, Component.IPressable
 		var playerPosition = Player.Local.Controller.EyePosition;
 		var playerDistance = playerPosition.Distance( WorldPosition );
 
-		// Only do raycast check if we're within basic distance range
-		if ( playerDistance <= TvRange )
+		if ( RequireLineOfSight )
 		{
-			// Perform raycast from player to TV to check for obstacles
-			var originPos = WorldPosition + WorldRotation * (Vector3.Up * 30 * WorldScale.z) + WorldRotation * Vector3.Forward * 5;
-			var direction = (originPos - playerPosition).Normal;
-
-			var trace = Scene.Trace.Ray( new Ray( playerPosition, direction ), TvRange )
-				.WithTag( "solid" )
-				.WithoutTags( Constants.PlayerTag )
-				.Run();
-
-			var isVisible = trace.GameObject == GameObject;
-
-			switch ( _isCurrentlyPlaying )
+			// Only do raycast check if we're within basic distance range
+			if ( playerDistance <= TvRange )
 			{
-				case false when playerDistance <= TvRange && isVisible && HasVideoContent():
-					StartPlayback();
-					break;
-				case true when playerDistance > TvRange || !isVisible:
-					StopPlayback();
-					break;
+				// Perform raycast from player to TV to check for obstacles
+				var originPos = WorldPosition + WorldRotation * (Vector3.Up * 30 * WorldScale.z) + WorldRotation * Vector3.Forward * 5;
+				var direction = (originPos - playerPosition).Normal;
+
+				var trace = Scene.Trace.Ray( new Ray( playerPosition, direction ), TvRange )
+					.WithTag( "solid" )
+					.WithoutTags( Constants.PlayerTag )
+					.Run();
+
+				var isVisible = trace.GameObject == GameObject;
+
+				switch ( _isCurrentlyPlaying )
+				{
+					case false when playerDistance <= TvRange && isVisible && HasVideoContent():
+						StartPlayback();
+						break;
+					case true when playerDistance > TvRange || !isVisible:
+						StopPlayback();
+						break;
+				}
 			}
+			else if ( _isCurrentlyPlaying )
+			{
+				StopPlayback();
+			}
+
+			return;
 		}
-		else if ( _isCurrentlyPlaying )
+
+		switch ( _isCurrentlyPlaying )
 		{
-			StopPlayback();
+			case false when playerDistance <= TvRange && HasVideoContent():
+				StartPlayback();
+				break;
+			case true when playerDistance > TvRange:
+				StopPlayback();
+				break;
 		}
 	}
 

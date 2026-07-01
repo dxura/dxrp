@@ -27,6 +27,7 @@ static class Launcher
 
         for (int i = 0; i < args.Length - 1; i++)
             if (args[i] == "--token") config.Token = args[i + 1];
+        if (args.Contains("--patch-only")) config.PatchOnly = true;
 
         Banner();
 
@@ -70,12 +71,19 @@ static class Launcher
 
         // [1] Token
         Header(1, total, "Token");
-        if (string.IsNullOrWhiteSpace(config.Token))
+        bool isFirstRun = string.IsNullOrWhiteSpace(config.Token);
+        if (isFirstRun)
         {
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write("  Enter server token: ");
             Console.ResetColor();
             config.Token = Console.ReadLine()?.Trim() ?? "";
+
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("  Patch only (don't launch server)? [y/N]: ");
+            Console.ResetColor();
+            var patchAnswer = Console.ReadLine()?.Trim().ToLower() ?? "";
+            config.PatchOnly = patchAnswer == "y" || patchAnswer == "yes";
         }
         if (string.IsNullOrWhiteSpace(config.Token))
             Fatal("No token provided.");
@@ -163,11 +171,13 @@ static class Launcher
             }
             Ok("All addons ready.");
 
-            if (devMode)
+            if (devMode || config.PatchOnly)
             {
                 Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("  ⚠  DEV  Addon patch complete. Server not launched.");
+                Console.WriteLine(devMode
+                    ? "  ⚠  DEV  Addon patch complete. Server not launched."
+                    : "  ⚠  Addon patch complete. Server not launched (patchOnly=true).");
                 Console.ResetColor();
                 break;
             }
@@ -470,6 +480,7 @@ class Config
     [JsonPropertyName("verifyAddons")] public bool   VerifyAddons   { get; set; } = false;
     [JsonPropertyName("map")]         public string Map            { get; set; } = "";
     [JsonPropertyName("extraArgs")]   public string ExtraArgs      { get; set; } = "";
+    [JsonPropertyName("patchOnly")]   public bool   PatchOnly      { get; set; } = false;
 }
 
 class AddonInfo

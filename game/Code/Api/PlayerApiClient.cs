@@ -56,7 +56,7 @@ public static class PlayerApiClient
 	public static async Task<bool> ShareScreenshot( byte[] imageData, bool forced = false )
 	{
 		await GameTask.MainThread();
-		if ( !ServerApiLink.HasAuthorizationKey )
+		if ( string.IsNullOrEmpty( ServerApiLink.Current?.TenantId ) )
 		{
 			return false;
 		}
@@ -82,7 +82,7 @@ public static class PlayerApiClient
 
 	public static async Task<bool> Consent()
 	{
-		if ( !ServerApiLink.HasAuthorizationKey )
+		if ( string.IsNullOrEmpty( ServerApiLink.Current?.TenantId ) )
 		{
 			return true;
 		}

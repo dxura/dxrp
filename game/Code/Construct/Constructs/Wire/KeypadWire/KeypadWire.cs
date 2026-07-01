@@ -83,6 +83,11 @@ public class KeypadWire() : BaseWireConstruct( ConstructType.KeypadWire ), IWire
 	[Rpc.Host]
 	public void SubmitCodeHost( string code )
 	{
+		if ( code.Length > Wire.MaxWireStringLength )
+		{
+			return;
+		}
+
 		var caller = Rpc.Caller;
 		var callerId = Rpc.CallerId;
 		if ( Cooldown.Current.CheckAndStartCooldown( $"{callerId}:keypad", Config.Current.Game.ActionCooldown ) )

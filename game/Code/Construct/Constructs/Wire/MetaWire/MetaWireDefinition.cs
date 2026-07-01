@@ -1,11 +1,11 @@
 namespace Dxura.RP.Game.Wire;
 
-public class MetaWireDefinition : ConstructDefinition<MetaWire, MetaWireData>
+public class MetaWireDefinition : WireConstructDefinition<MetaWire, MetaWireData>
 {
 	public override ConstructType Type => ConstructType.MetaWire;
 	public override uint Limit => Config.Current.Game.MetaWireLimit;
 
-	protected override ConstructDataValidationResult ValidateTyped( MetaWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( MetaWireData data )
 	{
 		return ConstructDataValidationResult.Success();
 	}

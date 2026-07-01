@@ -383,6 +383,18 @@
             "OnComponentUpdate": null
           },
           {
+            "__type": "Dxura.RP.Game.PartySystem",
+            "__guid": "b3f1d6a2-4e57-4c8b-9a10-7d2e6f9c4a51",
+            "__enabled": true,
+            "Flags": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null
+          },
+          {
             "__type": "Dxura.RP.Game.Minigame.MinigameSystem",
             "__guid": "6322be43-9b42-4bc8-9fd4-0a0c3d853c13",
             "__enabled": true,

@@ -1,0 +1,109 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+@* Always-on party roster HUD — accordion header (icon + PARTY + chevron) + expandable member cards. *@
+
+@{
+	var room = PartyRoom.Current;
+}
+
+@* Interaction (matches AdminTickets + DraggablePanel law — cursor must be unlocked for BOTH actions):
+   - Hold Alt ("Mouse" / cursor unlock in s&box settings) to interact, same as ticket headers.
+   - With the cursor unlocked: click the chevron to expand/collapse (mousedown stopPropagation so the
+     drag handle does not eat the click), or drag the bar to reposition.
+   - /party menu open also registers HUD.SetCursorUnlockRequest, so the bar is interactive while the menu
+     is open. No pointer-events override here — interactivity follows the HUD cursor-unlock gate. *@
+@if ( room is null || room.Count == 0 || Hidden )
+{
+	return;
+}
+
+<root>
+	<DraggablePanel StorageKey="party-hud"
+	                HandleClass="party-header-bar flex flex-row items-center"
+	                Class="party-hud-panel">
+		<HandleContent>
+			<div class="party-header-content flex flex-row items-center">
+				<i class="material-icons party-header-icon" style="color: @AccentHex">group</i>
+				<label class="party-header-title">#party.hud_title</label>
+				<div class="flex-grow"></div>
+				<button class="party-header-toggle"
+				        tooltip="@Language.GetPhrase( _collapsed ? "party.hud_expand" : "party.hud_collapse" )"
+				        @onmousedown="@StopMouseEvent"
+				        @onclick="@ToggleCollapsed">
+					<i class="material-icons party-header-chevron">@(_collapsed ? "chevron_right" : "expand_more")</i>
+				</button>
+			</div>
+		</HandleContent>
+
+		<ChildContent>
+			@if ( !_collapsed )
+			{
+				<div class="party-members flex flex-col">
+					@foreach ( var member in OrderedMembers( room ) )
+					{
+						var memberPlayer = GameUtils.GetPlayerById( member.Id );
+						<PartyMemberCard Player=@memberPlayer IsLeader=@member.IsLeader AccentColor=@AccentColor/>
+					}
+				</div>
+			}
+		</ChildContent>
+	</DraggablePanel>
+</root>
+
+@code
+{
+	private uint AccentColor => PartySystem.Instance is { } system && Player.Local.IsValid()
+		? system.GetPartyColorForMember( Player.Local.SteamId )
+		: PartySystem.DefaultPartyColor;
+
+	private string AccentHex => AccentColor.Hex();
+
+	/// <summary>Client-side toggle to minimize the always-on roster. Restored from the /party menu.</summary>
+	public static bool Hidden { get; set; }
+
+	// Collapsed by default — retracted bar shows icon + PARTY + chevron until the player expands.
+	private static bool _collapsed = false;
+
+	private static void StopMouseEvent( PanelEvent e ) => e.StopPropagation();
+
+	private void ToggleCollapsed()
+	{
+		_collapsed = !_collapsed;
+		Sound.Play( "pop" );
+	}
+
+	private static IEnumerable<PartyMember> OrderedMembers( PartyRoom room )
+	{
+		var localId = Player.Local.IsValid() ? Player.Local.SteamId : 0L;
+		return room.Members
+			.Where( m => m.Id != localId )
+			.OrderByDescending( m => m.IsLeader )
+			.ThenBy( m => m.Name );
+	}
+
+	protected override int BuildHash()
+	{
+		var room = PartyRoom.Current;
+		if ( room is null )
+		{
+			return 0;
+		}
+
+		var hash = new HashCode();
+		hash.Add( room.Id );
+		hash.Add( room.Count );
+		hash.Add( AccentColor );
+		hash.Add( _collapsed );
+		hash.Add( PartyMenu.IsOpen );
+		hash.Add( Hidden );
+		foreach ( var member in room.Members )
+		{
+			hash.Add( member.Id );
+			hash.Add( member.IsLeader );
+			hash.Add( member.Name );
+		}
+
+		return hash.ToHashCode();
+	}
+}

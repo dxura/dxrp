@@ -3,7 +3,7 @@ using Dxura.RP.Game.UI;
 
 namespace Dxura.RP.Game.Wire;
 
-public class NotifierWireDefinition : ConstructDefinition<NotifierWire, NotifierWireData>
+public class NotifierWireDefinition : WireConstructDefinition<NotifierWire, NotifierWireData>
 {
 	public override ConstructType Type => ConstructType.NotifierWire;
 	public override uint Limit => Config.Current.Game.NotiferWireLimit;
@@ -11,7 +11,7 @@ public class NotifierWireDefinition : ConstructDefinition<NotifierWire, Notifier
 	public const uint MinNotifierTextLength = 1;
 	public const uint MaxNotifierTextLength = 100;
 
-	protected override ConstructDataValidationResult ValidateTyped( NotifierWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( NotifierWireData data )
 	{
 		if ( string.IsNullOrWhiteSpace( data.Message ) )
 		{

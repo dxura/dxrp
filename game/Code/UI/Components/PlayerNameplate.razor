@@ -8,6 +8,14 @@
 }
 
 <root>
+	@if ( ShowPartyNameplateTag )
+	{
+		<div class="party-tag">
+			<i class="material-icons text-accent">group</i>
+			<span style="color: @PartyColorHex">#party.nameplate_tag</span>
+		</div>
+	}
+
 	@foreach(var statusId in Player.Statuses.Keys.Where( x => Status.Current.GetCachedInstance(x)?.ShowOnNameplate ?? false) )
 	{
 		var status = Status.Current.GetCachedInstance( statusId );
@@ -75,6 +83,51 @@
 	                               Player != Player.Local &&
 	                               HasMedkitEquipped();
 
+	// Marks teammates in the local player's party. Reads the host-synced PartySystem state, so it is
+	// safe on the client. Never marks the local player or players outside the local player's party.
+	private bool IsPartyMember
+	{
+		get
+		{
+			var party = PartySystem.Instance;
+			if ( party is null || !Player.IsValid() || !Player.Local.IsValid() || Player == Player.Local )
+			{
+				return false;
+			}
+
+			return party.AreInSameParty( Player.Local.SteamId, Player.SteamId );
+		}
+	}
+
+	// The party's customizable highlight color (same packed value the future party HUD will use),
+	// rendered as a hex string for inline styling — mirrors how rank/status colors are applied.
+	private uint PartyColorValue => PartySystem.Instance is { } party && Player.IsValid()
+		? party.GetPartyColorForMember( Player.SteamId )
+		: PartySystem.DefaultPartyColor;
+
+	private string PartyColorHex => PartyColorValue.Hex();
+
+	// When member outlines are on, skip the redundant PARTY chip — name/job nameplate stays visible.
+	private bool ShowPartyNameplateTag
+	{
+		get
+		{
+			if ( !IsPartyMember )
+			{
+				return false;
+			}
+
+			var party = PartySystem.Instance;
+			if ( party is null || !Player.Local.IsValid() )
+			{
+				return true;
+			}
+
+			var partyId = party.GetPartyId( Player.Local.SteamId );
+			return !partyId.HasValue || !party.IsMemberOutlineEnabled( partyId.Value );
+		}
+	}
+	
 	private bool HasCameraEquipped()
 	{
 		if ( !Player.Local.IsValid() )
@@ -147,6 +200,10 @@
 		hash.Add(health.CeilToInt());
 		hash.Add( DxNameplates );
 		hash.Add( RankSystem.Instance.GetPlayerRank( Player.SteamId )?.Name );
+		var isPartyMember = IsPartyMember;
+		hash.Add( isPartyMember );
+		hash.Add( isPartyMember ? PartyColorValue : 0u );
+		hash.Add( ShowPartyNameplateTag );
 		return hash.ToHashCode();
 	}
 }

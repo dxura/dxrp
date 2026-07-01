@@ -1,3 +1,4 @@
+using Dxura.RP.Game.Commands;
 using Dxura.RP.Game.Entities;
 using Dxura.RP.Game.System.Events;
 using Dxura.RP.Game.UI;
@@ -395,10 +396,10 @@ public class GameManager : SingletonComponent<GameManager>, IGameEvents, IConfig
 				var baseEntityComponent = entityToSpawn.GetComponent<BaseEntity>();
 				if ( baseEntityComponent != null )
 				{
-					baseEntityComponent.Owner = player.SteamId;
 					baseEntityComponent.ConfigureGameModeEntityHost( entity );
 				}
 
+				GameUtils.AssignSpawnedOwnership( entityToSpawn, player );
 				entityToSpawn.NetworkSpawn( player.Connection );
 				PurchaseSound?.Broadcast( entityToSpawn.WorldPosition, entityToSpawn );
 				return;
@@ -429,10 +430,10 @@ public class GameManager : SingletonComponent<GameManager>, IGameEvents, IConfig
 						return;
 					}
 
-					shipmentBaseEntity.Owner = player.SteamId;
 					shipmentEntity.MarketItemId = marketItem.Id;
 					shipmentEntity.ConfigureHost( equipment, marketItem.Quantity );
 
+					GameUtils.AssignSpawnedOwnership( shipmentObject, player );
 					shipmentObject.NetworkSpawn( player.Connection );
 					PurchaseSound?.Broadcast( shipmentObject.WorldPosition, shipmentObject );
 					return;
@@ -445,6 +446,23 @@ public class GameManager : SingletonComponent<GameManager>, IGameEvents, IConfig
 					marketItemId: marketItem.Id );
 				PurchaseSound?.Broadcast( droppedEquipment.WorldPosition, droppedEquipment.GameObject );
 				return;
+		}
+	}
+
+	[Rpc.Host]
+	public void SpawnMarketItemHost( Guid marketItemId )
+	{
+		var player = GameUtils.GetPlayerByConnectionId( Rpc.CallerId );
+		var marketItem = GameModeMarketItems.FindById( marketItemId );
+
+		if ( !player.IsValid() || marketItem == null )
+		{
+			return;
+		}
+
+		if ( !SpawnEntityCommand.TrySpawnMarketItem( player, marketItem ) )
+		{
+			player.Error( "#generic.forbidden" );
 		}
 	}
 

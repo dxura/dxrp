@@ -7,6 +7,15 @@ Settings {
   display: flex;
   flex-direction: column;
 
+  .settings-tabs {
+    flex-wrap: wrap;
+
+    .btn {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
   .navigator-body {
     flex-grow: 1;
 

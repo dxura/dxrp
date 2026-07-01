@@ -1,11 +1,10 @@
-﻿using Dxura.RP.Game.UI;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 namespace Dxura.RP.Game.Wire;
 
 [Title( "Button" )]
 [Category( "Wire" )]
 [Icon( "cable" )]
-public class ButtonWire() : BaseWireConstruct( ConstructType.ButtonWire ), Component.IPressable, IContextualObject, IWireEvents
+public class ButtonWire() : BaseWireConstruct( ConstructType.ButtonWire ), Component.IPressable, IWireEvents
 {
 	[Property] [RequireComponent]
 	private HighlightOutline Highlight { get; set; } = null!;
@@ -157,11 +156,5 @@ public class ButtonWire() : BaseWireConstruct( ConstructType.ButtonWire ), Compo
 	{
 		Highlight.Enabled = false;
 	}
-
-	public Vector3 ContextPosition => WorldPosition + Vector3.Up * 6f;
-	public bool LookOpacity => false;
-	public float ContextMaxDistance => 100f;
-
-	public string? DisplayText => string.IsNullOrWhiteSpace( _data.Label ) ? null : _data.Label;
 
 }

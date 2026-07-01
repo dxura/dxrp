@@ -19,6 +19,18 @@ public static class TabMenuSectionPreferences
 		return Load().MarketCategories.ToHashSet( StringComparer.OrdinalIgnoreCase );
 	}
 
+	public static bool LoadMarketAdminMode()
+	{
+		return Load().MarketAdminMode;
+	}
+
+	public static void SaveMarketAdminMode( bool enabled )
+	{
+		var data = Load();
+		data.MarketAdminMode = enabled;
+		Write( data );
+	}
+
 	public static void SaveCollapsedJobGroups( IEnumerable<Guid> collapsedGroupIds )
 	{
 		var data = Load();
@@ -79,5 +91,6 @@ public static class TabMenuSectionPreferences
 	{
 		public List<string> JobGroups { get; set; } = [];
 		public List<string> MarketCategories { get; set; } = [];
+		public bool MarketAdminMode { get; set; } = false;
 	}
 }

@@ -32,7 +32,7 @@
 		var canTeleport = RankSystem.HasLocalPermission( Permission.PlayerTeleport );
 		var canSpectate = canTargetRank && RankSystem.HasLocalPermission( Permission.PlayerSpectate );
 		var canUnwanted = isWanted && isLocalPlayerGovernment;
-		var canForceScreenshotAction = canForceScreenshot && ServerApiLink.HasAuthorizationKey;
+		var canForceScreenshotAction = canForceScreenshot && !string.IsNullOrEmpty( ServerApiLink.Current?.TenantId );
 		var hasPrimaryActionButtons = canTeleport || canSpectate || canUnwanted || canForceScreenshotAction;
 	}
 

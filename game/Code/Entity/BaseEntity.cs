@@ -23,8 +23,8 @@ public class BaseEntity : Component, IDamageEvents, IDescription, IOwned, IGameO
 	public GameModeAddonContentDto? Content => GameModeEntity.Content();
 	
 	public bool DestroyOnDisconnect => GameModeEntity?.DestroyOnDisconnect ?? true;
-	public bool DestroyOnJobChange => GameModeEntity?.DestroyOnJobChange ?? true;
-	public bool AllowOwnershipTransfer => GameModeEntity?.AllowOwnershipTransfer ?? false;
+	public virtual bool DestroyOnJobChange => GameModeEntity?.DestroyOnJobChange ?? true;
+	public virtual bool AllowOwnershipTransfer => GameModeEntity?.AllowOwnershipTransfer ?? false;
 
 	/// <summary>
 	///     Health component (If we have one)

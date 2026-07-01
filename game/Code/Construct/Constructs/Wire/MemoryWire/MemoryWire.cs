@@ -25,7 +25,7 @@ public class MemoryWire() : BaseWireConstruct( ConstructType.MemoryWire ), IWire
 	[WireOutput( "has_value" )]
 	private bool HasValue { get; set; }
 
-	public override string Name => $"Memory";
+	public override string Name => "Memory";
 
 	public void OnWireTick()
 	{
@@ -38,7 +38,7 @@ public class MemoryWire() : BaseWireConstruct( ConstructType.MemoryWire ), IWire
 		// Edge detection for store
 		else if ( Store && !_lastStoreState )
 		{
-			_storedValue = Input;
+			_storedValue = Input is string s && s.Length > Wire.MaxWireStringLength ? s[..Wire.MaxWireStringLength] : Input;
 			UpdateOutputs();
 		}
 

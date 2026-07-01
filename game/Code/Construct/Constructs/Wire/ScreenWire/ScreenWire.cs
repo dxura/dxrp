@@ -19,7 +19,7 @@ public class ScreenWire() : BaseWireConstruct( ConstructType.ScreenWire ), IWire
 	[Change( nameof( OnCurrentValueChanged ) )]
 	private string CurrentValue { get; set; } = "...";
 
-	public override string Name => $"Screen ({_data.Label})";
+	public override string Name => "Screen";
 
 	private DisplayMode _mode = DisplayMode.Text;
 
@@ -52,7 +52,8 @@ public class ScreenWire() : BaseWireConstruct( ConstructType.ScreenWire ), IWire
 	{
 		set
 		{
-			var newValue = value?.ToString() ?? "...";
+			var raw = value?.ToString() ?? "...";
+			var newValue = raw.Length > Wire.MaxWireStringLength ? raw[..Wire.MaxWireStringLength] : raw;
 			if ( CurrentValue != newValue )
 			{
 				BroadcastScreenValue( newValue );
@@ -600,6 +601,11 @@ public class ScreenWire() : BaseWireConstruct( ConstructType.ScreenWire ), IWire
 		if ( string.IsNullOrEmpty( text ) )
 		{
 			return string.Empty;
+		}
+
+		if ( text.Length > Wire.MaxWireStringLength )
+		{
+			text = text[..Wire.MaxWireStringLength];
 		}
 
 		var words = text.Split( ' ' );

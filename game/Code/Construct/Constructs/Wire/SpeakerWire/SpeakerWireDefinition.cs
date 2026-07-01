@@ -3,7 +3,7 @@ using Dxura.RP.Game.UI;
 
 namespace Dxura.RP.Game.Wire;
 
-public class SpeakerWireDefinition : ConstructDefinition<SpeakerWire, SpeakerWireData>
+public class SpeakerWireDefinition : WireConstructDefinition<SpeakerWire, SpeakerWireData>
 {
 	public override ConstructType Type => ConstructType.SpeakerWire;
 	public override uint Limit => Config.Current.Game.SpeakerWireLimit;
@@ -12,7 +12,7 @@ public class SpeakerWireDefinition : ConstructDefinition<SpeakerWire, SpeakerWir
 	public const float DefaultSpeakerPitch = 1.0f;
 	public const float DefaultSpeakerDistance = 800f;
 
-	protected override ConstructDataValidationResult ValidateTyped( SpeakerWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( SpeakerWireData data )
 	{
 		if ( data.Volume is < SpeakerWireTool.MinSpeakerVolume or > SpeakerWireTool.MaxSpeakerVolume )
 		{

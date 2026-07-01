@@ -1,4 +1,5 @@
 using Dxura.RP.Game.Tools;
+using Dxura.RP.Game.Wire;
 using Dxura.RP.Shared;
 using Sandbox.Diagnostics;
 using System.Threading;
@@ -265,6 +266,101 @@ public partial class Construct
 		Log.Info( $"Player {player.SteamId} updated construct ({construct.Type})" );
 
 		player.Success( "Applied" );
+	}
+
+	[Rpc.Host]
+	private void UpdateWireLabelHost( GameObject target, string label )
+	{
+		var callerId = Rpc.CallerId;
+		if ( Cooldown.Current.CheckAndStartCooldown( $"{callerId}:construct:update", Config.Current.Game.ConstructUpdateCooldown ) )
+		{
+			return;
+		}
+
+		var player = GameUtils.GetPlayerByConnectionId( callerId );
+		if ( !player.IsValid() )
+		{
+			Log.Warning( "Invalid player tried to update wire label" );
+			return;
+		}
+
+		if ( !target.IsValid() || !target.Root.Tags.Has( Constants.ConstructTag ) )
+		{
+			Log.Warning( $"Player ({player.SteamId}) tried to update wire label but target is invalid" );
+			return;
+		}
+
+		var distance = Vector3.DistanceBetween( player.GameObject.WorldPosition, target.WorldPosition );
+		if ( distance > Config.Current.Game.ReachDistance * 1.25f )
+		{
+			Log.Warning( $"Player ({player.SteamId}) tried to update wire label outside reach distance ({distance} > {Config.Current.Game.ReachDistance * 1.25f})" );
+			player.Error( "#generic.error" );
+			return;
+		}
+
+		var baseConstruct = target.Root.GetComponent<BaseConstruct>();
+		if ( baseConstruct == null || !baseConstruct.IsValid() )
+		{
+			player.Error( "#tool.wire.labeler.invalid" );
+			return;
+		}
+
+		var construct = baseConstruct as IConstruct;
+		if ( construct == null || !construct.IsValid() || !GameUtils.HasPermission( player.SteamId, construct.GameObject ) )
+		{
+			player.Error( "#generic.permission" );
+			return;
+		}
+
+		if ( construct.Data is not IWireLabelData )
+		{
+			player.Error( "#tool.wire.labeler.invalid" );
+			return;
+		}
+
+		label = label?.Trim() ?? string.Empty;
+		var labelValidation = WireLabelHelper.ValidateLabel( label );
+		if ( !labelValidation.IsValid )
+		{
+			player.Error( labelValidation.ErrorMessage );
+			return;
+		}
+
+		var definition = GetDefinition( construct.Type );
+		if ( definition == null )
+		{
+			return;
+		}
+
+		var dataJson = baseConstruct.DataJson;
+		if ( string.IsNullOrEmpty( dataJson ) )
+		{
+			var serializeCurrent = Serializer.Serialize( construct.Type, construct.Data );
+			if ( !serializeCurrent.IsSuccess )
+			{
+				player.Error( "#tool.wire.labeler.invalid" );
+				return;
+			}
+
+			dataJson = serializeCurrent.Value;
+		}
+
+		var deserializationResult = Serializer.DeserializeWithMigration( dataJson, definition );
+		if ( !deserializationResult.IsSuccess || deserializationResult.Value is not IWireLabelData labelData )
+		{
+			player.Error( "#tool.wire.labeler.invalid" );
+			return;
+		}
+
+		labelData.Label = label;
+
+		if ( !UpdateConstruct( construct, deserializationResult.Value ) )
+		{
+			player.Error( "Failed to update construct data" );
+			return;
+		}
+
+		Log.Info( $"Player {player.SteamId} updated wire label on construct ({construct.Type})" );
 	}
 
 	[Rpc.Host]

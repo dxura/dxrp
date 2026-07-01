@@ -80,6 +80,19 @@
 								    <span class="message text-base text-shadow" style="max-width: 350px;">@entry.Message</span>
 							    </span>
 							    break;
+						    case MessageType.PartyChat:
+							    <span class="flex flex-row w-full items-center gap-sm">
+								    <span class="flex flex-row gap-sm items-center">
+									    <label class="small no-shadow party-color text-base text-bold tags">@GetBracketedChatLabel( "chat.label.party" )</label>
+									    @if ( !string.IsNullOrEmpty( entry.Author ) )
+									    {
+										    <label class="playername bold no-shadow text-base text-bold"
+										           style="color: @entry.Color.Hex">@entry.Author</label>
+									    }
+								    </span>
+								    <span class="message text-base text-shadow" style="max-width: 350px;">@entry.Message</span>
+							    </span>
+							    break;
 						    case MessageType.Minigame:
 							    @if ( MinigameSystem.Instance.IsValid() && MinigameSystem.Instance.CurrentMinigame != null)
 							    {
@@ -387,6 +400,7 @@
 
 	private bool IsGovernment => Player.Local.IsValid() && Player.Local.Job.IsGovernmentRole();
 	private bool IsInFaction => Player.Local.IsValid() && Player.Local.IsInFaction;
+	private bool IsInParty => Player.Local.IsValid() && PartySystem.Instance.IsValid() && PartySystem.Instance.IsInParty( Player.Local.SteamId );
 	private bool CanStaffChat => RankSystem.HasLocalPermission( Permission.StaffChat );
 
 	private bool Open => _isOpen;
@@ -405,6 +419,11 @@
 
 		AcceptsFocus = false;
 
+		// Keep the active channel valid every frame so leaving a party (or losing
+		// gov/staff/faction access) falls back to Local instead of stranding you in
+		// a now-hidden mode.
+		EnsureValidChatMode();
+
 		if ( Input.Pressed( "chat" ) )
 		{
 			if ( !_isOpen )
@@ -414,7 +433,6 @@
 
 			InputBox.Focus();
 			_isOpen = true;
-			EnsureValidChatMode();
 		}
 
 		if ( !_isOpen )
@@ -498,12 +516,23 @@
 
 	private void EnsureValidChatMode()
 	{
-		var availableModes = GetAvailableChatModes();
-		if ( !availableModes.Contains( _chatMode ) )
+		if ( !IsValidChatMode( _chatMode ) )
 		{
-			_chatMode = availableModes[0];
+			_chatMode = MessageType.LocalChat;
 		}
 	}
+
+	// No allocation — only checks whether the current mode is still accessible.
+	private bool IsValidChatMode( MessageType mode ) => mode switch
+	{
+		MessageType.LocalChat => true,
+		MessageType.GlobalChat => Config.Current.Game.OocChatEnabled,
+		MessageType.GovernmentChat => IsGovernment,
+		MessageType.StaffChat => CanStaffChat,
+		MessageType.FactionChat => IsInFaction,
+		MessageType.PartyChat => IsInParty,
+		_ => false
+	};
 
 	private List<MessageType> GetAvailableChatModes()
 	{
@@ -532,6 +561,11 @@
 			modes.Add( MessageType.FactionChat );
 		}
 
+		if ( IsInParty )
+		{
+			modes.Add( MessageType.PartyChat );
+		}
+
 		return modes;
 	}
 
@@ -548,6 +582,7 @@
 			MessageType.GovernmentChat => "mode-government",
 			MessageType.StaffChat => "mode-staff",
 			MessageType.FactionChat => "mode-faction",
+			MessageType.PartyChat => "mode-party",
 			_ => "mode-local"
 		};
 	}
@@ -637,6 +672,7 @@
 			MessageType.GovernmentChat => Language.GetPhrase( "chat.label.gov" ),
 			MessageType.StaffChat => Language.GetPhrase( "chat.label.staff" ),
 			MessageType.FactionChat => Language.GetPhrase( "chat.label.fac" ),
+			MessageType.PartyChat => Language.GetPhrase( "chat.label.party" ),
 			_ => chatMode.ToString().ToUpperInvariant()
 		};
 	}

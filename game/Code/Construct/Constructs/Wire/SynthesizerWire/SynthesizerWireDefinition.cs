@@ -1,12 +1,12 @@
 using Dxura.RP.Game.Tools;
 namespace Dxura.RP.Game.Wire;
 
-public class SynthesizerWireDefinition : ConstructDefinition<SynthesizerWire, SynthesizerWireData>
+public class SynthesizerWireDefinition : WireConstructDefinition<SynthesizerWire, SynthesizerWireData>
 {
 	public override ConstructType Type => ConstructType.SynthesizerWire;
 	public override uint Limit => Config.Current.Game.SynthesizerWireLimit;
 
-	protected override ConstructDataValidationResult ValidateTyped( SynthesizerWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( SynthesizerWireData data )
 	{
 		if ( data.Volume is < 0f or > 1f )
 		{

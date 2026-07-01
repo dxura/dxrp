@@ -121,7 +121,11 @@ public sealed class GameNetworkManager : SingletonComponent<GameNetworkManager>,
 	{
 		var gameMode = await ServerApiClient.FetchDefaultGameMode();
 		await GameTask.MainThread();
-		Config.Current.SetGameMode( gameMode ?? GameModeDto.Default );
+		Config.Current.SetGameMode( gameMode ?? new GameModeDto
+		{
+			Name = "None"
+		} );
+		
 		Config.Current.MarkReady();
 		Networking.CreateLobby( new LobbyConfig()
 		{

@@ -1,5 +1,7 @@
 ﻿namespace Dxura.RP.Game;
 
+using Dxura.RP.Game.Wire;
+
 public partial class Construct
 {
 	/// <summary>
@@ -48,6 +50,47 @@ public partial class Construct
 	{
 		var data = GetData<T>( source );
 		return UpdateConstruct( target, data );
+	}
+
+	/// <summary>
+	/// Update only the label on a wire construct.
+	/// </summary>
+	public bool UpdateWireLabelPlayer( GameObject target, string label )
+	{
+		var construct = target.Root.GetComponent<IConstruct>();
+		if ( construct == null || !construct.IsValid() )
+		{
+			Notify.Error( "#tool.wire.labeler.invalid" );
+			return false;
+		}
+
+		if ( construct.Data is not IWireLabelData )
+		{
+			Notify.Error( "#tool.wire.labeler.invalid" );
+			return false;
+		}
+
+		if ( !GameUtils.HasPermission( Player.Local.SteamId, construct.GameObject ) )
+		{
+			Notify.Error( "#generic.permission" );
+			return false;
+		}
+
+		label = label?.Trim() ?? string.Empty;
+		var labelValidation = WireLabelHelper.ValidateLabel( label );
+		if ( !labelValidation.IsValid )
+		{
+			Notify.Error( labelValidation.ErrorMessage );
+			return false;
+		}
+
+		if ( Cooldown.Current.CheckAndStartCooldown( "construct:update", Config.Current.Game.ConstructUpdateCooldown, true ) )
+		{
+			return false;
+		}
+
+		UpdateWireLabelHost( target, label );
+		return true;
 	}
 
 	private bool UpdateConstruct<T>( IConstruct construct, T data ) where T : IConstructData

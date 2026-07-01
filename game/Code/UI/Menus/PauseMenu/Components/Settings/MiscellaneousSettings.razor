@@ -58,6 +58,13 @@
 		                              )/>
 	</div>
 
+	<div class="flex gap-2">
+		<p class="text-base">#settings.misc.tv_line_of_sight</p>
+		<SwitchControl Value="@( bool.Parse(ConsoleSystem.GetValue( "dx_tv_line_of_sight", "false")) )"
+		               OnValueChanged=@( ( bool value ) => { ConsoleSystem.SetValue( "dx_tv_line_of_sight", value ); }
+		                              )/>
+	</div>
+
 
 
 </root>

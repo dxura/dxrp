@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public class ButtonWireDefinition : ConstructDefinition<ButtonWire, ButtonWireData>
+public class ButtonWireDefinition : WireConstructDefinition<ButtonWire, ButtonWireData>
 {
 	public override ConstructType Type => ConstructType.ButtonWire;
 	public override uint Limit => Config.Current.Game.ButtonWireLimit;
@@ -10,7 +10,7 @@ public class ButtonWireDefinition : ConstructDefinition<ButtonWire, ButtonWireDa
 	public const float DefaultButtonOffValue = 0f;
 	public const float DefaultButtonOnValue = 1f;
 
-	protected override ConstructDataValidationResult ValidateTyped( ButtonWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( ButtonWireData data )
 	{
 		if ( data.OffValue is < MinButtonValue or > MaxButtonValue )
 		{

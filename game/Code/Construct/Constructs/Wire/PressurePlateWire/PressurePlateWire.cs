@@ -54,7 +54,13 @@ public class PressurePlateWire() : BaseWireConstruct( ConstructType.PressurePlat
 
 	protected override void OnStart()
 	{
+		EnsurePlateHierarchy();
 		base.OnStart();
+	}
+
+	public override void OnUnoccluded()
+	{
+		base.OnUnoccluded();
 		UpdateMeshes();
 	}
 
@@ -66,203 +72,23 @@ public class PressurePlateWire() : BaseWireConstruct( ConstructType.PressurePlat
 		{
 			UpdatePlateAnimation();
 		}
-
 	}
 
 	protected override void OnFixedUpdate()
 	{
 		base.OnFixedUpdate();
-		
-		if ( IsOwner )
+
+		if ( Networking.IsHost && !IsPreview )
 		{
 			CheckZone();
 		}
-		
 	}
 
-	private void CheckZone()
+	protected override void OnDataChanged( IConstructData oldData, IConstructData newData )
 	{
-		var objects = FindObjectsInZone();
-		var occupied = objects.Count > 0;
-		var totalMass = SumMass( objects );
-
-		var stateChanged = occupied != _isPlateOccupied
-		                   || objects.Count != _objectCountOnPlate
-		                   || Math.Abs( totalMass - _totalMassOnPlate ) > 0.01f;
-
-		if ( stateChanged )
-		{
-			if ( occupied && !_isPlateOccupied )
-			{
-				_hasBeenTriggeredSinceLastWireTick = true;
-			}
-
-			SyncZoneStateHost( occupied, totalMass, objects.Count );
-		}
-
-		_isPlateOccupied = occupied;
-		_totalMassOnPlate = totalMass;
-		_objectCountOnPlate = objects.Count;
-		_animatedMassOnPlate = totalMass;
-	}
-
-	private List<GameObject> FindObjectsInZone()
-	{
-		var results = new List<GameObject>();
-		var bounds = GetDetectionBounds();
-		var hits = Scene.FindInPhysics( bounds );
-		var processed = new HashSet<GameObject>();
-
-		foreach ( var hit in hits )
-		{
-			var root = hit.Root;
-			if ( !root.IsValid() || !processed.Add( root ) )
-			{
-				continue;
-			}
-
-			if ( root == GameObject.Root )
-			{
-				continue;
-			}
-
-			if ( !PassesFilter( root ) )
-			{
-				continue;
-			}
-
-			if ( !IsPointOnPlate( GetSamplePoint( root ) ) )
-			{
-				continue;
-			}
-
-			results.Add( root );
-		}
-
-		return results;
-	}
-
-	private static float SumMass( IEnumerable<GameObject> objects )
-	{
-		var total = 0f;
-		foreach ( var obj in objects )
-		{
-			total += GetObjectMass( obj );
-		}
-
-		return total;
-	}
-
-	private BBox GetDetectionBounds()
-	{
-		var halfLength = _data.Length * 0.5f;
-		var halfWidth = _data.Width * 0.5f;
-		var plateTop = GetPlateTopLocalZ();
-		var minLocal = new Vector3( -halfLength, -halfWidth, plateTop );
-		var maxLocal = new Vector3( halfLength, halfWidth, plateTop + PressurePlateWireDefinition.DetectionHeight );
-
-		var transform = GameObject.WorldTransform;
-		var corners = new Vector3[]
-		{
-			transform.PointToWorld( new Vector3( minLocal.x, minLocal.y, minLocal.z ) ),
-			transform.PointToWorld( new Vector3( maxLocal.x, minLocal.y, minLocal.z ) ),
-			transform.PointToWorld( new Vector3( minLocal.x, maxLocal.y, minLocal.z ) ),
-			transform.PointToWorld( new Vector3( maxLocal.x, maxLocal.y, minLocal.z ) ),
-			transform.PointToWorld( new Vector3( minLocal.x, minLocal.y, maxLocal.z ) ),
-			transform.PointToWorld( new Vector3( maxLocal.x, minLocal.y, maxLocal.z ) ),
-			transform.PointToWorld( new Vector3( minLocal.x, maxLocal.y, maxLocal.z ) ),
-			transform.PointToWorld( new Vector3( maxLocal.x, maxLocal.y, maxLocal.z ) )
-		};
-
-		return BBox.FromPoints( corners );
-	}
-
-	private float GetPlateTopLocalZ()
-	{
-		var plateCenterZ = PlateModel.IsValid()
-			? PlateModel.LocalPosition.z
-			: _plateRestPosition.z;
-
-		return plateCenterZ + _data.Depth * 0.5f;
-	}
-
-	private bool IsPointOnPlate( Vector3 worldPoint )
-	{
-		var localPoint = GameObject.WorldTransform.PointToLocal( worldPoint );
-		var halfLength = _data.Length * 0.5f;
-		var halfWidth = _data.Width * 0.5f;
-		var plateTop = GetPlateTopLocalZ();
-
-		if ( Math.Abs( localPoint.x ) > halfLength || Math.Abs( localPoint.y ) > halfWidth )
-		{
-			return false;
-		}
-
-		const float toleranceBelow = 1f;
-		return localPoint.z >= plateTop - toleranceBelow
-		       && localPoint.z <= plateTop + PressurePlateWireDefinition.DetectionHeight;
-	}
-
-	private Vector3 GetSamplePoint( GameObject root )
-	{
-		var player = root.GetComponent<Player>();
-		if ( player.IsValid() && player.Controller.IsValid() && player.Controller.FeetCollider.IsValid() )
-		{
-			return player.Controller.FeetCollider.WorldPosition;
-		}
-
-		BBox? combinedBounds = null;
-		foreach ( var collider in root.GetComponentsInChildren<Collider>( false ) )
-		{
-			if ( !collider.IsValid() )
-			{
-				continue;
-			}
-
-			combinedBounds = combinedBounds.HasValue
-				? combinedBounds.Value.AddBBox( collider.GetWorldBounds() )
-				: collider.GetWorldBounds();
-		}
-
-		if ( !combinedBounds.HasValue )
-		{
-			return root.WorldPosition;
-		}
-
-		var bounds = combinedBounds.Value;
-
-		var transform = GameObject.WorldTransform;
-		var localCenter = transform.PointToLocal( bounds.Center );
-		var localMin = transform.PointToLocal( bounds.Mins );
-		var localMax = transform.PointToLocal( bounds.Maxs );
-		var bottomLocalZ = MathF.Min( localMin.z, localMax.z );
-
-		return transform.PointToWorld( new Vector3( localCenter.x, localCenter.y, bottomLocalZ ) );
-	}
-
-	private bool PassesFilter( GameObject root )
-	{
-		return _data.FilterType switch
-		{
-			TriggerFilterType.PlayerOnly => root.Tags.Has( Constants.PlayerTag ),
-			TriggerFilterType.EntityOnly => root.Tags.Has( Constants.EntityTag ),
-			TriggerFilterType.ConstructOnly => root.Tags.Has( Constants.ConstructTag ),
-			_ => true
-		};
-	}
-
-	[Rpc.Host( NetFlags.Unreliable )]
-	private void SyncZoneStateHost( bool occupied, float totalMass, int objectCount )
-	{
-		if ( Rpc.CallerId != NetworkOwner )
-		{
-			return;
-		}
-
-		_isPlateOccupied = occupied;
-		_totalMassOnPlate = totalMass;
-		_objectCountOnPlate = objectCount;
-		_animatedMassOnPlate = totalMass;
+		_data = newData as PressurePlateWireData ?? new PressurePlateWireData();
+		EnsurePlateHierarchy();
+		UpdateMeshes();
 	}
 
 	public void OnWireTick()
@@ -276,18 +102,9 @@ public class PressurePlateWire() : BaseWireConstruct( ConstructType.PressurePlat
 			TriggerCount++;
 		}
 
-		if ( isCurrentlyTriggered )
-		{
-			TriggerMass = _totalMassOnPlate;
-			ObjectCount = _objectCountOnPlate;
-		}
-		else
-		{
-			TriggerMass = 0f;
-			ObjectCount = 0f;
-		}
+		TriggerMass = isCurrentlyTriggered ? _totalMassOnPlate : 0f;
+		ObjectCount = isCurrentlyTriggered ? _objectCountOnPlate : 0f;
 
-		// Update Triggered after mass/count so wired listeners see the correct values.
 		if ( hasBeenTriggered != wasTriggered )
 		{
 			Triggered = hasBeenTriggered;
@@ -311,6 +128,295 @@ public class PressurePlateWire() : BaseWireConstruct( ConstructType.PressurePlat
 		_animatedMassOnPlate = totalMass;
 	}
 
+	private void CheckZone()
+	{
+		var objects = FindObjectsInZone();
+		var occupied = objects.Count > 0;
+		var totalMass = 0f;
+		foreach ( var obj in objects )
+		{
+			totalMass += GetObjectMass( obj );
+		}
+
+		if ( occupied && !_isPlateOccupied )
+		{
+			_hasBeenTriggeredSinceLastWireTick = true;
+		}
+
+		_isPlateOccupied = occupied;
+		_totalMassOnPlate = totalMass;
+		_objectCountOnPlate = objects.Count;
+	}
+
+	private List<GameObject> FindObjectsInZone()
+	{
+		GetPlateMetrics( out var halfLength, out var halfWidth, out var plateTop );
+		var candidates = QueryPhysicsCandidates(
+			BuildZoneBounds( plateTop - PressurePlateWireDefinition.SurfaceTolerance, plateTop + PressurePlateWireDefinition.StackSearchHeight )
+		);
+
+		var counted = new HashSet<GameObject>();
+		foreach ( var root in candidates )
+		{
+			if ( PassesFilter( root ) && TouchesContactZone( root, halfLength, halfWidth, plateTop ) )
+			{
+				counted.Add( root );
+			}
+		}
+
+		for ( var pass = 0; pass < PressurePlateWireDefinition.MaxStackPasses; pass++ )
+		{
+			var addedAny = false;
+
+			foreach ( var root in candidates )
+			{
+				if ( counted.Contains( root )
+				     || !PassesFilter( root )
+				     || root.GetComponent<Player>().IsValid()
+				     || !IsStackedOn( counted, root ) )
+				{
+					continue;
+				}
+
+				counted.Add( root );
+				addedAny = true;
+			}
+
+			if ( !addedAny )
+			{
+				break;
+			}
+		}
+
+		return counted.ToList();
+	}
+
+	private IEnumerable<GameObject> QueryPhysicsCandidates( BBox bounds )
+	{
+		var processed = new HashSet<GameObject>();
+
+		foreach ( var hit in Scene.FindInPhysics( bounds ) )
+		{
+			var root = hit.Root;
+			if ( !root.IsValid() || root == GameObject.Root || !processed.Add( root ) )
+			{
+				continue;
+			}
+
+			yield return root;
+		}
+	}
+
+	private bool TouchesContactZone( GameObject root, float halfLength, float halfWidth, float plateTop )
+	{
+		if ( root.GetComponent<Player>().IsValid() )
+		{
+			return IsPointInContactZone( GetPlayerSamplePoint( root ), halfLength, halfWidth, plateTop );
+		}
+
+		var transform = GameObject.WorldTransform;
+		var minZ = plateTop - PressurePlateWireDefinition.SurfaceTolerance;
+		var maxZ = plateTop + PressurePlateWireDefinition.DetectionHeight;
+		var foundCollider = false;
+
+		foreach ( var collider in root.GetComponentsInChildren<Collider>( false ) )
+		{
+			if ( !collider.IsValid() )
+			{
+				continue;
+			}
+
+			foundCollider = true;
+
+			if ( IntersectsZone( collider.GetWorldBounds(), transform, halfLength, halfWidth, minZ, maxZ ) )
+			{
+				return true;
+			}
+		}
+
+		return !foundCollider && IsPointInContactZone( root.WorldPosition, halfLength, halfWidth, plateTop );
+	}
+
+	private bool IsStackedOn( HashSet<GameObject> supports, GameObject obj )
+	{
+		if ( !TryGetWorldBounds( obj, out var objBounds ) )
+		{
+			return false;
+		}
+
+		var transform = GameObject.WorldTransform;
+		var objBottom = GetLocalZRange( objBounds, transform ).Min;
+
+		foreach ( var support in supports )
+		{
+			if ( support == obj || !TryGetWorldBounds( support, out var supportBounds ) )
+			{
+				continue;
+			}
+
+			if ( !OverlapsHorizontally( objBounds, supportBounds, transform ) )
+			{
+				continue;
+			}
+
+			var gap = objBottom - GetLocalZRange( supportBounds, transform ).Max;
+			if ( Math.Abs( gap ) <= PressurePlateWireDefinition.StackSupportGap )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private bool IsPointInContactZone( Vector3 worldPoint, float halfLength, float halfWidth, float plateTop )
+	{
+		var localPoint = GameObject.WorldTransform.PointToLocal( worldPoint );
+
+		if ( Math.Abs( localPoint.x ) > halfLength || Math.Abs( localPoint.y ) > halfWidth )
+		{
+			return false;
+		}
+
+		return localPoint.z >= plateTop - PressurePlateWireDefinition.SurfaceTolerance
+		       && localPoint.z <= plateTop + PressurePlateWireDefinition.DetectionHeight;
+	}
+
+	private static Vector3 GetPlayerSamplePoint( GameObject root )
+	{
+		var player = root.GetComponent<Player>();
+		if ( player.IsValid()
+		     && player.Controller.IsValid()
+		     && player.Controller.FeetCollider.IsValid() )
+		{
+			return player.Controller.FeetCollider.WorldPosition;
+		}
+
+		return root.WorldPosition;
+	}
+
+	private bool PassesFilter( GameObject root )
+	{
+		return _data.FilterType switch
+		{
+			TriggerFilterType.PlayerOnly => root.Tags.Has( Constants.PlayerTag ),
+			TriggerFilterType.EntityOnly => root.Tags.Has( Constants.EntityTag ),
+			TriggerFilterType.ConstructOnly => root.Tags.Has( Constants.ConstructTag ),
+			_ => true
+		};
+	}
+
+	private float GetPlateTopLocalZ()
+	{
+		var plateCenterZ = PlateModel.IsValid()
+			? PlateModel.LocalPosition.z
+			: _plateRestPosition.z;
+
+		return plateCenterZ + _data.Depth * 0.5f;
+	}
+
+	private void GetPlateMetrics( out float halfLength, out float halfWidth, out float plateTop )
+	{
+		halfLength = _data.Length * 0.5f;
+		halfWidth = _data.Width * 0.5f;
+		plateTop = GetPlateTopLocalZ();
+	}
+
+	private BBox BuildZoneBounds( float minLocalZ, float maxLocalZ )
+	{
+		GetPlateMetrics( out var halfLength, out var halfWidth, out _ );
+		return LocalFootprintToWorldBounds( halfLength, halfWidth, minLocalZ, maxLocalZ );
+	}
+
+	private BBox LocalFootprintToWorldBounds( float halfLength, float halfWidth, float minLocalZ, float maxLocalZ )
+	{
+		var transform = GameObject.WorldTransform;
+		return BBox.FromPoints(
+		[
+			transform.PointToWorld( new Vector3( -halfLength, -halfWidth, minLocalZ ) ),
+			transform.PointToWorld( new Vector3( halfLength, -halfWidth, minLocalZ ) ),
+			transform.PointToWorld( new Vector3( -halfLength, halfWidth, minLocalZ ) ),
+			transform.PointToWorld( new Vector3( halfLength, halfWidth, minLocalZ ) ),
+			transform.PointToWorld( new Vector3( -halfLength, -halfWidth, maxLocalZ ) ),
+			transform.PointToWorld( new Vector3( halfLength, -halfWidth, maxLocalZ ) ),
+			transform.PointToWorld( new Vector3( -halfLength, halfWidth, maxLocalZ ) ),
+			transform.PointToWorld( new Vector3( halfLength, halfWidth, maxLocalZ ) )
+		] );
+	}
+
+	private static bool IntersectsZone(
+		BBox worldBounds,
+		Transform plateTransform,
+		float halfLength,
+		float halfWidth,
+		float minZ,
+		float maxZ )
+	{
+		var (minX, maxX, minY, maxY, localMinZ, localMaxZ) = GetLocalExtents( worldBounds, plateTransform );
+
+		return maxX >= -halfLength && minX <= halfLength
+		       && maxY >= -halfWidth && minY <= halfWidth
+		       && localMaxZ >= minZ && localMinZ <= maxZ;
+	}
+
+	private static bool OverlapsHorizontally( BBox a, BBox b, Transform plateTransform )
+	{
+		var aExtents = GetLocalExtents( a, plateTransform );
+		var bExtents = GetLocalExtents( b, plateTransform );
+
+		return aExtents.MaxX >= bExtents.MinX && aExtents.MinX <= bExtents.MaxX
+		       && aExtents.MaxY >= bExtents.MinY && aExtents.MinY <= bExtents.MaxY;
+	}
+
+	private static (float MinX, float MaxX, float MinY, float MaxY, float MinZ, float MaxZ) GetLocalExtents(
+		BBox worldBounds,
+		Transform plateTransform )
+	{
+		var localMin = plateTransform.PointToLocal( worldBounds.Mins );
+		var localMax = plateTransform.PointToLocal( worldBounds.Maxs );
+
+		return (
+			MathF.Min( localMin.x, localMax.x ),
+			MathF.Max( localMin.x, localMax.x ),
+			MathF.Min( localMin.y, localMax.y ),
+			MathF.Max( localMin.y, localMax.y ),
+			MathF.Min( localMin.z, localMax.z ),
+			MathF.Max( localMin.z, localMax.z )
+		);
+	}
+
+	private static (float Min, float Max) GetLocalZRange( BBox worldBounds, Transform plateTransform )
+	{
+		var extents = GetLocalExtents( worldBounds, plateTransform );
+		return (extents.MinZ, extents.MaxZ);
+	}
+
+	private static bool TryGetWorldBounds( GameObject root, out BBox bounds )
+	{
+		bounds = default;
+		BBox? combined = null;
+
+		foreach ( var collider in root.GetComponentsInChildren<Collider>( false ) )
+		{
+			if ( !collider.IsValid() )
+			{
+				continue;
+			}
+
+			combined = combined.HasValue
+				? combined.Value.AddBBox( collider.GetWorldBounds() )
+				: collider.GetWorldBounds();
+		}
+
+		if ( !combined.HasValue )
+		{
+			return false;
+		}
+
+		bounds = combined.Value;
+		return true;
+	}
+
 	private void UpdatePlateAnimation()
 	{
 		if ( !PlateModel.IsValid() || !PlateRenderer.IsValid() || GameObject.Tags.Has( Constants.OccludeTag ) )
@@ -322,29 +428,45 @@ public class PressurePlateWire() : BaseWireConstruct( ConstructType.PressurePlat
 		var pressDepth = PressurePlateWireDefinition.GetPressDepthFromMass( _animatedMassOnPlate, _data.Depth );
 		var targetPosition = _plateRestPosition + new Vector3( 0, 0, -pressDepth );
 		var lerpSpeed = 14f * Time.Delta;
-	
+
 		PlateModel.LocalPosition = Vector3.Lerp( PlateModel.LocalPosition, targetPosition, lerpSpeed );
 
 		var pressFactor = maxPress > 0f ? pressDepth / maxPress : 0f;
-		var targetPlateColor = Color.Lerp(
+		PlateRenderer.Tint = Color.Lerp(
 			PressurePlateWireDefinition.RestPlateColor,
 			PressurePlateWireDefinition.PressedPlateColor,
 			pressFactor
 		);
-		
-		PlateRenderer.Tint = Color.Lerp( PlateRenderer.Tint, targetPlateColor, lerpSpeed );
 	}
 
-	private static float GetObjectMass( GameObject obj )
+	private void EnsurePlateHierarchy()
 	{
-		var rigidbody = obj.GetComponent<Rigidbody>();
-		return rigidbody.IsValid() ? rigidbody.Mass : 0f;
-	}
+		if ( !PlateModel.IsValid() )
+		{
+			PlateModel = new GameObject( GameObject, true, "Plate" )
+			{
+				LocalPosition = Vector3.Zero,
+				LocalRotation = Rotation.Identity,
+				NetworkMode = NetworkMode.Never
+			};
+		}
 
-	protected override void OnDataChanged( IConstructData oldData, IConstructData newData )
-	{
-		_data = newData as PressurePlateWireData ?? new PressurePlateWireData();
-		UpdateMeshes();
+		if ( !PlateRenderer.IsValid() )
+		{
+			PlateRenderer = PlateModel.Components.Create<ModelRenderer>();
+			PlateRenderer.RenderType = ModelRenderer.ShadowRenderType.Off;
+		}
+
+		if ( IsPreview )
+		{
+			PlateCollider?.Destroy();
+			return;
+		}
+
+		if ( !PlateCollider.IsValid() )
+		{
+			PlateCollider = PlateModel.Components.Create<BoxCollider>();
+		}
 	}
 
 	private void UpdateMeshes()
@@ -355,10 +477,14 @@ public class PressurePlateWire() : BaseWireConstruct( ConstructType.PressurePlat
 		{
 			var plateMesh = CreateBoxMesh( _data.Width, _data.Length, _data.Depth );
 			PlateRenderer.Model = Model.Builder.AddMesh( plateMesh ).Create();
-			PlateRenderer.Tint = PressurePlateWireDefinition.RestPlateColor;
+
+			var restColor = PressurePlateWireDefinition.RestPlateColor;
+			PlateRenderer.Tint = IsPreview
+				? new Color( restColor.r, restColor.g, restColor.b, 0.5f )
+				: restColor;
 		}
 
-		if ( PlateCollider.IsValid() )
+		if ( !IsPreview && PlateCollider.IsValid() )
 		{
 			PlateCollider.Scale = new Vector3( _data.Length, _data.Width, _data.Depth );
 		}
@@ -407,5 +533,121 @@ public class PressurePlateWire() : BaseWireConstruct( ConstructType.PressurePlat
 		);
 
 		return mesh;
+	}
+
+	private static float GetObjectMass( GameObject obj )
+	{
+		var player = obj.GetComponent<Player>();
+		if ( player.IsValid() && player.Controller.IsValid() )
+		{
+			return player.Controller.BodyMass;
+		}
+
+		var massFromModel = GetMassFromModel( obj );
+		if ( massFromModel > 0f )
+		{
+			return massFromModel;
+		}
+
+		var construct = obj.GetComponent<IConstruct>();
+		if ( construct is not { IsFrozen: true } )
+		{
+			var rigidbody = obj.GetComponentInChildren<Rigidbody>();
+			if ( rigidbody.IsValid() && rigidbody.Mass > 0f )
+			{
+				return rigidbody.Mass;
+			}
+		}
+
+		return GetMassFromLocalBounds( obj );
+	}
+
+	private static float GetMassFromModel( GameObject obj )
+	{
+		var modelRenderer = obj.GetComponentInChildren<ModelRenderer>( false );
+		if ( modelRenderer.IsValid() && modelRenderer.Model.IsValid() && modelRenderer.Model.Bounds.Size.Length > 0.1f )
+		{
+			return MassFromVolume( modelRenderer.Model.Bounds.Size * obj.WorldScale );
+		}
+
+		var skinnedRenderer = obj.GetComponentInChildren<SkinnedModelRenderer>( false );
+		if ( skinnedRenderer.IsValid() && skinnedRenderer.Model.IsValid() && skinnedRenderer.Model.Bounds.Size.Length > 0.1f )
+		{
+			return MassFromVolume( skinnedRenderer.Model.Bounds.Size * obj.WorldScale );
+		}
+
+		return 0f;
+	}
+
+	private static float GetMassFromLocalBounds( GameObject obj )
+	{
+		if ( !TryGetLocalBounds( obj, out var localBounds ) )
+		{
+			return 0f;
+		}
+
+		return MassFromVolume( localBounds.Size );
+	}
+
+	private static float MassFromVolume( Vector3 size )
+	{
+		var volume = size.x * size.y * size.z;
+		if ( volume <= 0f )
+		{
+			return 0f;
+		}
+
+		return Math.Clamp(
+			volume * PressurePlateWireDefinition.MassPerVolumeUnit,
+			1f,
+			PressurePlateWireDefinition.ReferenceMass * 2f
+		);
+	}
+
+	private static bool TryGetLocalBounds( GameObject root, out BBox bounds )
+	{
+		bounds = default;
+		var transform = root.WorldTransform;
+		BBox? combined = null;
+
+		foreach ( var collider in root.GetComponentsInChildren<Collider>( false ) )
+		{
+			if ( !collider.IsValid() || collider.IsTrigger )
+			{
+				continue;
+			}
+
+			ExpandLocalBounds( ref combined, collider.GetWorldBounds(), transform );
+		}
+
+		if ( !combined.HasValue || combined.Value.Size.Length <= 0.01f )
+		{
+			return false;
+		}
+
+		bounds = combined.Value;
+		return true;
+	}
+
+	private static void ExpandLocalBounds( ref BBox? combined, BBox worldBounds, Transform objectTransform )
+	{
+		var mins = worldBounds.Mins;
+		var maxs = worldBounds.Maxs;
+
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( mins.x, mins.y, mins.z ) ) );
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( maxs.x, mins.y, mins.z ) ) );
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( mins.x, maxs.y, mins.z ) ) );
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( maxs.x, maxs.y, mins.z ) ) );
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( mins.x, mins.y, maxs.z ) ) );
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( maxs.x, mins.y, maxs.z ) ) );
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( mins.x, maxs.y, maxs.z ) ) );
+		AddLocalPoint( ref combined, objectTransform.PointToLocal( new Vector3( maxs.x, maxs.y, maxs.z ) ) );
+	}
+
+	private static void AddLocalPoint( ref BBox? combined, Vector3 localPoint )
+	{
+		combined = combined.HasValue
+			? combined.Value.AddPoint( localPoint )
+			: new BBox( localPoint, localPoint );
 	}
 }

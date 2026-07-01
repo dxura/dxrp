@@ -4529,14 +4529,6 @@
                       },
                       "Property": "Rotation",
                       "Value": "0,0,-1,1.94707198E-07"
-                    },
-                    {
-                      "Target": {
-                        "Type": "Component",
-                        "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
-                      },
-                      "Property": "OwnerJobIdentifier",
-                      "Value": "6e44bceb-56bb-5557-8925-3912208572f2"
                     }
                   ],
                   "MovedObjects": []
@@ -4588,14 +4580,6 @@
                       },
                       "Property": "Rotation",
                       "Value": "0,0,0.707106709,0.707106829"
-                    },
-                    {
-                      "Target": {
-                        "Type": "Component",
-                        "IdValue": "92ff1211-d124-40d5-8eb3-b9ac86e4973b"
-                      },
-                      "Property": "OwnerJobIdentifier",
-                      "Value": "6e44bceb-56bb-5557-8925-3912208572f2"
                     }
                   ],
                   "MovedObjects": []

@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 namespace Dxura.RP.Game.Wire;
 
-public record ConstantWireData : IConstructData
+public record ConstantWireData : IConstructData, IWireLabelData
 {
 	public uint SchemaVersion => 1;
 	public ConstantWireType Type { get; set; } = ConstantWireType.Number;
@@ -9,6 +9,7 @@ public record ConstantWireData : IConstructData
 	public int IntValue { get; set; } = ConstantWireDefinition.DefaultConstantInt;
 	public bool BoolValue { get; set; } = false;
 	public string StringValue { get; set; } = "";
+	public string Label { get; set; } = string.Empty;
 
 	[JsonIgnore]
 	public object Value => Type switch

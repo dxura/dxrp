@@ -1,0 +1,109 @@
+@namespace Dxura.RP.Game.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@if ( !Player.IsValid() )
+{
+	return;
+}
+
+<root class="@RootClass">
+	<div class="top-row flex flex-row items-center">
+		<div class="square rounded profile-picture" style="background-image: url(avatar:@Player.SteamId)"/>
+
+		<div class="flex flex-col name-col">
+			<div class="name-line flex flex-row items-center gap-1">
+				@if ( IsLeader )
+				{
+					<i class="material-icons leader-star" style="color: @AccentHex">star</i>
+				}
+				<label class="player-name">@Player.DisplayName.Truncate( 16 )</label>
+			</div>
+			@if ( Config.Current.Game.MoneyEnabled )
+			{
+				<label class="wallet-display-value">$@Player.WalletBalance.ToString( "N0" )</label>
+			}
+		</div>
+
+		<div class="flex-grow"></div>
+
+		<div class="flex flex-col vital-bars">
+			<div class="vital-row health-row flex flex-row items-center">
+				<i class="material-icons vital-icon health-icon" style="color: @HealthColorHex">favorite</i>
+				<div class="vital-bar health-bar">
+					<div class="vital-fill health-fill" style="width: @(HealthPercent)%; background-color: @HealthColorHex"></div>
+				</div>
+				<label class="vital-value health-value" style="color: @HealthColorHex">@Health</label>
+			</div>
+			<div class="vital-row flex flex-row items-center">
+				<i class="material-icons vital-icon armor-icon">shield</i>
+				<div class="vital-bar armor-bar">
+					<div class="vital-fill armor-fill" style="width: @(ArmorPercent)%"></div>
+				</div>
+				<label class="vital-value armor-value">@Armor</label>
+			</div>
+		</div>
+	</div>
+
+	<div class="bottom-row flex flex-row items-center">
+		@if ( Config.Current.Game.ShowJobPlayerInfoHud )
+		{
+			<label class="job-label" style="color: @Player.PlayerColor.Hex">@Player.JobDisplayName</label>
+		}
+
+		<div class="flex-grow"></div>
+
+		@if ( !IsAlive )
+		{
+			<label class="dead-label">#party.hud_dead</label>
+		}
+	</div>
+</root>
+
+@code
+{
+	/// <summary>The party member this card renders. Set by <see cref="PartyHud"/>.</summary>
+	public Player Player { get; set; } = null!;
+
+	/// <summary>Whether this member is the party leader (drives the star marker).</summary>
+	public bool IsLeader { get; set; }
+
+	/// <summary>Packed 0xRRGGBB party highlight color used for the accent border and leader star.</summary>
+	public uint AccentColor { get; set; } = PartySystem.DefaultPartyColor;
+
+	private HealthComponent? HealthComponent => Player.IsValid() ? Player.HealthComponent : null;
+	private ArmorComponent? ArmorComponent => Player.IsValid() ? Player.GameObject?.Components.Get<ArmorComponent>() : null;
+
+	private int Health => HealthComponent?.Health.CeilToInt() ?? 0;
+	private int MaxHealth => HealthComponent?.MaxHealth.CeilToInt() ?? 100;
+	private int Armor => ArmorComponent?.Armor.CeilToInt() ?? 0;
+	private bool IsAlive => HealthComponent is { State: LifeState.Alive } && Health > 0;
+
+	private float HealthPercent => MaxHealth > 0 ? Math.Clamp( (float)Health / MaxHealth * 100f, 0f, 100f ) : 0f;
+	private float ArmorPercent => Math.Clamp( Armor, 0f, 100f );
+
+	private string AccentHex => AccentColor.Hex();
+	private string RootClass => IsAlive ? "party-member" : "party-member dead";
+
+	private string HealthColorHex => UiUtils.HealthColorHex( HealthPercent );
+
+	protected override int BuildHash()
+	{
+		if ( !Player.IsValid() )
+		{
+			return 0;
+		}
+
+		var hash = new HashCode();
+		hash.Add( Player.SteamId );
+		hash.Add( Player.DisplayName );
+		hash.Add( IsLeader );
+		hash.Add( AccentColor );
+		hash.Add( Health );
+		hash.Add( Armor );
+		hash.Add( IsAlive );
+		hash.Add( Player.WalletBalance );
+		hash.Add( Player.JobDisplayName );
+		return hash.ToHashCode();
+	}
+}

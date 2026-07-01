@@ -1,9 +1,10 @@
 namespace Dxura.RP.Game.Wire;
 
-public record GateWireData : IConstructData
+public record GateWireData : IConstructData, IWireLabelData
 {
 	public uint SchemaVersion => 1;
 	public GateType Type { get; set; } = GateType.And;
+	public string Label { get; set; } = string.Empty;
 }
 
 public enum GateCategory

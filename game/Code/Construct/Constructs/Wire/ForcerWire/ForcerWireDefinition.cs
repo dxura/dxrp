@@ -3,7 +3,7 @@ using Dxura.RP.Game.UI;
 
 namespace Dxura.RP.Game.Wire;
 
-public class ForcerWireDefinition : ConstructDefinition<ForcerWire, ForcerWireData>
+public class ForcerWireDefinition : WireConstructDefinition<ForcerWire, ForcerWireData>
 {
 	public override ConstructType Type => ConstructType.ForcerWire;
 	public override uint Limit => Config.Current.Game.ForcerWireLimit;
@@ -15,7 +15,7 @@ public class ForcerWireDefinition : ConstructDefinition<ForcerWire, ForcerWireDa
 	public const float ForcerWireLineWidth = 0.1f;
 	public const float DefaultForcerLaserWireRange = 25f;
 
-	protected override ConstructDataValidationResult ValidateTyped( ForcerWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( ForcerWireData data )
 	{
 		if ( data.ForceAmount is < MinForcerWireForce or > MaxForcerWireForce )
 		{

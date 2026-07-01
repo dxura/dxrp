@@ -1,3 +1,4 @@
+using System.Text;
 namespace Dxura.RP.Game.Wire;
 
 [Title( "Gate" )]
@@ -184,7 +185,7 @@ public class GateWire() : BaseWireConstruct( ConstructType.GateWire ), IWireEven
 			GateType.Latch => UpdateSrLatch( boolInputA, boolInputB ),
 
 			// String operations
-			GateType.Concat => strA + strB + strC + strD + strE,
+			GateType.Concat => ConcatSafe( strA, strB, strC, strD, strE ),
 			GateType.Length => strA.Length,
 			GateType.Substring => ProcessSubstring( strA, numB, numC ),
 			GateType.ToUpper => strA.ToUpper(),
@@ -254,6 +255,19 @@ public class GateWire() : BaseWireConstruct( ConstructType.GateWire ), IWireEven
 		var numA = ConvertToFloat( a );
 		var numB = ConvertToFloat( b );
 		return MathF.Abs( numA - numB ) < GateWireDefinition.GateEqualityTolerance;
+	}
+
+	private static string ConcatSafe( string a, string b, string c, string d, string e )
+	{
+		var limit = Wire.MaxWireStringLength;
+		var sb = new StringBuilder( limit );
+		foreach ( var part in new[] { a, b, c, d, e } )
+		{
+			var remaining = limit - sb.Length;
+			if ( remaining <= 0 ) break;
+			sb.Append( part.Length <= remaining ? part : part[..remaining] );
+		}
+		return sb.ToString();
 	}
 
 	private string ProcessSubstring( string input, float startIndex, float length )

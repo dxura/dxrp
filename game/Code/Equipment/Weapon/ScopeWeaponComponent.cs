@@ -183,7 +183,9 @@ public class ScopeWeaponComponent : InputWeaponComponent, IGameEvents
 
 		if ( Equipment.IsValid() && Equipment.Owner.IsValid() )
 		{
-			Equipment.Owner.Controller.AimStrengthHead /= ZoomLevel * ZoomLevel + 1;
+			var baseFov = Preferences.FieldOfView.AlmostEqual( 90f, 0.5f ) ? 110f : Preferences.FieldOfView;
+			var zoomedFov = Math.Max( 1f, baseFov - GetFov() );
+			Equipment.Owner.Controller.AimStrengthHead *= zoomedFov / baseFov;
 		}
 
 		UpdateShader();

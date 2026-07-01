@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public class DelayWireDefinition : ConstructDefinition<DelayWire, DelayWireData>
+public class DelayWireDefinition : WireConstructDefinition<DelayWire, DelayWireData>
 {
 	public override ConstructType Type => ConstructType.DelayWire;
 	public override uint Limit => Config.Current.Game.DelayWireLimit;
@@ -8,7 +8,7 @@ public class DelayWireDefinition : ConstructDefinition<DelayWire, DelayWireData>
 	public const int MinDelayWireDelay = 1; // 5 second minimum
 	public const int MaxDelayWireDelay = 60; // 60 second maximum
 
-	protected override ConstructDataValidationResult ValidateTyped( DelayWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( DelayWireData data )
 	{
 		if ( data.Delay is < MinDelayWireDelay or > MaxDelayWireDelay )
 		{

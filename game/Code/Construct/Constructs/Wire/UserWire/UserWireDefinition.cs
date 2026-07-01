@@ -3,7 +3,7 @@ using Dxura.RP.Game.UI;
 
 namespace Dxura.RP.Game.Wire;
 
-public class UserWireDefinition : ConstructDefinition<UserWire, UserWireData>
+public class UserWireDefinition : WireConstructDefinition<UserWire, UserWireData>
 {
 	public override ConstructType Type => ConstructType.UserWire;
 	public override uint Limit => Config.Current.Game.UserWireLimit;
@@ -13,7 +13,7 @@ public class UserWireDefinition : ConstructDefinition<UserWire, UserWireData>
 	public const float UserWireLineWidth = 0.1f;
 	public const float DefaultUserLaserWireRange = 25f;
 
-	protected override ConstructDataValidationResult ValidateTyped( UserWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( UserWireData data )
 	{
 		if ( data.Range is < MinUserLaserWireRange or > MaxUserLaserWireRange )
 		{

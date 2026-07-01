@@ -67,31 +67,141 @@ public partial class Player
 	public HighlightOutline Outline { get; set; } = null!;
 
 
-	private bool IsOutlineVisible()
+	// ── Generic outline source discovery ────────────────────────────────────────────────────────
+	// Any system (party, job team, admin ESP, …) implements IPlayerOutlineSource; TypeLibrary
+	// discovers all concrete types automatically. The first source that returns a non-null request
+	// wins; sources are queried in discovery order.
+
+	private static List<IPlayerOutlineSource>? _outlineSources;
+
+	private static List<IPlayerOutlineSource> OutlineSources
+	{
+		get
+		{
+			if ( _outlineSources is not null )
+			{
+				return _outlineSources;
+			}
+
+			_outlineSources = new List<IPlayerOutlineSource>();
+			foreach ( var type in TypeLibrary.GetTypes<IPlayerOutlineSource>()
+				         .Where( t => !t.IsAbstract && t.TargetType != null ) )
+			{
+				if ( TypeLibrary.Create<IPlayerOutlineSource>( type.TargetType ) is { } source )
+				{
+					_outlineSources.Add( source );
+				}
+			}
+
+			return _outlineSources;
+		}
+	}
+
+	private PlayerOutlineRequest? GetSourceOutlineRequest()
 	{
 		var localPlayer = Local;
-		if ( !localPlayer.IsValid() ||
-		     localPlayer.HealthComponent.State != LifeState.Dead )
+		if ( !localPlayer.IsValid() || localPlayer == this || localPlayer.IsDead )
 		{
-			return false;
+			return null;
 		}
 
-		return localPlayer.GetLastKiller() == this;
+		foreach ( var source in OutlineSources )
+		{
+			var request = source.GetOutlineRequest( localPlayer, this );
+			if ( request.HasValue )
+			{
+				return request;
+			}
+		}
+
+		return null;
 	}
+
+	private bool _sourceOutlineActive;
+	private PlayerOutlineRequest _lastRequest;
+	private List<Renderer>? _cachedOutlineTargets;
 
 	private void OnUpdateEffects()
 	{
-		if ( !IsOutlineVisible() )
+		var request = GetSourceOutlineRequest();
+		if ( request.HasValue )
 		{
-			Outline.Enabled = false;
+			var r = request.Value;
+			if ( !_sourceOutlineActive )
+			{
+				_sourceOutlineActive = true;
+				Outline.Enabled = true;
+				Outline.OverrideTargets = r.OverrideTargets;
+				if ( r.OverrideTargets )
+				{
+					_cachedOutlineTargets = GetOutlineTargets();
+					Outline.Targets = _cachedOutlineTargets;
+				}
+			}
+
+			if ( !r.Equals( _lastRequest ) )
+			{
+				_lastRequest = r;
+				Outline.Width = r.Width;
+				Outline.Color = r.Color;
+				Outline.ObscuredColor = r.ObscuredColor;
+				Outline.InsideColor = r.InsideColor;
+				Outline.InsideObscuredColor = r.InsideObscuredColor;
+			}
+
 			return;
 		}
 
-		Outline.Enabled = true;
-		Outline.Width = 0.1f;
-		Outline.Color = Color.Transparent;
-		Outline.InsideColor = HealthComponent.IsGodMode ? Color.White.WithAlpha( 0.1f ) : Color.Transparent;
-		Outline.ObscuredColor = Color.Red;
+		if ( _sourceOutlineActive )
+		{
+			_sourceOutlineActive = false;
+			_cachedOutlineTargets = null;
+			Outline.Enabled = false;
+			Outline.OverrideTargets = false;
+			Outline.Targets = null;
+		}
+	}
+
+	/// <summary>
+	/// Outline the dressed citizen body only — never equipment under hold bones, emotes, or nameplates.
+	/// Targets must be <see cref="Renderer"/> instances, not <see cref="GameObject"/>.
+	/// </summary>
+	private List<Renderer> GetOutlineTargets()
+	{
+		var targets = new List<Renderer>();
+
+		if ( Renderer.IsValid() && Renderer.Enabled && Renderer.Model is { IsError: false } )
+		{
+			targets.Add( Renderer );
+		}
+
+		if ( !BodyRoot.IsValid() )
+		{
+			return targets;
+		}
+
+		foreach ( var skinnedRenderer in BodyRoot.GetComponentsInChildren<SkinnedModelRenderer>( true ) )
+		{
+			if ( skinnedRenderer == Renderer || skinnedRenderer == EmoteRenderer )
+			{
+				continue;
+			}
+
+			// Dresser clothing only — equipment rigs live under hold_* and must not be outlined.
+			if ( !skinnedRenderer.GameObject.Name.StartsWith( "Clothing - ", StringComparison.Ordinal ) )
+			{
+				continue;
+			}
+
+			if ( !skinnedRenderer.Enabled || skinnedRenderer.Model is null || skinnedRenderer.Model.IsError )
+			{
+				continue;
+			}
+
+			targets.Add( skinnedRenderer );
+		}
+
+		return targets;
 	}
 
 	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Unreliable )]

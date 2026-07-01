@@ -28,6 +28,12 @@ MarketTabMenuSection {
     border-radius: $space-1;
   }
 
+  .market-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
   .lock-toggle {
     display: flex;
     align-items: center;
@@ -35,6 +41,7 @@ MarketTabMenuSection {
     padding: $space-2 $space-4;
     background-color: $color-primary;
     border-radius: $space-3;
+    border: 1px solid transparent;
     cursor: pointer;
     font-size: $text-sm;
     color: $color-gray-400;
@@ -48,6 +55,12 @@ MarketTabMenuSection {
     &.active {
       color: $color-accent;
       background-color: rgba($color-accent, 0.08);
+    }
+
+    &.admin-active {
+      color: #e04c4c;
+      background-color: rgba(#e04c4c, 0.08);
+      border-color: #e04c4c;
     }
   }
 
@@ -124,6 +137,7 @@ MarketTabMenuSection {
 
   // Card
   .entity-card {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -149,6 +163,14 @@ MarketTabMenuSection {
         box-shadow: none;
       }
     }
+  }
+
+  .card-staff-border {
+    position: absolute;
+    inset: 0;
+    border: 1px solid #e04c4c;
+    pointer-events: none;
+    z-index: 1;
   }
 
   // Entity color as a subtle tinted layer

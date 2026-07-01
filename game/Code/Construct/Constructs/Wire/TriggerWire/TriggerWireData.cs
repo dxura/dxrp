@@ -18,10 +18,11 @@ public enum TriggerInfoSource
 	PlayerEquipment,
 }
 
-public record TriggerWireData : IConstructData
+public record TriggerWireData : IConstructData, IWireLabelData
 {
 	public uint SchemaVersion => 1;
 	public float Range { get; set; } = TriggerWireDefinition.DefaultTriggerLaserWireRange;
 	public TriggerFilterType FilterType { get; set; } = TriggerFilterType.Everything;
 	public TriggerInfoSource InfoSource { get; set; } = TriggerInfoSource.Default;
+	public string Label { get; set; } = string.Empty;
 }

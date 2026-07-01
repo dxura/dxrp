@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public record ScreenWireData : IConstructData
+public record ScreenWireData : IConstructData, IWireLabelData
 {
 	public uint SchemaVersion => 1;
 	public int Width { get; set; } = ScreenWireDefinition.DefaultScreenWidth;

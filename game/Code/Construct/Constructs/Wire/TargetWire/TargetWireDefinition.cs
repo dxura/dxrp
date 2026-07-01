@@ -3,12 +3,12 @@ using Dxura.RP.Game.UI;
 
 namespace Dxura.RP.Game.Wire;
 
-public class TargetWireDefinition : ConstructDefinition<TargetWire, TargetWireData>
+public class TargetWireDefinition : WireConstructDefinition<TargetWire, TargetWireData>
 {
 	public override ConstructType Type => ConstructType.TargetWire;
 	public override uint Limit => Config.Current.Game.TargetWireLimit;
 
-	protected override ConstructDataValidationResult ValidateTyped( TargetWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( TargetWireData data )
 	{
 
 		return ConstructDataValidationResult.Success();

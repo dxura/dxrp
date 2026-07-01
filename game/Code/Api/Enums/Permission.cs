@@ -222,7 +222,10 @@ public enum Permission
 	CommandDropItem,
 
 	[PermissionMeta( "command.spawnitem", "Spawn Inventory Item", "Spawn inventory items into the world via command", "Commands" )]
-	CommandSpawnItem,
+	CommandSpawnItem,	
+	
+	[PermissionMeta( "command.spawnentity", "Spawn Entity ", "Spawn entity into the world via command", "Commands" )]
+	CommandSpawnEntity,
 
 	[PermissionMeta( "command.title", "Use Title", "Equip inventory titles", "Commands" )]
 	CommandTitle,
@@ -235,6 +238,9 @@ public enum Permission
 
 	[PermissionMeta( "command.xray", "XRay", "View an overlay of a player's owned entities and their positions", "Commands" )]
 	CommandXray,
+
+	[PermissionMeta( "command.party", "Party", "Use the party system", "Commands" )]
+	CommandParty,
 
 	// Ability
 	[PermissionMeta( "ability.teleport", "Teleport", "Teleport to, bring, and return players", "Ability" )]

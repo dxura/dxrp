@@ -8,6 +8,7 @@ public class Wire : GameObjectSystem<Wire>
 	public const int WireMaxIterationsPerComponent = 75; // Prevent infinite loops per component
 	public const int WireTotalMaxIterations = WireMaxIterationsPerComponent * 64; // Global safety net
 	public const uint MaxWireAnchorCount = 10;
+	public const int MaxWireStringLength = 4096;
 	public const float MinWireThickness = 0.4f;
 	public const float MaxWireThickness = 1f;
 	public const float MinWireOpacity = 0.2f;
@@ -600,7 +601,8 @@ public class Wire : GameObjectSystem<Wire>
 			return;
 		}
 
-		var wireValue = WireValue.Create( value );
+		var sanitized = value is string s && s.Length > MaxWireStringLength ? (T)(object)s[..MaxWireStringLength] : value;
+		var wireValue = WireValue.Create( sanitized );
 
 		if ( !_outputValues.TryGetValue( component, out var outputDict ) || !outputDict.TryGetValue( outputId, out var oldValue ) )
 		{

@@ -54,7 +54,10 @@ public partial class Config : GameObjectSystem<Config>
 			OnOverrideConfigJsonChanged( string.Empty, OverrideConfigJson );
 		}
 		
-		GameMode = GameModeDto.Default;
+		GameMode = new GameModeDto
+		{
+			Name = "None"
+		};
 	}
 
 	/// <summary>

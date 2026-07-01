@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public class ScreenWireDefinition : ConstructDefinition<ScreenWire, ScreenWireData>
+public class ScreenWireDefinition : WireConstructDefinition<ScreenWire, ScreenWireData>
 {
 	public override ConstructType Type => ConstructType.ScreenWire;
 	public override uint Limit => Config.Current.Game.ScreenWireLimit;
@@ -15,7 +15,7 @@ public class ScreenWireDefinition : ConstructDefinition<ScreenWire, ScreenWireDa
 	public const int ScreenCameraTextureSize = 512;
 	public const float ScreenDefaultFontSize = 38f;
 
-	protected override ConstructDataValidationResult ValidateTyped( ScreenWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( ScreenWireData data )
 	{
 		if ( data.Width is < MinScreenSize or > MaxScreenSize )
 		{
@@ -30,11 +30,6 @@ public class ScreenWireDefinition : ConstructDefinition<ScreenWire, ScreenWireDa
 		if ( string.IsNullOrWhiteSpace( data.Label ) )
 		{
 			return ConstructDataValidationResult.Failure( "Label cannot be empty" );
-		}
-
-		if ( data.Label.Length > MaxScreenLabelLength )
-		{
-			return ConstructDataValidationResult.Failure( $"Label cannot exceed {MaxScreenLabelLength} characters" );
 		}
 
 		return ConstructDataValidationResult.Success();

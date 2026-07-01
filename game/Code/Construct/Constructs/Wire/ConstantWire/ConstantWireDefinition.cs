@@ -3,7 +3,7 @@ using Dxura.RP.Game.UI;
 
 namespace Dxura.RP.Game.Wire;
 
-public class ConstantWireDefinition : ConstructDefinition<ConstantWire, ConstantWireData>
+public class ConstantWireDefinition : WireConstructDefinition<ConstantWire, ConstantWireData>
 {
 	public override ConstructType Type => ConstructType.ConstantWire;
 	public override uint Limit => Config.Current.Game.ConstantWireLimit;
@@ -11,8 +11,13 @@ public class ConstantWireDefinition : ConstructDefinition<ConstantWire, Constant
 	public const float DefaultConstantFloat = 0f;
 	public const int DefaultConstantInt = 0;
 
-	protected override ConstructDataValidationResult ValidateTyped( ConstantWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( ConstantWireData data )
 	{
+		if ( data.Type == ConstantWireType.String && data.StringValue.Length > Wire.MaxWireStringLength )
+		{
+			return ConstructDataValidationResult.Failure( $"String value exceeds maximum length of {Wire.MaxWireStringLength} characters." );
+		}
+
 		return ConstructDataValidationResult.Success();
 	}
 

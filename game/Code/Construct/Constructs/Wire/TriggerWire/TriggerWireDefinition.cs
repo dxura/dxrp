@@ -3,7 +3,7 @@ using Dxura.RP.Game.UI;
 
 namespace Dxura.RP.Game.Wire;
 
-public class TriggerWireDefinition : ConstructDefinition<TriggerWire, TriggerWireData>
+public class TriggerWireDefinition : WireConstructDefinition<TriggerWire, TriggerWireData>
 {
 	public override ConstructType Type => ConstructType.TriggerWire;
 	public override uint Limit => Config.Current.Game.TriggerWireLimit;
@@ -13,7 +13,7 @@ public class TriggerWireDefinition : ConstructDefinition<TriggerWire, TriggerWir
 	public const float TriggerWireLineWidth = 0.1f;
 	public const float DefaultTriggerLaserWireRange = 25f;
 
-	protected override ConstructDataValidationResult ValidateTyped( TriggerWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( TriggerWireData data )
 	{
 		if ( data.Range is < MinTriggerLaserWireRange or > MaxTriggerLaserWireRange )
 		{

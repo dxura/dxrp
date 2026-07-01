@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public class PressurePlateWireDefinition : ConstructDefinition<PressurePlateWire, PressurePlateWireData>
+public class PressurePlateWireDefinition : WireConstructDefinition<PressurePlateWire, PressurePlateWireData>
 {
 	public override ConstructType Type => ConstructType.PressurePlateWire;
 	public override uint Limit => Config.Current.Game.PressurePlateWireLimit;
@@ -13,10 +13,16 @@ public class PressurePlateWireDefinition : ConstructDefinition<PressurePlateWire
 	public const int DefaultLength = 30;
 	public const int DefaultDepth = 4;
 	public const float DetectionHeight = 8f;
+	public const float SurfaceTolerance = 1f;
+	public const float StackSearchHeight = 500f;
+	public const float StackSupportGap = 3f;
+	public const int MaxStackPasses = 64;
 	public const float FlatSpawnBuffer = 1f;
 	public const float PressDepthRatio = 0.5f;
 	public const float MaxPressDepth = 10f;
 	public const float ReferenceMass = 500f;
+	public const float PlayerBodyVolume = 32f * 32f * 72f;
+	public const float MassPerVolumeUnit = ReferenceMass / PlayerBodyVolume;
 	public const float MinPressDepth = 0.1f;
 	public static readonly Color RestPlateColor = Color.FromRgb( 0x888888 );
 	public static readonly Color PressedPlateColor = Color.FromRgb( 0x4CAF50 );
@@ -38,7 +44,7 @@ public class PressurePlateWireDefinition : ConstructDefinition<PressurePlateWire
 		return Math.Max( MinPressDepth, maxPress * factor );
 	}
 
-	protected override ConstructDataValidationResult ValidateTyped( PressurePlateWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( PressurePlateWireData data )
 	{
 		if ( data.Width is < MinSize or > MaxSize )
 		{
@@ -72,7 +78,7 @@ public class PressurePlateWireDefinition : ConstructDefinition<PressurePlateWire
 		{
 			LocalPosition = Vector3.Zero,
 			LocalRotation = Rotation.Identity,
-			NetworkMode = NetworkMode.Snapshot
+			NetworkMode = NetworkMode.Never
 		};
 		pressurePlate.PlateModel = plateModel;
 		pressurePlate.PlateRenderer = plateModel.Components.Create<ModelRenderer>();

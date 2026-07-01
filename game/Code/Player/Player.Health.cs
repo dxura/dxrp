@@ -46,6 +46,13 @@ public partial class Player
 
 	void IDamageEvents.OnModifyDamageTaken( Component victim, ref DamageInfo damageInfo )
 	{
+		// Party protection runs first: friendly-fire between party members is blocked entirely regardless
+		// of governance role (e.g. two police in the same party still can't hurt each other).
+		if ( ApplyPartyDamageProtection( ref damageInfo ) )
+		{
+			return;
+		}
+
 		if ( ApplyGovernanceDamageMultipliers( ref damageInfo ) )
 		{
 			return;
@@ -56,6 +63,34 @@ public partial class Player
 		{
 			damageInfo = damageInfo with { Damage = damageInfo.Damage * multiplier };
 		}
+	}
+
+	/// <summary>
+	///     Blocks damage between members of the same party when the party system has friendly fire
+	///     disabled (<see cref="PartySystemConfig.PreventPartyDamage" />). Self-damage is never affected.
+	///     Returns true if the damage was fully cleared.
+	/// </summary>
+	private bool ApplyPartyDamageProtection( ref DamageInfo damageInfo )
+	{
+		var party = PartySystem.Instance;
+		if ( party is null || !party.Settings.PreventPartyDamage )
+		{
+			return false;
+		}
+
+		var attacker = GameUtils.GetPlayerFromComponent( damageInfo.Attacker );
+		if ( !attacker.IsValid() || attacker == this )
+		{
+			return false;
+		}
+
+		if ( !party.AreInSameParty( attacker.SteamId, SteamId ) )
+		{
+			return false;
+		}
+
+		DamageExtensions.ClearDamage( ref damageInfo );
+		return true;
 	}
 
 	private bool ApplyGovernanceDamageMultipliers( ref DamageInfo damageInfo )

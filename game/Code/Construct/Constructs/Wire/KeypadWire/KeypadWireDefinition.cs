@@ -1,11 +1,11 @@
 namespace Dxura.RP.Game.Wire;
 
-public class KeypadWireDefinition : ConstructDefinition<KeypadWire, KeypadWireData>
+public class KeypadWireDefinition : WireConstructDefinition<KeypadWire, KeypadWireData>
 {
 	public override ConstructType Type => ConstructType.KeypadWire;
 	public override uint Limit => Config.Current.Game.KeypadWireLimit;
 
-	protected override ConstructDataValidationResult ValidateTyped( KeypadWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( KeypadWireData data )
 	{
 		if ( data.OffValue is < ButtonWireDefinition.MinButtonValue or > ButtonWireDefinition.MaxButtonValue )
 		{

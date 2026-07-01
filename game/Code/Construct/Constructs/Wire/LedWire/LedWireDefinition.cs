@@ -2,12 +2,12 @@ using Dxura.RP.Game.Tools;
 
 namespace Dxura.RP.Game.Wire;
 
-public class LedWireDefinition : ConstructDefinition<LedWire, LedWireData>
+public class LedWireDefinition : WireConstructDefinition<LedWire, LedWireData>
 {
 	public override ConstructType Type => ConstructType.LedWire;
 	public override uint Limit => Config.Current.Game.LedWireLimit;
 
-	protected override ConstructDataValidationResult ValidateTyped( LedWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( LedWireData data )
 	{
 		// LED data validation is minimal - just check colors are valid
 		if ( data.OffColor.a <= 0 )

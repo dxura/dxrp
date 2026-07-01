@@ -135,7 +135,8 @@ public sealed partial class Chat
 		     messageType != MessageType.GlobalChat &&
 		     messageType != MessageType.GovernmentChat &&
 		     messageType != MessageType.StaffChat &&
-		     messageType != MessageType.FactionChat )
+		     messageType != MessageType.FactionChat &&
+		     messageType != MessageType.PartyChat )
 		{
 			return;
 		}
@@ -214,6 +215,28 @@ public sealed partial class Chat
 					using ( Rpc.FilterInclude( c => factionMembers.Contains( c ) ) )
 					{
 						BroadcastPlayerChat( messageId, callerId, message, MessageType.FactionChat );
+					}
+
+					break;
+				}
+			case MessageType.PartyChat:
+				{
+					var partySystem = PartySystem.Instance;
+					var partyId = partySystem?.GetPartyId( player.SteamId );
+					if ( !partyId.HasValue )
+					{
+						return;
+					}
+
+					var partyMembers = partySystem.GetMembers( partyId.Value ).ToHashSet();
+					var partyConnections = GameUtils.Players
+						.Where( x => x.IsValid() && partyMembers.Contains( x.SteamId ) )
+						.Select( x => x.Connection )
+						.ToHashSet();
+
+					using ( Rpc.FilterInclude( c => partyConnections.Contains( c ) ) )
+					{
+						BroadcastPlayerChat( messageId, callerId, message, MessageType.PartyChat );
 					}
 
 					break;

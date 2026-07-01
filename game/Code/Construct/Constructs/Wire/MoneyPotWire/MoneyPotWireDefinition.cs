@@ -1,11 +1,11 @@
 namespace Dxura.RP.Game.Wire;
 
-public class MoneyPotWireDefinition : ConstructDefinition<MoneyPotWire, MoneyPotWireData>
+public class MoneyPotWireDefinition : WireConstructDefinition<MoneyPotWire, MoneyPotWireData>
 {
 	public override ConstructType Type => ConstructType.MoneyPotWire;
 	public override uint Limit => Config.Current.Game.MoneyPotWireLimit;
 
-	protected override ConstructDataValidationResult ValidateTyped( MoneyPotWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( MoneyPotWireData data )
 	{
 		return ConstructDataValidationResult.Success();
 	}

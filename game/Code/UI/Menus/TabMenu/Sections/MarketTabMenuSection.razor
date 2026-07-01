@@ -6,17 +6,34 @@
 	<div class="market">
 		<div class="section-header market-toolbar">
 			<h1>@Language.GetPhrase( "tabmenu.market" )</h1>
-			<button class="lock-toggle @( _showLocked ? "active" : "" )"
-			        onclick="@( () => { _showLocked = !_showLocked; Sound.Play( "pop" ); } )">
-				<i class="material-icons">@( _showLocked ? "visibility" : "visibility_off" )</i>
-				<span>@Language.GetPhrase( _showLocked ? "tabmenu.market.hide_locked" : "tabmenu.market.show_locked" )</span>
-			</button>
+			<div class="market-toolbar-actions">
+				@if ( CanUseAdminMode )
+				{
+					<button class="lock-toggle @( _adminMode ? "active admin-active" : "" )"
+					        onclick="@ToggleAdminMode">
+						<i class="material-icons">admin_panel_settings</i>
+						<span>@Language.GetPhrase( _adminMode ? "tabmenu.market.admin_mode.on" : "tabmenu.market.admin_mode.off" )</span>
+					</button>
+				}
+				<button class="lock-toggle @( _showLocked ? "active" : "" )"
+				        onclick="@( () => { _showLocked = !_showLocked; Sound.Play( "pop" ); } )">
+					<i class="material-icons">@( _showLocked ? "visibility" : "visibility_off" )</i>
+					<span>@Language.GetPhrase( _showLocked ? "tabmenu.market.hide_locked" : "tabmenu.market.show_locked" )</span>
+				</button>
+			</div>
 		</div>
 
 		<div class="market-scroll">
 			@{
 				var allItems = GameModeMarketItems.All
-					.Select( item => (Item: item, Permitted: IsPermitted( item )) )
+					.Select( item =>
+					{
+						var adminModeActive = _adminMode && CanUseAdminMode;
+						var normallyPermitted = GameModeMarketItems.CanPurchase( Player.Local, item );
+						var isPermitted = normallyPermitted || ( adminModeActive && GameModeMarketItems.CanAdminSpawn( Player.Local, item ) );
+						var isStaffPurchase = adminModeActive && isPermitted;
+						return (Item: item, Permitted: isPermitted, StaffPurchase: isStaffPurchase);
+					} )
 					.Where( x => _showLocked || x.Permitted )
 					.GroupBy( x => { var g = GameModeMarketItems.Grouping( x.Item ); return string.IsNullOrEmpty( g ) ? "other" : g; } )
 					.OrderBy( g => g.Key );
@@ -36,10 +53,10 @@
 					@if ( !isCollapsed )
 					{
 						<div class="card-rail">
-							@foreach ( var (item, isPermitted) in group )
+							@foreach ( var (item, isPermitted, isStaffPurchase) in group )
 							{
-								<div class="entity-card @( isPermitted ? "" : "is-locked" )"
-								     @onclick=@( () => HandleClick( item ) )
+								<div class="entity-card @( !isPermitted ? "is-locked" : "" )"
+								     @onclick=@( () => HandleClick( item, isPermitted, isStaffPurchase ) )
 								     tooltip="@( !string.IsNullOrEmpty( GameModeMarketItems.DisplayDescription( item ) ) ? GameModeMarketItems.DisplayDescription( item ) : null )">
 									@{ var chipColor = GetItemColor( item ); }
 									@if ( chipColor != Color.White )
@@ -55,12 +72,16 @@
 										}
 										<div class="card-top">
 											<span class="card-name">@GameModeMarketItems.DisplayName( item )</span>
-											<span class="card-limit">@GetLimitText( item )</span>
+											<span class="card-limit">@GetLimitText( item, isStaffPurchase )</span>
 										</div>
 										<div class="card-bottom">
-											<span class="card-price">$@GetPriceText( item)</span>
+											<span class="card-price">@GetPriceText( item, isStaffPurchase )</span>
 										</div>
 									</div>
+									@if ( isStaffPurchase )
+									{
+										<div class="card-staff-border"></div>
+									}
 								</div>
 							}
 						</div>
@@ -83,6 +104,9 @@
 {
 	private bool _showLocked;
 	HashSet<string> _collapsedCategories = TabMenuSectionPreferences.LoadCollapsedMarketCategories();
+	private bool _adminMode = TabMenuSectionPreferences.LoadMarketAdminMode() && CanUseAdminMode;
+
+	private static bool CanUseAdminMode => RankSystem.HasLocalPermission( Permission.CommandSpawnEntity );
 
 	protected override int BuildHash()
 	{
@@ -94,14 +118,13 @@
 		var ownedEquipmentCount = Player.Local.IsValid()
 			? Player.Local.Equipment.Count( equipment => equipment.IsValid() && equipment.Enabled && equipment.MarketItemId != Guid.Empty )
 			: 0;
-
 		var collapsedHash = 0;
 		foreach ( var category in _collapsedCategories )
 		{
 			collapsedHash = HashCode.Combine( collapsedHash, category.GetHashCode() );
 		}
 
-		return HashCode.Combine( Player.Local.Job, _showLocked, ownedWorldCount, ownedEquipmentCount, collapsedHash );
+		return HashCode.Combine( Player.Local.Job, _showLocked, _adminMode, ownedWorldCount, ownedEquipmentCount, collapsedHash );
 	}
 
 	private void ToggleCategory( string categoryKey )
@@ -116,6 +139,17 @@
 		TabMenuSectionPreferences.SaveCollapsedMarketCategories( _collapsedCategories );
 	}
 
+	private void ToggleAdminMode()
+	{
+		_adminMode = !_adminMode;
+		if ( _adminMode )
+		{
+			_showLocked = true;
+		}
+
+		TabMenuSectionPreferences.SaveMarketAdminMode( _adminMode );
+		Sound.Play( "pop" );
+	}
 	private static string GetCategoryText( string? category )
 	{
 		if ( string.IsNullOrWhiteSpace( category ) ) return string.Empty;
@@ -123,18 +157,13 @@
 		return Language.GetPhrase( $"entity.category.{category.ToLowerInvariant()}" );
 	}
 
-	private bool IsPermitted( GameModeMarketItemDto item )
+	private string GetLimitText( GameModeMarketItemDto item, bool isStaffPurchase )
 	{
-		if ( !Player.Local.IsValid() )
+		if ( isStaffPurchase )
 		{
-			return false;
+			return Language.GetPhrase( "tabmenu.market.admin_mode.unlimited" );
 		}
 
-		return GameModeMarketItems.CanPurchase( Player.Local, item );
-	}
-
-	private string GetLimitText( GameModeMarketItemDto item )
-	{
 		var limit = item.Type switch
 		{
 			GameModeMarketItemType.Equipment => GameModeMarketItems.ResolveEquipment( item )?.Limit ?? 0,
@@ -143,17 +172,22 @@
 		};
 		if ( !Player.Local.IsValid() || limit <= 0 )
 		{
-			return "Unlimited";
+			return Language.GetPhrase( "tabmenu.market.admin_mode.unlimited" );
 		}
 
 		var owned = GameModeMarketItems.GetOwnedCount( Player.Local, item );
 		return $"{owned}/{limit}";
 	}
 
-	private string GetPriceText( GameModeMarketItemDto item )
+	private string GetPriceText( GameModeMarketItemDto item, bool isStaffPurchase )
 	{
+		if ( isStaffPurchase )
+		{
+			return Language.GetPhrase( "tabmenu.market.admin_mode.free" );
+		}
+
 		var price = Math.Max( 0, (int)MathF.Ceiling( item.Cost * GameManager.Instance.EntityPriceMultiplier ) );
-		return price.ToString( "N0" );
+		return $"${price.ToString( "N0" )}";
 	}
 
 	private static Color GetItemColor( GameModeMarketItemDto item )
@@ -161,38 +195,49 @@
 		return item.Color.ToColor();
 	}
 
-	private void HandleClick( GameModeMarketItemDto item )
+	private void HandleClick( GameModeMarketItemDto item, bool isPermitted, bool isStaffPurchase )
 	{
-		if ( !IsPermitted( item ) )
+		if ( !isPermitted )
 		{
 			Notify.Error( "#generic.forbidden" );
 			TabMenu.RequestCloseMenu();
 			return;
 		}
 
-		switch ( GameModeMarketItems.Grouping( item ) )
+		if ( !isStaffPurchase )
 		{
-			case "printer":
-				Achievements.Unlock( "illegal_print" );
-				break;
-			case "shipment":
-				Achievements.Unlock( "self_supply" );
-				break;
+			switch ( GameModeMarketItems.Grouping( item ) )
+			{
+				case "printer":
+					Achievements.Unlock( "illegal_print" );
+					break;
+				case "shipment":
+					Achievements.Unlock( "self_supply" );
+					break;
+			}
+
+			var basePrice = (uint)Math.Max( 0, (int)MathF.Ceiling( item.Cost * GameManager.Instance.EntityPriceMultiplier ) );
+			if ( Config.Current.Game.MoneyEnabled && Player.Local.WalletBalance + Player.Local.BankBalance < basePrice )
+			{
+				Notify.Error( "#notify.cash.poor" );
+				TabMenu.RequestCloseMenu();
+				return;
+			}
+			if ( Cooldown.Current.CheckAndStartCooldown( Constants.EntityTag, Config.Current.Game.EntityCooldown, true ) )
+			{
+				return;
+			}
 		}
 
-		var basePrice = (uint)Math.Max( 0, (int)MathF.Ceiling( item.Cost * GameManager.Instance.EntityPriceMultiplier ) );
-		if ( Config.Current.Game.MoneyEnabled && Player.Local.WalletBalance + Player.Local.BankBalance < basePrice )
+		if ( isStaffPurchase )
 		{
-			Notify.Error( "#notify.cash.poor" );
-			TabMenu.RequestCloseMenu();
-			return;
+			GameManager.Instance.SpawnMarketItemHost( item.Id );
 		}
-		if ( Cooldown.Current.CheckAndStartCooldown( Constants.EntityTag, Config.Current.Game.EntityCooldown, true ) )
+		else
 		{
-			return;
+			GameManager.Instance.PurchaseMarketItemHost( item.Id );
 		}
 
-		GameManager.Instance.PurchaseMarketItemHost( item.Id );
 		TabMenu.RequestCloseMenu();
 	}
 }

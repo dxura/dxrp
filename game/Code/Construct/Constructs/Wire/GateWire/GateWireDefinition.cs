@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public class GateWireDefinition : ConstructDefinition<GateWire, GateWireData>
+public class GateWireDefinition : WireConstructDefinition<GateWire, GateWireData>
 {
 	public override ConstructType Type => ConstructType.GateWire;
 	public override uint Limit => Config.Current.Game.GateWireLimit;
@@ -11,7 +11,7 @@ public class GateWireDefinition : ConstructDefinition<GateWire, GateWireData>
 	public const float GateLogicHigh = 1f;
 	public const float GateLogicLow = 0f;
 
-	protected override ConstructDataValidationResult ValidateTyped( GateWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( GateWireData data )
 	{
 		if ( !Enum.IsDefined( typeof( GateType ), data.Type ) )
 		{

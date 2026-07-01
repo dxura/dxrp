@@ -1,7 +1,8 @@
+using Dxura.RP.Game.Tools;
 using Dxura.RP.Game.UI;
 namespace Dxura.RP.Game.Wire;
 
-public abstract class BaseWireConstruct( ConstructType type ) : BaseConstruct( type ), IWireComponent, IWireConstruct, IDescription
+public abstract class BaseWireConstruct( ConstructType type ) : BaseConstruct( type ), IWireComponent, IWireConstruct, IDescription, IContextualObject
 {
 	private readonly List<WirePort> _inputPorts = new();
 	private readonly List<WirePort> _outputPorts = new();
@@ -9,6 +10,14 @@ public abstract class BaseWireConstruct( ConstructType type ) : BaseConstruct( t
 
 	public abstract string Name { get; }
 	public string DisplayName => Name;
+
+	protected string? WireLabel => Data is IWireLabelData labelData ? labelData.Label : null;
+
+	public string? DisplayText => string.IsNullOrWhiteSpace( WireLabel ) ? null : WireLabel!.Trim();
+	public Vector3 ContextPosition => WorldPosition + Vector3.Up * 6f;
+	public bool LookOpacity => false;
+	public float ContextMaxDistance => 100f;
+	public bool ShouldShow() => (WireTool.IsDeployed || WireLabelerTool.IsDeployed) && DisplayText != null;
 
 	protected override void OnStart()
 	{

@@ -9,6 +9,7 @@
 	@if ( isValidPlayer )
 	{
 		<CommandWheel @ref="_commandWheel"/>
+		<PartyMenu/>
 	}
 
 	@if ( HudHidden )
@@ -65,6 +66,9 @@
 
 	@if ( isValidPlayer )
 	{
+		@* Rendered AFTER the <canvas> (same as AdminTickets) so the full-screen canvas layer can't sit on
+		   top and swallow the accordion click. This is the proven-clickable slot for an always-on HUD. *@
+		<PartyHud/>
 		<AdminTickets/>
 	}
 </root>

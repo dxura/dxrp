@@ -1,0 +1,137 @@
+@import "../../styles.scss";
+
+PartyMemberCard {
+  pointer-events: none;
+  flex-direction: column;
+  // Stretch the rows to the full card width so the bottom job row lines up with the right edge of the
+  // health/armor bars in the top row, instead of collapsing to its own (shorter) content width.
+  align-items: stretch;
+  // Floor width only. In the /party menu the row override (width:0 + flex-grow + a fixed action column
+  // reserved on every row) sizes every card identically; in the HUD the column matches the widest card.
+  min-width: 232px;
+  background-color: rgba($color-primary, 0.92);
+  border-radius: $rounding;
+  transition: opacity 0.15s ease;
+
+  &.dead {
+    opacity: 0.5;
+  }
+
+  .top-row {
+    padding: 5px 7px;
+    gap: 6px;
+  }
+
+  .profile-picture {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  // Never shrinks — the full name always shows; the card widens to accommodate it instead.
+  .name-col {
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .leader-star {
+    font-size: 12px;
+  }
+
+  .player-name {
+    font-size: 12px;
+    color: $color-white;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    white-space: nowrap; // single line, full name — the card grows rather than clipping it
+  }
+
+  .wallet-display-value {
+    font-size: 11px;
+    font-weight: 700;
+    color: $color-good;
+    height: 13px;
+    line-height: 13px;
+    overflow: hidden;
+  }
+
+  .vital-bars {
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .vital-row {
+    gap: 5px;
+  }
+
+  .vital-icon {
+    font-size: 11px;
+    width: 13px;
+  }
+
+  .armor-icon {
+    color: $counter-terror-color;
+  }
+
+  .vital-bar {
+    width: 64px; // narrowed from 96px so the whole card fits the 232px header width
+    background-color: rgba(black, 0.6);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .health-bar {
+    height: 9px;
+  }
+
+  .armor-bar {
+    height: 6px;
+  }
+
+  .vital-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .armor-fill {
+    background-color: $counter-terror-color;
+  }
+
+  .vital-value {
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 22px;
+  }
+
+  .health-value {
+    font-size: 11px;
+  }
+
+  .armor-value {
+    color: $counter-terror-color;
+  }
+
+  .bottom-row {
+    padding: 1px 7px;
+    gap: 6px;
+    background-color: rgba(black, 0.35);
+    border-top: 0.5px solid rgba(white, 0.05);
+  }
+
+  .job-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+
+  .dead-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: $color-bad;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}

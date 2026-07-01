@@ -1,13 +1,13 @@
 namespace Dxura.RP.Game.Wire;
 
-public class CameraWireDefinition : ConstructDefinition<CameraWire, CameraWireData>
+public class CameraWireDefinition : WireConstructDefinition<CameraWire, CameraWireData>
 {
 	public override ConstructType Type => ConstructType.CameraWire;
 	public override uint Limit => Config.Current.Game.CameraWireLimit;
 
 	public const string CameraPrefix = "camera:";
 
-	protected override ConstructDataValidationResult ValidateTyped( CameraWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( CameraWireData data )
 	{
 		// if ( data.Delay is < GameConfig.MinDelayWireDelay or > GameConfig.MaxDelayWireDelay )
 		// {

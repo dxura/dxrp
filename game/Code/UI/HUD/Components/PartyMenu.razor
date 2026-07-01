@@ -1,0 +1,518 @@
+@namespace Dxura.RP.Game.UI
+@using Sandbox.UI
+@inherits Panel
+@attribute [StyleSheet]
+
+@{
+	// Local function aliases — defined before <root> so the markup below can call them.
+	IEnumerable<(PartyTab Section, string LabelKey, string Icon)> VisibleTabsLocal( bool ip, bool il ) => VisibleTabs( ip, il );
+	PartyTab EffectiveTabLocal( bool ip, bool il ) => EffectiveTab( ip, il );
+}
+
+<root class="@(IsOpen ? "is-open" : "")">
+@if ( IsOpen )
+{
+	var room = PartyRoom.Current;
+	var inParty = room is not null;
+	var isLeader = LocalIsLeader;
+	var activeTab = EffectiveTabLocal( inParty, isLeader );
+	
+	<div class="window flex flex-col">
+		<div class="title-bar flex flex-row items-center">
+			<label class="title">#party.window_title</label>
+			<div class="flex-grow"></div>
+			<i class="material-icons hud-toggle"
+			   tooltip="@Language.GetPhrase( PartyHud.Hidden ? "party.show_hud" : "party.hide_hud" )"
+			   onclick="@OnToggleHud">@(PartyHud.Hidden ? "visibility_off" : "visibility")</i>
+			<i class="material-icons close-x" tooltip="@Language.GetPhrase( "party.menu_close" )" onclick="@OnClose">close</i>
+		</div>
+
+		<div class="body flex flex-row">
+			<div class="sidebar flex flex-col">
+				<div class="navigation flex flex-col">
+					@foreach ( var tab in VisibleTabsLocal( inParty, isLeader ) )
+					{
+						var section = tab.Section;
+						var active = activeTab == section;
+						<div class="menuButton flex flex-row items-center cursor-pointer @(active ? "active-btn" : "")"
+						     onclick="@(() => SelectTab( section ))">
+							<i class="material-icons tab-icon">@tab.Icon</i>
+							<label class="tab-label">@Language.GetPhrase( tab.LabelKey )</label>
+						</div>
+					}
+				</div>
+			</div>
+
+			<div class="content flex flex-col">
+				@switch ( activeTab )
+				{
+					case PartyTab.Start:
+						<div class="pane flex flex-col">
+							<label class="pane-hint">#party.start_hint</label>
+
+							<div class="invite-row flex flex-row gap-2">
+								<TextEntry class="invite-input"
+								           placeholder="#party.invite_placeholder"
+								           MaxLength="@( 32 )"
+								           @ref="_inviteEntry"
+								           Value:bind="@_inviteName"
+								           onsubmit="@OnInviteSubmit"/>
+								<div class="primary-btn flex flex-row items-center gap-1" onclick="@OnInviteSubmit">
+									<i class="material-icons">person_add</i>
+									<label>#party.menu_invite</label>
+								</div>
+							</div>
+						</div>
+						break;
+
+					case PartyTab.Join:
+						<div class="pane flex flex-col">
+							@{
+								var invites = Invites().ToList();
+							}
+							@if ( invites.Count == 0 )
+							{
+								<label class="pane-hint">#party.join_none</label>
+							}
+							else
+							{
+								<label class="pane-hint">#party.join_hint</label>
+								<div class="roster flex flex-col">
+									@foreach ( var invite in invites )
+									{
+										<div class="invite-card flex flex-row items-center gap-2">
+											<i class="material-icons" style="color: @AccentHex">group</i>
+											<label class="invite-name">@LeaderName( invite )</label>
+											<div class="flex-grow"></div>
+											<div class="primary-btn flex flex-row items-center gap-1" onclick="@(() => OnAccept( invite.Id ))">
+												<i class="material-icons">check</i>
+												<label>#party.join_accept</label>
+											</div>
+										</div>
+									}
+								</div>
+							}
+						</div>
+						break;
+
+					case PartyTab.Leave:
+						<div class="pane leave-pane flex flex-col items-center justify-center">
+							@if ( isLeader )
+							{
+								<i class="material-icons warn-icon">group_off</i>
+								<label class="pane-title">#party.menu_disband</label>
+								<label class="warn-text">#party.disband_warning</label>
+								<div class="danger-btn flex flex-row items-center gap-1" onclick="@OnDisband">
+									<i class="material-icons">group_off</i>
+									<label>#party.menu_disband</label>
+								</div>
+							}
+							else
+							{
+								<i class="material-icons warn-icon">logout</i>
+								<label class="pane-title">#party.leave_confirm_title</label>
+								<label class="warn-text">#party.leave_warning</label>
+								<div class="danger-btn flex flex-row items-center gap-1" onclick="@OnLeave">
+									<i class="material-icons">logout</i>
+									<label>#party.menu_leave</label>
+								</div>
+							}
+						</div>
+						break;
+
+					case PartyTab.Settings:
+						<div class="pane flex flex-col">
+							@if ( SystemAllowsMemberOutline )
+							{
+								<label class="section-label">#party.outline_label</label>
+								<div class="toggle-row flex flex-row items-center gap-2 cursor-pointer"
+								     onclick="@OnToggleMemberOutline">
+									<i class="material-icons toggle-icon">@(MemberOutlineEnabled ? "check_box" : "check_box_outline_blank")</i>
+									<label class="toggle-label">@(MemberOutlineEnabled ? "ON" : "OFF")</label>
+								</div>
+								<label class="pane-hint">#party.outline_hint</label>
+							}
+
+							<label class="section-label">#party.color_label</label>
+							<div class="color-row flex flex-row items-center gap-2">
+								<div class="color-preview" style="background-color: @PendingHex"></div>
+								@if ( ColorProperty is not null )
+								{
+									<ColorControl Property=@ColorProperty/>
+								}
+							</div>
+							<label class="pane-hint">#party.color_hint</label>
+							<div class="apply-row flex flex-row justify-center">
+								<div class="primary-btn @(_colorDirty ? "" : "is-disabled") flex flex-row items-center gap-1" onclick="@OnApplyColor">
+									<i class="material-icons">check</i>
+									<label>#party.color_apply</label>
+								</div>
+							</div>
+						</div>
+						break;
+
+					case PartyTab.Party:
+						<div class="pane flex flex-col">
+							@if ( isLeader )
+							{
+								<div class="invite-row flex flex-row gap-2">
+									<TextEntry class="invite-input"
+									           placeholder="#party.invite_placeholder"
+									           MaxLength="@( 32 )"
+									           @ref="_inviteEntry"
+									           Value:bind="@_inviteName"
+									           onsubmit="@OnInviteSubmit"/>
+									<div class="primary-btn flex flex-row items-center gap-1" onclick="@OnInviteSubmit">
+										<i class="material-icons">person_add</i>
+										<label>#party.menu_invite</label>
+									</div>
+								</div>
+							}
+
+							<label class="section-label">#party.menu_members</label>
+							<div class="roster flex flex-col">
+								@foreach ( var member in OrderedMembers( room ) )
+								{
+									var memberPlayer = GameUtils.GetPlayerById( member.Id );
+									var memberId = member.Id;
+									<div class="member-row flex flex-row items-center gap-2">
+										<PartyMemberCard Player=@memberPlayer IsLeader=@member.IsLeader AccentColor=@AccentColor/>
+										@* Action column reserved on EVERY row (kick for other members, empty for self) so every
+										   card flexes to the same width and the health/armor bars line up across the roster. No
+										   extra flex-grow spacer — the card already grows to fill the space left of this column. *@
+										<div class="member-actions flex flex-row gap-1">
+											@if ( isLeader && !IsSelf( memberId ) )
+											{
+												<div class="action-btn kick flex flex-row items-center justify-center"
+												     tooltip="@Language.GetPhrase( "party.kick_tooltip" )"
+												     onclick="@(() => OnKick( memberId ))">
+													<i class="material-icons">person_remove</i>
+												</div>
+											}
+										</div>
+									</div>
+								}
+							</div>
+						</div>
+						break;
+				}
+			</div>
+		</div>
+	</div>
+}
+</root>
+
+@code
+{
+	/// <summary>Whether the /party management menu is currently open on this client.</summary>
+	public static bool IsOpen { get; private set; }
+
+	public enum PartyTab
+	{
+		Start,
+		Join,
+		Party,
+		Settings,
+		Leave
+	}
+
+	// All sidebar tabs in display order, mirroring the DXRP TabMenu sidebar pattern (icon + label, a
+	// single subtle accent highlight on the active tab). Which ones actually render is decided per party
+	// state by VisibleTabs — there is no Admin tab; member management lives inline on the roster.
+	private static readonly (PartyTab Section, string LabelKey, string Icon)[] AllTabs =
+	{
+		(PartyTab.Start, "party.tab_start", "group_add"),
+		(PartyTab.Join, "party.tab_join", "login"),
+		(PartyTab.Party, "party.tab_party", "group"),
+		(PartyTab.Settings, "party.tab_settings", "palette"),
+		(PartyTab.Leave, "party.tab_leave", "logout"),
+	};
+
+	// Tabs shown depend on party state: partyless players see only Start/Join (create or accept), party
+	// members see the roster (Party) + Leave, and the leader additionally gets Settings (color). The old
+	// Admin tab is gone — the leader's kick control renders inline on each other member's roster row.
+	private static IEnumerable<(PartyTab Section, string LabelKey, string Icon)> VisibleTabs( bool inParty, bool isLeader )
+	{
+		foreach ( var tab in AllTabs )
+		{
+			var show = tab.Section switch
+			{
+				PartyTab.Start => !inParty,
+				PartyTab.Join => !inParty,
+				PartyTab.Party => inParty,
+				PartyTab.Settings => inParty && isLeader,
+				PartyTab.Leave => inParty,
+				_ => false
+			};
+
+			if ( show )
+			{
+				yield return tab;
+			}
+		}
+	}
+
+	// Clamp the remembered _tab to one that's valid for the current state, so a tab that just became
+	// hidden (you left the party, or handed off lead) cleanly falls back to the first sensible tab.
+	private PartyTab EffectiveTab( bool inParty, bool isLeader )
+	{
+		foreach ( var tab in VisibleTabs( inParty, isLeader ) )
+		{
+			if ( tab.Section == _tab )
+			{
+				return _tab;
+			}
+		}
+
+		return inParty ? PartyTab.Party : PartyTab.Start;
+	}
+
+	private PartyTab _tab = PartyTab.Start;
+	private string _inviteName = string.Empty;
+	private TextEntry? _inviteEntry;
+
+	// ── Color picker binding ──────────────────────────────────────────────────────────────────────
+	// The native ColorControl edits a SerializedProperty, so we back it with a tiny holder object. The
+	// chosen color is ONLY pushed to the host when the leader presses Apply (confirmation-based) — never
+	// live while dragging — so committing fires a single "party color updated" instead of a spam of
+	// broadcasts. `_colorDirty` just tracks that there's an unapplied edit (drives the preview + button).
+	private sealed class ColorHolder
+	{
+		public Color Color { get; set; } = Color.White;
+	}
+
+	private readonly ColorHolder _colorHolder = new();
+	private SerializedObject? _colorObject;
+	private SerializedProperty? _colorProperty;
+	private bool _colorDirty;
+
+	private SerializedProperty? ColorProperty
+	{
+		get
+		{
+			EnsureColorBinding();
+			return _colorProperty;
+		}
+	}
+
+	private void EnsureColorBinding()
+	{
+		if ( _colorObject is not null )
+		{
+			return;
+		}
+
+		_colorHolder.Color = AccentColor.ToColor();
+		_colorObject = TypeLibrary.GetSerializedObject( _colorHolder );
+		_colorObject.OnPropertyChanged += _ => _colorDirty = true;
+		_colorObject.TryGetProperty( nameof( ColorHolder.Color ), out _colorProperty );
+	}
+
+	// A stable owner token for the HUD cursor-unlock request. The menu is opened/closed by the
+	// /party (menu) command rather than per-instance interaction, so a static owner keeps the cursor
+	// request in lockstep with IsOpen even across HUD panel rebuilds.
+	private static readonly object CursorOwner = new();
+
+	/// <summary>Opens or closes the menu and keeps the HUD cursor-unlock request in sync.</summary>
+	public static void SetOpen( bool open )
+	{
+		IsOpen = open;
+		HUD.SetCursorUnlockRequest( CursorOwner, open );
+	}
+
+	public static void Toggle() => SetOpen( !IsOpen );
+	public static void Close() => SetOpen( false );
+
+	private void OnClose() => SetOpen( false );
+
+	private void SelectTab( PartyTab tab )
+	{
+		_tab = tab;
+		Sound.Play( "pop" );
+	}
+
+	// ── Actions (route through PartySystem's [Rpc.Host] request wrappers) ─────────────────────────
+
+	// Commit the picked color to the host once, on confirmation. No-op if nothing changed.
+	private void OnApplyColor()
+	{
+		if ( !_colorDirty )
+		{
+			return;
+		}
+
+		var packed = _colorHolder.Color.ToPacked();
+		_colorDirty = false;
+		PartySystem.Instance?.RequestSetColor( packed );
+		Sound.Play( "pop" );
+	}
+
+	private void OnToggleMemberOutline()
+	{
+		if ( !LocalIsLeader || !SystemAllowsMemberOutline )
+		{
+			return;
+		}
+
+		PartySystem.Instance?.RequestSetMemberOutline( !MemberOutlineEnabled );
+		Sound.Play( "pop" );
+	}
+
+	private void OnInviteSubmit()
+	{
+		var name = _inviteName?.Trim();
+		if ( string.IsNullOrWhiteSpace( name ) )
+		{
+			return;
+		}
+
+		PartySystem.Instance?.RequestInvite( name );
+		_inviteName = string.Empty;
+		if ( _inviteEntry.IsValid() )
+		{
+			_inviteEntry.Text = string.Empty;
+		}
+	}
+
+	private static void OnAccept( Guid partyId ) => PartySystem.Instance?.RequestAccept( partyId );
+	private static void OnKick( long steamId ) => PartySystem.Instance?.RequestKick( steamId );
+	private static void OnToggleHud() => PartyHud.Hidden = !PartyHud.Hidden;
+
+	private void OnLeave()
+	{
+		PartySystem.Instance?.RequestLeave();
+		SetOpen( false );
+	}
+
+	private void OnDisband()
+	{
+		PartySystem.Instance?.RequestDisband();
+		SetOpen( false );
+	}
+
+	// ── Helpers ──────────────────────────────────────────────────────────────────────────────────
+
+	// The local player's party color (leader-customizable), shared with every member card so the menu
+	// reads as one cohesive group. Falls back to the default color when partyless/unavailable.
+	private uint AccentColor => PartySystem.Instance is { } system && Player.Local.IsValid()
+		? system.GetPartyColorForMember( Player.Local.SteamId )
+		: PartySystem.DefaultPartyColor;
+
+	private string AccentHex => AccentColor.Hex();
+
+	// The not-yet-applied color the picker is currently on — shown in the preview swatch so the leader
+	// sees exactly what Apply will commit (the live party color only changes once they confirm).
+	private string PendingHex => _colorHolder.Color.ToPacked().Hex();
+
+	// Leader-only actions (kick/promote/disband/color) are gated on this; non-leaders see read-only notes.
+	private bool LocalIsLeader => PartySystem.Instance is { } system && Player.Local.IsValid()
+		&& system.IsLeader( Player.Local.SteamId );
+
+	private bool SystemAllowsMemberOutline =>
+		PartySystem.Instance?.Settings.AllowMemberOutline == true;
+
+	private bool MemberOutlineEnabled
+	{
+		get
+		{
+			if ( PartySystem.Instance is not { } system || !Player.Local.IsValid() )
+			{
+				return false;
+			}
+
+			var partyId = system.GetPartyId( Player.Local.SteamId );
+			return partyId.HasValue
+			       && system.Parties.TryGetValue( partyId.Value, out var data )
+			       && data.MemberOutlineEnabled;
+		}
+	}
+
+	private static bool IsSelf( long steamId ) => Player.Local.IsValid() && Player.Local.SteamId == steamId;
+
+	private static IEnumerable<PartyRoom> Invites() =>
+		PartySystem.Instance is { } system && Player.Local.IsValid()
+			? system.GetInvitesFor( Player.Local.SteamId )
+			: Enumerable.Empty<PartyRoom>();
+
+	private static string LeaderName( PartyRoom room )
+	{
+		foreach ( var member in room.Members )
+		{
+			if ( member.IsLeader )
+			{
+				return member.Name;
+			}
+		}
+
+		return room.Members.Count > 0 ? room.Members[0].Name : string.Empty;
+	}
+
+	// The roster shows the FULL party including the local player; the leader's inline kick button is
+	// gated per-row to other members only (you can't kick yourself — use Leave/Disband).
+	private static IEnumerable<PartyMember> OrderedMembers( PartyRoom room ) =>
+		room.Members
+			.OrderByDescending( m => m.IsLeader )
+			.ThenBy( m => m.Name );
+
+	protected override int BuildHash()
+	{
+		var room = PartyRoom.Current;
+		var inParty = room is not null;
+		var isLeader = LocalIsLeader;
+
+		// Minimal equivalent logic for hash (avoids any generator visibility quirks on the helpers).
+		PartyTab activeTabForHash = PartyTab.Start;
+		if ( inParty )
+		{
+			// Prefer current if still valid for this state; else fall back.
+			if ( _tab == PartyTab.Party || _tab == PartyTab.Leave || (isLeader && _tab == PartyTab.Settings) )
+			{
+				activeTabForHash = _tab;
+			}
+			else
+			{
+				activeTabForHash = PartyTab.Party;
+			}
+		}
+		else
+		{
+			activeTabForHash = ( _tab == PartyTab.Start || _tab == PartyTab.Join ) ? _tab : PartyTab.Start;
+		}
+
+		var hash = new HashCode();
+		hash.Add( IsOpen );
+		hash.Add( activeTabForHash );
+		hash.Add( inParty );
+		hash.Add( AccentColor );
+		hash.Add( isLeader );
+		hash.Add( PartyHud.Hidden );
+
+		// Settings preview swatch + Apply button follow the picker before it's committed.
+		if ( activeTabForHash == PartyTab.Settings )
+		{
+			hash.Add( SystemAllowsMemberOutline );
+			hash.Add( MemberOutlineEnabled );
+			hash.Add( _colorDirty );
+			hash.Add( _colorHolder.Color.ToPacked() );
+		}
+
+		if ( room is not null )
+		{
+			hash.Add( room.Id );
+			hash.Add( room.Count );
+			foreach ( var member in room.Members )
+			{
+				hash.Add( member.Id );
+				hash.Add( member.IsLeader );
+				hash.Add( member.Name );
+			}
+		}
+		else
+		{
+			// Off the roster, the Join tab depends on pending-invite count.
+			hash.Add( Invites().Count() );
+		}
+
+		return hash.ToHashCode();
+	}
+}

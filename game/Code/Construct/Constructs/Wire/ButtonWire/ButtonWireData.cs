@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public record ButtonWireData : IConstructData
+public record ButtonWireData : IConstructData, IWireLabelData
 {
 	public uint SchemaVersion => 1;
 	public bool Toggle { get; set; }

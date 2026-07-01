@@ -184,6 +184,37 @@ public static class GameUtils
 		return player.WorldPosition.DistanceSquared( closestPoint ) < maxDistance;
 	}
 
+	public static void AssignSpawnedOwnership( GameObject gameObject, Player player )
+	{
+		if ( !gameObject.IsValid() || !player.IsValid() )
+		{
+			return;
+		}
+
+		foreach ( var entity in gameObject.Components.GetAll<BaseEntity>( FindMode.EverythingInSelfAndDescendants ) )
+		{
+			entity.Owner = player.SteamId;
+		}
+
+		if ( gameObject.NetworkMode == NetworkMode.Object )
+		{
+			gameObject.Network.AssignOwnership( player.Connection );
+		}
+	}
+
+	public static void ClearSpawnedOwnership( GameObject gameObject )
+	{
+		if ( !gameObject.IsValid() )
+		{
+			return;
+		}
+
+		foreach ( var entity in gameObject.Components.GetAll<BaseEntity>( FindMode.EverythingInSelfAndDescendants ) )
+		{
+			entity.Owner = 0;
+		}
+	}
+
 	private static bool HasOwnershipPermission( long steamId, GameObject gameObject )
 	{
 		// Handle doors specifically

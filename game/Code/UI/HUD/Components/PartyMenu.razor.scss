@@ -1,0 +1,383 @@
+@import "../../styles.scss";
+
+PartyMenu {
+  // Only stretch to cover the screen and block input when the menu is actually open.
+  // Without this guard the panel root would sit full-screen at all times and eat every click.
+  &.is-open {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    // Above the always-on HUD, but below AdminTickets (z 999000, staff-only) so staff tickets still win.
+    z-index: 100000;
+    pointer-events: all;
+    background-color: rgba(black, 0.55);
+  }
+
+  .window {
+    width: 680px;
+    height: 460px;
+    max-width: 92vw;
+    max-height: 84vh;
+    background-color: $color-primary;
+    border-radius: $rounding;
+    overflow: hidden;
+  }
+
+  // ── Title bar ────────────────────────────────────────────────────────────────────────────────
+  .title-bar {
+    padding: 10px 14px;
+    background-color: rgba(black, 0.35);
+    border-bottom: 0.5px solid rgba(white, 0.04);
+    gap: 4px;
+  }
+
+  .title {
+    font-size: 14px;
+    font-weight: 700;
+    color: $color-white;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .hud-toggle,
+  .close-x {
+    font-size: 18px;
+    color: $color-gray-400;
+    cursor: pointer;
+    pointer-events: all;
+    padding: 2px;
+    transition: color 0.1s ease;
+
+    &:hover {
+      color: $color-white;
+    }
+  }
+
+  .body {
+    flex-grow: 1;
+    min-height: 0;
+  }
+
+  // ── Sidebar (tabbed navigation) ──────────────────────────────────────────────────────────────
+  // Mirrors the DXRP TabMenu sidebar exactly: clean icon + 18px near-white label, no per-row
+  // dividers (those read "boxy"), and a single subtle accent wash on the active tab. The active
+  // state is carried mostly by opacity (0.7 → 1) like Dimmer's menu, not a heavy colored fill.
+  .sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    background-color: $color-secondary;
+    border-right: 0.5px solid rgba(white, 0.04);
+  }
+
+  .navigation {
+    padding: $space-2 0;
+  }
+
+  // Explicit row + left alignment: s&box doesn't reliably left-align/row a bare `flex` here, so we
+  // pin the layout ourselves (icon, then label) exactly like the working invite button.
+  .menuButton {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 11px $space-3;
+    opacity: 0.7;
+    pointer-events: all;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    .tab-icon {
+      font-size: $text-lg;
+      color: $color-tertiary;
+      margin-right: $space-3;
+      pointer-events: none;
+    }
+
+    .tab-label {
+      font-size: $text-base;
+      color: $color-tertiary;
+      text-align: left;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    &:hover {
+      opacity: 1;
+      background-color: rgba($color-accent, 0.04);
+    }
+  }
+
+  .active-btn {
+    opacity: 1;
+    background-color: rgba($color-accent, 0.08);
+  }
+
+  // ── Content pane ─────────────────────────────────────────────────────────────────────────────
+  .content {
+    flex-grow: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: scroll;
+  }
+
+  .pane {
+    padding: 16px 18px;
+    gap: 8px;
+    flex-grow: 1;
+  }
+
+  .leave-pane {
+    gap: 12px;
+  }
+
+  .pane-title {
+    font-size: $text-lg;
+    font-weight: 600;
+    color: $color-tertiary;
+    text-align: center;
+  }
+
+  .pane-hint {
+    font-size: $text-sm;
+    color: $color-gray-400;
+    text-align: center;
+  }
+
+  .pane-note {
+    font-size: 12px;
+    color: $color-gray-400;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: $color-gray-400;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  // ── Invite ───────────────────────────────────────────────────────────────────────────────────
+  .invite-row {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .invite-input {
+    flex-grow: 1;
+    background-color: rgba(black, 0.4);
+    border: 0.5px solid rgba(white, 0.04);
+    border-radius: $rounding;
+    padding: 7px 10px;
+    color: $color-white;
+    font-size: 12px;
+  }
+
+  .invite-card {
+    background-color: rgba(white, 0.05);
+    border-radius: $rounding;
+    padding: 8px 10px;
+
+    i {
+      font-size: 16px;
+    }
+
+    .invite-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: $color-white;
+    }
+  }
+
+  // ── Buttons ──────────────────────────────────────────────────────────────────────────────────
+  .primary-btn {
+    padding: 7px 13px;
+    border-radius: $rounding;
+    background-color: $color-good;
+    pointer-events: all;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+
+    i {
+      font-size: 15px;
+      color: $color-white;
+      pointer-events: none;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 700;
+      color: $color-white;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      pointer-events: none;
+    }
+
+    &:hover {
+      background-color: lighten($color-good, 6%);
+    }
+
+    // No pending change → dim and inert, so Apply only reads as live once the color is edited.
+    &.is-disabled {
+      background-color: rgba(white, 0.08);
+      cursor: default;
+      pointer-events: none;
+
+      i,
+      label {
+        color: $color-gray-400;
+      }
+    }
+  }
+
+  .danger-btn {
+    padding: 9px 20px;
+    border-radius: $rounding;
+    background-color: $color-bad;
+    pointer-events: all;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+
+    i {
+      font-size: 16px;
+      color: $color-white;
+      pointer-events: none;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 700;
+      color: $color-white;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    &:hover {
+      background-color: lighten($color-bad, 8%);
+    }
+  }
+
+  .warn-icon {
+    font-size: 34px;
+    color: $color-gray-400;
+  }
+
+  .warn-text {
+    font-size: 12px;
+    color: $color-gray-400;
+    text-align: center;
+  }
+
+  // ── Settings (outline + color) ───────────────────────────────────────────────────────────────
+  .toggle-row {
+    margin-top: 4px;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border-radius: $rounding;
+    background-color: rgba(black, 0.2);
+    pointer-events: all;
+
+    &:hover {
+      background-color: rgba(black, 0.28);
+    }
+  }
+
+  .toggle-icon {
+    font-size: 20px;
+    color: $color-accent;
+    pointer-events: none;
+  }
+
+  .toggle-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: $color-white;
+    letter-spacing: 0.4px;
+    pointer-events: none;
+  }
+
+  .color-row {
+    margin-top: 4px;
+  }
+
+  .color-preview {
+    width: 28px;
+    height: 28px;
+    border-radius: $rounding;
+    border: 2px solid rgba(white, 0.15);
+    flex-shrink: 0;
+  }
+
+  .apply-row {
+    margin-top: 10px;
+  }
+
+  // ── Roster + inline leader controls ──────────────────────────────────────────────────────────
+  .roster {
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  // Roster row: card + kick sit on one line; the card flexes within the pane and the icon button stays
+  // a fixed square to its right (never adds extra column width or floats outside the row).
+  .member-row {
+    width: 100%;
+    gap: 0;
+    padding: 1px 0;
+    align-items: stretch;
+
+    PartyMemberCard {
+      flex-grow: 1;
+      flex-shrink: 1;
+      min-width: 0;
+      width: 0;
+    }
+  }
+
+  // Fixed-width action column reserved on EVERY row (filled with the kick button for other members,
+  // left empty for self). Holding the same width on all rows keeps each PartyMemberCard identical in
+  // width so the health/armor bars line up across the roster. Wider than the 28px button + center
+  // alignment so the kick button sits centered in the space to the right of the card, not jammed
+  // against the window edge.
+  .member-actions {
+    width: 60px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-self: center;
+    // Shifted toward the right of the reserved column (not dead-center) per Dimmer's spacing.
+    justify-content: flex-end;
+    padding-right: 8px;
+  }
+
+  // Compact, icon-only kick button — square hit target, red-tinted on hover.
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: $rounding;
+    background-color: rgba(white, 0.06);
+    pointer-events: all;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+
+    i {
+      font-size: 15px;
+      pointer-events: none;
+    }
+
+    &.kick {
+      i {
+        color: $color-bad;
+      }
+
+      &:hover {
+        background-color: rgba($color-bad, 0.18);
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 namespace Dxura.RP.Game.Wire;
 
-public class IntervalWireDefinition : ConstructDefinition<IntervalWire, IntervalWireData>
+public class IntervalWireDefinition : WireConstructDefinition<IntervalWire, IntervalWireData>
 {
 	public override ConstructType Type => ConstructType.IntervalWire;
 	public override uint Limit => Config.Current.Game.IntervalWireLimit;
@@ -10,7 +10,7 @@ public class IntervalWireDefinition : ConstructDefinition<IntervalWire, Interval
 	public const float MinIntervalWireHold = 0f; // 0 seconds minimum
 	public const float MaxIntervalWireHold = 600f; // 10 minutes maximum
 
-	protected override ConstructDataValidationResult ValidateTyped( IntervalWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( IntervalWireData data )
 	{
 		var minInterval = Config.Current.Game.WireTick;
 

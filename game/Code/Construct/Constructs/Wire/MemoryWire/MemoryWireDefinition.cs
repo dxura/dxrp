@@ -1,11 +1,11 @@
 namespace Dxura.RP.Game.Wire;
 
-public class MemoryWireDefinition : ConstructDefinition<MemoryWire, MemoryWireData>
+public class MemoryWireDefinition : WireConstructDefinition<MemoryWire, MemoryWireData>
 {
 	public override ConstructType Type => ConstructType.MemoryWire;
 	public override uint Limit => Config.Current.Game.MemoryWireLimit;
 
-	protected override ConstructDataValidationResult ValidateTyped( MemoryWireData data )
+	protected override ConstructDataValidationResult ValidateWireTyped( MemoryWireData data )
 	{
 		return ConstructDataValidationResult.Success();
 	}

@@ -1,4 +1,3 @@
-using Dxura.RP.Game.UI;
 using Dxura.RP.Game.Wire;
 using Dxura.RP.Shared;
 
@@ -44,19 +43,6 @@ public class ButtonWireTool() : BaseConstructTool<ButtonWireData>( ConstructType
 		set => Data = Data with
 		{
 			OnValue = value
-		};
-	}
-
-	[Property]
-	[Title( "Label" )]
-	[Description( "Describe this button (optional)" )]
-	[Range( TextDefinition.MinTextLength, TextDefinition.MaxTextLength )]
-	public string Label
-	{
-		get => Data.Label;
-		set => Data = Data with
-		{
-			Label = value
 		};
 	}
 }
