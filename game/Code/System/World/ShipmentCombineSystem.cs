@@ -45,8 +45,7 @@ public class ShipmentCombineSystem : SingletonComponent<ShipmentCombineSystem>, 
 		{
 			if ( clusters.TryGetValue( drop, out var cluster ) )
 			{
-				drop.SetCombineIndicator( cluster.Count, cluster.MaxQuantity );
-			}
+				drop.SetCombineIndicator( cluster.Count > cluster.MaxQuantity ? cluster.MaxQuantity : cluster.Count, cluster.MaxQuantity );			}
 			else
 			{
 				drop.ClearCombineIndicator();

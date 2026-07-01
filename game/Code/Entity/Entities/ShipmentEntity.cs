@@ -85,7 +85,10 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 
 	protected override void OnDestroyed()
 	{
-		Assert.True( Networking.IsHost );
+		if ( !Networking.IsHost )
+ 		{
+ 			return;
+ 		}
 
 		var equipment = GetEquipment();
 		if ( equipment != null )
@@ -172,7 +175,7 @@ public class ShipmentEntity : BaseEntity, IWireUsable, Component.IPressable
 		shipmentEntity.MarketItemId = marketItemId;
 		shipmentEntity.ConfigureHost( equipment, maxQuantity, quantity );
 
-		foreach ( var drop in drops )
+		foreach ( var drop in drops.Take( quantity ) )
 		{
 			drop.GameObject.Destroy();
 		}
