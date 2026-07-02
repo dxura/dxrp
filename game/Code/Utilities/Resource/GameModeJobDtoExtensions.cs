@@ -108,9 +108,23 @@ public static class GameModeJobDtoExtensions
 		return !string.IsNullOrWhiteSpace( modelPath ) && IsCloudIdent( modelPath );
 	}
 
+	public static bool SupportsCitizenClothing( this GameModeJobDto? job )
+	{
+		var modelPath = ResolveModelPath( job );
+		return !IsCloudIdent( modelPath ) && IsCitizenModelPath( modelPath );
+	}
+
 	private static bool IsCloudIdent( string path )
 	{
 		return !path.Contains( '/' ) && path.Contains( '.' );
+	}
+
+	private static bool IsCitizenModelPath( string path )
+	{
+		path = path.Replace( '\\', '/' ).Trim();
+
+		return path.StartsWith( "models/citizen/", StringComparison.OrdinalIgnoreCase )
+		       || path.StartsWith( "models/citizen_human/", StringComparison.OrdinalIgnoreCase );
 	}
 
 	public static string FormatPlayerSlots( this GameModeJobDto? job, int currentPlayers )
@@ -229,7 +243,7 @@ public static class GameModeJobDtoExtensions
 	{
 		var clothing = new ClothingContainer();
 
-		if ( !job.HasCloudModel() )
+		if ( job.SupportsCitizenClothing() )
 		{
 			var source = avatarSource ?? (Player.Local.IsValid() ? Player.Local : null);
 			var avatarData = source?.Network.Owner?.GetUserData( "avatar" );
@@ -250,6 +264,12 @@ public static class GameModeJobDtoExtensions
 	public static ClothingContainer BuildClothing( this Player player )
 	{
 		var clothing = new ClothingContainer();
+
+		if ( player.Job.IsValid() && !player.Job.SupportsCitizenClothing() )
+		{
+			return clothing;
+		}
+
 		var avatarData = player.Network.Owner?.GetUserData( "avatar" );
 
 		if ( !string.IsNullOrWhiteSpace( avatarData ) )

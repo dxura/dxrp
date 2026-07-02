@@ -40,6 +40,7 @@
 	private float _yawVelocity;
 	private bool _isDragging;
 	private Vector2 _lastMousePosition;
+	private int _previewVersion;
 
 	public GameModeJobDto? Job { get; set; }
 	public Player? Player { get; set; }
@@ -168,46 +169,64 @@
 		if ( Player != null )
 		{
 			renderer.Model = Player.GetPrimaryModel();
-			Player.Job.BuildClothing( Player ).Apply( renderer );
+			if ( Player.Job.SupportsCitizenClothing() )
+			{
+				Player.Job.BuildClothing( Player ).Apply( renderer );
+			}
 			return;
 		}
 
-		if ( Job!.HasCloudModel() )
+		var job = Job!;
+
+		if ( job.HasCloudModel() )
 		{
 			renderer.Enabled = false;
-			_ = ApplyCloudModelAsync( Job, renderer );
+			_ = ApplyCloudModelAsync( job, renderer );
 			return;
 		}
 
-		renderer.Model = Job.GetPrimaryModel();
-		Job.BuildClothing().Apply( renderer );
+		renderer.Model = job.GetPrimaryModel();
+		if ( job.SupportsCitizenClothing() )
+		{
+			job.BuildClothing().Apply( renderer );
+		}
 	}
 
-	private void CenterPreview( SkinnedModelRenderer renderer ) =>
-		CenterPreview( renderer.Bounds.Size.LengthSquared > 1f ? renderer.Bounds : renderer.Model.Bounds );
-
-	private void CenterPreview( BBox bounds )
+	private void CenterPreview( SkinnedModelRenderer renderer )
 	{
-		var localCenter = bounds.Center - PreviewOrigin;
-		var localMins = bounds.Mins - PreviewOrigin;
+		if ( !_body.IsValid() || !_pivot.IsValid() )
+		{
+			return;
+		}
+
+		var useModelBounds = renderer.Model.IsValid() && renderer.Model.Bounds.Size.LengthSquared > 1f;
+		var bounds = useModelBounds ? renderer.Model.Bounds : renderer.Bounds;
+		var worldBounds = !useModelBounds;
+		CenterPreview( bounds, worldBounds );
+	}
+
+	private void CenterPreview( BBox bounds, bool worldBounds )
+	{
+		var localCenter = worldBounds ? bounds.Center - PreviewOrigin : bounds.Center;
+		var localMins = worldBounds ? bounds.Mins - PreviewOrigin : bounds.Mins;
+		var rawWidth = MathF.Max( MathF.Max( bounds.Size.x, bounds.Size.y ), 18f );
+		var rawHeight = MathF.Max( bounds.Size.z, 48f );
 
 		if ( Player != null )
 		{
-			var width = MathF.Max( MathF.Max( bounds.Size.x, bounds.Size.y ), 18f );
-			var height = MathF.Max( bounds.Size.z, 48f );
+			var width = MathF.Min( rawWidth, 58f );
+			var height = MathF.Min( rawHeight, 84f );
 
 			_modelSize = new Vector3( width, width, height );
 			_body!.LocalPosition = new Vector3( -localCenter.x, -localCenter.y, -localMins.z );
 			_focusPoint = PreviewOrigin + Vector3.Up * Math.Clamp( height * 0.58f, 22f, height * 0.72f );
-			_fitDistance = Math.Clamp( MathF.Max( height * 0.62f, width * 1.3f ), 44f, 96f );
+			_fitDistance = Math.Clamp( MathF.Max( height * 0.68f, width * 1.28f ), 44f, 96f );
 			_zoomOffset = 0f;
 			_minDistance = Math.Clamp( _fitDistance * 0.72f, 36f, 84f );
 			_maxDistance = Math.Clamp( _fitDistance * 1.45f, 60f, 144f );
 		}
 		else
 		{
-			var rawWidth = MathF.Max( MathF.Max( bounds.Size.x, bounds.Size.y ), 18f );
-			var rawHeight = MathF.Max( bounds.Size.z, 48f );
 			var width = MathF.Min( rawWidth, 46f );
 			var height = MathF.Min( rawHeight, 76f );
 
@@ -282,6 +301,7 @@
 
 	private void RebuildPreview()
 	{
+		var previewVersion = ++_previewVersion;
 		DestroyPreviewObjects();
 		EnsureScene();
 		if ( _scene == null || !_scene.IsValid() )
@@ -305,6 +325,22 @@
 			PopulatePreview( renderer );
 			EnsureLight();
 			if ( renderer.Model.IsValid() ) CenterPreview( renderer );
+			_ = CenterPreviewAsync( renderer, previewVersion );
+		}
+	}
+
+	private async Task CenterPreviewAsync( SkinnedModelRenderer renderer, int previewVersion )
+	{
+		await Task.FixedUpdate();
+
+		if ( previewVersion != _previewVersion || !renderer.IsValid() || _scene == null || !_scene.IsValid() )
+		{
+			return;
+		}
+
+		using ( _scene.Push() )
+		{
+			CenterPreview( renderer );
 		}
 	}
 
@@ -389,7 +425,7 @@
 		{
 			renderer.Model = model;
 			renderer.Enabled = true;
-			CenterPreview( model.Bounds );
+			CenterPreview( renderer );
 		}
 	}
 }

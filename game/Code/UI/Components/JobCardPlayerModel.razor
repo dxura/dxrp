@@ -69,7 +69,13 @@ else if ( Job.IsValid() )
 			return Texture.Transparent;
 
 		return ThumbnailCache.GetCharacterPortrait( key, Job,
-			r => Job.BuildClothing().Apply( r ) );
+			r =>
+			{
+				if ( Job.SupportsCitizenClothing() )
+				{
+					Job.BuildClothing().Apply( r );
+				}
+			} );
 	}
 
 	private string BuildSignature()

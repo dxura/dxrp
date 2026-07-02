@@ -33,6 +33,8 @@ public partial class Player
 	public Vector3 DamageTakenPosition { get; set; }
 	public Vector3 DamageTakenForce { get; set; }
 
+	private int _clothingApplyVersion;
+
 	private void OnStartBody()
 	{
 		NamePlate.Enabled = !IsLocalPlayer && !GameManager.IsHeadless;
@@ -117,34 +119,68 @@ public partial class Player
 	/// </summary>
 	public void ApplyClothing()
 	{
-		if ( !Renderer.IsValid() || !Job.IsValid() || !Dresser.IsValid() || GameManager.IsHeadless )
+		if ( !Renderer.IsValid() || !Job.IsValid() || GameManager.IsHeadless )
 		{
 			return;
 		}
 
+		var applyVersion = ++_clothingApplyVersion;
+
+		if ( !Job.SupportsCitizenClothing() )
+		{
+			if ( Dresser.IsValid() )
+			{
+				Dresser.Clothing.Clear();
+				Dresser.Enabled = false;
+			}
+
+			CleanupDresserClothing();
+
+			if ( !Job.HasCloudModel() )
+			{
+				ApplyUndressedModel( Job.GetPrimaryModel() );
+				return;
+			}
+
+			_ = ApplyUndressedModelAsync( applyVersion );
+			return;
+		}
+
+		if ( !Dresser.IsValid() )
+		{
+			return;
+		}
+
+		Dresser.Enabled = true;
+
 		// 1: Apply model
 		Renderer.Model = Job.GetPrimaryModel();
 
-		// 2: Build and apply clothing
+		// 2: Build and apply citizen clothing
 		var includeJobClothing = DxCivilianJobClothing || !Job.IsInGroup( "0802e49f-43ba-5bf2-adb0-933b150f0156" );
 		Dresser.Clothing.Clear();
 		Dresser.Clothing.AddRange( Job.BuildClothing( this, includeJobClothing ).Clothing );
 
-		_ = ApplyClothingAsync();
+		_ = ApplyClothingAsync( applyVersion );
 	}
 
-	public async Task ApplyClothingAsync()
+	private async Task ApplyClothingAsync( int applyVersion )
 	{
 		// Wait for a fixed update so stuff is ready
 		await Task.FixedUpdate();
 
-		if ( !GameObject.IsValid() || !Dresser.IsValid() )
+		if ( !GameObject.IsValid() || !Dresser.IsValid() || applyVersion != _clothingApplyVersion )
 		{
 			return;
 		}
 
 		// Resolve cloud model (may need to download/mount the package)
 		var model = await Job.GetPrimaryModelAsync();
+
+		if ( !GameObject.IsValid() || !Dresser.IsValid() || applyVersion != _clothingApplyVersion )
+		{
+			return;
+		}
 
 		if ( Renderer.IsValid() )
 		{
@@ -153,7 +189,22 @@ public partial class Player
 
 		await Dresser.Apply();
 
-		if ( !GameObject.IsValid() || !ModelHitboxes.IsValid() )
+		if ( !GameObject.IsValid() )
+		{
+			return;
+		}
+
+		if ( applyVersion != _clothingApplyVersion )
+		{
+			if ( !Job.SupportsCitizenClothing() )
+			{
+				CleanupDresserClothing();
+			}
+
+			return;
+		}
+
+		if ( !ModelHitboxes.IsValid() )
 		{
 			return;
 		}
@@ -161,10 +212,81 @@ public partial class Player
 		ModelHitboxes.Rebuild();
 	}
 
+	private async Task ApplyUndressedModelAsync( int applyVersion )
+	{
+		await Task.FixedUpdate();
+
+		if ( !GameObject.IsValid() || applyVersion != _clothingApplyVersion )
+		{
+			return;
+		}
+
+		var model = await Job.GetPrimaryModelAsync();
+
+		if ( !GameObject.IsValid() || applyVersion != _clothingApplyVersion )
+		{
+			return;
+		}
+
+		ApplyUndressedModel( model );
+	}
+
+	private void ApplyUndressedModel( Model model )
+	{
+		if ( Dresser.IsValid() )
+		{
+			Dresser.Clothing.Clear();
+			Dresser.Enabled = false;
+		}
+
+		CleanupDresserClothing();
+
+		if ( Renderer.IsValid() )
+		{
+			Renderer.Model = model;
+		}
+
+		if ( ModelHitboxes.IsValid() )
+		{
+			ModelHitboxes.Rebuild();
+		}
+	}
+
+	private void CleanupDresserClothing()
+	{
+		if ( !BodyRoot.IsValid() )
+		{
+			return;
+		}
+
+		foreach ( var skinnedRenderer in BodyRoot.GetComponentsInChildren<SkinnedModelRenderer>( true ).ToArray() )
+		{
+			if ( skinnedRenderer == Renderer || skinnedRenderer == EmoteRenderer )
+			{
+				continue;
+			}
+
+			if ( !skinnedRenderer.GameObject.Name.StartsWith( "Clothing - ", StringComparison.Ordinal ) )
+			{
+				continue;
+			}
+
+			skinnedRenderer.GameObject.Destroy();
+		}
+	}
+
 	public void ClearClothing()
 	{
 		if ( !Renderer.IsValid() )
 		{
+			return;
+		}
+
+		CleanupDresserClothing();
+
+		if ( !Job.IsValid() || !Job.SupportsCitizenClothing() )
+		{
+			Renderer.Enabled = false;
 			return;
 		}
 
