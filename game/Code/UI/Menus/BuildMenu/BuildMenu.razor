@@ -98,7 +98,8 @@
 
   public bool IsVisible => (Input.Down("BuildMenu") || _textInputHasFocus) && 
                             Player.Local.IsValid() &&
-                           !Player.Local.Restricted && 
+                           !Player.Local.Restricted &&
+                           !Player.Local.IsStunned &&
                            Player.Local.HealthComponent.State == LifeState.Alive;
   
   private bool _wasVisibleLastFrame;

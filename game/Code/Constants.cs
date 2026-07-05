@@ -24,6 +24,7 @@ public static class Constants
 	public const string SurrenderStatus = "surrender";
 	public const string DrunkStatus = "drunk";
 	public const string FreezeStatus = "freeze";
+	public const string StunStatus = "stun";
 	
 	// API
 	public static string ApiBaseUrl => ServerApiLink.Endpoint switch

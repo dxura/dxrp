@@ -248,6 +248,13 @@
 			return;
 		}
 
+		if ( Player.Local.Restricted || Player.Local.IsStunned )
+		{
+			Notify.Error( "#generic.forbidden" );
+			TabMenu.RequestCloseMenu();
+			return;
+		}
+
         // route via command system
         Dxura.RP.Game.Chat.Current.ExecuteCommandHost(SuicideCommand.CommandConstant);
 	}

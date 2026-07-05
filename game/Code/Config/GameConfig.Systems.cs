@@ -111,5 +111,9 @@ public abstract partial class GameConfig
 
 	// Satiated Status
 	public virtual float SatiatedHealPerStack { get; set; } = 1f; // Health healed per second per stack
+
+	// Stun Status
+	public virtual float StunDuration { get; set; } = 10f;
+	public virtual float StunRagdollDuration { get; set; } = 5f;
 }
 

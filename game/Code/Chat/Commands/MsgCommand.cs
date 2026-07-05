@@ -14,6 +14,7 @@ public class MsgCommand : ICommand
 	};
 	public string Help => $"Send a private message to another player. {UsageMessage}";
 	public bool IsUsableWhileRestricted => true;
+	public bool IsUsableWhileStunned => true;
 
 	private static string UsageMessage => Language.GetPhrase( "command.msg.usage" );
 

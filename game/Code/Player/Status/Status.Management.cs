@@ -55,6 +55,8 @@ public partial class Status
 			// Update the player's status dictionary with new expiry and stack count
 			player.Statuses[status] = new StatusInfo( existingStatus.Expiry, existingStatus.CurrentStacks );
 
+			existingStatus.OnRefreshedServer( player );
+
 			return;
 		}
 

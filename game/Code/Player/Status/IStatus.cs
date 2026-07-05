@@ -42,6 +42,7 @@ public interface IStatus
 	/// </summary>
 	/// <param name="player">The player this is for</param>
 	void OnAddedServer( Player player ) {}
+	void OnRefreshedServer( Player player ) {}
 	/// <summary>
 	/// Called on the player's client instance when the status is added.
 	/// </summary>

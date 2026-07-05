@@ -87,11 +87,17 @@ public partial class Player
 		{
 			SyncPlayerRagdoll();
 		}
+		else if ( Networking.IsHost && HasStatus( Constants.StunStatus ) )
+		{
+			SyncStunRagdoll();
+		}
 	}
 
 	private void ResetBody()
 	{
 		DamageTakenForce = Vector3.Zero;
+		ClearStunRagdoll();
+		SetStunned( false );
 		ClearRagdoll();
 		SetDead( false );
 	}
@@ -297,6 +303,7 @@ public partial class Player
 
 	private void OnDestroyBody()
 	{
+		ClearStunRagdoll();
 		ClearRagdoll();
 	}
 

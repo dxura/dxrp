@@ -1,3 +1,4 @@
+using Dxura.RP.Game.Minigame;
 using Dxura.RP.Game.UI;
 using Dxura.RP.Shared;
 using Sandbox.Diagnostics;
@@ -37,6 +38,8 @@ public partial class Player
 	[Property]
 	[Group( "State" )]
 	public bool Restricted { get; set; }
+
+	public bool IsStunned => HasStatus( Constants.StunStatus );
 
 	[Sync( SyncFlags.FromHost )]
 	[Property]
@@ -325,7 +328,7 @@ public partial class Player
 
 	private bool CanSit()
 	{
-		if ( Restricted )
+		if ( Restricted || IsStunned )
 		{
 			return false;
 		}

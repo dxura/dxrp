@@ -1,0 +1,393 @@
+{
+  "RootObject": {
+    "__guid": "537a3752-47c2-491f-b7a8-84d06247b15b",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "w_taser",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "player",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 3,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 1,
+    "Components": [
+      {
+        "__type": "Dxura.RP.Game.Equipment",
+        "__guid": "fe1fe626-a1a6-40ab-b2f5-1ce554531845",
+        "__enabled": true,
+        "Flags": 0,
+        "ArmorReduction": null,
+        "DeploySound": "sounds/equipment/switch/equipment_switch.sound",
+        "DroppedCenter": "0,0,0",
+        "DroppedSize": "8,2,8",
+        "EjectionPort": {
+          "_type": "gameobject",
+          "go": "0e090fee-9fb1-4b07-bba6-047370e3c2e4"
+        },
+        "Handedness": "Right",
+        "HelmetReduction": null,
+        "HoldType": "Pistol",
+        "Identifier": "taser",
+        "IsPurchasable": true,
+        "ModelRenderer": {
+          "_type": "component",
+          "component_id": "5abbb3cb-4005-418f-970c-50342f9b3759",
+          "go": "fccf584a-67cf-4b26-ae4b-c0fafa897f5e",
+          "component_type": "SkinnedModelRenderer"
+        },
+        "Muzzle": {
+          "_type": "gameobject",
+          "go": "93b70621-3326-4689-b0dd-82371b9b8594"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnlyShowCrosshairDot": false,
+        "SpeedPenalty": 20,
+        "UseCrosshair": true,
+        "ViewModelPrefab": {
+          "_type": "gameobject",
+          "prefab": "gameplay/equipment/job/taser/vm_taser.prefab"
+        }
+      },
+      {
+        "__type": "Dxura.RP.Game.TagBinder",
+        "__guid": "8acf7f5b-f598-4b06-bee2-07501c3e874f",
+        "__enabled": true,
+        "Flags": 0,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "fccf584a-67cf-4b26-ae4b-c0fafa897f5e",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Model",
+        "Position": "4.06697512,0.620780885,-0.703365445",
+        "Rotation": "0,0,1,-4.37113883E-08",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "5abbb3cb-4005-418f-970c-50342f9b3759",
+            "__enabled": true,
+            "Flags": 0,
+            "AnimationGraph": null,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": false,
+            "CreateBoneObjects": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": "gameplay/equipment/job/taser/models/dxrp_taser.vmdl",
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Sequence": {
+              "Name": null,
+              "Looping": true,
+              "Blending": false
+            },
+            "Tint": "1,1,1,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": [
+          {
+            "__guid": "93b70621-3326-4689-b0dd-82371b9b8594",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "Muzzle",
+            "Position": "-6.43997908,0.486309469,0.612102032",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [],
+            "Children": []
+          },
+          {
+            "__guid": "0e090fee-9fb1-4b07-bba6-047370e3c2e4",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "EjectionPort",
+            "Position": "-5.8575635,0.584382832,0.408277988",
+            "Rotation": "0,0,0,1",
+            "Scale": "1,1,1",
+            "Tags": "particles",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [],
+            "Children": []
+          }
+        ]
+      },
+      {
+        "__guid": "6a5b70e8-f9db-4408-b52a-b13eacbede77",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "Functions",
+        "Position": "-0.210025787,-1.83610354E-08,0.160665035",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Dxura.RP.Game.AmmoComponent",
+            "__guid": "56dabf53-f930-467b-a7d2-ab7a938e6d56",
+            "__enabled": true,
+            "Flags": 0,
+            "Ammo": 15,
+            "HasAmmo": true,
+            "MaxAmmo": 15,
+            "MaxReserveAmmo": 30,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "ReserveAmmo": 0
+          },
+          {
+            "__type": "Dxura.RP.Game.Equipments.TaserEquipment",
+            "__guid": "13898a0b-1984-4ff1-a7da-a97972a40fb2",
+            "__enabled": true,
+            "Flags": 0,
+            "AmmoComponent": {
+              "_type": "component",
+              "component_id": "56dabf53-f930-467b-a7d2-ab7a938e6d56",
+              "go": "6a5b70e8-f9db-4408-b52a-b13eacbede77",
+              "component_type": "AmmoComponent"
+            },
+            "ArcDuration": 0.15,
+            "ArcWidth": 0.35,
+            "Damage": 5,
+            "Delay": 1,
+            "DeployDelay": 0.5,
+            "DryFireSound": "sounds/equipment/gun_dryfire.sound",
+            "DryShootDelay": 0.15,
+            "InputActions": [
+              "Attack1"
+            ],
+            "MaxRange": 215,
+            "MuzzleEffectPrefab": {
+              "_type": "gameobject",
+              "prefab": "prefabs/impact_fx/impact_sparks.prefab"
+            },
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RequiresAllInputActions": false,
+            "ShootSound": "gameplay/equipment/job/taser/sounds/dxrp_taser_shoot.sound",
+            "StunDuration": 10,
+            "StunSound": "gameplay/equipment/job/taser/sounds/dxrp_taser_stun.sound"
+          },
+          {
+            "__type": "Dxura.RP.Game.ReloadWeaponComponent",
+            "__guid": "15156164-ab42-4b80-bf53-a61e07e89901",
+            "__enabled": true,
+            "Flags": 0,
+            "AmmoComponent": {
+              "_type": "component",
+              "component_id": "56dabf53-f930-467b-a7d2-ab7a938e6d56",
+              "go": "6a5b70e8-f9db-4408-b52a-b13eacbede77",
+              "component_type": "AmmoComponent"
+            },
+            "EmptyReloadSounds": {
+              "0": "gameplay/equipment/weapons/usp/sounds/reload/usp.reload.sound",
+              "0.5": "gameplay/equipment/weapons/usp/sounds/reload/usp.reload.fow.sound",
+              "1.2": "gameplay/equipment/weapons/usp/sounds/reload/usp.reload.load.sound"
+            },
+            "EmptyReloadTime": 2,
+            "InputActions": [
+              "Reload"
+            ],
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "ReloadTime": 1.5,
+            "RequiresAllInputActions": false,
+            "SingleReload": false,
+            "TimedReloadSounds": {
+              "0": "gameplay/equipment/weapons/usp/sounds/reload/usp.reload.sound",
+              "1": "gameplay/equipment/weapons/usp/sounds/reload/usp.reload.out.sound"
+            }
+          },
+          {
+            "__type": "Dxura.RP.Game.RecoilWeaponComponent",
+            "__guid": "4b68ac05-70af-4150-9d3c-2901ddc3dc55",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalSpread": "1.39999998 -1.39999998",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RecoilPattern": {
+              "Points": [],
+              "LoopStart": 0,
+              "LoopEnd": 0,
+              "IsLooping": false
+            },
+            "ResetTime": 0.3,
+            "Scale": "2,5",
+            "UseRecoilPattern": false,
+            "VerticalSpread": "2"
+          },
+          {
+            "__type": "Dxura.RP.Game.ViewPunch",
+            "__guid": "c7fe5140-2864-4dc7-908c-34e52c63014f",
+            "__enabled": true,
+            "Flags": 0,
+            "AnglesOffset": "-0.5,0.100000001,0.5",
+            "Curve": [
+              {
+                "x": 0,
+                "y": 0,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              },
+              {
+                "x": 0.20833333,
+                "y": 1,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              },
+              {
+                "x": 1,
+                "y": 0,
+                "in": 0,
+                "out": 0,
+                "mode": "Mirrored"
+              }
+            ],
+            "Lifetime": 0.1,
+            "MaxAnglesOffset": "-0.5,0.100000001,0.5",
+            "MaxPositionOffset": "0.5,0.200000003,1.5",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PositionOffset": "0.5,0.200000003,1.5"
+          },
+          {
+            "__type": "Dxura.RP.Game.ManualOffset",
+            "__guid": "a4ab8706-e8d7-4e87-87a1-bb39ede630c6",
+            "__enabled": true,
+            "Flags": 0,
+            "AimAngleOffset": "0,0,0",
+            "AimOffset": "5,0,0",
+            "InputActions": [
+              "Attack2"
+            ],
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "RequiresAllInputActions": false
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": false,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": "",
+        "DeferGeneration": false,
+        "CustomBounds": false
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}
