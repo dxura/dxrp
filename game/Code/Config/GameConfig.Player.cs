@@ -31,7 +31,6 @@ public abstract partial class GameConfig
 	public virtual float AfkCheckInterval { get; set; } = 2.5f;
 	public virtual float TimeUntilAfk { get; set; } = 300f; // 5 minutes
 	public virtual float TimeUntilAfkDemote { get; set; } = 3600f; // 60 minutes
-	public virtual float AfkMovementThreshold { get; set; } = 0.5f; // Minimum movement to not be AFK
 
 	// Armor
 	public virtual float MaxArmor { get; set; } = 100f;

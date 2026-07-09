@@ -46,6 +46,7 @@ public sealed partial class Player : Component, IEquipmentEvents, IDamageEvents,
 			return;
 		}
 
+		OnUpdateAfkOwner();
 		OnUpdateEquipment();
 		OnUpdateCamera();
 		OnUpdatePresence();
