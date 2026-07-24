@@ -1,0 +1,12 @@
+{
+  "MasterVolume": "0.19999993",
+  "LoopedSounds": [
+    {
+      "SoundFile": "sounds/city_noise.vsnd",
+      "Volume": "0.4"
+    }
+  ],
+  "StingSounds": [],
+  "__references": [],
+  "__version": 0
+}

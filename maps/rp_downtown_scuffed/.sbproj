@@ -1,0 +1,18 @@
+{
+  "Title": "rp_downtown_scuffed",
+  "Type": "game",
+  "Org": "dxura",
+  "Ident": "rp_downtown_scuffed",
+  "Schema": 1,
+  "IncludeSourceFiles": false,
+  "Resources": null,
+  "PackageReferences": [],
+  "EditorReferences": null,
+  "Mounts": null,
+  "IsStandaloneOnly": false,
+  "Metadata": {
+    "Summary": "Downtown but scuffed",
+    "Description": "The OG downtown darkrp map but scuffed",
+    "Public": true
+  }
+}
