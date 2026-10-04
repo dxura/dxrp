@@ -466,6 +466,6 @@ game/Editor/rpdev.editor.csproj
 
 .devcontainer/
 
-/game*
+game*
 platform*
-maps/rp_map*
+maps*
