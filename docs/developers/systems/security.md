@@ -4,23 +4,23 @@ description: The rules that keep an addon from becoming an exploit, for ownershi
 order: 6
 ---
 
-A functional bug produces a bug report. A security bug produces an exploit that players find before you do, and on a roleplay server most exploits are about money. This page collects the rules that matter most for addon code. Read [Networking](/docs/developers/systems/networking) first for where RPCs live and how to identify the caller.
+Most addon bugs end up as a bug report. Security bugs end up as exploits, usually found by players before you find them, and on a roleplay server most of them involve money. The rules below cover the mistakes addon code makes most often. If you have not read [Networking](/docs/developers/systems/networking) yet, start there: it explains where RPCs live and how to identify the caller.
 
 ## The client is never the authority
 
 Everything a client sends is a request. On the host, re-check:
 
-- **who**: resolve the player from `Rpc.CallerId`, never from a Steam ID passed as a parameter;
-- **may they**: `RankSystem.HasPermission( steamId, ... )` for staff actions, `GameUtils.HasPermission( steamId, gameObject )` for objects;
-- **can they**: alive, not `Restricted`, in range, holding the right job;
-- **how often**: `Cooldown.Current.CheckAndStartCooldown( $"{Rpc.CallerId}:my-addon:action", seconds )` returns `true` while still cooling down;
-- **is the input sane**: lengths, ranges, finite numbers.
+- the caller, resolved from `Rpc.CallerId` and never from a Steam ID passed as a parameter;
+- their permissions, with `RankSystem.HasPermission( steamId, ... )` for staff actions and `GameUtils.HasPermission( steamId, gameObject )` for objects;
+- their state: alive, not `Restricted`, in range, holding the right job;
+- the rate, with `Cooldown.Current.CheckAndStartCooldown( $"{Rpc.CallerId}:my-addon:action", seconds )`, which returns `true` while still cooling down; and
+- the input itself: lengths, ranges, finite numbers.
 
 A client-side check is useful for hiding a button. It is not authorization. See [Permissions](/docs/developers/systems/permissions).
 
 ## Ownership tags
 
-`GameUtils.HasPermission` returns `true` for **every player** on an object tagged `entity` unless it also has `restricted_entity`. That is intentional for garbage, dropped money, and printers (which are meant to be stealable), but it means an entity built only with the `entity` tag can be picked up, used, or removed by anyone.
+`GameUtils.HasPermission` returns `true` for every player on an object tagged `entity` unless it also has `restricted_entity`. Core relies on that for garbage, dropped money, and printers, which are meant to be stealable. The catch is that an entity built with only the `entity` tag can be picked up, used, or removed by anyone.
 
 | Tags | Who can interact |
 | --- | --- |
@@ -41,9 +41,9 @@ if ( !await player.ChargeHost( price, "My Addon: purchase" ) )
 }
 ```
 
-Know what the result means:
+The result is easy to misread:
 
-- They **do not throw** on failure; they return `false`. A `try`/`catch` around them catches nothing, and an unchecked result announces a success that never happened.
+- They do not throw on failure; they return `false`. A `try`/`catch` around them catches nothing, and if you ignore the result your addon can announce a payment that never happened.
 - They return `true` without moving anything when `amount` is `0` or when money is disabled on the server (`MoneyEnabled = false`). `true` means "nothing to refuse", not "money moved".
 - Bank operations call the DXRP backend and can suspend for many frames. Wallet operations do not call the backend, but every operation first waits for that player's transaction lock, so any of them can suspend. Always `await` them.
 
@@ -65,11 +65,11 @@ if ( !await player.PayHost( netAmount, "My Addon: exchange", inBank: true ) )
 
 ### Every `await` is a gap
 
-Anything can happen while an `await` is suspended: the player disconnects, another RPC from the same player runs, the round ends. Two consequences:
+While an `await` is suspended, the player can disconnect, another RPC from the same player can run, or the round can end.
 
-**Re-validate after every `await`.** A check done before the await is stale after it. Check `player.IsValid()`, range, state, and any cap again before acting on the result.
+**Re-validate after every `await`.** Whatever you checked before the await may no longer be true after it. Check `player.IsValid()`, range, state, and any cap again before acting on the result.
 
-**Claim before you pay.** If several RPCs can reach the same payout, the first thing each one does must be to atomically claim it, and only the winner pays:
+**Claim before you pay.** If several RPCs can reach the same payout, each one must first claim it atomically, and only the call that wins the claim pays:
 
 ```csharp
 // Wrong: three concurrent calls all find the ticket and all get paid.
@@ -126,15 +126,15 @@ Some core paths (kill boxes, elevators, medkit revives) set `IsGodMode = false` 
 
 ## Client-run minigames
 
-A minigame drawn on the client cannot be made bot-proof: the client has to know the solution to display it. Host-side checks on ownership, range, cooldown, and minimum duration do not help if the **result** is still a `bool` the client sends; a script waits out the minimum duration and reports success.
+A minigame drawn on the client cannot be made bot-proof, because the client has to know the solution to display it. Host-side checks on ownership, range, cooldown, and minimum duration do not help while the result is still a `bool` the client sends. A script just waits out the minimum duration and reports success, and it never fumbles the way a person does.
 
-What does work:
+To make the result trustworthy:
 
 - run the simulation on the host from the client's streamed input, and decide the result there;
 - send the client only the feedback it needs to play (for example proximity), not the solution; and
 - remove the "I won" RPC entirely rather than merely not calling it from your UI.
 
-If the reward is small, accept the risk knowingly and rate-limit it instead.
+For a small reward, it can be reasonable to accept the risk and rate-limit the minigame instead. Just make that a deliberate choice.
 
 ## Checklist
 

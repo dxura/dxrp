@@ -4,7 +4,7 @@ description: Where to put state and RPCs in an addon, which patterns survive lat
 order: 5
 ---
 
-DXRP is host-authoritative. The host owns money, jobs, statuses, and every piece of shared state; clients render it and ask the host to change it. This page covers the patterns that work for addon code, which is compiled separately and often mounted after core has started (see [Addon Load Order](/docs/developers/hooks/events/load-order)).
+DXRP is host-authoritative. The host owns money, jobs, statuses, and every piece of shared state; clients render it and ask the host to change it. Addon code is compiled separately from core and is often mounted after core has started (see [Addon Load Order](/docs/developers/hooks/events/load-order)), so some patterns that work inside core do not work for an addon. The ones below do.
 
 For the s&box primitives themselves (`[Sync]`, `[Rpc.*]`, `NetworkSpawn`), see the official [s&box documentation](https://sbox.game/dev/doc/).
 
@@ -79,8 +79,9 @@ Core's `MiningClient` uses exactly this shape. The client copy is display state 
 
 ### What to avoid
 
-- **Instance RPCs on an `[AddonService]` or a `System` content component.** These are created at runtime, separately on each machine, rather than spawned by the host. Core's own `MiningSystem` carries no RPCs for this reason; its RPCs live on the NPC, furnace, and static client class.
-- **Instance RPCs on a `GameObjectSystem<T>` from addon code.** Addon authors have reported them failing with `OnObjectMessage: Invalid GameObjectSystem` when the package is mounted after the scene started. Core's `Notify` uses RPCs on a `GameObjectSystem`, but core's assembly is loaded before the scene exists; yours may not be.
+Do not put instance RPCs on an `[AddonService]` or a `System` content component. Each machine creates its own copy at runtime; the host never spawns them. Core's own `MiningSystem` has no RPCs for this reason. Mining's RPCs live on the NPC, the furnace, and the static client class instead.
+
+Avoid instance RPCs on a `GameObjectSystem<T>` in addon code too. Addon authors have reported them failing with `OnObjectMessage: Invalid GameObjectSystem` when the package mounts after the scene has started. Core's `Notify` does use RPCs on a `GameObjectSystem`, but core's assembly is loaded before the scene exists, and yours may not be.
 
 ## Network flags that fail silently
 
@@ -90,7 +91,7 @@ Core's `MiningClient` uses exactly this shape. The client copy is display state 
 | `NetFlags.OwnerOnly` | A host-spawned anchor, NPC, or entity | **Every non-host player is ignored**, with no error or log. The host owns the object, so only the host can call it |
 | `NetFlags.HostOnly` | A broadcast or owner RPC | Says who is expected to send it. Do not treat it as authorization; see below |
 
-Only the flagged RPC stops working, so an `OwnerOnly` mistake usually looks like a UI bug: the panel opens (its RPC has no flag) but the button does nothing.
+Only the flagged RPC stops working, which is why an `OwnerOnly` mistake usually gets reported as a UI bug: the panel opens, because its RPC has no flag, and then the button does nothing.
 
 ## Validate the caller in the body
 
@@ -104,13 +105,13 @@ then check, on the host, everything the client could lie about: range, ownership
 
 ## Late joiners
 
-A client that connects after something happened only sees its current synced state. A `[Rpc.Broadcast]` sent before it connected is gone, and one that lands before the target object exists on the client is lost too; nothing retries it.
+A client that connects late only gets the current synced state, not the history. A `[Rpc.Broadcast]` sent before it connected never reaches it. One that arrives before the target object exists on the client is dropped as well, and nothing retries it.
 
-For anything that must be visible to late joiners (a status visual, a placed effect, a door state), store the state in a `[Sync]` property and build the visual from it in `OnStart` and in its `[Change]` callback. Use broadcasts only for transient effects you do not mind a late joiner missing.
+If late joiners need to see something (a status visual, a placed effect, a door state), keep that state in a `[Sync]` property and build the visual from it in `OnStart` and in its `[Change]` callback. Broadcasts are fine for short effects a late joiner can miss without anyone noticing.
 
 ## Testing
 
-- Test with a host **and** a second client; the editor host alone hides most of these bugs.
+- Test with a host and a second client. Running the editor host alone hides most of these bugs.
 - Join with the client after the feature has been used, to check late-joiner state.
 - Attach the addon while the server is running, then use the feature from a client.
 - Remember that `Cooldown.Current` is shared between host and client in a single editor session, so a cooldown started client-side can block the host's own check there. Confirm rate limits on a real client.

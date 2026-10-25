@@ -4,9 +4,9 @@ description: When addon code exists relative to core startup, configuration, and
 order: 0
 ---
 
-[Lifecycle](/docs/developers/hooks/events/lifecycle) covers gameplay events: a player spawns, a job changes, the game mode is saved. This page covers the question that comes first: **when does your addon's code exist at all?**
+[Lifecycle](/docs/developers/hooks/events/lifecycle) covers gameplay events: a player spawns, a job changes, the game mode is saved. Before any of that matters, your addon's code has to be loaded, and that happens later than most authors expect.
 
-An addon loads late. Core singletons have already started, the configuration has already been fetched, and on a client the player has usually already joined. Code that assumes otherwise works in the editor and fails on a live server.
+By the time an addon loads, core singletons have started, the configuration has been fetched, and on a client the player has usually joined already. Code written as if it ran first tends to work in the editor and then fail on a live server.
 
 ## Core startup sequence
 
@@ -31,7 +31,7 @@ When an operator attaches an addon to a game mode and saves it, the running serv
 2. starts mounting the new package in the background; and
 3. posts `OnAddonPackageMounted` once it has mounted.
 
-Your code does not exist during step 1, so your service never receives that `OnGameModeUpdated`. It is created during step 3, after `OnGameStartupCompleted` has already been posted. Players are already in the world.
+Your code is not loaded yet during step 1, so your service never receives that `OnGameModeUpdated`. The service is created during step 3, long after `OnGameStartupCompleted` was posted, with players already in the world.
 
 Do your initial setup in `OnStart`, from the current state:
 
@@ -85,7 +85,7 @@ A client goes through the same sequence when it connects. By the time its own se
 
 ## Host or client?
 
-Decide inside the event that needs it, not once in `OnStart`. Prefer the `Host`-suffixed events for host-only work: they only ever run on the host. When you do need a check in `OnStart`, use `Networking.IsHost`, and keep in mind that a service on a client may start while the connection is still being established.
+Check it in the event that needs it rather than once in `OnStart`. For host-only work, the `Host`-suffixed events are the simplest option, since they never run anywhere else. If you do need the check in `OnStart`, use `Networking.IsHost`, and remember that a service on a client can start while the connection is still being set up.
 
 ## Checklist
 
@@ -94,4 +94,4 @@ Decide inside the event that needs it, not once in `OnStart`. Prefer the `Host`-
 - Nothing assumes `OnGameStartupCompleted` or the first `OnGameModeUpdated` reached your code.
 - Players already in the world are handled, not just the ones who join later.
 - Client visuals rebuild from synced state for late joiners.
-- Test by attaching the addon to a game mode **while the server is running**, then by joining with a second client.
+- Test by attaching the addon to a game mode while the server is already running, then by joining with a second client.
