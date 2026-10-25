@@ -174,6 +174,33 @@ Declare custom permissions only for capabilities operators need to grant. Permis
 
 ## Step 7: test locally
 
+### Run DXRP in the editor
+
+You do not need to publish and restart a dedicated server for every change. With your addon project open in the s&box editor (targeting `dxura.rp`):
+
+1. In the Asset Browser, open `scenes/game.scene` from the `dxura.rp` package, not your project's own scene.
+2. Press **Play**.
+
+DXRP boots as a local host: the map loads, your code is compiled in, and your `[AddonService]` components attach and run. Saving a source file hot-reloads it.
+
+Pressing Play without opening that scene first starts your project's `StartupScene`, which for a new project is the empty `scenes/minimal.scene` template, so nothing from DXRP runs. See [Creating a Project](/docs/developers/creating-projects#run-dxrp-from-your-project).
+
+What this local run gives you, and what it does not:
+
+| | Local editor run |
+| --- | --- |
+| Game mode | The public default game mode. With no server authorization key, nothing is fetched from your network |
+| Your code | Loaded: services, commands, statuses, tab menu sections, and other type-discovered code run |
+| Your content entries | **Not mapped.** The default game mode does not include your addon, so `Entity`, `Equipment`, `System`, and `Fixture` entries are not active |
+| Addon and content config | Your C# defaults (or the fallback you pass); no portal `BaseConfig` or operator override |
+| Permissions | The local host gets an "Owner" rank with every permission. Use a second client to test a refusal |
+| Store | The in-memory mock: works, but resets when you stop |
+| Machines | One host, plus any extra local client you start from the editor |
+
+So use it for the fast loop ("does my service attach", "does my command run", "does my UI open"), and use a test server with a draft revision (Step 8) for content mapping, portal config, real ranks, and the published package.
+
+### Checklist
+
 Test the feature in the same shape in which it will ship:
 
 1. Build the local project and fix compile errors before portal upload.
