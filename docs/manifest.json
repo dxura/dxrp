@@ -1,5 +1,5 @@
 [
-  { "section": "player", "title": "Player", "icon": "pi pi-play", "pages": ["playing-dxrp.md"] },
+  { "section": "player", "title": "Player", "icon": "pi pi-play", "pages": ["playing-dxrp.md", "expression-chip.md"] },
   {
     "section": "operators",
     "title": "Operators",
