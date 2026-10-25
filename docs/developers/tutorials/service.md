@@ -41,7 +41,7 @@ public sealed class WelcomeService : Component, IGameEvents
 }
 ```
 
-`AddonServiceRegistry` finds the attribute and creates one component on the `GameManager` root. `OnPlayerJoined` is posted on the host after the player has initialized.
+`AddonSystemRegistry` finds the attribute and creates one component on the core systems object (`GameManager.SystemsGameObject`). `OnPlayerJoined` is posted on the host once the player object has been network-spawned and any active sanctions applied. See [Lifecycle](/docs/developers/hooks/events/lifecycle) for when the service is created relative to startup and to addon package mounting.
 
 ## 2. Test discovery
 

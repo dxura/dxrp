@@ -85,7 +85,17 @@ On the networked root object, add:
 
 Assign the `Rigidbody` property on `KickableBallEntity`. Put the model renderer on the root or a child and assign the optional sound event.
 
-Useful root tags are `entity`, `pocket_item`, `occludable`, and `hands_interact`, depending on how the ball should interact with core systems.
+Useful root tags, depending on how the ball should interact with core systems:
+
+| Tag | Effect |
+| --- | --- |
+| `entity` | Marks the object as a DXRP entity |
+| `restricted_entity` | Limits interaction to the owner and players they permit |
+| `pocket_item` | Can be pocketed |
+| `occludable` | Takes part in occlusion culling |
+| `hands_interact` | Can be grabbed with the hands equipment |
+
+An object tagged `entity` **without** `restricted_entity` is public: `GameUtils.HasPermission` returns `true` for every player, so anyone can interact with it, pick it up, or remove it. That suits a ball, garbage, or dropped money, and it is why printers can be stolen. For anything that holds value or must stay with its owner, add `restricted_entity`.
 
 ## 3. Create the content entry
 

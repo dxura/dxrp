@@ -25,11 +25,11 @@
         "title": "Hooks",
         "icon": "pi pi-link",
         "children": [
-          { "section": "developers/hooks/events", "title": "Events", "icon": "pi pi-bolt", "pages": ["lifecycle.md", "configuration.md", "equipment.md"] },
+          { "section": "developers/hooks/events", "title": "Events", "icon": "pi pi-bolt", "pages": ["load-order.md", "lifecycle.md", "configuration.md", "equipment.md"] },
           { "section": "developers/hooks/handlers", "title": "Handlers", "icon": "pi pi-code", "pages": ["commands.md", "server-actions.md"] }
         ]
       },
-      { "section": "developers/systems", "title": "Systems", "icon": "pi pi-cog", "pages": ["config-resolution.md", "permissions.md", "persistence.md"] },
+      { "section": "developers/systems", "title": "Systems", "icon": "pi pi-cog", "pages": ["config-resolution.md", "permissions.md", "persistence.md", "networking.md", "security.md"] },
       { "section": "developers/publishing", "title": "Publishing", "icon": "pi pi-upload", "pages": ["publishing-addons.md", "content-entries.md", "sbox-packages.md", "monetization.md"] }
     ]
   },

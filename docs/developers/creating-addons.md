@@ -124,7 +124,9 @@ public sealed class CityJobsService : Component
 }
 ```
 
-`AddonServiceRegistry` discovers concrete components carrying `[AddonService]` and creates one on the `GameManager` root after the scene loads. There is no registration list and no `IAddonService` interface.
+`AddonSystemRegistry` discovers concrete components carrying `[AddonService]` and creates one on the core systems object (`GameManager.SystemsGameObject`) when core systems start, and again for any type that appears when an addon package mounts later. There is no registration list and no `IAddonService` interface.
+
+A service added by a package that mounts after startup misses the startup events. Read [Lifecycle](/docs/developers/hooks/events/lifecycle) before relying on `OnGameStartupCompleted` or the first `OnGameModeUpdated`.
 
 Use a service for long-lived coordination. Do not mark every entity, equipment component, or UI provider as an addon service; those are instantiated by their own prefab or registry lifecycle.
 
@@ -148,6 +150,8 @@ Choose the smallest feature path that matches the addon:
 - [Configuration](/docs/developers/systems/config-resolution) for operator-tunable values;
 - [Permissions](/docs/developers/systems/permissions) for staff or player access; and
 - [Persistence](/docs/developers/systems/persistence) for data that survives restarts.
+
+Before writing anything networked or anything that touches money, read [Networking](/docs/developers/systems/networking) and [Security](/docs/developers/systems/security).
 
 An addon can be code-only. Content entries, custom permissions, persistent data, and UI extensions are optional.
 
