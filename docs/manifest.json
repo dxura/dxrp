@@ -1,0 +1,37 @@
+[
+  { "section": "player", "title": "Player", "icon": "pi pi-play", "pages": ["playing-dxrp.md"] },
+  {
+    "section": "operators",
+    "title": "Operators",
+    "icon": "pi pi-server",
+    "pages": ["setting-up-a-server.md", "dashboard.md"],
+    "children": [
+      { "section": "operators/operations", "title": "Servers & Gameplay", "icon": "pi pi-server", "pages": ["servers.md", "game-modes.md", "maps.md", "rulesets.md"] },
+      { "section": "operators/community", "title": "Players & Moderation", "icon": "pi pi-users", "pages": ["players.md", "audit.md", "ranks.md", "factions.md", "sanctions.md"] },
+      { "section": "operators/addons", "title": "Addons", "icon": "pi pi-box", "pages": ["addons.md", "inventory.md"] },
+      { "section": "operators/monetization", "title": "Monetization", "icon": "pi pi-dollar", "pages": ["monetization.md"] },
+      { "section": "operators/administration", "title": "Administration", "icon": "pi pi-cog", "pages": ["network.md", "backups.md", "store.md"] }
+    ]
+  },
+  {
+    "section": "developers",
+    "title": "Developers",
+    "icon": "pi pi-code",
+    "pages": ["creating-projects.md", "creating-addons.md"],
+    "children": [
+      { "section": "developers/tutorials", "title": "Tutorials", "icon": "pi pi-graduation-cap", "pages": ["service.md", "entity.md", "equipment.md", "fixture.md", "command.md", "tab-menu.md"] },
+      {
+        "section": "developers/hooks",
+        "title": "Hooks",
+        "icon": "pi pi-link",
+        "children": [
+          { "section": "developers/hooks/events", "title": "Events", "icon": "pi pi-bolt", "pages": ["lifecycle.md", "configuration.md", "equipment.md"] },
+          { "section": "developers/hooks/handlers", "title": "Handlers", "icon": "pi pi-code", "pages": ["commands.md", "server-actions.md"] }
+        ]
+      },
+      { "section": "developers/systems", "title": "Systems", "icon": "pi pi-cog", "pages": ["config-resolution.md", "permissions.md", "persistence.md"] },
+      { "section": "developers/publishing", "title": "Publishing", "icon": "pi pi-upload", "pages": ["publishing-addons.md", "content-entries.md", "sbox-packages.md", "monetization.md"] }
+    ]
+  },
+  { "section": "api", "title": "API", "icon": "pi pi-key", "pages": ["api-documentation.md"] }
+]

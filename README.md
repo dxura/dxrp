@@ -6,7 +6,7 @@
 - [Roadmap](https://github.com/orgs/dxura/projects/11)
 - [Discord](https://discord.gg/uBwQ2QHP2D)
 - [s&box Link](https://sbox.game/dxura/rp)
-- [Documentation](https://dxrp.net/docs)
+- [Documentation](https://dxrp.net/docs) ([contribute](docs/README.md))
 
 ## Features
 
