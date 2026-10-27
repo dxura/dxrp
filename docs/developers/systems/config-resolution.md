@@ -15,7 +15,9 @@ Do not confuse addon configuration with the server's global game configuration:
 | Server configuration | `Config.Current.Game` | An operator edits the server override |
 | Addon/content configuration | `Config.Current.Addon<T>()`, `Content<T>()`, or `BaseEntity.GetConfig<T>()` | The active game mode or its addon mapping changes |
 
-`IConfigEvents.OnConfigOverride()` is about the first system. `IGameEvents.OnGameModeUpdated()` is the event to watch when cached addon state depends on the second.
+`IConfigEvents.OnConfigOverride()` is about the first system. `IGameEvents.OnGameModeUpdated()` is the event to watch when cached addon state depends on the second. It fires at startup, on every game mode save, and on clients when the host's synced game mode arrives, so rebuild cached state from the current game mode rather than applying a diff. An addon added to a running game mode mounts after that event, so also read the current config in `OnStart`. See [Lifecycle](/docs/developers/hooks/events/lifecycle).
+
+The game mode is synced from the host. Changing `Config.Current.GameMode` in code (adding a job, a market item, or an equipment row) only changes the machine that ran it, and the next sync overwrites it. If an addon registers rows at runtime, every machine must build the same rows with the same IDs: derive the IDs from a fixed value (for example a hash of your addon ID and a key), never `Guid.NewGuid()`.
 
 ## The three addon-config layers
 

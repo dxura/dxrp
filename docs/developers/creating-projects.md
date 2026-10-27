@@ -101,10 +101,18 @@ The `ParentPackage` or target-game setting describes the package the addon is bu
 3. Set the target game/parent package before writing DXRP-specific code.
 4. Put source-controlled code and assets in `Code/` and `Assets/`.
 5. Keep generated folders such as `.sbox/`, `bin/`, and `obj/` out of source control.
-6. Run the project locally and fix compile, asset, prefab, and network errors before publishing.
+6. Run DXRP locally with your project loaded (see [below](#run-dxrp-from-your-project)) and fix compile, asset, prefab, and network errors before publishing.
 7. Publish or upload a test revision only after checking the exact paths used by your content entries.
 
 Hotload makes code iteration fast, but it does not replace a clean-install test. A local editor can resolve files that were never included in the package or that exist only in your cache.
+
+## Run DXRP from your project
+
+A new project's `.sbproj` sets `"StartupScene": "scenes/minimal.scene"`, the empty s&box template. Pressing **Play** in your own project therefore starts an empty scene, not DXRP.
+
+The scene that boots DXRP belongs to the parent package. To run DXRP with your addon code loaded, open `scenes/game.scene` from `dxura.rp` in the Asset Browser, then press **Play**. No server authorization key is needed; DXRP starts as a local host on the public default game mode.
+
+[Creating an Addon](/docs/developers/creating-addons) (Step 7) lists what this local run covers and what still needs a test server.
 
 ## Project-to-addon flow
 
