@@ -34,7 +34,7 @@ Take a [Backup](/docs/operators/administration/backups) before deleting a group 
 
 ## Limits and ownership
 
-The Store allows keys up to 512 characters, values up to 1 MB, and 25,000 entries per network. It is not a bulk file store.
+The Store allows keys up to 512 characters, values up to 1 MB, and 250,000 entries per network. It is not a bulk file store.
 
 Addon authors should namespace their keys and document their value schema. [Persistence](/docs/developers/systems/persistence) covers the server-side API and failure behaviour.
 

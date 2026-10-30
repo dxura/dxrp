@@ -46,7 +46,7 @@ Enforced server-side, so calls that exceed these fail rather than silently trunc
 | --- | --- |
 | Key length | 512 characters |
 | Value size | 1 MB |
-| Entries per network | 25,000 total |
+| Entries per network | 250,000 total |
 
 Updates to an existing key don't count against the entry cap, only creating a brand new key does. Keep this in mind: the Store is meant for small-to-moderate structured data (settings, saved locations, feature flags, small per-player records), not bulk storage. Operators can inspect it from the portal's [Store](/docs/operators/administration/store), and it is included in regular [backups](/docs/operators/administration/backups).
 
