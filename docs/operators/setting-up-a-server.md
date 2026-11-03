@@ -99,22 +99,6 @@ timeout /t 5 /nobreak
 goto start
 ```
 
-## Run the DXRP repository launcher
-
-Use the repository launcher when your server needs DXRP revision bundles installed before startup. The normal s&box server command does not download and extract DXRP launcher bundles.
-
-From a directory containing `sbox-server.dll` and the launcher script:
-
-```powershell
-dotnet run dxrp-server.cs --token YOUR_TOKEN
-```
-
-The launcher requires the .NET SDK and Git. On its first run it creates `dxrp-server-config.json`, stores the token, fetches the configured DXRP repository, asks the API for the addons attached to the server’s game mode, clears the generated addon directories, downloads code/assets packages, and launches the server. Keep the config file private; it contains the server token and is ignored by the root repository.
-
-For a safe development check, run with a checkout containing `game/`. The launcher detects this as development mode, asks for confirmation, patches the existing addon directories, and does not launch the server. Use `--patch-only` with a normal server installation when you want package patching without launching.
-
-If the launcher stops at preflight, check that `sbox-server.dll` is in the current directory. If it reports an API error, verify the token and the server’s network connectivity. If an addon fails to build with verification enabled, inspect the first reported C# error before restarting.
-
 ## 6. Start with Docker on Linux
 
 The `dxura/sbox:latest` image runs the server through SteamCMD:

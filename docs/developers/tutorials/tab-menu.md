@@ -59,7 +59,7 @@ Open the tab menu and confirm:
 - reopening the menu does not duplicate the entry; and
 - the page behaves at different screen sizes.
 
-This is a code-only feature, so it does not need a content entry. For Launcher delivery, upload the `Code/` folder and select **Launcher** on the game-mode addon. For s&box Package delivery, publish/bind the package and select **Package** so the addon mounts on the active game mode.
+This is a code-only feature, so it does not need a content entry. Publish it as an s&box package and set the addon’s S&box Identifier so the addon mounts on the active game mode.
 
 ## 4. Control when a tab is available
 

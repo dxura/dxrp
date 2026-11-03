@@ -60,13 +60,13 @@ In a draft revision, **Add Content**:
 | Grouping | `Lighting` (optional — categorizes the entry in the placement tool's dropdown) |
 | Base Config | `{ "brightness": 1.0 }` |
 
-The primary reference must end in `.prefab` and be relative to the published package/bundle root — entries without a valid `.prefab` reference are skipped by fixture discovery. Save the draft.
+The primary reference must end in `.prefab` and be relative to the published package root — entries without a valid `.prefab` reference are skipped by fixture discovery. Save the draft.
 
 ## 4. Add it to a game mode
 
 Attach the draft addon to a test game mode and include the `Street Lamp` content entry. An operator can override the label or `Base Config` at this mapping level — that override applies to every placement of this fixture on that game mode, layered on top of `Base Config`.
 
-Choose **Package** or **Launcher** to match how the revision is delivered, and sync the test server.
+Save the game mode and sync the test server; the addon’s s&box package is mounted through its S&box Identifier.
 
 ## 5. Place it with the placement tool
 

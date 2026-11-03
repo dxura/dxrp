@@ -55,7 +55,7 @@ If the service does not load, check that the class is concrete, derives from `Co
 
 ## 3. Publish it
 
-This addon needs no assets or content entries. Create a draft revision, then either upload the `Code/` folder for [Launcher delivery](/docs/developers/publishing/publishing-addons) or bind the revision to the published package for [Package delivery](/docs/developers/publishing/sbox-packages). Attach the matching load method to a test game mode and verify the service again.
+This addon needs no assets or content entries. Publish it as an [s&box package](/docs/developers/publishing/sbox-packages), set the addon’s S&box Identifier, and create a [draft revision](/docs/developers/publishing/publishing-addons). Attach it to a test game mode and verify the service again.
 
 A code-only addon still must be present in the active build or mounted package before discovery can see it. Compiled code needs no game-mode content mapping; an s&box package must be attached to the active game mode so it can mount.
 

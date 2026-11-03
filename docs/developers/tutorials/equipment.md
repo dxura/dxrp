@@ -84,7 +84,7 @@ Add content to the draft revision:
 
 Both references are relative to the asset-package root. Save the draft, attach it to a test game mode, and include the equipment content.
 
-On the game-mode addon mapping, choose **Package** when the addon uses a published s&box package or **Launcher** when the revision contains DXRP Code/Assets bundles. Loading the addon and adding the equipment to a job or market are separate steps.
+The game mode mounts the addon’s published s&box package through its S&box Identifier. Loading the addon and adding the equipment to a job or market are separate steps, unless the revision suggests them and the operator applies the suggestions.
 
 ## 5. Put it in gameplay
 

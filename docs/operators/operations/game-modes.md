@@ -40,27 +40,26 @@ Use **Add Addon** to attach an owned or licensed addon and select its revision. 
 
 - include only the content the game mode needs;
 - remap content after an addon revision changes;
-- override addon-wide or content-level configuration; and
+- override addon-wide or content-level configuration;
+- apply the addon’s suggested jobs, market items, and entity settings; and
 - update an attached addon to its latest revision.
 
-### Select a load method
+### Delivery
 
-The **Load Method** controls how the server receives the addon’s code/assets:
+The server mounts an addon’s s&box package if, and only if, the addon has an S&box Identifier, using the revision’s S&box Version when one is pinned. There is nothing to choose per game mode. A package can mount successfully while still providing no active gameplay: content entries must also be selected in the game mode.
 
-| Method | Select it when | Required data |
-| --- | --- | --- |
-| **Package** | The addon points to a published s&box package | Addon S&box Identifier; optional revision S&box Version |
-| **Launcher** | The DXRP server launcher should install the revision bundles | Code or Assets package on the selected revision |
-| **None** | The addon has no external server package | Nothing; use only for shipped/base content or metadata |
+### Suggestions
 
-The game-mode editor disables methods the selected addon/revision cannot support. If a revision changes from launcher bundles to an s&box package, review this field instead of assuming the old mapping will switch delivery automatically.
+An addon revision can suggest jobs, market items, and entity settings (limits, health, ownership transfer). When you add an addon that has suggestions, a dialog lets you pick which jobs and market items to add, and whether to add the suggested entities that aren’t in the game mode yet with their suggested limits.
 
-For Package delivery, the server fetches the selected package at runtime. For Launcher delivery, the DXRP launcher downloads and extracts the revision bundles before the server starts. A package can mount successfully while still providing no active gameplay: content entries must also be selected in the game mode.
+Applying copies them in as ordinary rows you can edit or remove; nothing stays linked to the addon. Entity settings are only applied to rows the apply creates, so your own settings are never overwritten. Suggestions never include ranks: add rank restrictions yourself.
+
+The **Suggestions** column on the Addons tab shows how many suggestions are not applied yet, for example after updating to a revision that suggests a new job. Select it to apply them. Removing an addon removes market items for its content and the rows copied from its suggestions, except a suggested job that has become the default job.
 
 See [Addons](/docs/operators/addons/addons) for installation, licensing, and revision management. Addon configuration merges in layers; [Configuration](/docs/developers/systems/config-resolution) documents the exact order.
 
 ## Apply changes
 
-Saving edits updates the portal definition. Use **Sync Servers** or **Update All** to push the game mode to online servers that use it. Check **View Changes** before syncing a busy production network. A load-method or package-version change should be treated like a deploy: test it on one server, inspect the startup log, then update the rest.
+Saving edits updates the portal definition. Use **Sync Servers** or **Update All** to push the game mode to online servers that use it. Check **View Changes** before syncing a busy production network. A package-version change should be treated like a deploy: test it on one server, inspect the startup log, then update the rest.
 
 Game-mode access uses `gamemodes.view` and `gamemodes.edit`.

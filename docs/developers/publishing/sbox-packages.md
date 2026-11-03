@@ -4,9 +4,9 @@ description: Create, publish, version, and mount an s&box package from a DXRP ga
 order: 3
 ---
 
-An s&box package is a cloud-published revision of an s&box project or asset. DXRP can mount one at runtime when a game-mode addon points at its package identity.
+An s&box package is a cloud-published revision of an s&box project or asset. It is the only way DXRP delivers addon code and assets: a game mode mounts an addon’s package at runtime when the addon has an S&box Identifier.
 
-This is different from a DXRP revision. A DXRP revision stores portal metadata, content entries, permissions, configuration, and optional launcher bundles. An s&box package stores the project/package files delivered by s&box.
+This is different from a DXRP revision. A DXRP revision stores portal metadata, content entries, permissions, configuration, and suggestions. An s&box package stores the project/package files delivered by s&box.
 
 ## The identities involved
 
@@ -17,22 +17,15 @@ Keep these values separate:
 | s&box package identity | `myorg.city-jobs` | s&box | Fetching and mounting the package |
 | s&box package revision | `myorg.city-jobs#312160` | s&box | Pinning an exact s&box version |
 | DXRP addon identifier | `city-jobs` | DXRP network | Stable portal and code namespace |
-| DXRP revision | `Revision 4` | DXRP | Versioning metadata, content, permissions, and delivery choices |
+| DXRP revision | `Revision 4` | DXRP | Versioning metadata, content, permissions, suggestions, and the version pin |
 
 The s&box identity is entered on the DXRP addon’s **S&box Identifier** field as `organization.package`, without `https://sbox.game/` and without `/version/...`.
 
-## When to use a package
+## When a package is mounted
 
-Choose runtime package delivery when:
+A game mode mounts the addon’s package if, and only if, the addon has an S&box Identifier. Every server using the game mode must be able to reach the s&box package service.
 
-- the addon is already a separately published s&box package;
-- the package should be fetched and mounted by the game at runtime;
-- the package’s target game and compatibility are controlled on s&box; and
-- every server using the game mode can reach the s&box package service.
-
-Choose the [launcher bundle](#launcher-bundles) when the addon is only a DXRP code/assets workspace, when the package cannot be published, or when you explicitly need the DXRP server launcher to patch files before startup.
-
-The two delivery modes are alternatives for a game-mode addon. A revision may contain both kinds of data, but the game mode should select the one it is actually prepared to use.
+An addon without an S&box Identifier mounts nothing. That is only useful when it contributes content mappings and config for content already shipped with DXRP.
 
 ## Create the s&box project
 
@@ -44,7 +37,7 @@ The two delivery modes are alternatives for a game-mode addon. A revision may co
 6. Add the code, prefabs, scenes, and other assets under source control.
 7. Run the project locally and test a clean editor/session before publishing.
 
-The `.sbproj` file describes the s&box project. It is not uploaded as a DXRP launcher package and it is not the portal addon record. In an asset-focused Addon Project, publish the individual asset from the Asset Browser; do not expect the Addon Project folder itself to become a single published package.
+The `.sbproj` file describes the s&box project. It is not uploaded to DXRP and it is not the portal addon record. In an asset-focused Addon Project, publish the individual asset from the Asset Browser; do not expect the Addon Project folder itself to become a single published package.
 
 ## Publish the package
 
@@ -95,9 +88,7 @@ Open the portal addon under **More → Addons → Edit Details** and enter the s
 
 ### 2. Create the DXRP revision
 
-Open **New Revision**, set the optional **S&box Version**, write a changelog, and define the content entries and permissions that the package provides. The portal metadata is what lets a game mode expose a prefab or system to operators; mounting the package alone does not add content to a game mode.
-
-If you are using package delivery only, you do not need to upload DXRP Code or Assets bundles. If you also select the Launcher delivery mode later, the revision must contain the corresponding bundles.
+On the addon page, select **Import Definition** and pick the package’s `.dxaddon` to fill the content entries, config, permissions and suggestions the package provides. Then open **New Revision**, set the optional **S&box Version**, and write a changelog. The portal metadata is what lets a game mode expose a prefab or system to operators; mounting the package alone does not add content to a game mode.
 
 ### 3. Publish and attach it
 
@@ -105,41 +96,11 @@ After the revision is tested and published:
 
 1. Open **Game Modes** and edit the target game mode.
 2. Add the owned or licensed addon.
-3. Select the tested DXRP revision.
-4. Set **Load Method** to **Package**.
-5. Select the content entries the game mode should expose and add any configuration overrides.
-6. Save the game mode and sync the affected servers.
+3. Select the tested DXRP revision, and apply any suggestions you want.
+4. Select the content entries the game mode should expose and add any configuration overrides.
+5. Save the game mode and sync the affected servers.
 
 At startup DXRP fetches the selected `organization.package` (or its `#version` form), mounts it once for that game-mode addon, and then continues addon discovery. A package fetch/mount failure is logged and the package’s content will not work; check the server log for the package identity.
-
-## Launcher bundles
-
-Launcher delivery uses the independent packages uploaded on the DXRP revision’s **Launcher** tab:
-
-```
-Code/       → Code/Addons/<network>/<addon>/
-Assets/     → Assets/addons/<network>/<addon>/
-```
-
-The portal zips the selected folder’s contents. The selected folder name is not included in the archive. Upload `Code/` and `Assets/` contents directly; do not select a folder that produces `Code/Code/...` or `game/Code/Addons/...` inside the archive.
-
-The DXRP launcher downloads those packages before it starts the server. In this repository, `dxrp-server.cs` clears the existing addon directories, downloads the packages from the server API, extracts them, and can optionally build the result. A standard s&box launcher does not perform that DXRP patch step.
-
-The portal limits launcher bundles to 50 MB for code and 300 MB for assets. A new revision can reuse an unchanged package, replace it with a new upload, or explicitly clear it.
-
-## Package vs Launcher
-
-| | Package | Launcher |
-| --- | --- | --- |
-| Source | Published s&box package | DXRP revision Code/Assets bundles |
-| DXRP field | Addon S&box Identifier | Uploaded package in the revision |
-| Game-mode setting | Load Method → Package | Load Method → Launcher |
-| Delivery | Fetch and mount at runtime | Extract before server startup |
-| Version pin | Optional `Sbox Version` | DXRP revision number |
-| Requires custom DXRP launcher | No | Yes |
-| Best for | Published, reusable s&box packages | DXRP-only bundles and controlled server patching |
-
-If an addon has neither a package identity nor a launcher bundle, the game mode cannot load its server code/assets. If it only contributes content that is already shipped with DXRP, select **None**.
 
 ## Safe versioning
 
@@ -163,7 +124,3 @@ Check the server log for the exact identity, confirm the package is released/vis
 ### The package mounts but content is missing
 
 Mounting does not select content. Confirm that the DXRP revision contains the content entry, the game mode includes it, the primary reference matches the packaged path, and the server was synced after saving the game mode.
-
-### The launcher cannot see the addon
-
-The launcher only downloads the packages returned by the DXRP server API. Verify the server token, the addon is attached to the game mode, the selected revision has the required bundle, and the selected load method is **Launcher**.

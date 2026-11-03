@@ -1,6 +1,6 @@
 ---
 title: Creating an Addon
-description: Create a DXRP addon, connect it to a local s&box project, choose a delivery mode, and test it locally.
+description: Create a DXRP addon, describe it in a .dxaddon definition, connect it to an s&box package, and test it locally.
 order: 2
 ---
 
@@ -13,9 +13,8 @@ If you have not created the local s&box project yet, start with [Creating a Proj
 An addon is not one upload. It is a chain of related records and files:
 
 ```
-Local s&box project
-    ├── published s&box package (optional)
-    └── Code/ + Assets/ launcher workspace (optional)
+Local s&box project (with a .dxaddon definition)
+    └── published s&box package
             ↓
 DXRP portal addon
     └── DXRP revision
@@ -30,8 +29,8 @@ Running server
 | s&box project | `.sbproj`, source files, assets, target game, package identity | Create the DXRP portal record |
 | s&box package | Cloud-delivered package revisions | Define DXRP content mappings or permissions |
 | DXRP addon | Stable portal identifier, listing, licensing, package identity | Load code by itself |
-| DXRP revision | Changelog, package references, config, content, permissions | Automatically attach itself to every game mode |
-| Game-mode mapping | Selected revision, load method, content and overrides | Publish an s&box package |
+| DXRP revision | Changelog, s&box version pin, config, content, permissions, suggestions | Automatically attach itself to every game mode |
+| Game-mode mapping | Selected revision, content, applied suggestions and overrides | Publish an s&box package |
 
 Creating a portal addon without a revision is only creating metadata. Publishing a revision without attaching it to a game mode does not make its content active on a server.
 
@@ -46,17 +45,16 @@ You need:
 
 DXRP addon identifiers must use lowercase letters, numbers, and hyphens, begin with a letter or number, and be at most 64 characters. They are network-scoped in the portal. Choose one that will still make sense in namespaces, permission IDs, and server paths; it cannot be changed after creation.
 
-## Step 1: decide how the addon will be delivered
+## Step 1: understand how the addon is delivered
 
-Choose before you package the first release:
+Addons reach servers only as s&box packages. A game mode mounts an addon if, and only if, the addon has an **S&box Identifier**. The revision's optional **S&box Version** pins which published package version is mounted.
 
-| Choose | When | What you need |
-| --- | --- | --- |
-| **Package** | You maintain a standalone s&box package and want runtime mounting | An s&box `organization.package` identity, plus a DXRP revision |
-| **Launcher** | You want the DXRP launcher to patch code/assets before startup | DXRP `Code/` and/or `Assets/` bundle folders in each revision |
-| **None** | The addon is already shipped in the DXRP game or contains metadata only | No server-side package or bundle |
+| Addon has | What the server does |
+| --- | --- |
+| An S&box Identifier | Mounts `organization.package`, or `organization.package#version` when the revision pins a version |
+| No S&box Identifier | Mounts nothing. The addon only carries content mappings and config, e.g. content already shipped in the DXRP game |
 
-Package delivery is usually the cleanest option for a separately published s&box addon. Launcher delivery is useful for a DXRP-only bundle and is the path supported by the `dxrp-server.cs` workflow in this repository. The selected game-mode load method must match the delivery data you publish.
+DXRP does not upload or install code or asset bundles; publish your code and assets as an s&box package.
 
 ## Step 2: create the portal addon
 
@@ -72,38 +70,45 @@ Enter:
 
 The new addon starts private and free. That is a good state for development. Do not make it public or paid until a clean revision has been tested.
 
-If using Package delivery, select **Edit Details** after creation and set **S&box Identifier** to the package identity, such as `myorg.city-jobs`. Do not enter the full URL or a version suffix. See [s&box Packages](/docs/developers/publishing/sbox-packages) for version pinning.
+Select **Edit Details** after creation and set **S&box Identifier** to the package identity, such as `myorg.city-jobs`. Do not enter the full URL or a version suffix. See [s&box Packages](/docs/developers/publishing/sbox-packages) for version pinning.
 
-## Step 3: organise the local workspace
+## Step 3: organise the local project
 
-For a launcher bundle, keep the upload roots flat:
-
-```
-my-addon/
-├── Code/
-│   ├── MyAddonService.cs
-│   └── ...
-└── Assets/
-    ├── entities/
-    ├── equipment/
-    └── ...
-```
-
-Put C# and Razor source directly under `Code/`. Put prefabs, models, sounds, textures, scenes, and other s&box assets directly under `Assets/`.
-
-The portal uploads the **contents** of the selected folder. It removes the selected folder itself, so a file at `Assets/entities/tool/tool.prefab` is packaged as `entities/tool/tool.prefab` and should be entered in the content reference exactly that way.
-
-Do not put any of these wrapper paths inside the selected upload folder:
+Keep the normal s&box project layout and publish through the editor. Keep your assets under a folder unique to your addon, for example:
 
 ```
-game/Code/Addons/<network>/<addon>/...
-Code/Addons/<network>/<addon>/...
-Assets/addons/<network>/<addon>/...
+Assets/addons/myorg/city-jobs/
+├── city-jobs.dxaddon
+├── entities/
+└── equipment/
 ```
 
-Those are installation paths created by the launcher. Including them yourself causes doubled paths and missing prefabs.
+Content references are paths as they exist inside the published package, e.g. `addons/myorg/city-jobs/entities/city-sign/city-sign.prefab`.
 
-For an s&box package project, keep the normal project layout and publish through the editor. The s&box project wrapper and editor caches are not substitutes for the DXRP launcher package folders.
+### The addon definition (`.dxaddon`)
+
+Describe the addon in a **DXRP Addon** resource (`.dxaddon`, class `Dxura.RP.Game.Addons.AddonDefinition`). Create one from the Asset Browser and edit it in the inspector. It is the single source of truth for the addon's definition:
+
+- in the editor, every mounted `.dxaddon` is injected into the local game mode (see [Local addon definitions](#local-addon-definitions)); and
+- on the portal, **Import Definition** reads the same file to fill in the next revision (see [Step 6](#step-6-define-content-permissions-and-suggestions)).
+
+| Property | Purpose |
+| --- | --- |
+| `AddonId` | Your portal addon id |
+| `Name`, `Description` | Shown when injected locally |
+| `InjectInEditor` | Turn off to stop the editor injecting it, e.g. to test the published revision instead |
+| `GlobalBaseConfig` | The revision's global base config, as JSON text |
+| `Contents` | Content entries, the same `CreateAddonContentDto` the portal saves: `Id`, `Type` (Entity, Equipment, System, Fixture), `Name`, `Description`, `PrimaryReference`, `SecondaryReference`, `Grouping`, `IconPath`, `WorldModelPath`, `WorldModelScale`, `BaseConfig` (JSON text) |
+| `Permissions` | `Identifier` (the suffix only), `Name`, `Description`, `Category` |
+| `Suggestions.Jobs` | Suggested jobs: `Key`, `Name`, `Description`, `Color` (packed `0xRRGGBB`), `Model`, `Clothes`, `JobTags`, `Salary`, `Health`, `MaxCount`, `Selectable`, `Demotable`, `VoteRequired`, `IncludeDefaultEquipment`, `Equipment` (ids of Equipment content entries) |
+| `Suggestions.Entities` | Suggested entity settings per Entity content: `Content` (content id), `Limit`, `HealthEnabled`, `HealthAmount`, `DestroyOnDisconnect`, `DestroyOnJobChange`, `AllowOwnershipTransfer` |
+| `Suggestions.MarketItems` | Suggested market listings: `Key`, `Content` (an Entity or Equipment content id), `Cost`, `Grouping`, `SortOrder`, `Color`, `Quantity`, `WhitelistJobs` (suggested job keys), `WhitelistJobTags` |
+
+The content, permission and suggestion types are the platform's own API DTOs, synced into the game, so the file is exactly what a revision stores. The portal validates suggestions when you save a revision: every `Content` must be one of the revision's contents of a fitting type, keys must be unique, and market `WhitelistJobs` must name suggested jobs.
+
+A content `Id` is generated when you add an entry. Keep it across revisions: game modes bind to it. Job `Key`s are how the portal tells which suggested jobs a game mode already has, so keep those stable too.
+
+The official brewing addon (`addons/official/brewing/brewing.dxaddon`) is a complete example, with suggested entity settings and market items.
 
 ## Step 4: add an entry point only when you need one
 
@@ -155,11 +160,11 @@ Before writing anything networked or anything that touches money, read [Networki
 
 An addon can be code-only. Content entries, custom permissions, persistent data, and UI extensions are optional.
 
-## Step 6: define content and permissions
+## Step 6: define content, permissions and suggestions
 
-Content and permissions are authored on the addon, then snapshotted into a revision.
+Content, permissions and suggestions are authored on the addon, then snapshotted into a revision. The easiest way is to keep them in your `.dxaddon` and select **Import Definition** on the addon page: it fills the **Content**, **Config**, **Permissions** and **Suggestions** tabs from the file. Existing permission ids are kept where the identifiers match, and you are warned if the file's `AddonId` belongs to a different addon. Nothing is saved until you save a revision, so reloading the page undoes a wrong import.
 
-For a prefab-backed feature, open the addon’s **Content** tab and create an entry with the exact packaged reference:
+You can also edit the tabs by hand. For a prefab-backed feature, a content entry needs the exact packaged reference:
 
 | Feature | Type | Primary reference |
 | --- | --- | --- |
@@ -169,6 +174,14 @@ For a prefab-backed feature, open the addon’s **Content** tab and create an en
 | Persistent placed object | `Fixture` | A `.prefab` path |
 
 The content entry does not load the package and does not grant an item automatically. It gives a game-mode owner a stable capability to select, configure, and map.
+
+### Suggestions
+
+An addon cannot own jobs or market items: those belong to each game mode. Instead, a revision can **suggest** them. Suggestions are jobs, market items, and entity settings (limits, health, ownership transfer) that a game-mode owner can choose to apply. Applying copies them into the game mode as ordinary rows the owner can edit; nothing stays linked to the addon. Suggestions never include ranks, because ranks belong to each network.
+
+The **Suggestions** tab shows the suggestions as JSON (`Jobs`, `Entities`, `MarketItems`). It is normally filled by **Import Definition** from the `.dxaddon` `Jobs` list and each content entry's `Entity` and `Market` blocks.
+
+### Permissions
 
 Declare custom permissions only for capabilities operators need to grant. Permission identifiers are prefixed with the addon identifier and should be treated as permanent. Read [Content Entries](/docs/developers/publishing/content-entries) and [Permissions](/docs/developers/systems/permissions) before renaming or removing either.
 
@@ -191,19 +204,25 @@ What this local run gives you, and what it does not:
 | --- | --- |
 | Game mode | The public default game mode. With no server authorization key, nothing is fetched from your network |
 | Your code | Loaded: services, commands, statuses, tab menu sections, and other type-discovered code run |
-| Your content entries | **Not mapped.** The default game mode does not include your addon, so `Entity`, `Equipment`, `System`, and `Fixture` entries are not active |
-| Addon and content config | Your C# defaults (or the fallback you pass); no portal `BaseConfig` or operator override |
+| Your content entries | Mapped from your `.dxaddon` definition (below), with its suggested entities, market items and jobs applied |
+| Addon and content config | The `GlobalBaseConfig` in your `.dxaddon`, then your C# defaults; no operator override |
 | Permissions | The local host gets an "Owner" rank with every permission. Use a second client to test a refusal |
 | Store | The in-memory mock: works, but resets when you stop |
 | Machines | One host, plus any extra local client you start from the editor |
 
-So use it for the fast loop ("does my service attach", "does my command run", "does my UI open"), and use a test server with a draft revision (Step 8) for content mapping, portal config, real ranks, and the published package.
+So use it for the fast loop ("does my service attach", "does my command run", "does my UI open"), and use a test server with a draft revision (Step 8) for portal config, real ranks, and the published package.
+
+### Local addon definitions
+
+In the editor only, the host injects every mounted `.dxaddon` into whatever game mode it loads. There is nothing to register: a definition in your project or in any mounted package is picked up just by existing. Each one adds the addon, its content entries, an entity or equipment row per entry, and its suggestions: entity settings, market items (with job whitelists resolved) and jobs.
+
+A definition replaces any addon with the same `AddonId` already in the game mode, so it also works as a local override of a published revision. Set `InjectInEditor` off to test the published revision instead. Dedicated servers and published builds never inject definitions.
 
 ### Checklist
 
 Test the feature in the same shape in which it will ship:
 
-1. Build the local project and fix compile errors before portal upload.
+1. Build the local project and fix compile errors before publishing the package.
 2. Check that prefabs open and all asset references resolve.
 3. Test both host and client behaviour for shared state.
 4. Confirm an addon service is created once per scene, not once per player.
@@ -216,22 +235,16 @@ The editor can see local source that was never published. A clean-install test i
 
 ## Step 8: create and test a revision
 
-Open **New Revision** from the addon page. Add a changelog, review the inherited content/config/permissions, set an optional s&box version, and upload or reuse the appropriate packages. Save the revision as a draft first.
+Publish your s&box package first. Then open the addon page, select **Import Definition** to bring in your latest `.dxaddon`, and open **New Revision**. Add a changelog and, optionally, an s&box version to pin the published package version. Save the revision as a draft first.
 
-Attach the draft to a test game mode and choose its load method:
-
-- **Package** mounts the published s&box package named by the addon’s S&box Identifier;
-- **Launcher** installs the revision’s Code/Assets bundles before startup; or
-- **None** leaves the addon unloaded when no server package is required.
-
-Select the content the test game mode should use, apply config overrides, save, and sync the test server. Then follow [Publishing Revisions](/docs/developers/publishing/publishing-addons) for the release checklist.
+Attach the draft to a test game mode. If the revision has suggestions, the portal offers to apply them. Select the content the test game mode should use, apply config overrides, save, and sync the test server. Then follow [Publishing Revisions](/docs/developers/publishing/publishing-addons) for the release checklist.
 
 ## What to record for operators
 
 Your revision changelog and addon About text should state:
 
-- which load method to select;
 - the s&box package identity and whether a version pin is required;
+- which suggestions are worth applying and which are optional;
 - which content entries are safe to enable;
 - which config keys are available and their defaults;
 - which permissions must be granted;

@@ -17,13 +17,12 @@ You normally create the s&box project first, then create the portal addon when y
 | --- | --- | --- |
 | DXRP itself | The checked-out `game/rp.sbproj` | The DXRP game project, with its code, scenes, UI, and assets |
 | A reusable DXRP asset feature | An **Addon Project** targeted at `dxura.rp` | Assets published individually and referenced by a DXRP game mode |
-| A runtime addon with code | A code-capable targeted project when your s&box build supports it, or a launcher workspace | A published code package or a DXRP Code/Assets bundle |
+| A runtime addon with code | A code-capable project targeted at `dxura.rp` | A published s&box package with code |
 | A standalone map or asset package | The appropriate s&box asset/project template | A package that can be referenced by a map or registered in the DXRP portal |
-| A DXRP launcher addon | A normal local workspace with `Code/` and `Assets/` folders | Code and assets that can be uploaded to a DXRP revision and installed by the launcher |
 
 The s&box editor’s project wizard and current documentation are the source of truth for which templates are available in your installed build. If the wizard offers **Target Game**, choose DXRP (`dxura.rp`) for a package intended to run inside DXRP.
 
-Project capabilities are editor-version dependent. The official Addon Project guide describes Addon Projects as asset-focused and says they are published from the Asset Browser; newer targeted-addon work can also expose code-targeting features. If your installed wizard does not allow the code layout you need, use the project type it provides for the target game or use DXRP Launcher delivery, and confirm the publish manifest before building the DXRP portal revision.
+Project capabilities are editor-version dependent. The official Addon Project guide describes Addon Projects as asset-focused and says they are published from the Asset Browser; newer targeted-addon work can also expose code-targeting features. If your installed wizard does not allow the code layout you need, use the project type it provides for the target game, and confirm the publish manifest before building the DXRP portal revision. DXRP only delivers addons as s&box packages.
 
 An Addon Project is not the same as a DXRP portal addon. The former describes an s&box package; the latter is the delivery and configuration record used by DXRP networks.
 
@@ -66,14 +65,6 @@ my-project/
 └── ProjectSettings/        # generated or editor-managed settings
 ```
 
-For a DXRP launcher revision, the portal does not need the project wrapper. It expects the contents of two selected folders:
-
-```
-my-addon/
-├── Code/                   # C# and Razor source
-└── Assets/                 # prefabs and other s&box assets
-```
-
 For a published s&box package, publish the supported asset/project from the s&box editor or Asset Browser so s&box can calculate compiled assets and references. Asset-focused Addon Projects publish their individual assets rather than the project folder as one package. Do not manually zip `.sbproj`, `bin`, `.sbox`, or editor caches and call that an s&box package.
 
 ## Project identity
@@ -99,10 +90,10 @@ The `ParentPackage` or target-game setting describes the package the addon is bu
 1. Install the current s&box editor and restart it after installing an update.
 2. Create or open the project from its `.sbproj` file.
 3. Set the target game/parent package before writing DXRP-specific code.
-4. Put source-controlled code and assets in `Code/` and `Assets/`.
+4. Put source-controlled code and assets in `Code/` and `Assets/`, and describe the addon in a `.dxaddon` definition (see [Creating an Addon](/docs/developers/creating-addons#the-addon-definition-dxaddon)).
 5. Keep generated folders such as `.sbox/`, `bin/`, and `obj/` out of source control.
 6. Run DXRP locally with your project loaded (see [below](#run-dxrp-from-your-project)) and fix compile, asset, prefab, and network errors before publishing.
-7. Publish or upload a test revision only after checking the exact paths used by your content entries.
+7. Publish the package and a test revision only after checking the exact paths used by your content entries.
 
 Hotload makes code iteration fast, but it does not replace a clean-install test. A local editor can resolve files that were never included in the package or that exist only in your cache.
 
@@ -121,23 +112,23 @@ Use this sequence when building a distributable DXRP feature:
 ```
 s&box project
     ↓ local test
-s&box package (optional)
+s&box package
     ↓ bind author.package in DXRP
 DXRP portal addon
-    ↓ create revision
+    ↓ import .dxaddon, create revision
 game-mode addon mapping
-    ↓ choose Package or Launcher
+    ↓ apply suggestions, select content
 running server
 ```
 
-Read [Creating an Addon](/docs/developers/creating-addons) next for the DXRP-specific setup, then [s&box Packages](/docs/developers/publishing/sbox-packages) if you are using runtime package mounting.
+Read [Creating an Addon](/docs/developers/creating-addons) next for the DXRP-specific setup, then [s&box Packages](/docs/developers/publishing/sbox-packages) for package mounting.
 
 ## Common mistakes
 
-- **Creating only a portal addon:** the portal record has no executable code until a revision contains a launcher bundle or points to an s&box package.
+- **Creating only a portal addon:** the portal record has no executable code until the addon has an S&box Identifier pointing at a published package.
 - **Using the DXRP addon identifier as the s&box package identifier:** they are separate identifiers and can have different values.
 - **Opening the wrong project:** open `game/rp.sbproj` for core DXRP work; open your own `.sbproj` for an external addon.
 - **Publishing generated files:** `.sbox`, `bin`, `obj`, logs, local saves, and secrets do not belong in a package.
-- **Using a local path as a package reference:** a local project path is useful for testing only; servers need a published package identity or a DXRP launcher revision.
+- **Using a local path as a package reference:** a local project path is useful for testing only; servers need a published package identity.
 
 For the platform-side package workflow, see the official [s&box project types](https://sbox.game/dev/doc/getting-started/project-types/) and [dedicated server documentation](https://sbox.game/dev/doc/networking-multiplayer/dedicated-servers/).

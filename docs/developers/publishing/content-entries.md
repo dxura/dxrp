@@ -16,7 +16,7 @@ Addon
             └── Runtime consumer
 ```
 
-Mounting a package or installing a launcher bundle makes code and assets available. It does not select an entry, place an entity, put equipment in a job, or enable a system.
+Mounting the addon’s s&box package makes code and assets available. It does not select an entry, place an entity, put equipment in a job, or enable a system.
 
 ## Content types
 
@@ -55,7 +55,7 @@ entities/kickable-ball/kickable-ball.prefab
 
 Do not prepend `Assets`, `addons`, `Code`, a network identifier, or the DXRP addon identifier. The same rule applies to an equipment view-model path.
 
-For a launcher bundle, remember that the selected `Assets/` folder itself is removed from the archive. For an s&box package, use the path as it exists inside the published package. The two paths should match when you maintain both delivery modes.
+Use the path as it exists inside the published s&box package. The easiest way to keep entries and paths in sync is to author them in your `.dxaddon` definition and use **Import Definition** on the addon page (see [Creating an Addon](/docs/developers/creating-addons#the-addon-definition-dxaddon)).
 
 ## System entries
 
@@ -138,7 +138,7 @@ Before publishing a revision:
 - keep prefab paths stable or ship a migration;
 - add config keys with safe defaults instead of renaming existing keys;
 - do not silently change the entry type;
-- keep the content available in both package and launcher paths if you support both; and
+- keep content IDs stable in your `.dxaddon` so imports don't create new entries; and
 - test a game mode upgrade from the previous revision.
 
 If a content reference changes, expect operators to review **View Changes**, remap the affected content, and resave their game mode. Tell them exactly what changed in the revision changelog.

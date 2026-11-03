@@ -113,7 +113,7 @@ Save the draft. The path must be relative to the asset root and match the packag
 
 Attach the draft addon to a test game mode, add the entity content, configure its health/lifecycle settings, save, and sync the test server.
 
-Choose the load method that matches your revision: **Package** for a published s&box package, or **Launcher** for uploaded DXRP Code/Assets bundles. The entity content will not spawn until the game mode includes the entry even after the package is loaded.
+The game mode mounts the addon’s s&box package because the addon has an S&box Identifier. The entity content will not spawn until the game mode includes the entry, even after the package is loaded. If you gave the entry `Entity` or `Market` suggestions in your `.dxaddon`, applying them when adding the addon includes it for you.
 
 Spawn the entity and verify:
 
