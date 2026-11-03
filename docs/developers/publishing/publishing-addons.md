@@ -44,7 +44,7 @@ The rest of the revision is taken from the addon page’s tabs at the moment you
 
 | Tab | What it controls |
 | --- | --- |
-| **Content** | The revision’s entity, equipment, system, or fixture entries |
+| **Content** | The revision’s content entries (entities, equipment, systems, fixtures, apps, emotes) |
 | **Config** | Addon-wide base configuration inherited by game modes |
 | **Permissions** | The revision’s custom permission declarations |
 | **Suggestions** | Jobs, market items, and entity settings a game mode can choose to apply |

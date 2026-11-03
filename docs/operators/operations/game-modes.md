@@ -26,6 +26,13 @@ Create job groups to organise related jobs, then configure each job's:
 
 Set a valid default job before assigning the game mode to a production server.
 
+## Apps
+
+The phone only has the apps your game mode includes. Apps come from addons' **App** content (the built-in ones from Base Content): map one on the **Content** tab and open it to set:
+
+- **Installed by default**: every player has the app. Turn it off to sell it instead.
+- **Price**: what the app costs when it isn't installed by default. There is no app store yet, so apps that aren't installed by default don't appear for now.
+
 ## Market
 
 Market items connect a display name and price to equipment or entity content. Grouping values place related items together in the in-game market. Configure limits and required or blocked job tags where appropriate.
@@ -47,6 +54,17 @@ Use **Add Addon** to attach an owned or licensed addon and select its revision. 
 ### Delivery
 
 The server mounts an addon’s s&box package if, and only if, the addon has an S&box Identifier, using the revision’s S&box Version when one is pinned. There is nothing to choose per game mode. A package can mount successfully while still providing no active gameplay: content entries must also be selected in the game mode.
+
+### Revisions and following the latest
+
+Each addon is pinned to a revision. Changing the revision carries your content mappings across. If the new revision drops or changes the type of content you use, you're asked first, and that content is removed along with its entity, equipment, app, market and job settings.
+
+Tick **Latest** to have an addon follow new revisions on its own. It's available for your own network's addons and official ones (like Base Content), not other networks' addons. When a revision is published:
+
+- if it keeps every content this game mode uses (same content, same type), the game mode moves to it automatically. Servers pick it up on their next restart or when you select **Apply**, never mid-session;
+- otherwise the game mode stays on its current revision and the addon shows **Update Needs Review**. Click it to see what would be removed and change revision yourself.
+
+Both outcomes are recorded in the audit log. To roll back, pick the previous revision.
 
 ### Suggestions
 

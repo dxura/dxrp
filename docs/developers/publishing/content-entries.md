@@ -26,8 +26,19 @@ Mounting the addon’s s&box package makes code and assets available. It does no
 | `Equipment` | An item players can equip, deploy, drop, or receive in a loadout | Equipment world prefab |
 | `System` | A configurable addon component attached when content is enabled | Namespace-qualified component type |
 | `Fixture` | A persistent prefab placed and managed with the placement tool | Fixture prefab |
+| `App` | A phone app: a `PhoneApp` subclass with `[PhoneApp( id, ... )]` | The app's id |
+| `Emote` | An emote animation players can play; unlocked by Emote items that grant it | Animation sequence name |
+| `Vehicle` | Reserved; not used by the game yet | Vehicle prefab |
 
 Equipment can use a secondary reference for its first-person view-model prefab. Systems use a C# type name instead of a prefab path. Fixtures require a `.prefab` primary reference.
+
+Only apps a game mode includes are on the phone; there is no app whitelist or blacklist. Each included app has a game-mode **price** and an **installed by default** switch. Apps not installed by default will be got from the app store (not built yet), so for now they don't appear.
+
+An emote's base config holds its playback settings, which game modes can override:
+
+```json
+{ "Repeat": false, "Duration": 3, "HoldLastFrame": false, "CancelOnMove": true }
+```
 
 ## Stable IDs and references
 
@@ -95,7 +106,7 @@ See the [Fixture](/docs/developers/tutorials/fixture) tutorial for the component
 | --- | --- |
 | **Name** | Human-readable name; keep it recognisable across revisions |
 | **Description** | Explain what an operator gets and any dependencies |
-| **Type** | `Entity`, `Equipment`, `System`, or `Fixture`; do not change this casually |
+| **Type** | `Entity`, `Equipment`, `System`, `Fixture`, `App`, `Emote`, or `Vehicle`; do not change this casually |
 | **Primary Reference** | Prefab path or namespace-qualified system component type |
 | **Secondary Reference** | Optional equipment view-model prefab |
 | **Grouping** | Optional category used by consuming UIs |

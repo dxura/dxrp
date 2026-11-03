@@ -98,7 +98,7 @@ Describe the addon in a **DXRP Addon** resource (`.dxaddon`, class `Dxura.RP.Gam
 | `Name`, `Description` | Shown when injected locally |
 | `InjectInEditor` | Turn off to stop the editor injecting it, e.g. to test the published revision instead |
 | `GlobalBaseConfig` | The revision's global base config, as JSON text |
-| `Contents` | Content entries, the same `CreateAddonContentDto` the portal saves: `Id`, `Type` (Entity, Equipment, System, Fixture), `Name`, `Description`, `PrimaryReference`, `SecondaryReference`, `Grouping`, `IconPath`, `WorldModelPath`, `WorldModelScale`, `BaseConfig` (JSON text) |
+| `Contents` | Content entries, the same `CreateAddonContentDto` the portal saves: `Id`, `Type` (Entity, Equipment, System, Fixture, App, Emote, Vehicle), `Name`, `Description`, `PrimaryReference`, `SecondaryReference`, `Grouping`, `IconPath`, `WorldModelPath`, `WorldModelScale`, `BaseConfig` (JSON text) |
 | `Permissions` | `Identifier` (the suffix only), `Name`, `Description`, `Category` |
 | `Suggestions.Jobs` | Suggested jobs: `Key`, `Name`, `Description`, `Color` (packed `0xRRGGBB`), `Model`, `Clothes`, `JobTags`, `Salary`, `Health`, `MaxCount`, `Selectable`, `Demotable`, `VoteRequired`, `IncludeDefaultEquipment`, `Equipment` (ids of Equipment content entries) |
 | `Suggestions.Entities` | Suggested entity settings per Entity content: `Content` (content id), `Limit`, `HealthEnabled`, `HealthAmount`, `DestroyOnDisconnect`, `DestroyOnJobChange`, `AllowOwnershipTransfer` |
@@ -172,6 +172,8 @@ You can also edit the tabs by hand. For a prefab-backed feature, a content entry
 | Equippable item | `Equipment` | `equipment/radio/w_radio.prefab` |
 | Background/configurable system | `System` | Namespace-qualified component type |
 | Persistent placed object | `Fixture` | A `.prefab` path |
+| Phone app | `App` | The `[PhoneApp]` id, e.g. `city-jobs` |
+| Emote | `Emote` | Animation sequence, e.g. `emote_wave` |
 
 The content entry does not load the package and does not grant an item automatically. It gives a game-mode owner a stable capability to select, configure, and map.
 

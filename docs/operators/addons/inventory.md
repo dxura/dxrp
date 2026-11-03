@@ -10,7 +10,18 @@ Inventory separates item definitions from player ownership. Editing or deleting 
 
 ## Item definitions
 
-Select **Create New Item** and configure the name, description, type, rarity, stack behaviour, trading/market options, and grant identifier required by the item. Copy the item ID when another system needs to reference it.
+Select **Create New Item** and configure the name, description, type, rarity, stack behaviour, trading/market options, and what the item grants. Copy the item ID when another system needs to reference it.
+
+### What an item grants
+
+| Item type | Grants |
+| --- | --- |
+| Emote | An **Emote** content |
+| Vehicle | A **Vehicle** content |
+| Consumable | An **Entity** content, spawned when the item is used |
+| Anything else | An optional plain identifier, e.g. a title's text |
+
+For content grants, open the item, select **Edit**, pick a game mode to browse, then the content. The item keeps the content's own id, not the game mode's, so it grants that content in every game mode that includes it. If a game mode doesn't include the content, the item does nothing there.
 
 Images must be PNG, JPEG, or WebP and no larger than 5 MB. You can download, replace, or clear the current image.
 
