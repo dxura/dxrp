@@ -59,7 +59,7 @@ The server mounts an addon’s s&box package if, and only if, the addon has an S
 
 Each addon is pinned to a revision. Changing the revision carries your content mappings across. If the new revision drops or changes the type of content you use, you're asked first, and that content is removed along with its entity, equipment, app, market and job settings.
 
-Tick **Latest** to have an addon follow new revisions on its own. It's available for your own network's addons and official ones (like Base Content), not other networks' addons. When a revision is published:
+Tick **Keep Updated** to have an addon follow new revisions on its own. It's available for your own network's addons and official ones (like Base Content), not other networks' addons. When a revision is published:
 
 - if it keeps every content this game mode uses (same content, same type), the game mode moves to it automatically. Servers pick it up on their next restart or when you select **Apply**, never mid-session;
 - otherwise the game mode stays on its current revision and the addon shows **Update Needs Review**. Click it to see what would be removed and change revision yourself.

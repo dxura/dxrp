@@ -21,7 +21,7 @@ Select **Create New Item** and configure the name, description, type, rarity, st
 | Consumable | An **Entity** content, spawned when the item is used |
 | Anything else | An optional plain identifier, e.g. a title's text |
 
-For content grants, open the item, select **Edit**, pick a game mode to browse, then the content. The item keeps the content's own id, not the game mode's, so it grants that content in every game mode that includes it. If a game mode doesn't include the content, the item does nothing there.
+For content grants, open the item, select **Edit**, and pick the content. The list has every content of that type from your own addons and the addons your game modes use, once each. The item keeps the content's own id, so it grants that content in every game mode that includes it. If a game mode doesn't include the content, the item does nothing there.
 
 Images must be PNG, JPEG, or WebP and no larger than 5 MB. You can download, replace, or clear the current image.
 
