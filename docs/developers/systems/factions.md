@@ -95,6 +95,10 @@ Members with **Manage** permission draw the banner in-game from **Settings**, us
 
 Only the host talks to the API. `FactionBannerCache` keeps each faction's image (or "none") until a change clears it; players ask the host, which sends the bytes over RPC. A change on this server clears the cache everywhere through the mutation result, and a change on another server or in the portal clears it through the `faction_changed` action (`BannerChanged`). Show a banner with `<FactionBannerImage FactionId=... />`, which stays empty until the image arrives and gets the `loaded` class when it does.
 
+## Message of the day
+
+The description is a public tagline (150 characters) shown in the directory and the faction header. The MOTD (500 characters) is for members only: it isn't in the synced `FactionInfo`, so the host keeps it and sends it to members over RPC when they join the server or the faction, and to every online member when it changes. Members see it pinned on the Overview tab and as a chat line. Read it on the client with `FactionSystem.Instance.LocalMotd`; members with **Manage** permission edit it in **Settings**.
+
 ## Membership and ranks
 
 Role **order** is seniority: lower is more senior. The **leader** sits above every role and implicitly holds every permission. They can't be kicked, and they must hand leadership to another member before leaving. If they leave as the last member, the faction disbands.
