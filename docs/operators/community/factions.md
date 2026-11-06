@@ -44,6 +44,7 @@ Staff with **Manage Factions** (`portal.faction.manage`) can act on a faction fr
 | Adjust the treasury | Click the treasury amount | A reason is required. The change appears in the ledger as an Adjustment. |
 | Grant experience | Click the experience amount | The level updates when a server next loads the faction, using that server's level curve. |
 | Set an upgrade level | **Set** on Upgrades, or the edit button on an upgrade | No treasury charge. |
+| Remove the banner | **Remove banner** in the header | Banners are drawn in-game by members with Manage permission; they can draw a new one. |
 
 ### Cleaning up inactive factions
 

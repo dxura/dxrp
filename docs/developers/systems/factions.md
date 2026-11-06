@@ -89,6 +89,12 @@ These fire on the host for changes made by that server. When another server or t
 
 Notifications are merged over about a second, so a burst of changes to one faction (income ticks, several deposits) reaches each server once. Experience grants aren't broadcast at all, because they're too frequent. Portal changes that depend on config are corrected by the next server that loads the faction: an experience grant (the level is recalculated from that server's curve) or an upgrade level set by staff (the member cap is recalculated). Levels never go down, so servers on different curves can't keep overwriting each other.
 
+## Banner
+
+Members with **Manage** permission draw the banner in-game from **Settings**, using the same 512x512 canvas as paintings (`PaintCanvas`). The client only sends brush strokes; the host draws them onto the current banner with `PaintStrokes.Render` and uploads the PNG, so no image made outside the game can become a banner. The backend checks it's a 512x512 PNG and stores one file per faction.
+
+Only the host talks to the API. `FactionBannerCache` keeps each faction's image (or "none") until a change clears it; players ask the host, which sends the bytes over RPC. A change on this server clears the cache everywhere through the mutation result, and a change on another server or in the portal clears it through the `faction_changed` action (`BannerChanged`). Show a banner with `<FactionBannerImage FactionId=... />`, which stays empty until the image arrives and gets the `loaded` class when it does.
+
 ## Membership and ranks
 
 Role **order** is seniority: lower is more senior. The **leader** sits above every role and implicitly holds every permission. They can't be kicked, and they must hand leadership to another member before leaving. If they leave as the last member, the faction disbands.
