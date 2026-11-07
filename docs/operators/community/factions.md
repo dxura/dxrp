@@ -67,3 +67,21 @@ Faction rules are part of your game mode's configuration under **Systems → Fac
 - the upgrades members can buy
 
 See [Game modes](/docs/operators/operations/game-modes) for editing configuration.
+
+## Control zones
+
+A **Control Zone** is a fixture you place on the map. Factions capture it by standing inside it: one faction alone fills the capture bar, and a second faction inside contests it and freezes progress. The faction holding a zone earns faction experience, and optionally treasury money, on a timer. Players outside a faction don't count. Members inside see the zone's state at the top of the screen, and a ring on the ground shows its edge (green for your faction, red for another, amber when contested).
+
+Each placement can override the zone's settings:
+
+| Setting | Default | |
+| --- | --- | --- |
+| `Name` | Control Point | Shown on the HUD and in capture messages. |
+| `Radius` / `Height` | 400 / 200 | How far across, and up or down, counts as inside. |
+| `CaptureTime` | 30 | Seconds for one member to capture it. |
+| `SpeedPerExtraMember` / `MaxSpeed` | 0.25 / 2 | Each extra member speeds the capture up, to this cap. |
+| `RewardInterval` | 60 | Seconds between rewards. |
+| `RewardExperience` / `RewardMoney` | 25 / 0 | Paid to the holder each interval. Money needs the treasury enabled. |
+| `RewardRequiresPresence` | false | Only pay while a member of the holding faction is inside. |
+
+Zones aren't saved: after a restart every zone starts unclaimed. Turn the HUD off with **UI → HUD → Control Zone**.
