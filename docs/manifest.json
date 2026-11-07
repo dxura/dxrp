@@ -19,7 +19,7 @@
     "icon": "pi pi-code",
     "pages": ["creating-projects.md", "creating-addons.md"],
     "children": [
-      { "section": "developers/tutorials", "title": "Tutorials", "icon": "pi pi-graduation-cap", "pages": ["service.md", "entity.md", "equipment.md", "fixture.md", "command.md", "tab-menu.md"] },
+      { "section": "developers/tutorials", "title": "Tutorials", "icon": "pi pi-graduation-cap", "pages": ["service.md", "entity.md", "equipment.md", "fixture.md", "command.md", "tab-menu.md", "phone-app.md"] },
       {
         "section": "developers/hooks",
         "title": "Hooks",
