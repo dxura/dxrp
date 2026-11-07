@@ -6,10 +6,14 @@
   "Schema": 1,
   "IncludeSourceFiles": false,
   "Resources": null,
+  "PublishUsedAssetsOnly": false,
   "PackageReferences": [],
   "EditorReferences": null,
   "Mounts": null,
   "IsStandaloneOnly": false,
+  "AI": {
+    "EnableMcpCommunication": true
+  },
   "Metadata": {
     "MaxPlayers": 64,
     "MinPlayers": 1,

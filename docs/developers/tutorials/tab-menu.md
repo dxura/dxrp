@@ -12,7 +12,7 @@ Create `CommunityTab.razor` in your addon code folder:
 
 ```razor
 @namespace Dxura.RP.Game.UI
-@inherits PanelComponent
+@inherits Panel
 
 <div class="p-6">
     <h1>Community</h1>

@@ -30,7 +30,7 @@
       "WorldModelPath": null,
       "WorldModelScale": null,
       "IconPath": null,
-      "BaseConfig": "{\"IntervalSeconds\":300,\"Tips\":[\"Press Tab to open the menu.\",\"Type /visits to count your visits.\",\"Your phone has a Coin Flip app.\"]}"
+      "BaseConfig": "{\"IntervalSeconds\":60,\"Tips\":[\"Press Tab to open the menu.\",\"Type /visits to count your visits.\",\"Your phone has a Coin Flip app.\"]}"
     },
     {
       "Id": "adb4152f-64cf-4a02-b132-359ce7839d35",
