@@ -1,0 +1,21 @@
+@namespace Dxura.RP.Game.Addons.Example
+@using Dxura.RP.Game.UI
+@inherits PhoneApp
+@attribute [StyleSheet]
+@attribute [PhoneApp( "example.coin-flip", "Coin Flip", "toll", Order = 100, Color = "#ffd60a" )]
+
+<root class="flex flex-col items-center justify-center">
+	<label class="result">@_result</label>
+	<div class="flip" onclick="@Flip">
+		<label>Flip</label>
+	</div>
+</root>
+
+@code
+{
+	private string _result = "?";
+
+	private void Flip() => _result = Random.Shared.Next( 2 ) == 0 ? "Heads" : "Tails";
+
+	protected override int BuildHash() => _result.GetHashCode();
+}

@@ -1,0 +1,17 @@
+CoinFlipApp {
+  padding: 16px;
+  gap: 24px;
+  color: white;
+
+  .result {
+    font-size: 40px;
+  }
+
+  .flip {
+    padding: 12px 32px;
+    border-radius: 24px;
+    background-color: #ffd60a;
+    color: black;
+    cursor: pointer;
+  }
+}

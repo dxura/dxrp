@@ -1,0 +1,84 @@
+{
+  "AddonId": "febc4da5-e3b1-4dd7-b4c1-5a18bcd5b05a",
+  "Name": "Example",
+  "Description": "SDK example addon: a service, a chat command, a tab menu page, a configurable system, an entity and a phone app.",
+  "InjectInEditor": true,
+  "GlobalConfigType": "",
+  "GlobalBaseConfig": "{}",
+  "Contents": [
+    {
+      "Id": "266c01d1-e0d8-4789-b8ae-9bb8c422cc8d",
+      "Name": "Bouncy Ball",
+      "Type": "Entity",
+      "Description": "A ball that bounces up when you walk into it.",
+      "PrimaryReference": "entities/bouncy_ball/bouncy_ball.prefab",
+      "SecondaryReference": null,
+      "Grouping": null,
+      "WorldModelPath": null,
+      "WorldModelScale": null,
+      "IconPath": null,
+      "BaseConfig": null
+    },
+    {
+      "Id": "fcdd4e9d-442e-4887-a12b-b5be4130211d",
+      "Name": "Tips",
+      "Type": "System",
+      "Description": "Broadcasts a random tip to every player on an interval.",
+      "PrimaryReference": "Dxura.RP.Game.Addons.Example.TipsSystem",
+      "SecondaryReference": null,
+      "Grouping": null,
+      "WorldModelPath": null,
+      "WorldModelScale": null,
+      "IconPath": null,
+      "BaseConfig": "{\"IntervalSeconds\":300,\"Tips\":[\"Press Tab to open the menu.\",\"Type /visits to count your visits.\",\"Your phone has a Coin Flip app.\"]}"
+    },
+    {
+      "Id": "adb4152f-64cf-4a02-b132-359ce7839d35",
+      "Name": "Coin Flip",
+      "Type": "App",
+      "Description": "A phone app that flips a coin.",
+      "PrimaryReference": "example.coin-flip",
+      "SecondaryReference": null,
+      "Grouping": null,
+      "WorldModelPath": null,
+      "WorldModelScale": null,
+      "IconPath": null,
+      "BaseConfig": null
+    }
+  ],
+  "Permissions": [],
+  "Suggestions": {
+    "Jobs": [],
+    "Content": [
+      {
+        "Content": "266c01d1-e0d8-4789-b8ae-9bb8c422cc8d",
+        "Limit": 2,
+        "HealthEnabled": false,
+        "HealthAmount": 100,
+        "DestroyOnDisconnect": true,
+        "DestroyOnJobChange": false,
+        "AllowOwnershipTransfer": false
+      },
+      {
+        "Content": "adb4152f-64cf-4a02-b132-359ce7839d35",
+        "Price": 0,
+        "InstalledByDefault": true
+      }
+    ],
+    "MarketItems": [
+      {
+        "Key": "f6c0f1f0-22a4-4ee3-b0e7-303800e513f1",
+        "Content": "266c01d1-e0d8-4789-b8ae-9bb8c422cc8d",
+        "Cost": 100,
+        "Grouping": "Example",
+        "SortOrder": 0,
+        "Color": 16777215,
+        "Quantity": 1,
+        "WhitelistJobs": [],
+        "WhitelistJobTags": []
+      }
+    ]
+  },
+  "__references": [],
+  "__version": 0
+}
